@@ -5,8 +5,12 @@ import ReactDOM from 'react-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { tileCodes } from './vars.js';
+
 
 library.add(fab, fas);
+
+
 
 
 //let fasArray = Object.keys(library.definitions.fas)
@@ -16,7 +20,7 @@ library.add(fab, fas);
 function App() {
   return (
     <div className="App">
-      <Landing />
+      <Landing tileCodes={tileCodes} />
     </div>
   );
 }
