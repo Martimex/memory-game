@@ -1,3 +1,36 @@
+:root {
+    --lightness: 50%;
+    --A: hsl(0, 100%, 50%);
+        --A1: hsl(10, 100%, 50%);
+        --A2: hsl(15, 100%, 50%);
+        --A3: hsl(20, 100%, 50%);
+    --B: hsl(30, 100%, 50%);
+        --B1: hsl(40, 100%, 50%);
+        --B2: hsl(45, 100%, 50%);
+        --B3: hsl(50, 100%, 50%);
+    --C: hsl(60, 100%, 50%);
+        --C1: hsl(75, 100%, 50%);
+        --C2: hsl(90, 100%, 50%);
+        --C3: hsl(105, 100%, 50%);
+    --D: hsl(120, 100%, 50%);
+        --D1: hsl(150, 100%, 50%);
+        --D2: hsl(180, 100%, 50%);
+        --D3: hsl(210, 100%, 50%);
+    --E: hsl(240, 100%, 50%);
+        --E1: hsl(250, 100%, 50%);
+        --E2: hsl(260, 100%, 50%);
+        --E3: hsl(270, 100%, 50%);
+    --F: hsl(275, 100%, 25%);
+    --G: hsl(280, 100%, 50%);
+        --G1: hsl(295, 100%, 50%);
+        --G2: hsl(310, 100%, 50%);
+        --G3: hsl(325, 100%, 50%);
+
+    /* BASIC COLORS:  6 */
+    /* ALTERNATIVES: 18 */
+    /* TOTAL COLORS: 24 */
+}
+
 body {
 
 }
@@ -26,11 +59,37 @@ h1 {
 }
 
 .card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     border: .2rem solid #ffcb22;
     margin: .5rem;
     border-radius: 10%;
+    transform-style: preserve-3d;
+    transition: all 0.8s ease;
+}
 
+.card:hover {
+    transform: rotateY(180deg);
+}
+
+.card-front {
+    background: hsl(0, 0%, 0%);
+    backface-visibility: hidden;
+}
+
+.card-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    color: hsl(210, 50%, 80%);
+}
+
+.icon {
+    color: hsl(0, 0%, 100%)
 }
 
 .content {
@@ -89,4 +148,9 @@ h1 {
     width: 100%;
     border: .1rem solid #ffcb2277;
     background: linear-gradient(to right, #000, #ffcb2277, #ffcb2277, #000);
+}
+
+.fa-icon {
+    color: #fffb;
+    font-size: 1.2rem;
 }
