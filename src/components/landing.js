@@ -19,20 +19,39 @@ let randomizedIcons = [];
 let fasArray = Object.keys(library.definitions.fas);
 
 function getRandomIcons(fasArray, usedIcons, randomizedIcons) {
-
-    for(let i=0; i<(tileCodes.length/2); i++) {
-        usedIcons.push(fasArray[Math.floor(Math.random() * fasArray.length)]);
+    let fasArrayCopy = [...fasArray]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
+    for(let i=0; i<(tileCodes.length/2); i++) { // Math.ceil(tileCodes.length/2)
+        let random = Math.floor(Math.random() * fasArrayCopy.length);
+        usedIcons.push(fasArrayCopy[random]);
+        fasArrayCopy.splice(random, 1);
     }
     let duplicate = usedIcons;
     usedIcons.push(...duplicate);
-    console.log(duplicate);
-    console.log(usedIcons);
+
+    const usedIconsCopy = [...usedIcons]; // Same here - creating a copy; do not assign values directly(it works for original ref only) !!
+    console.log(usedIcons.length)
+    console.log(usedIconsCopy.length)
+
+    for(let j=0; j<usedIconsCopy.length; j++) {
+        randomizedIcons.push(setIcon(usedIcons));
+    }
+
+    console.log(randomizedIcons);
 }
 
+function setIcon(usedIcons) {
+    let index = Math.floor(Math.random() * usedIcons.length);
+    let chosenIcon = usedIcons[index];
+    usedIcons.splice(index, 1);
+    return chosenIcon;
+}
+
+
+// INIT
 getRandomIcons(fasArray, usedIcons, randomizedIcons);
 
-console.log(fasArray)
-console.log(tileCodes)
+//console.log(fasArray)
+//console.log(tileCodes)
 
 
 function Landing(props) {
@@ -232,7 +251,7 @@ function Landing(props) {
 
 
     const allTiles = tileCodes.map((code, index) => 
-        <div className={`card ${code}`}><div className='card-front'></div> <div className='card-back'><FontAwesomeIcon icon={`${usedIcons[index]}`} className={`fa-icon ${code}`}/></div></div>
+        <div className={`card ${code}`}><div className='card-front'></div> <div className='card-back'><FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon ${code}`}/></div></div>
     );
 
     return( 
