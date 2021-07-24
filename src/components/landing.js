@@ -264,7 +264,7 @@ function Landing(props) {
 
             <div className='content'>
                 <span className="game-title">MEMO</span>
-                <button className='start'> Play </button>
+                <button className='start' onClick={props.changeComponent}> Play </button>
             </div>       
         </div>
     )

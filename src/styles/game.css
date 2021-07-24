@@ -1,0 +1,36 @@
+.para{
+    color: pink;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: .2rem solid #ffcb22;
+    margin: .5rem;
+    border-radius: 10%;
+    transform-style: preserve-3d;
+    transition: all 0.8s ease;
+}
+
+.card-front {
+    background: hsl(0, 0%, 0%);
+    backface-visibility: hidden;
+}
+
+.card-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    color: hsl(210, 50%, 80%);
+}
+
+.summary {
+    width: 6rem;
+    height: 2rem;
+    color: #222;
+    background: hsl(125, 50%, 50%)
+}
