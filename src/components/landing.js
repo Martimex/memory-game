@@ -10,6 +10,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { tileCodes } from '../vars.js';
+import { useState } from 'react/cjs/react.development';
 
 library.add(fab, fas);
 
@@ -17,10 +18,11 @@ let usedIcons = [];
 let randomizedIcons = [];
 
 let fasArray = Object.keys(library.definitions.fas);
+let fabArray = Object.keys(library.definitions.fab);
 
 function getRandomIcons(fasArray, usedIcons, randomizedIcons) {
     let fasArrayCopy = [...fasArray]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
-    for(let i=0; i<(tileCodes.length/2); i++) { // Math.ceil(tileCodes.length/2)
+    for(let i=0; i<(tileCodes.length/2); i++) { // Math.ceil(tileCodes.length/2) => it should be actually state value !!!
         let random = Math.floor(Math.random() * fasArrayCopy.length);
         usedIcons.push(fasArrayCopy[random]);
         fasArrayCopy.splice(random, 1);
@@ -29,14 +31,14 @@ function getRandomIcons(fasArray, usedIcons, randomizedIcons) {
     usedIcons.push(...duplicate);
 
     const usedIconsCopy = [...usedIcons]; // Same here - creating a copy; do not assign values directly(it works for original ref only) !!
-    console.log(usedIcons.length)
-    console.log(usedIconsCopy.length)
+    //console.log(usedIcons.length)
+    //console.log(usedIconsCopy.length)
 
     for(let j=0; j<usedIconsCopy.length; j++) {
         randomizedIcons.push(setIcon(usedIcons));
     }
 
-    console.log(randomizedIcons);
+    //console.log(randomizedIcons);
 }
 
 function setIcon(usedIcons) {
@@ -58,30 +60,28 @@ function Landing(props) {
 
     const tileCodes = props.tileCodes;
 
-   /*  function myMethod() {
-        const node = ReactDOM.findDOMNode(this);
-        console.log(node);
-
-        // Get child nodes
-        if (node instanceof HTMLElement) {
-            const child = node.querySelector('div .layer');
-            console.log(child);
-        }
-    }
-
-        myMethod();
-    */
-
     const gameBoard = useRef(null);
 
     useEffect(() => {
         const board = gameBoard.current;
+
+        console.log(board);
+
+        board.addEventListener('click', (e) => {
+            if(e.target.classList.contains('card')) {
+                console.log('event fired')
+            } else {
+                console.log('x');
+            }
+
+        })
        // console.log(board);
         //console.log(board.children)
 
         const allChilds = board.children;
 
        // console.log(allChilds)
+       //console.log(allChilds)
 
         //console.log(allChilds[0]);
         //console.log(allChilds[0].children[1])
@@ -108,12 +108,6 @@ function Landing(props) {
         //})
     }, []);
 
-    const staggering = 40;
-    const startBefore = 5000;
-
-    const animationRef1 = React.useRef(null);
-    const animationRef2 = React.useRef(null);
-    const animationRef3 = React.useRef(null);
 
     /* BELOW USED FOR TILES BORDER COLOR MANIPULATION */
 
@@ -241,23 +235,16 @@ function Landing(props) {
 
     console.log(gameBoard.current)
 
-    function doSomething(e) {
-        console.log(e);
-        console.log('s');
-        console.log(this)
-
-    }
-
 
 
     const allTiles = tileCodes.map((code, index) => 
-        <div className={`card ${code}`}><div className='card-front'></div> <div className='card-back'><FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon ${code}`}/></div></div>
+        <div className={`card ${code}`} key={index.toString()}><div className='card-front'></div> <div className='card-back'><FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon ${code}`}/></div></div>
     );
 
     return( 
         <div>
             <div className='layer'>
-                <div className='theme' onLoad={doSomething(this)} ref={gameBoard}>
+                <div className='theme' ref={gameBoard}>
                     {allTiles}
                 </div>
             </div>
@@ -271,3 +258,4 @@ function Landing(props) {
 }
 
 export default Landing;
+export { getRandomIcons, setIcon, fasArray, fabArray };
