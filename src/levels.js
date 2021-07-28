@@ -1,10 +1,11 @@
 
 const levels = {
 
-    1: {
+    lvl1: {
         lv: 1,
         rows: 4,
         columns: 4,
+        tiles: 16,
         iconSet: 'fas',
         counter: {
             time: null,
@@ -13,16 +14,29 @@ const levels = {
 
     },
 
-    2: {
+    lvl2: {
         lv: 2,
         rows: 8,
         columns: 3,
+        tiles: 24,
         iconSet: 'fas',
         counter: {
             time: null,
             turns: 17,
         },
 
+    },
+
+    lvl3: {
+        lv: 2,
+        rows: 5,
+        columns: 4,
+        tiles: 20,
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns:13,
+        },
     },
 }
 

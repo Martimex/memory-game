@@ -16,18 +16,26 @@ let usedIcons = [];
 let randomizedIcons = [];
 
 
-function clearArrayElems(usedIcons, randomizedIcons, fasArrayCopy, fabArrayCopy) {
+function clearArrayElems(usedIcons, randomizedIcons, /*fasArrayCopy, fabArrayCopy*/) {
     //for() // Clear all arrays, because every render pushes next elems, making arrays with unlimited elems !!!!!!!!!
+    console.log((usedIcons.length === randomizedIcons.length));
+    for(let i=0; i<usedIcons.length; i++) {
+        usedIcons.pop();
+        randomizedIcons.pop();
+    }
+    return { usedIcons, randomizedIcons };
 }
 
 function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
 
-    if(randomizedIcons.length > 0) {
-        clearArrayElems(usedIcons, randomizedIcons, fasArrayCopy, fabArrayCopy);
-    }
+    //if(randomizedIcons.length > 0) {
+        //clearArrayElems(usedIcons, randomizedIcons, /*fasArrayCopy, fabArrayCopy*/);
+    //}
 
     let fasArrayCopy = [...fasArray]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
     let fabArrayCopy = [...fabArray]; // Same here ...
+    console.log(fasArrayCopy);
+    console.log(fabArrayCopy);
     for(let i=0; i<(tiles/2); i++) { // Math.ceil(tileCodes.length/2) => it should be actually state value !!!
         let random = Math.floor(Math.random() * fasArrayCopy.length);
         usedIcons.push(fasArrayCopy[random]);
@@ -38,11 +46,19 @@ function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
 
     const usedIconsCopy = [...usedIcons]; // Same here - creating a copy; do not assign values directly(it works for original ref only) !!
 
+    if(randomizedIcons.length > 0) {
+        for(let h=0; h<usedIconsCopy.length; h++) {
+            randomizedIcons.pop();
+        }
+    }
+
     for(let j=0; j<usedIconsCopy.length; j++) {
         randomizedIcons.push(setIcon(usedIcons));
     }
 
-    console.log(randomizedIcons);
+    //console.log(usedIcons);
+    //console.log(usedIconsCopy);
+    //console.log(randomizedIcons);
 }
 
 
@@ -68,13 +84,11 @@ function Game(props) {
     setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles);
 
     const changeTileNumber = (arr) => {
-        if(tiles === 16) {
-            setTiles(0); // CHANGE TO 10 LATER
-        }
 
-        else {
-            setTiles(16);
-        }
+        console.log('level value: '+ level);
+        setLevel(level + 1);
+        // setTiles(0); // CHANGE TO 10 LATER
+        setTiles(levels[`lvl${level}`].tiles);
     }
 
     const gameboard = useRef(null);
@@ -97,6 +111,12 @@ function Game(props) {
 
     let arr = [];
 
+    if(arr.length > 0) {
+        while(arr.length > 0) {
+            arr.pop();
+        }
+    }
+
     for(let i=0; i<tiles; i++) {
         arr.push('');
     };
@@ -111,7 +131,7 @@ function Game(props) {
         <div>
             <div className='background'>
                 <p className="para"> Here is your game...</p>
-                <div> {levels[1].columns}  Poziom zawiera {tiles} kafelków </div>
+                <div> {level} poziom zawiera {tiles} kafelków - Kolumny: {levels[`lvl${level}`].columns}; </div>
                 <div className='game'>
                     <div className='board' ref={gameboard}>
                         {allTiles}
