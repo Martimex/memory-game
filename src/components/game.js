@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import GameInfo from './game_info.js';
 
 import { setIcon, fasArray, fabArray } from './landing.js';
 
@@ -74,16 +75,16 @@ function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
 
 function Game(props) {
 
-    const [tiles, setTiles] = useState(16);
+    const [tiles, setTiles] = useState(null);
     const [level, setLevel] = useState(1);
     const [score, setScore] = useState(0);
-    const [moves, setMoves] = useState(12);
+    const [moves, setMoves] = useState(0);
     const [time, setTime] = useState(null);
 
     // INIT
     setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles);
 
-    const changeTileNumber = (arr) => {
+    const changeTileNumber = () => {
 
         console.log('level value: '+ level);
         setLevel(level + 1);
@@ -100,12 +101,13 @@ function Game(props) {
             if(e.target.classList.contains('tile')) {
                 console.log('event fired');
                 e.target.style = 'transform: rotateY(180deg)';
+                setMoves(moves + 1);
             } else {
                 console.log('x');
             }
 
         })
-    })
+    }, [])
 
     console.log(tiles);
 
@@ -123,15 +125,28 @@ function Game(props) {
 
     console.log('length: ', arr.length)
 
-    const allTiles = arr.map((tile, index) => 
+    let allTiles =  arr.map((tile, index) => 
         <div className={`tile`} key={index.toString()}><div className='tile-front'></div> <div className='tile-back'>{<FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon`}/>}</div></div>
     );
+
+    useEffect((allTiles) => {
+        allTiles = arr.map((tile, index) => 
+            <div className={`tile`} key={index.toString()}><div className='tile-front'></div> <div className='tile-back'>{<FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon`}/>}</div></div>
+        );
+        return allTiles;
+    }, [level])
 
     return(
         <div>
             <div className='background'>
-                <p className="para"> Here is your game...</p>
-                <div> {level} poziom zawiera {tiles} kafelków - Kolumny: {levels[`lvl${level}`].columns}; </div>
+                {/*<GameInfo />*/}
+                <div className='game-info'>
+                    <div> Level: {levels[`lvl${level-1}`].lv} </div>
+                    <div> Turns remaining: {parseInt(levels[`lvl${level-1}`].counter.turns) - parseInt(moves)} </div>
+                    <div> Highscore: </div>
+                </div>
+
+                <div> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className='game'>
                     <div className='board' ref={gameboard}>
                         {allTiles}

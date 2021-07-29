@@ -1,6 +1,19 @@
 
 const levels = {
 
+    // FALLBACK, SINCE FOR SOME REASON VERY FIRST RENDER DOESN'T APPEAR TO DISPLAY CARDS
+    lvl0: {
+        lv: 0,
+        rows: 0,
+        columns: 0,
+        tiles: 0,
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: 0,
+        }
+    },
+
     lvl1: {
         lv: 1,
         rows: 4,
@@ -28,7 +41,7 @@ const levels = {
     },
 
     lvl3: {
-        lv: 2,
+        lv: 3,
         rows: 5,
         columns: 4,
         tiles: 20,
