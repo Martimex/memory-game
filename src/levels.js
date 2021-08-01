@@ -6,7 +6,7 @@ const levels = {
         lv: 0,
         rows: 0,
         columns: 0,
-        tiles: 0,
+        tiles: 2,
         iconSet: 'fas',
         counter: {
             time: null,

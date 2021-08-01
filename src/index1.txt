@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class='container'>
+
+        <div class="info">
+            <div class="title">
+                <div class="title-name"> Express Car Memory</div>
+            </div>
+
+            <div class="details">
+                <div class='details-level details-elem'> Level: 
+                    <span class="level "> 1 </span>
+                </div>
+                <div class='details-turns details-elem'> Turns used:
+                    <span class="turns"> 0 </span>    
+                </div>
+                <div class="details-highscore details-elem"> Highscore:
+                    <span class="highscore"> 0 </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game">
+            <div class="game-board">
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">B</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+                <div class="card"> <div class="card-front"></div>  <div class="card-back"> <div class="i">R</div> </div> </div>
+            </div>
+        </div> 
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
