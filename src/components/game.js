@@ -112,6 +112,10 @@ function Game(props) {
     const gameboard = useRef(null);
     const game = useRef(null);
 
+    useEffect(() => {
+        gameboard.current.addEventListener('click', clickable);
+    }, []);
+
     const clickable = (e) => {
         if(e.target.classList.contains('tile')) {
             e.target.style = 'transform: rotateY(180deg);'; // border: .3rem solid hsl(51, 88%, 38%);
@@ -259,30 +263,11 @@ function Game(props) {
     
             console.log(cardsOpened);
     
-           // gameboard.current.addEventListener('click', clickable); // game.childNodes[0]
+           gameboard.current.addEventListener('click', clickable); // game.childNodes[0]
     
         }, 900);
     }
         
-    function clickable1(event) {
-        //alert('Wygrałeś 1000 zł');
-        if(event.target.classList.contains('card')) {
-            //console.log('class found');
-            event.target.style = 'transform: rotateY(180deg); border: .3rem solid hsl(51, 88%, 38%);';
-            console.log(event.target.childNodes);
-            let node = event.target.childNodes;
-            for( let i = 0; i < node.length; i++) {
-                if((node[i].classList !== undefined) && (node[i].classList.contains('card-back'))) {
-                    { styleNode(node[i]);
-                        keepCardOpen(node, node[i], event);
-                    }
-                }
-            }
-
-        } else {
-            console.log (' X ');
-        }
-    }
 
     /* useLayoutEffect(() => {
 
@@ -320,7 +305,7 @@ function Game(props) {
 
                 <div> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className='game' ref={game}>
-                    <div className='board' ref={gameboard} onClick={clickable}>
+                    <div className='board' ref={gameboard}>
                         {allTiles}
                     </div>
                 </div>
