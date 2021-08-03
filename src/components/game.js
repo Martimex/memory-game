@@ -18,6 +18,8 @@ library.add(fab, fas);
 let usedIcons = [];
 let randomizedIcons = [];
 
+let cardsOpened = [];
+
 function clearArrayElems(usedIcons, randomizedIcons, /*fasArrayCopy, fabArrayCopy*/) {
     //for() // Clear all arrays, because every render pushes next elems, making arrays with unlimited elems !!!!!!!!!
     console.log((usedIcons.length === randomizedIcons.length));
@@ -76,15 +78,17 @@ function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
 
 function Game(props) {
 
-    let cardsOpened = [];
+    // SET MOVES ODEJMUJE SIĘ TYLKO 1 RAZ (Z JAKIEGOŚ POWODU...) => MOŻE DLATEGO, ŻE REACT NIE WIDZI ŻADNYCH ZMIAN, PRZEZ CO NIE MALUJE EKRANU NA NOWO
 
     const [renderCount, setRenderCount] = useState(0);
-    const [tiles, setTiles] = useState(null);
+    const [tiles, setTiles] = useState(null);  // Ta wartość odpowiada za poprawne malowanie ekranu - NIE WOLNO JEJ MODYFIKOWAĆ W TRAKCIE GRY !
     const [level, setLevel] = useState(1);
     const [score, setScore] = useState(0);
     const [moves, setMoves] = useState(0);
     const [time, setTime] = useState(null);
-    const [cardsOpen, setCardsOpen] = useState([]);
+    const [foundTiles, setFoundTiles] = useState(0);
+    //const []
+    //const [cardsOpen, setCardsOpen] = useState([]);
 
     //  Render Count pomaga pozbyć się mylących błędów z konsoli - zmienna pilnuje, czy render wykonał się 1 raz. Jeśli ma się on wykonać po raz
     //  kolejny, to nie tworzymy na nowo tabeli z ikonkami (unikamy podmiany ikon na planszy podczas gry)
@@ -231,7 +235,7 @@ function Game(props) {
             //console.log(cardsOpened[0].childNodes[0].classList[1])
             //console.log(cardsOpened[1].childNodes[0].classList[1]);
 
-            setMoves(moves + 1);
+            //setMoves(moves + 1);
             //document.querySelector('.turns').textContent = turns;
     
             if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) { // czy pary się zgadzają? TAK -> usuń je z planszy;  NIE -> odwróć z powrotem
@@ -241,8 +245,16 @@ function Game(props) {
     
                 //highscore +=10;
                 //document.querySelector('.highscore').textContent = highscore;
+
                 // *W tym miejscu robimy animację znikania* -> W tym celu pobierz anime.js na potrzeby tego projektu
                 
+                console.log({foundTiles});
+                console.log({tiles});
+
+                if({foundTiles} === {tiles}) {  // If you win the level...
+                    confirmSuccess();
+                }
+
                 // Testy z VANTA.JS
                 
             } else {
@@ -253,7 +265,10 @@ function Game(props) {
                 cardsOpened[0].parentNode.style = `transform: rotateY(${temp}deg);`;
                 cardsOpened[1].parentNode.style = `transform: rotateY(${temp}deg);`;
     
-    
+                console.log({moves});
+                if((parseInt(levels[`lvl${level-1}`].counter.turns) - {moves}) <= 0) {
+                    confirmFailure();
+                }
             }
             console.log('time out');
     
@@ -268,7 +283,39 @@ function Game(props) {
         }, 900);
     }
         
+    function confirmSuccess() {
+        console.log('SUCCESS');
+    }
 
+    function confirmFailure() {
+        console.log('FAILURE');
+    }
+
+
+    function handleState() {
+        console.log('handleState fired');
+        if(cardsOpened.length > 1) {
+            if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
+                console.log('conditions passed')
+                return;
+            }
+
+            setMoves(moves + 1);
+
+            if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+                setFoundTiles(foundTiles + 2);
+                if((foundTiles+2) === tiles) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
+                    confirmSuccess();
+                    return;
+                }
+
+            }
+
+            if((parseInt(levels[`lvl${level-1}`].counter.turns) - (moves + 1)) <= 0) {  // SetState is async, so we need to prepend a value right before
+                confirmFailure();
+            }
+        }    
+    }
     /* useLayoutEffect(() => {
 
         console.log('useLayoutEffect');
@@ -305,7 +352,7 @@ function Game(props) {
 
                 <div> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className='game' ref={game}>
-                    <div className='board' ref={gameboard}>
+                    <div className='board' ref={gameboard} onClick={handleState}>
                         {allTiles}
                     </div>
                 </div>
