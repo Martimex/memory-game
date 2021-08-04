@@ -8,6 +8,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import GameInfo from './game_info.js';
+import Confirm from './confirm.js';
 
 import { setIcon, fasArray, fabArray } from './landing.js';
 import { set } from 'animejs';
@@ -19,6 +20,8 @@ let usedIcons = [];
 let randomizedIcons = [];
 
 let cardsOpened = [];
+
+let iter = 0; // Prevents from using multiple turns during the cards checkout animation
 
 function clearArrayElems(usedIcons, randomizedIcons, /*fasArrayCopy, fabArrayCopy*/) {
     //for() // Clear all arrays, because every render pushes next elems, making arrays with unlimited elems !!!!!!!!!
@@ -87,6 +90,7 @@ function Game(props) {
     const [moves, setMoves] = useState(0);
     const [time, setTime] = useState(null);
     const [foundTiles, setFoundTiles] = useState(0);
+    const [confrimValue, setConfirmValue] = useState(null); // przyjmuje wartości true / false  -> wygrałeś / przegrałeś ten poziom ?
     //const []
     //const [cardsOpen, setCardsOpen] = useState([]);
 
@@ -278,29 +282,42 @@ function Game(props) {
     
             console.log(cardsOpened);
     
-           gameboard.current.addEventListener('click', clickable); // game.childNodes[0]
+            setTimeout(() => {
+                gameboard.current.addEventListener('click', clickable); // game.childNodes[0]
+            }, 800); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
     
         }, 900);
     }
         
     function confirmSuccess() {
+        setConfirmValue(true);
         console.log('SUCCESS');
     }
 
     function confirmFailure() {
+        setConfirmValue(false);
         console.log('FAILURE');
     }
 
 
     function handleState() {
         console.log('handleState fired');
+
+        //if(iter > 0) { return; }
+
+        iter++;
+
         if(cardsOpened.length > 1) {
             if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
                 console.log('conditions passed')
                 return;
             }
 
-            setMoves(moves + 1);
+            setTimeout(() => {
+                setMoves(moves + 1);
+            }, 800)  // Block the scope and prevents from fast-clicking turn decreasing behaviour
+            // Please do find a better solution than this....
+
 
             if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
                 setFoundTiles(foundTiles + 2);
@@ -357,6 +374,13 @@ function Game(props) {
                     </div>
                 </div>
                 <button className='summary' onClick={changeTileNumber} > Submit</button>
+                {confrimValue === true && (
+                    <Confirm value={true} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={time} changeTileNumber={changeTileNumber}/>
+                )}
+                {confrimValue === false && (
+                    <Confirm value={false} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={time} changeTileNumber={changeTileNumber}/>
+                )}
+
             </div>
         </div>
     )
