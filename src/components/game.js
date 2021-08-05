@@ -306,32 +306,35 @@ function Game(props) {
         //if(iter > 0) { return; }
 
         iter++;
+        setTimeout(() => {
 
-        if(cardsOpened.length > 1) {
-            if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
-                console.log('conditions passed')
-                return;
-            }
-
-            setTimeout(() => {
-                setMoves(moves + 1);
-            }, 800)  // Block the scope and prevents from fast-clicking turn decreasing behaviour
-            // Please do find a better solution than this....
-
-
-            if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
-                setFoundTiles(foundTiles + 2);
-                if((foundTiles+2) === tiles) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
-                    confirmSuccess();
+        
+            if(cardsOpened.length > 1) {
+                if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
+                    console.log('conditions passed')
                     return;
                 }
 
-            }
+                
+                setMoves(moves + 1);
+                // Block the scope and prevents from fast-clicking turn decreasing behaviour
+                // Please do find a better solution than this....
 
-            if((parseInt(levels[`lvl${level-1}`].counter.turns) - (moves + 1)) <= 0) {  // SetState is async, so we need to prepend a value right before
-                confirmFailure();
-            }
-        }    
+
+                if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+                    setFoundTiles(foundTiles + 2);
+                    if((foundTiles+2) === tiles) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
+                        confirmSuccess();
+                        return;
+                    }
+
+                }
+
+                if((parseInt(levels[`lvl${level-1}`].counter.turns) - (moves + 1)) <= 0) {  // SetState is async, so we need to prepend a value right before
+                    confirmFailure();
+                }
+            }    
+        }, 800)
     }
     /* useLayoutEffect(() => {
 
@@ -373,12 +376,20 @@ function Game(props) {
                         {allTiles}
                     </div>
                 </div>
-                <button className='summary' onClick={changeTileNumber} > Submit</button>
+                {level === 1 && (
+                    <button className='summary' onClick={changeTileNumber} > Submit</button>
+                )}
                 {confrimValue === true && (
-                    <Confirm value={true} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={time} changeTileNumber={changeTileNumber}/>
+                    <div className='confirmation-s'>
+                        <Confirm value={true} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={time} />
+                        <button className='btn-s' onClick={changeTileNumber} > Next level </button>
+                    </div>
                 )}
                 {confrimValue === false && (
-                    <Confirm value={false} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={time} changeTileNumber={changeTileNumber}/>
+                    <div className='confirmation-f'>
+                        <Confirm value={false} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={time} />,
+                        <button className='btn-f' onClick={changeTileNumber} > Try again !</button>
+                    </div>
                 )}
 
             </div>

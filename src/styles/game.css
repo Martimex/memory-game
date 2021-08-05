@@ -65,10 +65,96 @@
 
 /* SUCCESS */
 
-.confirmation-s {
+.confirmation-title, .info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-s, .title-f {
+    padding: .4rem;
+    font-size: 2rem;
+    font-weight: 650;
+    letter-spacing: .2rem;
+}
+
+.title-s {
+    color: hsl(118, 70%, 30%);
+}
+
+.title-f {
+    color: hsl(2, 70%, 30%);
+}
+
+.confirmation-s, .confirmation-f {
+    border-radius: 28%;
     position: absolute;    top: 30%;    left: 30%;
     width: 40%;
     height: 40%;
-    background: hsl(125, 50%, 50%);
+}
 
+.confirmation-s {
+    background: hsl(118, 50%, 50%);
+}
+
+.confirmation-f {
+    background: hsl(2, 50%, 50%);
+
+}
+
+.info-s, .info-f {
+    color: hsl(118, 70%, 20%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .6rem 2.3rem .6rem 2.3rem;
+}
+
+.info-s {
+    color: hsl(118, 70%, 20%);
+}
+
+.info-f {
+    color: hsl(2, 70%, 20%);
+}   
+
+.highscore-s, .highscore-f {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.1rem;
+    font-weight: 550;
+    font-size: 1.25rem;
+}
+
+.highscore-s {
+    color: hsl(118, 70%, 20%);
+}
+
+.highscore-f {
+    color: hsl(2, 70%, 20%);
+}
+
+.total-score {
+    padding: 0 .7rem;
+}
+
+.btn-s, .btn-f {
+    height: 3rem;
+    width: 8rem;
+    font-size: 1.2rem;
+}
+
+.btn-s {
+    color: hsl(118, 70%, 20%);
+    background: hsl(118, 70%, 60%);
+    border: .3rem solid hsl(118, 80%, 60%);
+    border-radius: 20%;
+}
+
+.btn-f {
+    color: hsl(2, 70%, 20%);
+    background: hsl(2, 70%, 60%);
+    border: .3rem solid hsl(2, 80%, 60%);
+    border-radius: 20%;
 }

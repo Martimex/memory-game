@@ -6,29 +6,28 @@ function Confirm(props) {
     console.log(props.value);
 
     return (
-        <div className={(props.value) ? 'confirmation-s' : 'confirmation-f'}>
-            <div className={(props.value) ? 'title-s' : 'title-f' }> {(props.value) ? 'Success !' : 'Failure !' } </div>
-            <div className='info'>
+        <div>
+            <div className="confirmation-title">
+                <div className={(props.value) ? 'title-s' : 'title-f' }> {(props.value) ? 'Success !' : 'Failure !' } </div>
+            </div>
+            <div className={(props.value) ? 'info-s' : 'info-f' }>
                 <div className='info-level'> LV: </div>
                 <div className='info-level-val'> {props.level-1}</div>
             </div>
-            <div className='info'>
+            <div className={(props.value) ? 'info-s' : 'info-f' }>
                 <div className='info-counter'>Counter: </div>
-                <div className='info-counter-moves-val'> {(props.turns !== null) ? `${props.turns} turns` : '-'}</div>
-                <div className='info-counter-time-val'> {(props.time !== null) ? `${props.time} s` : '-'}</div>
+                {(props.turns !== null) && <div className='info-counter-moves-val'> {props.turns} turns</div>}
+                {(props.time !==null) && <div className='info-counter-time-val'> {props.time} s </div>}
             </div>
-            <div className='info'>
+            <div className={(props.value) ? 'info-s' : 'info-f' }>
                 <div className='info-score'> Score: </div>
                 <div className='info-score-val'> 9 </div>
             </div>
 
-            <div className='highscore'> Highscore: 
+            <div className={(props.value) ? 'highscore-s' : 'highscore-f' }> Highscore: 
                 <div className='total-score'> 14 </div>
             </div>
 
-            <div className='finish'>
-                <button className={(props.value) ? 'btn-s' : 'btn-f'} onClick={(props.value) ? {/*changeTileNumber*/} : ''} > {(props.value) ? 'Next level ->' : 'Try again !'}</button>
-            </div>
         </div>
     )
 
