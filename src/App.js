@@ -27,6 +27,12 @@ function App() {
     setState('game');
   }
 
+  const triggerStart = () => {
+    setTimeout(() => {
+      setState('start');
+    }, 1700);  // zamiast tego zrób animację dla przegranej gry, po której można kliknąć przycisk :)
+  }
+
   return (
     <div className="App">
       {state === 'start' && (
@@ -34,7 +40,7 @@ function App() {
       )}
 
       {state === 'game' && (
-        <Game changeComponent={triggerChangeComponent} tileCodes={tileCodes} />
+        <Game changeComponent={triggerChangeComponent} start={triggerStart} tileCodes={tileCodes} />
       )}
 
     </div>

@@ -18,24 +18,26 @@ const levels = {
         lv: 1,
         rows: 4,
         columns: 4,
-        tiles: 16,
+        tile_size: 8,
+        tiles: 4,
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 12,
+            turns: 3,
         },
 
     },
 
     lvl2: {
         lv: 2,
-        rows: 8,
-        columns: 3,
+        rows: 3,
+        columns: 8,
+        tile_size: 6,
         tiles: 24,
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 17,
+            turns: 21,
         },
 
     },
@@ -44,11 +46,12 @@ const levels = {
         lv: 3,
         rows: 5,
         columns: 4,
+        tile_size: 7,
         tiles: 20,
         iconSet: 'fas',
         counter: {
             time: null,
-            turns:13,
+            turns: 17,
         },
     },
 }

@@ -51,10 +51,16 @@ function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
     let duplicate = usedIcons;
     usedIcons.push(...duplicate);
 
+    //console.log('USED ICONS ARRAY:::::::::')
+    //console.log(usedIcons);
+
     const usedIconsCopy = [...usedIcons]; // Same here - creating a copy; do not assign values directly(it works for original ref only) !!
 
+    //console.log('randomized icon length:  ', randomizedIcons.length)
+    //console.log('usedIconsCopy length:  ', usedIconsCopy.length ) // JEST 0, A POWINNO BYĆ 24
+
     if(randomizedIcons.length > 0) {
-        for(let h=0; h<usedIconsCopy.length; h++) {
+        while(randomizedIcons.length > 0) {
             randomizedIcons.pop();
         }
     }
@@ -65,6 +71,8 @@ function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
 
     //console.log(usedIcons);
     //console.log(usedIconsCopy);
+    //console.log(randomizedIcons);
+    //console.log('ICONS ARRAY::');
     //console.log(randomizedIcons);
 }
 
@@ -101,13 +109,20 @@ function Game(props) {
         setRenderCount(renderCount + 1);
     }
 
+
+    //If you lose, the Icon Array has to be cleared out completely - neglecting can cause pushing not paired icons to array
+    
+    // If you win...
     const changeTileNumber = () => {
+
+        // Clean-up function whenever you finish a level
+        // First, clean up all State variables
 
         console.log('level value: '+ level);
         setLevel(level + 1);
-        // setTiles(0); // CHANGE TO 10 LATER
+        setFoundTiles(0);
+        setMoves(0);
         setTiles(levels[`lvl${level}`].tiles);
-        setRenderCount(0);
 
         cleanup();
     }
@@ -115,6 +130,25 @@ function Game(props) {
     const cleanup = () => {
         // Tu będzie rotate wszystkich ikon; w skrócie: przywracamy poziom do stanu pierwotnego i potem tworzymy kolejny poziom
         // Spróbuj jeszcze pomyśleć nad prerobieniem mechanizmu dla arr (L: 124 - 134); być może to wystarczy i ta funkcja okaże się bez sensu
+
+        // Then proceed with new tiles, grid, icons...
+
+        // Hide win confirmation table
+        setConfirmValue(null);
+
+        // Create new grid based on level values
+       // gameboard.current.style = `gridTemplateColumns: repeat(${levels[`lvl${level}`].columns}, ${levels[`lvl${level}`].tile_size}vw )`;
+       // gameboard.current.style = `gridTempleteRows: repeat(${levels[`lvl${level}`].rows}, 3vw )`;
+        //gameboard.current.style = `background: green`;
+
+        console.log('child Nodes: ')
+        console.log(gameboard.current.childNodes);
+
+        for(let x=0; x<gameboard.current.childNodes.length; x++) {
+            gameboard.current.childNodes[x].style = `visibility: visible`;
+        }
+
+        setRenderCount(0);
     }
 
     const gameboard = useRef(null);
@@ -296,7 +330,7 @@ function Game(props) {
 
     function confirmFailure() {
         setConfirmValue(false);
-        console.log('FAILURE');
+        
     }
 
 
@@ -372,7 +406,8 @@ function Game(props) {
 
                 <div> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className='game' ref={game}>
-                    <div className='board' ref={gameboard} onClick={handleState}>
+               
+                    <div className='board' ref={gameboard} onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${levels[`lvl${level-1}`].tile_size}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${levels[`lvl${level-1}`].tile_size}vw)`}}>
                         {allTiles}
                     </div>
                 </div>
@@ -388,7 +423,7 @@ function Game(props) {
                 {confrimValue === false && (
                     <div className='confirmation-f'>
                         <Confirm value={false} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={time} />,
-                        <button className='btn-f' onClick={changeTileNumber} > Try again !</button>
+                        <button className='btn-f' onClick={props.start} > Try again !</button>
                     </div>
                 )}
 
