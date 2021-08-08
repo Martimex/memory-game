@@ -1,0 +1,25 @@
+console.log('input')
+
+let map = document.querySelector('.container');
+
+
+const InverseReverse = anime.timeline({
+    duration: 800,
+    easing: 'easeInOutQuart',
+});
+
+InverseReverse
+    .add ({
+        targets: '.card',
+        //backgroundColor: '#4ba',
+        rotateY: '180deg',
+        loop: false,
+    })
+
+    .add ({
+        delay: 1400, // it prevents these two animations from running at the same time - they should work separately
+        targets: '.card',
+        //backgroundColor: '#4ba',
+        rotateY: '0deg',
+        loop: false,
+    })

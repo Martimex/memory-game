@@ -19,11 +19,11 @@ const levels = {
         rows: 4,
         columns: 4,
         tile_size: 8,
-        tiles: 4,
+        tiles: 16,
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 3,
+            turns: 1,
         },
 
     },
@@ -37,7 +37,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 21,
+            turns: 26,
         },
 
     },

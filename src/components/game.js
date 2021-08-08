@@ -3,6 +3,8 @@ import  React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import '../styles/game.css';
 import  levels from '../levels.js';
 
+import anime from 'animejs/lib/anime.es.js';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -151,12 +153,42 @@ function Game(props) {
         setRenderCount(0);
     }
 
+    const all = useRef(null);
+    const bg = useRef(null);
     const gameboard = useRef(null);
     const game = useRef(null);
+    const inverseReverse = useRef(null); // Starting animation
 
     useEffect(() => {
-        gameboard.current.addEventListener('click', clickable);
+        setTimeout(() => {
+            gameboard.current.removeEventListener('click', clickable);
+            gameboard.current.addEventListener('click', clickable);
+        }, 4000);  // Starting animation in the first place -> 800 animation time + 1400 delay - 4000 ms is a safe delay - at worse user can waste 1 - 2 turns
     }, []);
+
+    useEffect(() => {
+         // Below add some Inverse / Reverse starting animation
+         inverseReverse.current = anime.timeline({
+            duration: 800,
+            easing: 'easeInOutQuart',
+        });
+
+        inverseReverse.current
+        .add ({
+            targets: '.tile',
+            //backgroundColor: '#4ba',
+            rotateY: '180deg',
+            loop: false,
+        })
+
+        .add ({
+            delay: 1400, // it prevents these two animations from running at the same time - they should work separately
+            targets: '.tile',
+            //backgroundColor: '#4ba',
+            rotateY: '0deg',
+            loop: false,
+        })
+    }, [level]);
 
     const clickable = (e) => {
         if(e.target.classList.contains('tile')) {
@@ -203,37 +235,7 @@ function Game(props) {
         );
 
         return allTiles;
-    } */
-
-    // THIS ONE MIGHT STILL NOT WORK AS EXPECTED 
-    function animateStart() {
-
-        setTimeout(() => {
-            document.querySelectorAll('.card').forEach(card => {
-                //card.style += 'transform: rotateY(90deg); ';
-                //let back = card.querySelector('.card-back');
-                let node = card.childNodes;
-                node.style = 'transform: rotateY(180deg); border: .3rem solid hsl(51, 88%, 38%);';
-                //console.log(node);
-                for( let i = 0; i < node.length; i++) {
-                    if((node[i].classList !== undefined) && (node[i].classList.contains('card-back'))) {
-                        node[i].style = 'transform: rotateY(180deg); border: .3rem solid hsl(51, 88%, 38%);';
-                        styleNode(node[i]);
-                    }
-                }
-                //console.log(back);
-                //back.style += 'transform: rotateY(90deg); border: .3rem solid hsl(51, 88%, 38%);';
-            })
-            console.log('finished');
-            //board.addEventListener('click', clickable); 
-        }, 2000)
-    }
-    
-    
-    function styleNode(elem) {
-        console.log(elem);
-        elem.style += 'transform: rotateY(180deg); border: .3rem solid hsl(51, 88%, 38%);'
-    }
+    } */  
     
     function keepCardOpen(allCardNodes, card_back, card) {
       cardsOpened.push(card_back);
@@ -329,8 +331,30 @@ function Game(props) {
     }
 
     function confirmFailure() {
+        console.log('lost confirmed');
         setConfirmValue(false);
-        
+
+        // IT IS NOT WORKING
+
+        gameboard.current.removeEventListener('click', clickable);
+
+        // IT CAUSES NEW BUGS
+
+       /* gameboard.current = anime({
+            targets: ['.tile'],
+            duration: 500,
+            display: 'none',
+            opacity: [1, 0],
+            loop: false,
+        }); */
+
+        // IT IS NOT REMOVING ALL TILES - 2 LASTLY CHOSEN REMAINS STILL ON THE BOARD
+        setTimeout(() => {
+            for(let x=0; x<gameboard.current.childNodes.length; x++) {
+                gameboard.current.childNodes[x].style = `display: none`;
+            }
+        }, 800); // WORKS WITH A PROPER TIMEOUT VALUE
+
     }
 
 
@@ -395,16 +419,14 @@ function Game(props) {
     */
 
     return(
-        <div>
-            <div className='background'>
+        <div className='all' ref={all}>
+            <div className='background' ref={bg}>
                 {/*<GameInfo />*/}
                 <div className='game-info'>
-                    <div> Level: {levels[`lvl${level-1}`].lv} </div>
-                    <div> Turns remaining: {parseInt(levels[`lvl${level-1}`].counter.turns) - parseInt(moves)} </div>
-                    <div> Highscore: </div>
+                    <GameInfo level={level}  moves={moves} score={score}  />
                 </div>
 
-                <div> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
+                {/*<div> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>*/}
                 <div className='game' ref={game}>
                
                     <div className='board' ref={gameboard} onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${levels[`lvl${level-1}`].tile_size}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${levels[`lvl${level-1}`].tile_size}vw)`}}>

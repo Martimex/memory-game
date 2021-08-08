@@ -6,7 +6,7 @@ function Confirm(props) {
     console.log(props.value);
 
     return (
-        <div>
+        <div className='confirmation-bg'>
             <div className="confirmation-title">
                 <div className={(props.value) ? 'title-s' : 'title-f' }> {(props.value) ? 'Success !' : 'Failure !' } </div>
             </div>

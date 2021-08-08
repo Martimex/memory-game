@@ -66,6 +66,10 @@
 
 /* SUCCESS */
 
+.confirmation-bg {
+  
+}
+
 .confirmation-title, .info {
     display: flex;
     align-items: center;
@@ -89,9 +93,9 @@
 
 .confirmation-s, .confirmation-f {
     border-radius: 28%;
-    position: absolute;    top: 30%;    left: 30%;
+    position: absolute;    top: 30%;    left: 30%; 
     width: 40%;
-    height: 40%;
+    height: 40%; 
 }
 
 .confirmation-s {
@@ -158,4 +162,27 @@
     background: hsl(2, 70%, 60%);
     border: .3rem solid hsl(2, 80%, 60%);
     border-radius: 20%;
+}
+
+/* GAME DETAILS - UPPER LABEL AT THE TOP OF EVERY LEVEL */
+
+.game-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 2rem 0 2.4rem 0;
+    font-size: 1.8rem;
+}
+
+.details-item {
+    color: hsl(2, 50%, 60%);
+    letter-spacing: .1rem;
+}
+
+.details-item::after {
+    content: '';
+    display: block;
+    width: 100%;
+    margin: .2rem .8rem;
+    border: solid .1rem #ffcb22bb;
 }
