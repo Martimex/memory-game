@@ -67,7 +67,24 @@
 /* SUCCESS */
 
 .confirmation-bg {
-  
+    position: absolute; top: 0%; left: 0%;
+    width: 100%;
+    height: 100%;
+    background: #000a;
+}
+
+.confirmation-table-s, .confirmation-table-f {
+    position: absolute; top: 30%; left: 30%;
+    width: 40%; height: 40%;
+    border-radius: 28%;
+}
+
+.confirmation-table-s {
+    background: hsl(118, 50%, 50%);
+}
+
+.confirmation-table-f {
+    background: hsl(2, 50%, 50%);
 }
 
 .confirmation-title, .info {
@@ -89,22 +106,6 @@
 
 .title-f {
     color: hsl(2, 70%, 30%);
-}
-
-.confirmation-s, .confirmation-f {
-    border-radius: 28%;
-    position: absolute;    top: 30%;    left: 30%; 
-    width: 40%;
-    height: 40%; 
-}
-
-.confirmation-s {
-    background: hsl(118, 50%, 50%);
-}
-
-.confirmation-f {
-    background: hsl(2, 50%, 50%);
-
 }
 
 .info-s, .info-f {

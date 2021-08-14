@@ -100,7 +100,7 @@ function Game(props) {
     const [moves, setMoves] = useState(0);
     const [time, setTime] = useState(null);
     const [foundTiles, setFoundTiles] = useState(0);
-    const [confrimValue, setConfirmValue] = useState(null); // przyjmuje wartości true / false  -> wygrałeś / przegrałeś ten poziom ?
+    const [confirmValue, setConfirmValue] = useState(null); // przyjmuje wartości true / false  -> wygrałeś / przegrałeś ten poziom ?
     //const []
     //const [cardsOpen, setCardsOpen] = useState([]);
 
@@ -124,6 +124,7 @@ function Game(props) {
         setLevel(level + 1);
         setFoundTiles(0);
         setMoves(0);
+        setTime(0); //setTime(0);
         setTiles(levels[`lvl${level}`].tiles);
 
         cleanup();
@@ -210,6 +211,34 @@ function Game(props) {
     }
 
     //console.log(tiles);
+
+    useEffect(() => {
+
+        // ISSUE #1 : COUNTER IS BEING INVOKED DURING THE ANIMATION, CAUSING TIME TO RUN WHILE USER CAN'T CLICK ANYTHING (3 SECONDS)
+        //            IT'S MINOR ISSUE THO, BUT STILL SOMETHING THAT CAN BE MADE BETTER
+
+        // ISSUE #2 : BUG -> IF U CLICK AT VERY LAST SECOND AT LAST TWO TILES, THEN FAILURE SCREEN SHOWS UP, IMMADIETALY INTERRUPTED
+        //                   BY WINNING SCREEN. ONE OF THEM SHOULD SHOW, NOT ONE AFTER ANOTHER. RESOLVING THIS MIGHT BE CRUCIAL SINCE
+        //                   LOSING AND WINNING ANIMATIONS MIGHT BE INVOKED AT THE SAME TIME, CAUSING VISUAL BUGS...
+
+        const stopwatch = setInterval(() => {
+            setTime(time + 1);
+        }, 1000);
+
+        if((foundTiles === tiles) && (levels[`lvl${level-1}`].counter.time - time > 0)) {
+            console.log('Time game won')
+            confirmSuccess();
+            clearInterval(stopwatch);
+        }
+
+        else if((levels[`lvl${level-1}`].counter.time - time <= 0) && (levels[`lvl${level-1}`].counter.time !== null)) {
+            confirmFailure();
+            clearInterval(stopwatch);
+        }
+
+        return () => clearInterval(stopwatch);
+    }, [time]);
+
 
     let arr = [];
 
@@ -349,18 +378,18 @@ function Game(props) {
         }); */
 
         // IT IS NOT REMOVING ALL TILES - 2 LASTLY CHOSEN REMAINS STILL ON THE BOARD
-        setTimeout(() => {
+      /*   setTimeout(() => {
             for(let x=0; x<gameboard.current.childNodes.length; x++) {
                 gameboard.current.childNodes[x].style = `display: none`;
             }
-        }, 800); // WORKS WITH A PROPER TIMEOUT VALUE
+        }, 800); // WORKS WITH A PROPER TIMEOUT VALUE */
 
     }
-
 
     function handleState() {
         console.log('handleState fired');
 
+        //if(levels[`lvl${level-1}`].counter.turns === null) { return; }
         //if(iter > 0) { return; }
 
         iter++;
@@ -379,7 +408,7 @@ function Game(props) {
                 // Please do find a better solution than this....
 
 
-                if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+                if((cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
                     setFoundTiles(foundTiles + 2);
                     if((foundTiles+2) === tiles) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
                         confirmSuccess();
@@ -423,7 +452,7 @@ function Game(props) {
             <div className='background' ref={bg}>
                 {/*<GameInfo />*/}
                 <div className='game-info'>
-                    <GameInfo level={level}  moves={moves} score={score}  />
+                    <GameInfo level={level}  moves={moves} time={time} score={score}  />
                 </div>
 
                 {/*<div> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>*/}
@@ -436,16 +465,14 @@ function Game(props) {
                 {level === 1 && (
                     <button className='summary' onClick={changeTileNumber} > Submit</button>
                 )}
-                {confrimValue === true && (
+                {confirmValue === true && (
                     <div className='confirmation-s'>
-                        <Confirm value={true} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={time} />
-                        <button className='btn-s' onClick={changeTileNumber} > Next level </button>
+                        <Confirm value={true} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} next={changeTileNumber}/>
                     </div>
                 )}
-                {confrimValue === false && (
+                {confirmValue === false && (
                     <div className='confirmation-f'>
-                        <Confirm value={false} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={time} />,
-                        <button className='btn-f' onClick={props.start} > Try again !</button>
+                        <Confirm value={false} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} start={props.start}/>,
                     </div>
                 )}
 
