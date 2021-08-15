@@ -1,4 +1,4 @@
-
+// PLEASE DO NOT TEST LEVELS WITH 2 TILES !!!
 const levels = {
 
     // FALLBACK, SINCE FOR SOME REASON VERY FIRST RENDER DOESN'T APPEAR TO DISPLAY CARDS
@@ -10,8 +10,17 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 0,
-        }
+            turns: null,
+        },
+        onStartFlag: function() {
+            return;
+        },
+        onFirstClickFlag: function() {
+            return;
+        },
+        onSecondClickFlag: function() {
+            return;
+        },
     },
 
     lvl1: {
@@ -19,11 +28,20 @@ const levels = {
         rows: 4,
         columns: 4,
         tile_size: 8,
-        tiles: 8,   // 16
+        tiles: 6,   // 16
         iconSet: 'fas',
         counter: {
-            time: 16,
-            turns: null, // 12
+            time: null, // 16
+            turns: 4, // 12
+        },
+        onStartFlag: function() {
+            console.log('%c start function flag runs', 'background: #222; color: #bada55');
+        },
+        onFirstClickFlag: function() {        // It means every first push to the pair array
+            console.log('%c first click', 'background: #721; color: #174bb9'); 
+        },
+        onSecondClickFlag: function() {       // It means every second push to the pair array
+            console.log('%c second click', 'background: #ab3; color: #a4713e');
         },
 
     },
@@ -33,13 +51,21 @@ const levels = {
         rows: 3,
         columns: 8,
         tile_size: 6,
-        tiles: 24,
+        tiles: 4,  // 24
         iconSet: 'fas',
         counter: {
-            time: 75,
-            turns: null,  // 26
+            time: null,  // 75
+            turns: 26,  // 26
         },
-
+        onStartFlag: function() {
+            console.log('%c Love ya', 'background: #471; color: #af43d8');
+        },
+        onFirstClickFlag: function() {
+            console.log('%c got you', 'background: #721; color: #174bb9'); 
+        },
+        onSecondClickFlag: function() {
+            console.log('%c lol it works', 'background: #ab3; color: #a4713e');
+        },
     },
 
     lvl3: {
@@ -47,11 +73,20 @@ const levels = {
         rows: 5,
         columns: 4,
         tile_size: 7,
-        tiles: 20,
+        tiles: 6,  // 20
         iconSet: 'fas',
         counter: {
             time: null,
             turns: 17,
+        },
+        onStartFlag: function() {
+            return;
+        },
+        onFirstClickFlag: function() {
+            return;
+        },
+        onSecondClickFlag: function() {
+            return;
         },
     },
 }

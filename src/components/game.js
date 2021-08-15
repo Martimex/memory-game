@@ -126,6 +126,7 @@ function Game(props) {
         setMoves(0);
         setTime(0); //setTime(0);
         setTiles(levels[`lvl${level}`].tiles);
+        setConfirmValue(null);
 
         cleanup();
     }
@@ -137,7 +138,9 @@ function Game(props) {
         // Then proceed with new tiles, grid, icons...
 
         // Hide win confirmation table
-        setConfirmValue(null);
+
+        //setConfirmValue(null);
+        
 
         // Create new grid based on level values
        // gameboard.current.style = `gridTemplateColumns: repeat(${levels[`lvl${level}`].columns}, ${levels[`lvl${level}`].tile_size}vw )`;
@@ -165,10 +168,16 @@ function Game(props) {
             gameboard.current.removeEventListener('click', clickable);
             gameboard.current.addEventListener('click', clickable);
         }, 4000);  // Starting animation in the first place -> 800 animation time + 1400 delay - 4000 ms is a safe delay - at worse user can waste 1 - 2 turns
-    }, []);
+    }, []); // leave this dependency array as it is
 
     useEffect(() => {
+
+        // ADD STARTING FLAG
+
+            levels[`lvl${level-1}`].onStartFlag(); // it works !!
+
          // Below add some Inverse / Reverse starting animation
+
          inverseReverse.current = anime.timeline({
             duration: 800,
             easing: 'easeInOutQuart',
@@ -214,30 +223,52 @@ function Game(props) {
 
     useEffect(() => {
 
+        if(levels[`lvl${level-1}`].counter.turns !== null) {
+            if((foundTiles+2) === tiles) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
+                console.log('moves win');
+                confirmSuccess();
+            }
+
+            else if((parseInt(levels[`lvl${level-1}`].counter.turns) - moves) <= 0) {  // SetState is async, so we need to prepend a value right before
+                confirmFailure();
+            } 
+        } 
+
+    }, [moves]);
+
+
+    useEffect(() => {
+
         // ISSUE #1 : COUNTER IS BEING INVOKED DURING THE ANIMATION, CAUSING TIME TO RUN WHILE USER CAN'T CLICK ANYTHING (3 SECONDS)
         //            IT'S MINOR ISSUE THO, BUT STILL SOMETHING THAT CAN BE MADE BETTER
 
         // ISSUE #2 : BUG -> IF U CLICK AT VERY LAST SECOND AT LAST TWO TILES, THEN FAILURE SCREEN SHOWS UP, IMMADIETALY INTERRUPTED
-        //                   BY WINNING SCREEN. ONE OF THEM SHOULD SHOW, NOT ONE AFTER ANOTHER. RESOLVING THIS MIGHT BE CRUCIAL SINCE
+        //  (RESOLVED)       BY WINNING SCREEN. ONE OF THEM SHOULD SHOW, NOT ONE AFTER ANOTHER. RESOLVING THIS MIGHT BE CRUCIAL SINCE
         //                   LOSING AND WINNING ANIMATIONS MIGHT BE INVOKED AT THE SAME TIME, CAUSING VISUAL BUGS...
 
-        const stopwatch = setInterval(() => {
-            setTime(time + 1);
-        }, 1000);
-
-        if((foundTiles === tiles) && (levels[`lvl${level-1}`].counter.time - time > 0)) {
-            console.log('Time game won')
-            confirmSuccess();
-            clearInterval(stopwatch);
+        if(levels[`lvl${level-1}`].counter.time !== null) {
+            const stopwatch = setInterval(() => {
+                setTime(time + 1);
+            }, 1000);
+    
+            //if(renderCount < 1) {return () => clearInterval(stopwatch);};  // Prevents from causing error on very first render - line below causes it
+    
+            if((foundTiles === tiles) && (levels[`lvl${level-1}`].counter.time - time > 0)) {
+                console.log('Time game won')
+                confirmSuccess();
+                clearInterval(stopwatch);
+    
+            }
+    
+            else if((levels[`lvl${level-1}`].counter.time - time <= 0) && (levels[`lvl${level-1}`].counter.time !== null)) {
+                confirmFailure();
+                clearInterval(stopwatch);
+            }
+    
+            return () => clearInterval(stopwatch);
         }
 
-        else if((levels[`lvl${level-1}`].counter.time - time <= 0) && (levels[`lvl${level-1}`].counter.time !== null)) {
-            confirmFailure();
-            clearInterval(stopwatch);
-        }
-
-        return () => clearInterval(stopwatch);
-    }, [time]);
+    }, [time, level]); // Level because normally we won't count down time - only when those time levels came in, so every time we need to check if new level is the time level
 
 
     let arr = [];
@@ -276,8 +307,9 @@ function Game(props) {
        checkParentOrigin(cardsOpened); // Prevents from tile + outer tile border click bug
     
       if(cardsOpened.length > 1) {
-          doCardsMatch(cardsOpened);
-      }
+            //levels[`lvl${level-1}`].onSecondClickFlag();
+            doCardsMatch(cardsOpened);
+       }
     }
     
     function checkParentOrigin(cardsOpened) {
@@ -317,12 +349,12 @@ function Game(props) {
 
                 // *W tym miejscu robimy animację znikania* -> W tym celu pobierz anime.js na potrzeby tego projektu
                 
-                console.log({foundTiles});
-                console.log({tiles});
+                //console.log({foundTiles});
+                //console.log({tiles});
 
-                if({foundTiles} === {tiles}) {  // If you win the level...
-                    confirmSuccess();
-                }
+                //if({foundTiles} === {tiles}) {  // If you win the level...
+                //    confirmSuccess();
+                //}
 
                 // Testy z VANTA.JS
                 
@@ -335,9 +367,9 @@ function Game(props) {
                 cardsOpened[1].parentNode.style = `transform: rotateY(${temp}deg);`;
     
                 console.log({moves});
-                if((parseInt(levels[`lvl${level-1}`].counter.turns) - {moves}) <= 0) {
-                    confirmFailure();
-                }
+                //if((parseInt(levels[`lvl${level-1}`].counter.turns) - {moves}) <= 0) {
+                //    confirmFailure();
+                //}
             }
             console.log('time out');
     
@@ -387,40 +419,40 @@ function Game(props) {
     }
 
     function handleState() {
-        console.log('handleState fired');
 
-        //if(levels[`lvl${level-1}`].counter.turns === null) { return; }
-        //if(iter > 0) { return; }
+        // PREVENT FIRSTCLICK AND SECONDCLICK MULTIPLE TIMES INVOKING WHEN USER KEEPS PRESSING THE SAME TILE / SOME TILES MULTIPLE TIMES !!!!
 
-        iter++;
+        if(cardsOpened.length > 1) {
+            levels[`lvl${level-1}`].onSecondClickFlag();
+        }
+
+        else if(cardsOpened.length === 1) {
+            levels[`lvl${level-1}`].onFirstClickFlag();
+        }
+
         setTimeout(() => {
-
-        
+            
             if(cardsOpened.length > 1) {
+
                 if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
                     console.log('conditions passed')
                     return;
                 }
 
-                
-                setMoves(moves + 1);
-                // Block the scope and prevents from fast-clicking turn decreasing behaviour
-                // Please do find a better solution than this....
-
+                if(levels[`lvl${level-1}`].counter.turns !== null) {
+                    setMoves(moves + 1);
+                }
 
                 if((cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
                     setFoundTiles(foundTiles + 2);
-                    if((foundTiles+2) === tiles) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
-                        confirmSuccess();
-                        return;
-                    }
-
                 }
+        
+                // Block the scope and prevents from fast-clicking turn decreasing behaviour
+                // Please do find a better solution than this....
 
-                if((parseInt(levels[`lvl${level-1}`].counter.turns) - (moves + 1)) <= 0) {  // SetState is async, so we need to prepend a value right before
-                    confirmFailure();
-                }
-            }    
+                // useEffect for below lines of code
+            } 
+
         }, 800)
     }
     /* useLayoutEffect(() => {
