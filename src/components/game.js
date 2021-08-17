@@ -22,6 +22,8 @@ let usedIcons = [];
 let randomizedIcons = [];
 
 let cardsOpened = [];
+let handleCount = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag poprzez kliknięcie - dotyczy onFirstClick
+let handleCheck = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag poprzez kliknięcie - dotyczy onSecondClick
 
 let iter = 0; // Prevents from using multiple turns during the cards checkout animation
 
@@ -94,6 +96,7 @@ function Game(props) {
     // SET MOVES ODEJMUJE SIĘ TYLKO 1 RAZ (Z JAKIEGOŚ POWODU...) => MOŻE DLATEGO, ŻE REACT NIE WIDZI ŻADNYCH ZMIAN, PRZEZ CO NIE MALUJE EKRANU NA NOWO
 
     const [renderCount, setRenderCount] = useState(0);
+    const [animationLoad, setAnimationLoad] = useState(false);
     const [tiles, setTiles] = useState(null);  // Ta wartość odpowiada za poprawne malowanie ekranu - NIE WOLNO JEJ MODYFIKOWAĆ W TRAKCIE GRY !
     const [level, setLevel] = useState(1);
     const [score, setScore] = useState(0);
@@ -121,12 +124,16 @@ function Game(props) {
         // First, clean up all State variables
 
         console.log('level value: '+ level);
+        //setAnimationLoad(false);
         setLevel(level + 1);
         setFoundTiles(0);
         setMoves(0);
         setTime(0); //setTime(0);
         setTiles(levels[`lvl${level}`].tiles);
         setConfirmValue(null);
+
+        handleCount = 0;
+        handleCheck = 0;
 
         cleanup();
     }
@@ -164,11 +171,11 @@ function Game(props) {
     const inverseReverse = useRef(null); // Starting animation
 
     useEffect(() => {
-        setTimeout(() => {
-            gameboard.current.removeEventListener('click', clickable);
-            gameboard.current.addEventListener('click', clickable);
-        }, 4000);  // Starting animation in the first place -> 800 animation time + 1400 delay - 4000 ms is a safe delay - at worse user can waste 1 - 2 turns
-    }, []); // leave this dependency array as it is
+        gameboard.current.removeEventListener('click', clickable);
+        gameboard.current.addEventListener('click', clickable);
+        handleCount = 0;
+            // Starting animation in the first place -> 800 animation time + 1400 delay - 4000 ms is a safe delay - at worse user can waste 1 - 2 turns
+    }, [setAnimationLoad]); // leave this dependency array as it is -> [] */
 
     useEffect(() => {
 
@@ -178,36 +185,41 @@ function Game(props) {
 
          // Below add some Inverse / Reverse starting animation
 
-         inverseReverse.current = anime.timeline({
-            duration: 800,
-            easing: 'easeInOutQuart',
-        });
+            inverseReverse.current = anime.timeline({
+                duration: 800,
+                easing: 'easeInOutQuart',
+            });
+    
+            inverseReverse.current
+            .add ({
+                targets: '.tile',
+                //backgroundColor: '#4ba',
+                rotateY: '180deg',
+                loop: false,
+            })
+    
+            .add ({
+                //delay: 1400, // it prevents these two animations from running at the same time - they should work separately
+                targets: '.tile',
+                //backgroundColor: '#4ba',
+                rotateY: '0deg',
+                loop: false,
+            }, '+=1200')
 
-        inverseReverse.current
-        .add ({
-            targets: '.tile',
-            //backgroundColor: '#4ba',
-            rotateY: '180deg',
-            loop: false,
-        })
-
-        .add ({
-            delay: 1400, // it prevents these two animations from running at the same time - they should work separately
-            targets: '.tile',
-            //backgroundColor: '#4ba',
-            rotateY: '0deg',
-            loop: false,
-        })
+        setTimeout(() => {
+            setAnimationLoad(true);
+        }, 5000);
+            
     }, [level]);
 
-    const clickable = (e) => {
+    function clickable(e)  {
         if(e.target.classList.contains('tile')) {
             e.target.style = 'transform: rotateY(180deg);'; // border: .3rem solid hsl(51, 88%, 38%);
             //console.log(e.target.childNodes);
             let node = e.target.childNodes;
             for( let i = 0; i < node.length; i++) {
                 if((node[i].classList !== undefined) && (node[i].classList.contains('tile-back'))) {
-                    //console.log('indeed')
+                    console.log('indeed')
                     //styleNode(node[i]);
                     keepCardOpen(node, node[i], e);
 
@@ -216,6 +228,7 @@ function Game(props) {
             //setMoves(moves + 1);
         } else {
             console.log('nope');
+            handleCount++;
         }
     }
 
@@ -298,9 +311,11 @@ function Game(props) {
     } */  
     
     function keepCardOpen(allCardNodes, card_back, card) {
-      cardsOpened.push(card_back);
+      
+        console.log(cardsOpened.length);
+        cardsOpened.push(card_back);
 
-      console.log(cardsOpened);
+      console.log(cardsOpened.length);
 
       // Czy user wybrał już 2 karty ?
     
@@ -315,6 +330,7 @@ function Game(props) {
     function checkParentOrigin(cardsOpened) {
 
         if((cardsOpened.length > 1) && (cardsOpened[0].parentNode === cardsOpened[1].parentNode)) {
+            handleCount++;
             cardsOpened.pop();
         }
     }
@@ -324,15 +340,16 @@ function Game(props) {
     function doCardsMatch(cardsOpened) {
         // Block the click listener for a brief checkout duration
         gameboard.current.removeEventListener('click', clickable);  //game.childNodes[0]
-        console.log(cardsOpened[0]);
-        console.log(cardsOpened[1]);
+        //console.log(cardsOpened.length);
+        //console.log(cardsOpened[0]);
+        //console.log(cardsOpened[1]);
     
         console.log('checking...');
         setTimeout(() => {
     
             //console.log(cardsOpened[0].parentNode);
             //console.log(cardsOpened[1]);
-    
+            
             //console.log(cardsOpened[0].childNodes[0].classList[1])
             //console.log(cardsOpened[1].childNodes[0].classList[1]);
 
@@ -377,13 +394,13 @@ function Game(props) {
                 cardsOpened.pop();
             }
     
-            console.log(cardsOpened);
+            //console.log(cardsOpened);
     
             setTimeout(() => {
                 gameboard.current.addEventListener('click', clickable); // game.childNodes[0]
             }, 800); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
     
-        }, 900);
+        }, 900); // this time allows to see two opend tiles for user - he can check whether they match or not
     }
         
     function confirmSuccess() {
@@ -410,7 +427,7 @@ function Game(props) {
         }); */
 
         // IT IS NOT REMOVING ALL TILES - 2 LASTLY CHOSEN REMAINS STILL ON THE BOARD
-      /*   setTimeout(() => {
+      /*   setTi2meout(() => {
             for(let x=0; x<gameboard.current.childNodes.length; x++) {
                 gameboard.current.childNodes[x].style = `display: none`;
             }
@@ -422,13 +439,25 @@ function Game(props) {
 
         // PREVENT FIRSTCLICK AND SECONDCLICK MULTIPLE TIMES INVOKING WHEN USER KEEPS PRESSING THE SAME TILE / SOME TILES MULTIPLE TIMES !!!!
 
-        if(cardsOpened.length > 1) {
-            levels[`lvl${level-1}`].onSecondClickFlag();
-        }
+        console.log('handleState invoked...')
 
-        else if(cardsOpened.length === 1) {
+        if((handleCount < 1) && (cardsOpened.length === 1)) {
+            handleCheck = 0;
             levels[`lvl${level-1}`].onFirstClickFlag();
         }
+
+        else if((handleCheck < 1) && (cardsOpened.length > 1)) {
+            levels[`lvl${level-1}`].onSecondClickFlag();
+            handleCheck++;
+        }
+
+        handleCount++;
+        //console.log(handleCount);
+
+        //if(handleCount === 1) {
+         //       
+         //   levels[`lvl${level-1}`].onFirstClickFlag();
+       // }
 
         setTimeout(() => {
             
@@ -449,11 +478,12 @@ function Game(props) {
         
                 // Block the scope and prevents from fast-clicking turn decreasing behaviour
                 // Please do find a better solution than this....
-
                 // useEffect for below lines of code
+                //handleCheck = 0;
             } 
-
-        }, 800)
+            handleCount = 0;
+        }, 800) // block the scope and prevents from fast-clicking turn decreasing behaviour
+        handleCount = 0;
     }
     /* useLayoutEffect(() => {
 

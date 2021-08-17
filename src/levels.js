@@ -80,13 +80,13 @@ const levels = {
             turns: 17,
         },
         onStartFlag: function() {
-            return;
+            console.log('%c start function flag runs', 'background: #222; color: #bada55');
         },
         onFirstClickFlag: function() {
-            return;
+            console.log('%c first click', 'background: #721; color: #174bb9'); 
         },
         onSecondClickFlag: function() {
-            return;
+            console.log('%c second click', 'background: #ab3; color: #a4713e');
         },
     },
 }
