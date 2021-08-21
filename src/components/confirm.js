@@ -1,10 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Game from './game.js';
 import levels from '../levels.js';
+import anime from 'animejs/lib/anime.es.js';
 
 function Confirm(props) {
 
     console.log(props.value);
+
+    const highscoreVis = useRef(null);
+
+    highscoreVis.current= anime({
+        targets: '.total-score',
+        duration: 2400,
+        opacity: [0, 1],
+        easing: 'linear',
+    })
 
     return (
         <div className='confirmation-bg'>
@@ -23,11 +33,11 @@ function Confirm(props) {
                 </div>
                 <div className={(props.value) ? 'info-s' : 'info-f' }>
                     <div className='info-score'> Score: </div>
-                    <div className='info-score-val'> 9 </div>
+                    <div className='info-score-val'> {props.score} </div>
                 </div>
 
                 <div className={(props.value) ? 'highscore-s' : 'highscore-f' }> Highscore: 
-                    <div className='total-score'> 14 </div>
+                    <div className='total-score' ref={highscoreVis}> {props.highscore} </div>
                 </div>
                 {(props.value) ?
                 <button className='btn-s' onClick={props.next} > Next level </button>

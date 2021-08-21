@@ -21,11 +21,18 @@ library.add(fab, fas);
 let usedIcons = [];
 let randomizedIcons = [];
 
+//let highscore = 0; // Your total score count
+
 let cardsOpened = [];
 let handleCount = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag poprzez kliknięcie - dotyczy onFirstClick
 let handleCheck = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag poprzez kliknięcie - dotyczy onSecondClick
 
+let scoreAddon = 0;
+
 let iter = 0; // Prevents from using multiple turns during the cards checkout animation
+const scorePerPair = 100;  // Don't modify this varible; let it be with this value
+const moveScoreValue = 150; // Don't momdify aswell - it calculates score for every remaining move after you've succeded
+const timeScoreValue = 50; // Don't momdify aswell - it calculates score for every remaining second after you've succeded, it's calculated twice, so add '/2' value
 
 function clearArrayElems(usedIcons, randomizedIcons, /*fasArrayCopy, fabArrayCopy*/) {
     //for() // Clear all arrays, because every render pushes next elems, making arrays with unlimited elems !!!!!!!!!
@@ -100,6 +107,8 @@ function Game(props) {
     const [tiles, setTiles] = useState(null);  // Ta wartość odpowiada za poprawne malowanie ekranu - NIE WOLNO JEJ MODYFIKOWAĆ W TRAKCIE GRY !
     const [level, setLevel] = useState(1);
     const [score, setScore] = useState(0);
+    const [scoreMultiplier, setScoreMultiplier] = useState(1);
+    const [highscore, setHighscore] = useState(0);
     const [moves, setMoves] = useState(0);
     const [time, setTime] = useState(null);
     const [foundTiles, setFoundTiles] = useState(0);
@@ -127,11 +136,14 @@ function Game(props) {
         //setAnimationLoad(false);
         setLevel(level + 1);
         setFoundTiles(0);
+        setScore(0);
+        setScoreMultiplier(1);
         setMoves(0);
         setTime(0); //setTime(0);
         setTiles(levels[`lvl${level}`].tiles);
         setConfirmValue(null);
 
+        scoreAddon = 0;
         handleCount = 0;
         handleCheck = 0;
 
@@ -404,13 +416,35 @@ function Game(props) {
     }
         
     function confirmSuccess() {
+     
+        scoreAddon = (scorePerPair * scoreMultiplier);
+
+        if(levels[`lvl${level-1}`].counter.turns !== null) {
+            setHighscore(highscore + score +  scoreAddon + ((levels[`lvl${level-1}`].counter.turns - moves) * moveScoreValue));
+        }
+        else {  // So it was time level
+            setHighscore(highscore + score  + ((levels[`lvl${level-1}`].counter.time - time) * timeScoreValue));
+        } 
+
         setConfirmValue(true);
+        
+        
         console.log('SUCCESS');
     }
 
     function confirmFailure() {
-        console.log('lost confirmed');
+        
+        if(levels[`lvl${level-1}`].counter.turns !== null) {
+            setHighscore(highscore + score + scoreAddon + ((levels[`lvl${level-1}`].counter.turns - moves) * moveScoreValue));
+        }
+        else {  // So it was time level
+            setHighscore(highscore + score  + ((levels[`lvl${level-1}`].counter.time - time) * timeScoreValue));
+        } 
+
         setConfirmValue(false);
+
+        console.log('lost confirmed');
+        
 
         // IT IS NOT WORKING
 
@@ -474,6 +508,13 @@ function Game(props) {
 
                 if((cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
                     setFoundTiles(foundTiles + 2);
+                    setScore(score +(scorePerPair * scoreMultiplier));
+                    scoreAddon = ((scorePerPair * scoreMultiplier) +50);  // if u lose, but the last pair match
+                    setScoreMultiplier(scoreMultiplier + 0.5);
+                }
+                else {
+                    setScoreMultiplier(1);
+                    scoreAddon = 0;  // if u lose, but the last pair doesn't match
                 }
         
                 // Block the scope and prevents from fast-clicking turn decreasing behaviour
@@ -529,12 +570,12 @@ function Game(props) {
                 )}
                 {confirmValue === true && (
                     <div className='confirmation-s'>
-                        <Confirm value={true} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} next={changeTileNumber}/>
+                        <Confirm value={true} level={level} score={score} highscore={highscore} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} next={changeTileNumber}/>
                     </div>
                 )}
                 {confirmValue === false && (
                     <div className='confirmation-f'>
-                        <Confirm value={false} level={level} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} start={props.start}/>,
+                        <Confirm value={false} level={level} score={score} highscore={highscore} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} start={props.start}/>,
                     </div>
                 )}
 

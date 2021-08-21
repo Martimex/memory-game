@@ -55,7 +55,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,  // 75
-            turns: 26,  // 26
+            turns: 2,  // 26
         },
         onStartFlag: function() {
             console.log('%c Love ya', 'background: #471; color: #af43d8');
