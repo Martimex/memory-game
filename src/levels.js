@@ -1,3 +1,6 @@
+import flags from './flags.js';
+import Game from './components/game';
+
 // PLEASE DO NOT TEST LEVELS WITH 2 TILES !!!
 const levels = {
 
@@ -28,20 +31,24 @@ const levels = {
         rows: 4,
         columns: 4,
         tile_size: 8,
-        tiles: 6,   // 16
+        tiles: 16,   // 16 , 6
         iconSet: 'fas',
         counter: {
             time: null, // 16
-            turns: 4, // 12
+            turns: 15, // 12  , 15, 14,  4
         },
         onStartFlag: function() {
             console.log('%c start function flag runs', 'background: #222; color: #bada55');
+            flags.loadBorders_1();
         },
         onFirstClickFlag: function() {        // It means every first push to the pair array
-            console.log('%c first click', 'background: #721; color: #174bb9'); 
+            console.log('%c first click', 'background: #721; color: #174bb9');
+            flags.markBorders_1();
         },
         onSecondClickFlag: function() {       // It means every second push to the pair array
             console.log('%c second click', 'background: #ab3; color: #a4713e');
+            flags.markBorders_1();
+            //flags.removeBordersMark_1();
         },
 
     },

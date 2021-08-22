@@ -2,6 +2,7 @@
 import  React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import '../styles/game.css';
 import  levels from '../levels.js';
+import flags from '../flags.js';
 
 import anime from 'animejs/lib/anime.es.js';
 
@@ -192,9 +193,10 @@ function Game(props) {
     useEffect(() => {
 
         // ADD STARTING FLAG
-
             levels[`lvl${level-1}`].onStartFlag(); // it works !!
 
+            // MAYBE DURING ANIMATION TIME ADD SOME INVINCIBLE LAYER, WHICH PREVENTS FROM CLICKING DURING THE ANIMATION PROCESS ???
+            //gameboard.current.removeEventListener('click', clickable);
          // Below add some Inverse / Reverse starting animation
 
             inverseReverse.current = anime.timeline({
@@ -218,9 +220,11 @@ function Game(props) {
                 loop: false,
             }, '+=1200')
 
-        setTimeout(() => {
+            inverseReverse.current.finished.then(() => { console.log('timeline accpeted')});
+
+        /* setTimeout(() => {
             setAnimationLoad(true);
-        }, 5000);
+        }, 5000); */
             
     }, [level]);
 
@@ -311,7 +315,7 @@ function Game(props) {
     //console.log('length: ', arr.length)
 
     let allTiles =  arr.map((tile, index) =>  
-        <div className={`tile`} key={index.toString()}><div className='tile-front'></div> <div className='tile-back'>{<FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon`}/>}</div></div>
+        <div className={`tile t-${level-1}`} key={index.toString()}><div className={`tile-front tf-${level-1}`}></div> <div className={`tile-back tb-${level-1}`}>{<FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon-${level-1}`}/>}</div></div>
     ); 
 
     /* function createAllTiles(randomizedIcons) {
@@ -552,16 +556,16 @@ function Game(props) {
 
     return(
         <div className='all' ref={all}>
-            <div className='background' ref={bg}>
+            <div className={`background bg-${level-1}`} ref={bg}>
                 {/*<GameInfo />*/}
                 <div className='game-info'>
                     <GameInfo level={level}  moves={moves} time={time} score={score}  />
                 </div>
 
                 {/*<div> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>*/}
-                <div className='game' ref={game}>
+                <div className={`game game-${level-1}`} ref={game}>
                
-                    <div className='board' ref={gameboard} onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${levels[`lvl${level-1}`].tile_size}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${levels[`lvl${level-1}`].tile_size}vw)`}}>
+                    <div className={`board board-${level-1}`} ref={gameboard} onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${levels[`lvl${level-1}`].tile_size}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${levels[`lvl${level-1}`].tile_size}vw)`}}>
                         {allTiles}
                     </div>
                 </div>
@@ -585,3 +589,4 @@ function Game(props) {
 } 
 
 export default Game;
+//export gameboard;
