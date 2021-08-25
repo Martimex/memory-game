@@ -232,12 +232,13 @@ function Game(props) {
         if(e.target.classList.contains('tile')) {
             e.target.style = 'transform: rotateY(180deg);'; // border: .3rem solid hsl(51, 88%, 38%);
             //console.log(e.target.childNodes);
+            let trgt = e.target;
             let node = e.target.childNodes;
             for( let i = 0; i < node.length; i++) {
                 if((node[i].classList !== undefined) && (node[i].classList.contains('tile-back'))) {
                     console.log('indeed')
                     //styleNode(node[i]);
-                    keepCardOpen(node, node[i], e);
+                    keepCardOpen(node, node[i], e, trgt);
 
                 }
             }
@@ -326,7 +327,7 @@ function Game(props) {
         return allTiles;
     } */  
     
-    function keepCardOpen(allCardNodes, card_back, card) {
+    function keepCardOpen(allCardNodes, card_back, card, target) {
       
         console.log(cardsOpened.length);
         cardsOpened.push(card_back);
@@ -336,7 +337,9 @@ function Game(props) {
       // Czy user wybrał już 2 karty ?
     
        checkParentOrigin(cardsOpened); // Prevents from tile + outer tile border click bug
-    
+        console.log(card)
+       target.classList.add('target');
+
       if(cardsOpened.length > 1) {
             //levels[`lvl${level-1}`].onSecondClickFlag();
             doCardsMatch(cardsOpened);
@@ -501,6 +504,10 @@ function Game(props) {
             
             if(cardsOpened.length > 1) {
 
+                for(let i=0; i < cardsOpened.length; i++) {
+                    cardsOpened[i].parentNode.classList.remove('target');
+                }
+
                 if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
                     console.log('conditions passed')
                     return;
@@ -562,10 +569,10 @@ function Game(props) {
                     <GameInfo level={level}  moves={moves} time={time} score={score}  />
                 </div>
 
-                {/*<div> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>*/}
+                <div onClick={() => {confirmSuccess()}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className={`game game-${level-1}`} ref={game}>
                
-                    <div className={`board board-${level-1}`} ref={gameboard} onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${levels[`lvl${level-1}`].tile_size}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${levels[`lvl${level-1}`].tile_size}vw)`}}>
+                    <div className={`board board-${level-1}`} ref={gameboard} onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`}}>
                         {allTiles}
                     </div>
                 </div>

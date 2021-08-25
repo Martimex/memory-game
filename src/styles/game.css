@@ -242,3 +242,78 @@
 .score-1 {
     color: hsl(4, 87%, 84%); 
 }
+
+
+/* LEVEL 2 */
+
+.bg-2 {
+    overflow: hidden;
+    position: absolute; top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #222;
+    background-image: linear-gradient(40deg, #54e, #4c5);
+}
+
+.flood {
+
+}
+
+.flood-elem {
+    z-index: -54;
+    width:100%;
+    height: .5%;
+    background: #001;
+}
+
+.game-2 {
+    
+}
+
+.board-2 {
+    background: inherit;
+    /*border: 2px solid #eee;*/
+    -webkit-box-shadow: -8px 0px 10px -5px #000000, 9px 0px 10px -5px #000000, 0px 0px 8px 29px rgba(116,211,255,0.43); 
+    box-shadow: -8px 0px 10px -5px #000000, 9px 0px 10px -5px #000000, 0px 0px 8px 29px rgba(116,211,255,0.43);
+}
+
+.fa-icon-2 {
+    color: hsl(4, 87%, 95%);
+    font-size: 1.3rem;
+    /*color: hsl(105, 70%, 60%);*/
+}
+
+
+.t-2 {  /* Front size of card */
+    border: .15rem solid hsl(199, 100%, 73%);
+}
+
+.tf-2 { /* Have no clue what this class is for */
+
+}
+
+.tb-2 {  /* Back side of card */
+
+}
+
+.level-2::after, .counter-2::after, .score-2::after {
+    content: '';
+    display: block;
+    width: 100%;
+    border:hsla(199, 100%, 73%, 40%) solid .15rem;
+    height: 1rem;
+    background: hsla(118, 70%, 60%, 15%);
+    /*background: inherit;*/
+}
+
+.level-2 {
+  color: #ddd;
+}
+
+.counter-2 {
+    color: #ddd;
+}
+
+.score-2 {
+    color: #ddd;
+}

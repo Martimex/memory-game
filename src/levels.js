@@ -30,8 +30,8 @@ const levels = {
         lv: 1,
         rows: 4,
         columns: 4,
-        tile_size: 8,
-        tiles: 16,   // 16 , 6
+        tile_size: 80, // 80 x 0.1vw
+        tiles: 6,   // 16 , 6
         iconSet: 'fas',
         counter: {
             time: null, // 16
@@ -57,21 +57,24 @@ const levels = {
         lv: 2,
         rows: 3,
         columns: 8,
-        tile_size: 6,
-        tiles: 4,  // 24
+        tile_size: 64,
+        tiles: 24,  // 24
         iconSet: 'fas',
         counter: {
-            time: null,  // 75
-            turns: 2,  // 26
+            time: 75,  // 75
+            turns: null,  // 26
         },
         onStartFlag: function() {
             console.log('%c Love ya', 'background: #471; color: #af43d8');
+            flags.setBackgroundFlood_2();
         },
         onFirstClickFlag: function() {
-            console.log('%c got you', 'background: #721; color: #174bb9'); 
+            console.log('%c got you', 'background: #721; color: #174bb9');
+            flags.colorBackground_2();
         },
         onSecondClickFlag: function() {
             console.log('%c lol it works', 'background: #ab3; color: #a4713e');
+            flags.colorBackground_2();
         },
     },
 
