@@ -31,7 +31,7 @@ const levels = {
         rows: 4,
         columns: 4,
         tile_size: 80, // 80 x 0.1vw
-        tiles: 6,   // 16 , 6
+        tiles: 16,   // 16 , 6
         iconSet: 'fas',
         counter: {
             time: null, // 16

@@ -1,7 +1,7 @@
 import anime from 'animejs/lib/anime.es.js';
 import { useRef } from 'react/cjs/react.development';
 import Game from './components/game.js';
-
+//import { tiles, foundTiles } from './components/game.js';
 //let gameboard = useRef(null);
 
 const flags = {
@@ -32,12 +32,16 @@ const flags = {
 
     setBackgroundFlood_2: function() {
         let waterMaxheight = window.innerWidth;
-        let f= document.querySelector('.background');
+        let f = document.querySelector('.background');
+        let animationContainer = document.querySelector('.animationContainer');//document.createElement('div');
+        //animationContainer.classList.add('animationContainer');
+
+        f.appendChild(animationContainer);
 
         for(let i=75; i>0; i--) {
             let d = document.createElement('div');
             d.classList.add('flood-elem');
-            f.appendChild(d);
+            animationContainer.appendChild(d);
         }
         console.log(waterMaxheight); 
         anime({
@@ -55,6 +59,11 @@ const flags = {
             duration: 500,
             backgroundColor: 'hsl(199, 70%, 52%)',
         })
+        
+       /*  if(foundTiles === tiles) {    //-> Usuń 75 divów; jeśli przegrałeś, zrób to samo, albo dodaj coś takiego w komponencie Game !
+            console.log(foundTiles);
+            console.log('h123')
+        }  */
     },
 }
 

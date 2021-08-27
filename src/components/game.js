@@ -158,9 +158,18 @@ function Game(props) {
         // Then proceed with new tiles, grid, icons...
 
         // Hide win confirmation table
-
         //setConfirmValue(null);
         
+        console.log(animationBox.current.childNodes.length);
+
+        if(animationBox.current.childNodes.length > 0) {
+            for(let nodeCount = 0; nodeCount !== animationBox.current.childNodes.length; nodeCount = nodeCount) {
+                animationBox.current.childNodes[nodeCount].remove();
+            }
+    
+        }
+
+        console.log(animationBox.current.childNodes);
 
         // Create new grid based on level values
        // gameboard.current.style = `gridTemplateColumns: repeat(${levels[`lvl${level}`].columns}, ${levels[`lvl${level}`].tile_size}vw )`;
@@ -181,6 +190,7 @@ function Game(props) {
     const bg = useRef(null);
     const gameboard = useRef(null);
     const game = useRef(null);
+    const animationBox = useRef(null);
     const inverseReverse = useRef(null); // Starting animation
 
     useEffect(() => {
@@ -229,6 +239,7 @@ function Game(props) {
     }, [level]);
 
     function clickable(e)  {
+        console.log(e.target);
         if(e.target.classList.contains('tile')) {
             e.target.style = 'transform: rotateY(180deg);'; // border: .3rem solid hsl(51, 88%, 38%);
             //console.log(e.target.childNodes);
@@ -576,6 +587,8 @@ function Game(props) {
                         {allTiles}
                     </div>
                 </div>
+                <div className={`animationContainer aContainer-${level-1}`} ref={animationBox}></div>
+
                 {level === 1 && (
                     <button className='summary' onClick={changeTileNumber} > Submit</button>
                 )}
@@ -596,4 +609,5 @@ function Game(props) {
 } 
 
 export default Game;
+//export { tiles };
 //export gameboard;
