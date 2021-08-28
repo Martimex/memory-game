@@ -80,23 +80,47 @@ const levels = {
 
     lvl3: {
         lv: 3,
-        rows: 5,
-        columns: 4,
-        tile_size: 7,
-        tiles: 6,  // 20
+        rows: 4,
+        columns: 5,
+        tile_size: 66,
+        tiles: 20,  // 20
+        iconSet: 'fas',
+        counter: {
+            time: 48, //  45, 50, 48
+            turns: null, // 17
+        },
+        onStartFlag: function() {
+            flags.moveRows_3();
+        },
+        onFirstClickFlag: function() {
+            flags.fadeTile_3();
+            
+        },
+        onSecondClickFlag: function() {
+            flags.fadeTile_3();
+        },
+    },
+
+    lvl4: {
+        lv: 4,
+        rows: 6,
+        columns: 6,
+        tile_size: 50,
+        tiles: 36,  // 20
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 17,
+            turns: 35, // 17
         },
         onStartFlag: function() {
-            console.log('%c start function flag runs', 'background: #222; color: #bada55');
+            return;
         },
         onFirstClickFlag: function() {
-            console.log('%c first click', 'background: #721; color: #174bb9'); 
+            return;
+            
         },
         onSecondClickFlag: function() {
-            console.log('%c second click', 'background: #ab3; color: #a4713e');
+            return;
         },
     },
 }

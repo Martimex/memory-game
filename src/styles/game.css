@@ -28,6 +28,14 @@
 
 }
 
+.animationContainer {
+    overflow: hidden;
+    position: absolute; bottom: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
+
 .tile {
     display: flex;
     align-items: center;
@@ -255,14 +263,6 @@
     background-image: linear-gradient(40deg, #54e, #4c5);
 }
 
-.animationContainer {
-    overflow: hidden;
-    position: absolute; bottom: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-}
-
 .aContainer-2 {
     overflow: hidden;
     position: relative; bottom: 0; left: 0;
@@ -328,4 +328,68 @@
 
 .score-2 {
     color: #ddd;
+}
+
+/* LEVEL 3 */
+
+.bg-3 {
+    overflow: hidden;
+   position: absolute; top: 0; left: 0;
+   width: 100vw;
+   height: 100vh; 
+   background: #222;
+   background: hsla(118, 70%, 60%, 35%);
+}
+
+.aContainer-3 {
+   overflow: hidden;
+   position: absolute; bottom: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   pointer-events: none;
+}
+
+.game-3 {
+   
+}
+
+.board-3 {
+    padding: 0 7rem;
+}
+
+.fa-icon-3 {
+   color: hsl(299, 50%, 40%);
+   font-size: 1.2rem;
+   /*color: hsl(105, 70%, 60%);*/
+}
+
+
+.t-3 {  /* Front size of card */
+   border: .2rem solid hsla(142, 80%, 30%, 50%);
+}
+
+
+.tf-3 { /* Have no clue what this class is for */
+
+}
+
+.tb-3 {  /* Back side of card */
+
+}
+
+.level-3::after, .counter-2::after, .score-2::after {
+   content: '';
+   display: block;
+}
+
+.level-3 {
+ color: #ddd;
+}
+
+.counter-3 {
+   color: #ddd;
+}
+
+.score-3 {
+   color: #ddd;
 }

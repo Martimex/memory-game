@@ -59,12 +59,33 @@ const flags = {
             duration: 500,
             backgroundColor: 'hsl(199, 70%, 52%)',
         })
-        
-       /*  if(foundTiles === tiles) {    //-> Usuń 75 divów; jeśli przegrałeś, zrób to samo, albo dodaj coś takiego w komponencie Game !
-            console.log(foundTiles);
-            console.log('h123')
-        }  */
     },
+
+    // LVL 3
+
+    moveRows_3: function() {
+
+    },
+
+    fadeTile_3: function() {
+        async function waitInverse() {
+            const wait = anime ({
+                duration: 500,
+                targets: '.tile',
+            }).finished;
+            await Promise.all([wait]);
+        } 
+        waitInverse().then(() => {
+            anime({
+                targets: '.target',
+                //delay: 8000,
+                duration: 1000,
+                // autoplay: false,
+                easing: 'linear',
+                opacity: '0.1',
+            })
+        })
+    }
 }
 
 export default flags;
