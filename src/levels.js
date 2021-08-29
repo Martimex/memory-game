@@ -90,7 +90,7 @@ const levels = {
             turns: null, // 17
         },
         onStartFlag: function() {
-            flags.moveRows_3();
+            flags.animate_3();
         },
         onFirstClickFlag: function() {
             flags.fadeTile_3();
@@ -106,14 +106,14 @@ const levels = {
         rows: 6,
         columns: 6,
         tile_size: 50,
-        tiles: 36,  // 20
+        tiles: 36,  // 36
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 35, // 17
+            turns: 42, // 42
         },
         onStartFlag: function() {
-            return;
+            flags.blockInverseAnimation_4();
         },
         onFirstClickFlag: function() {
             return;

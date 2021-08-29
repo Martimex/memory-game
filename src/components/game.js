@@ -461,6 +461,10 @@ function Game(props) {
 
         setConfirmValue(false);
 
+        if(cardsOpened.length > 0) {  // If you lose time game and click 1 tile before losing...
+            cardsOpened.pop();
+        }
+
         console.log('lost confirmed');
         
 
