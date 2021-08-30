@@ -121,8 +121,8 @@ const flags = {
     blockInverseAnimation_4: function() {
         anime({
             targets: '.tile',
-            duration: 3600,
-            delay: anime.stagger(50),
+            duration: 3200,
+            delay: anime.stagger(85),
             keyframes: [
                 {translateX: '10rem'},
                 {translateX: '0rem'},
@@ -133,12 +133,68 @@ const flags = {
 
         anime({
             targets: '.board',
-            duration: 3600,
+            duration: 3200,
             skewY: '10deg',
             loop: false,
         })
     },
 
+    colorFirstTargetShadow_4: function() {
+        anime({ 
+            targets: '.target',
+            duration: 500,
+            boxShadow: ['6px -6px 0px 2px hsla(142, 0%, 0%, 70%)', '6px -6px 0px 2px hsla(50, 90%, 50%, 90%)'],
+        })
+    },
+
+    colorSecondTargetShadow_4: function() {
+        anime({
+            targets: '.target',
+            duration: 500,
+            boxShadow: ['6px -6px 0px 2px hsla(142, 0%, 0%, 70%)', '6px -6px 0px 2px hsla(50, 90%, 50%, 90%)'],
+        })
+    },
+
+    changeRepeatedBg_4: function(cardsOpened, tiles, foundTiles) {
+        console.log(tiles);
+        console.log(foundTiles);
+        if(foundTiles+2 === tiles) {  // it's async, so append value right away
+            async function waitFinish() {
+                const wait = anime ({
+                    duration: 1000,
+                    targets: '.tile',
+                }).finished;
+                await Promise.all([wait]);
+            } 
+            waitFinish().then(() => {
+                anime({
+                    targets:'.background',
+                    duration: 4200,
+                    easing: 'linear',
+                    backgroundImage: ['repeating-linear-gradient(190deg, hsl(41, 70%, 50%), hsl(50, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)', 'repeating-linear-gradient(30deg, hsl(70, 70%, 50%), hsl(110, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)'],
+                    direction: 'alternate',
+                })
+            })
+        }
+        else if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            anime({
+                targets:'.background',
+                duration: 1500,
+                easing: 'linear',
+                backgroundImage: ['repeating-linear-gradient(190deg, hsl(41, 70%, 50%), hsl(50, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)', 'repeating-linear-gradient(190deg, hsl(70, 70%, 50%), hsl(110, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)'],
+                direction: 'alternate',
+            })
+        }
+        else {
+            anime({
+                targets:'.background',
+                duration: 1600,
+                easing: 'linear',
+                backgroundImage: ['repeating-linear-gradient(190deg, hsl(41, 70%, 50%), hsl(50, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)', 'repeating-linear-gradient(190deg, hsl(41, 70%, 50%), hsl(15, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)'],
+                direction: 'alternate',
+            })
+        }
+    },
 }
 
 export default flags;

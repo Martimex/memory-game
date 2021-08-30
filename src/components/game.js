@@ -457,13 +457,12 @@ function Game(props) {
         }
         else {  // So it was time level
             setHighscore(highscore + score  + ((levels[`lvl${level-1}`].counter.time - time) * timeScoreValue));
+            if(cardsOpened.length > 0) {  // If you lose time game and click 1 tile before losing...
+                cardsOpened.pop();
+            }
         } 
 
         setConfirmValue(false);
-
-        if(cardsOpened.length > 0) {  // If you lose time game and click 1 tile before losing...
-            cardsOpened.pop();
-        }
 
         console.log('lost confirmed');
         
@@ -503,7 +502,7 @@ function Game(props) {
         }
 
         else if((handleCheck < 1) && (cardsOpened.length > 1)) {
-            levels[`lvl${level-1}`].onSecondClickFlag();
+            levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles);
             handleCheck++;
         }
 

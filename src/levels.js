@@ -116,11 +116,12 @@ const levels = {
             flags.blockInverseAnimation_4();
         },
         onFirstClickFlag: function() {
-            return;
+            flags.colorFirstTargetShadow_4();
             
         },
-        onSecondClickFlag: function() {
-            return;
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles) {
+            flags.colorSecondTargetShadow_4();
+            flags.changeRepeatedBg_4(cardsOpened, tiles, foundTiles);
         },
     },
 }

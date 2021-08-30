@@ -518,12 +518,7 @@
 
 .level-4::after, .score-4::after {
    content: '';
-   transform: skewX(115deg);
-   transform: skewY(11deg);
    display: block;
-   width: 5rem;
-   background-color: hsl(299, 30%, 40%, 70%);
-   height: .8rem;
 }
 
 .counter-4::after, .counter-4::before  {
@@ -533,19 +528,16 @@
 }
 
 .level-4 {
- color: hsla(299, 50%, 40%, 50%);
- transform: rotateY(10deg);
- font-style: oblique;
+ color: hsla(299, 50%, 0%, 80%);
+ transform: rotate(10deg);
 }
 
 .counter-4 {
-   color: hsla(299, 50%, 40%, 50%);
-   transform: rotateY(10deg);
-   font-style: oblique;
+   color: hsla(299, 50%, 0%, 80%);
+   transform: rotate(10deg);
 }
 
 .score-4 {
-   color: hsla(299, 50%, 40%, 50%);
-   transform: rotateY(10deg);
-   font-style: oblique;
+   color: hsla(299, 50%, 0%, 80%);
+   transform: rotate(10deg);
 }
