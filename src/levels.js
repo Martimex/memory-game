@@ -124,6 +124,32 @@ const levels = {
             flags.changeRepeatedBg_4(cardsOpened, tiles, foundTiles);
         },
     },
+
+    lvl5: {
+        lv: 5,
+        rows: 6,
+        columns: 5,
+        tile_size: 58,
+        tiles: 30,  // 30
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: 20, // 42
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles) {
+            flags.skewTo0Deg_5(); // temporary function, remove it before deploying to production
+            flags.addTilesIdentifer_5(cardsOpened, tiles, foundTiles);
+            flags.resetIcons_5(cardsOpened, tiles, foundTiles);
+            flags.hideSecondType_5();
+        },
+        onFirstClickFlag: function() {
+            flags.hideFirstType_5();
+            
+        },
+        onSecondClickFlag: function() {
+            flags.hideSecondType_5();
+        },
+    },
 }
 
 

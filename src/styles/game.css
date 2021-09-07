@@ -541,3 +541,77 @@
    color: hsla(299, 50%, 0%, 80%);
    transform: rotate(10deg);
 }
+
+
+
+/* LEVEL 5 */
+
+.bg-5 {
+    overflow: hidden;
+   position: absolute; top: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   background: #000;
+}
+
+.aContainer-5 {
+   overflow: hidden;
+   position: absolute; bottom: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   pointer-events: none;
+}
+
+.game-5 {
+
+}
+
+.board-5 {
+    padding: 2rem 6rem;
+}
+
+.fa-icon-5 {
+   color: hsl(51, 94%, 53%);
+   font-size: 1.1rem;
+   /*color: hsl(105, 70%, 60%);*/
+}
+
+
+.t-5 {  /* Front size of card */ 
+    border: .2rem dashed #222;
+}
+
+
+
+.tf-5 { /* Have no clue what this class is for */
+
+}
+
+
+
+.tb-5 {  /* Back side of card */
+    color: hsl(51, 94%, 53%);
+}
+
+.level-5::after, .score-5::after {
+   content: '';
+   display: block;
+}
+
+.counter-5::after, .counter-5::before  {
+    content: '';
+    display: block;
+    
+}
+
+.level-5 {
+ 
+}
+
+.counter-5 {
+  
+}
+
+.score-5 {
+  
+}

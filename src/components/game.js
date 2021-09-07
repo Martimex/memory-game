@@ -203,7 +203,7 @@ function Game(props) {
     useEffect(() => {
 
         // ADD STARTING FLAG
-            levels[`lvl${level-1}`].onStartFlag(); // it works !!
+            levels[`lvl${level-1}`].onStartFlag(cardsOpened, tiles, foundTiles); // it works !!
 
             // MAYBE DURING ANIMATION TIME ADD SOME INVINCIBLE LAYER, WHICH PREVENTS FROM CLICKING DURING THE ANIMATION PROCESS ???
             //gameboard.current.removeEventListener('click', clickable);

@@ -119,7 +119,7 @@ const flags = {
     // LVL 4
 
     blockInverseAnimation_4: function() {
-        anime({
+        /* anime({
             targets: '.tile',
             duration: 3200,
             delay: anime.stagger(85),
@@ -136,7 +136,7 @@ const flags = {
             duration: 3200,
             skewY: '10deg',
             loop: false,
-        })
+        })  DISABLED ONLY FOR DEVELOPMENT PURPOSES*/ 
     },
 
     colorFirstTargetShadow_4: function() {
@@ -161,8 +161,10 @@ const flags = {
         if(foundTiles+2 === tiles) {  // it's async, so append value right away
             async function waitFinish() {
                 const wait = anime ({
+                    targets: '.board',
                     duration: 1000,
-                    targets: '.tile',
+                    skewY: '0deg',
+                    loop: false,
                 }).finished;
                 await Promise.all([wait]);
             } 
@@ -194,6 +196,160 @@ const flags = {
                 direction: 'alternate',
             })
         }
+    },
+
+
+    // LVL 5
+
+    skewTo0Deg_5: function() {
+        anime({
+            targets: '.board',
+            duration: 1000,
+            skewY: '0deg',
+            loop: false,
+        })
+    },
+
+    addTilesIdentifer_5: function(cardsOpened, tiles, foundTiles) {
+        console.log(tiles);
+        let allTiles = document.querySelectorAll('.tile');
+        for(let i=0; i<tiles/2; i++) {
+            allTiles[i].classList.add('tileType1');
+        }
+        for(let j=(tiles/2); j<tiles; j++) {
+            allTiles[j].classList.add('tileType2');
+        } 
+    },
+
+    resetIcons_5: function(cardsOpened, tiles, foundTiles) {
+        const allTiles = document.querySelectorAll('.tile');
+        let iconsArr = [];
+        let tileTypeArr1 = [];
+        let tileTypeArr2 = [];
+        let randomizedElems1 = [];
+        let randomizedElems2 = [];
+        //console.log(allTiles[0].childNodes[2].childNodes[0].classList[1]);
+        for(let a=0; a<tiles; a++) {
+            iconsArr.push(allTiles[a].childNodes[2].childNodes[0]);
+        }
+        //console.log(iconsArr);
+        function sortSvgs(array) {
+            let compareArr = [];
+            for(let x=0; x<array.length; x++) {
+                compare(array[x], compareArr);
+            }
+            return compareArr;
+        }
+
+        function compare(item, compareArr) {
+            compareArr.unshift(item);
+            if(compare.length > 1) {
+                for(let y=1; y<compareArr.length; y++) {
+                    if(item.classList[1] > compareArr[y].classList[1]) {
+                        let z = compareArr[y];
+                        compareArr[y] = compareArr[y-1];
+                        compareArr[y-1] = z;
+                    }
+                }
+            } else {
+                return compareArr;
+            }
+        }
+
+        let sortediconsArr = sortSvgs(iconsArr);
+
+        //console.log('112345');
+        //console.log(comp);
+        //console.log(iconsArr);
+        //console.log(allTiles);
+        for(let b=0; b<tiles; b++) {
+            if(b%2) {
+                tileTypeArr1.push(sortediconsArr[b]);
+                /*tileTypeArr1[Math.floor(b/2)].classList.add('tileType1');*/
+            } else { tileTypeArr2.push(sortediconsArr[b]);  /*tileTypeArr2[Math.floor(b/2)].classList.add('tileType2');*/ }
+        }
+        const tileType1 = document.querySelectorAll('.tileType1');
+        const tileType2 = document.querySelectorAll('.tileType2');
+        //console.log(tileType1)
+        for(let c=0; c<(tiles/2); c++) {
+            let rand = Math.floor(Math.random() * tileTypeArr1.length);
+            //console.log(tileType1[c].childNodes[2].childNodes[0]);
+            //console.log(tileTypeArr1[rand]);
+            randomizedElems1.push(tileTypeArr1[rand]);
+            tileTypeArr1.splice(rand, 1);
+        }
+        for(let d=0; d<(tiles/2); d++) {
+            let rand = Math.floor(Math.random() * tileTypeArr2.length);
+            randomizedElems2.push(tileTypeArr2[rand]);
+            tileTypeArr2.splice(rand, 1);
+        }  
+
+        for(let h=0; h<allTiles.length; h++) {
+            allTiles[h].childNodes[2].childNodes[0].remove();
+        }
+
+        tileType1.forEach((tile, index) => {
+            //console.log(tile);
+            tile.childNodes[2].appendChild(randomizedElems1[index])
+        })
+
+        tileType2.forEach((tile, index) => {
+            tile.childNodes[2].appendChild(randomizedElems2[index])
+        })
+    },
+
+    hideFirstType_5: function() {
+        const firstType = document.querySelectorAll('.tileType1');
+        const secondType = document.querySelectorAll('.tileType2');
+
+        //firstType.forEach(first => first.style = 'visibilty: none;');
+       // secondType.forEach(second => second.style = 'visibility: ;');
+
+        anime({
+            targets: firstType,
+            delay: 1000,
+            duration: 1000,
+            backgroundColor: ['#48c', '#75a'],
+            opacity: 0,
+            visibility: 'hidden',
+            easing: 'linear',
+        })
+
+        anime({
+            targets: secondType,
+            duration: 1000,
+            backgroundColor: ['#48c', '#75a'],
+            opacity: 1,
+            visibility: 'visible',
+            easing: 'linear',
+        })
+    },
+
+    hideSecondType_5: function() {
+        const secondType = document.querySelectorAll('.tileType2');
+        const firstType = document.querySelectorAll('.tileType1');
+
+        //secondType.forEach(second => second.style = 'pointer-events: none;');
+        //firstType.forEach(first => first.style = 'pointer-events: autp;');
+
+        anime({
+            targets: secondType,
+            delay: 1000,
+            duration: 1000,
+            backgroundColor: ['#48c', '#75a'],
+            opacity: 0,
+            visibility: 'hidden',
+            easing: 'linear',
+        })
+
+        anime({
+            targets: firstType,
+            duration: 1000,
+            backgroundColor: ['#48c', '#75a'],
+            opacity: 1,
+            visibility: 'visible',
+            easing: 'linear',
+        })
     },
 }
 
