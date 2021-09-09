@@ -45,7 +45,7 @@
     margin: .5rem;
     border-radius: 10%;
     transform-style: preserve-3d;
-    transition: all 0.7s ease;
+    /*transition: all 0.7s ease; */
 }
 
 .tile-front {

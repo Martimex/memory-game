@@ -48,7 +48,7 @@ const levels = {
         onSecondClickFlag: function() {       // It means every second push to the pair array
             console.log('%c second click', 'background: #ab3; color: #a4713e');
             flags.markBorders_1();
-            //flags.removeBordersMark_1();
+            flags.removeBordersMark_1();
         },
 
     },
@@ -61,7 +61,7 @@ const levels = {
         tiles: 24,  // 24
         iconSet: 'fas',
         counter: {
-            time: 75,  // 75
+            time: 75,  // 75        // TIME LEVELS CAN CAUSE BUGS WHEN USER CLICKS SECOND TILE AT VERY LAST SECOND
             turns: null,  // 26
         },
         onStartFlag: function() {
@@ -75,6 +75,7 @@ const levels = {
         onSecondClickFlag: function() {
             console.log('%c lol it works', 'background: #ab3; color: #a4713e');
             flags.colorBackground_2();
+            flags.removeColorBackground_2();
         },
     },
 
@@ -121,6 +122,7 @@ const levels = {
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles) {
             flags.colorSecondTargetShadow_4();
+            flags.removeTargetShadow_4();
             flags.changeRepeatedBg_4(cardsOpened, tiles, foundTiles);
         },
     },

@@ -210,13 +210,16 @@ function Game(props) {
          // Below add some Inverse / Reverse starting animation
 
             inverseReverse.current = anime.timeline({
-                duration: 800,
+                duration: 1400,
                 easing: 'easeInOutQuart',
             });
     
             inverseReverse.current
             .add ({
                 targets: '.tile',
+                //transformStyle: 'preserve-3d',
+                //transitionTimingFunction: 'linear',
+                transitionProperty: 'all',
                 //backgroundColor: '#4ba',
                 rotateY: '180deg',
                 loop: false,
@@ -225,10 +228,13 @@ function Game(props) {
             .add ({
                 //delay: 1400, // it prevents these two animations from running at the same time - they should work separately
                 targets: '.tile',
+                //transformStyle: 'preserve-3d',
+                //transitionTimingFunction: 'linear',
+                transitionProperty: 'all',
                 //backgroundColor: '#4ba',
                 rotateY: '0deg',
                 loop: false,
-            }, '+=1200')
+            }, '+=600')
 
             inverseReverse.current.finished.then(() => { console.log('timeline accpeted')});
 
@@ -239,9 +245,19 @@ function Game(props) {
     }, [level]);
 
     function clickable(e)  {
+        console.log(gameboard.current.dataset.animation);
+        if(gameboard.current.dataset.animation !== 'off') {return;}
         console.log(e.target);
         if(e.target.classList.contains('tile')) {
-            e.target.style = 'transform: rotateY(180deg);'; // border: .3rem solid hsl(51, 88%, 38%);
+            //e.target.style = 'transform: rotateY(180deg);'; // border: .3rem solid hsl(51, 88%, 38%);
+            anime({
+                targets: e.target,
+                duration: 3200,
+                //transformStyle: 'preserve-3d',
+                //transitionTimingFunction: 'linear',
+                transitionProperty: 'all',
+                rotateY: 180,
+            })
             //console.log(e.target.childNodes);
             let trgt = e.target;
             let node = e.target.childNodes;
@@ -385,12 +401,33 @@ function Game(props) {
 
             //setMoves(moves + 1);
             //document.querySelector('.turns').textContent = turns;
+
+            if(cardsOpened[1] === undefined) { cardsOpened.pop(); return;} // prevents from time bug
     
             if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) { // czy pary się zgadzają? TAK -> usuń je z planszy;  NIE -> odwróć z powrotem
                 //console.log('equal');
-                cardsOpened[0].parentNode.style = 'visibility: hidden';
-                cardsOpened[1].parentNode.style = 'visibility: hidden';
-    
+                //cardsOpened[0].parentNode.style = 'visibility: hidden';
+                //cardsOpened[1].parentNode.style = 'visibility: hidden';
+                async function fade() {
+                    const a1 = anime({
+                        targets: [cardsOpened[0].parentNode, cardsOpened[1].parentNode],
+                        duration: 1000,
+                        opacity: [1, 0],
+                    })
+
+                    Promise.all([a1]);
+                }
+
+                fade().then(() => {
+                    setTimeout(() => {
+                        cardsOpened[0].parentNode.style = 'visibility: hidden';
+                        cardsOpened[1].parentNode.style = 'visibility: hidden';
+                
+                        for(let i=0; i<=1; i++) {
+                            cardsOpened.pop();
+                        }
+                    }, 200)
+                })
                 //highscore +=10;
                 //document.querySelector('.highscore').textContent = highscore;
 
@@ -410,19 +447,25 @@ function Game(props) {
                 const temp = 0;
     
                 //console.log(`There's no match here`);
-                cardsOpened[0].parentNode.style = `transform: rotateY(${temp}deg);`;
-                cardsOpened[1].parentNode.style = `transform: rotateY(${temp}deg);`;
+                anime({
+                    targets: [cardsOpened[0].parentNode, cardsOpened[1].parentNode],
+                    duration: 3200,
+                    rotateY: 0,
+                })
+
+
+               // cardsOpened[0].parentNode.style = `transform: rotateY(${temp}deg);`;
+               // cardsOpened[1].parentNode.style = `transform: rotateY(${temp}deg);`;
     
+                for(let i=0; i<=1; i++) {
+                    cardsOpened.pop();
+                }
                 console.log({moves});
                 //if((parseInt(levels[`lvl${level-1}`].counter.turns) - {moves}) <= 0) {
                 //    confirmFailure();
                 //}
             }
             console.log('time out');
-    
-            for(let i=0; i<=1; i++) {
-                cardsOpened.pop();
-            }
     
             //console.log(cardsOpened);
     
@@ -493,6 +536,8 @@ function Game(props) {
     function handleState() {
 
         // PREVENT FIRSTCLICK AND SECONDCLICK MULTIPLE TIMES INVOKING WHEN USER KEEPS PRESSING THE SAME TILE / SOME TILES MULTIPLE TIMES !!!!
+
+        if(gameboard.current.dataset.animation !== 'off') {return;}
 
         console.log('handleState invoked...')
 
@@ -586,7 +631,7 @@ function Game(props) {
                 <div onClick={() => {confirmSuccess()}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className={`game game-${level-1}`} ref={game}>
                
-                    <div className={`board board-${level-1}`} ref={gameboard} onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`}}>
+                    <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`}}>
                         {allTiles}
                     </div>
                 </div>
