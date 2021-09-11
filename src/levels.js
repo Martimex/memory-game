@@ -136,20 +136,21 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 20, // 42
+            turns: 31, // 31
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles) {
             flags.skewTo0Deg_5(); // temporary function, remove it before deploying to production
             flags.addTilesIdentifer_5(cardsOpened, tiles, foundTiles);
             flags.resetIcons_5(cardsOpened, tiles, foundTiles);
+            flags.createAnimatedDots_5();
             flags.hideSecondType_5();
         },
-        onFirstClickFlag: function() {
-            flags.hideFirstType_5();
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles) {
+            flags.hideFirstType_5(cardsOpened, tiles, foundTiles);
             
         },
-        onSecondClickFlag: function() {
-            flags.hideSecondType_5();
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles) {
+            flags.hideSecondType_5(cardsOpened, tiles, foundTiles);
         },
     },
 }

@@ -30,7 +30,7 @@ let handleCheck = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag p
 
 let scoreAddon = 0;
 
-let iter = 0; // Prevents from using multiple turns during the cards checkout animation
+let isChecking = false; // Prevents from using multiple turns during the cards checkout animation
 const scorePerPair = 100;  // Don't modify this varible; let it be with this value
 const moveScoreValue = 150; // Don't momdify aswell - it calculates score for every remaining move after you've succeded
 const timeScoreValue = 50; // Don't momdify aswell - it calculates score for every remaining second after you've succeded, it's calculated twice, so add '/2' value
@@ -388,29 +388,20 @@ function Game(props) {
         //console.log(cardsOpened.length);
         //console.log(cardsOpened[0]);
         //console.log(cardsOpened[1]);
-    
+        setTimeout(() => {
+            isChecking = true;
+        }, 200)
         console.log('checking...');
         setTimeout(() => {
-    
-            //console.log(cardsOpened[0].parentNode);
-            //console.log(cardsOpened[1]);
-            
-            //console.log(cardsOpened[0].childNodes[0].classList[1])
-            //console.log(cardsOpened[1].childNodes[0].classList[1]);
-
-            //setMoves(moves + 1);
-            //document.querySelector('.turns').textContent = turns;
 
             if(cardsOpened[1] === undefined) { cardsOpened.pop(); return;} // prevents from time bug
-    
+            //isChecking = false;
             if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) { // czy pary się zgadzają? TAK -> usuń je z planszy;  NIE -> odwróć z powrotem
-                //console.log('equal');
-                //cardsOpened[0].parentNode.style = 'visibility: hidden';
-                //cardsOpened[1].parentNode.style = 'visibility: hidden';
+
                 async function fade() {
                     const a1 = anime({
                         targets: [cardsOpened[0].parentNode, cardsOpened[1].parentNode],
-                        duration: 1000,
+                        duration: 1800,
                         opacity: [1, 0],
                     })
 
@@ -425,54 +416,40 @@ function Game(props) {
                         for(let i=0; i<=1; i++) {
                             cardsOpened.pop();
                         }
-                    }, 200)
+                    })
                 })
-                //highscore +=10;
-                //document.querySelector('.highscore').textContent = highscore;
-
-                // *W tym miejscu robimy animację znikania* -> W tym celu pobierz anime.js na potrzeby tego projektu
-                
-                //console.log({foundTiles});
-                //console.log({tiles});
-
-                //if({foundTiles} === {tiles}) {  // If you win the level...
-                //    confirmSuccess();
-                //}
 
                 // Testy z VANTA.JS
                 
             } else {
-    
                 const temp = 0;
-    
-                //console.log(`There's no match here`);
-                anime({
-                    targets: [cardsOpened[0].parentNode, cardsOpened[1].parentNode],
-                    duration: 3200,
-                    rotateY: 0,
-                })
+                async function flipBack() {
+                    const a1 = anime({
+                        targets: [cardsOpened[0].parentNode, cardsOpened[1].parentNode],
+                        duration: 2200,
+                        rotateY: 0,
+                    })
 
-
-               // cardsOpened[0].parentNode.style = `transform: rotateY(${temp}deg);`;
-               // cardsOpened[1].parentNode.style = `transform: rotateY(${temp}deg);`;
-    
-                for(let i=0; i<=1; i++) {
-                    cardsOpened.pop();
+                    Promise.all([a1]);
                 }
+                
+                flipBack().then(() => {
+                    for(let i=0; i<=1; i++) {
+                        cardsOpened.pop();
+                    }
+                })
+                
                 console.log({moves});
-                //if((parseInt(levels[`lvl${level-1}`].counter.turns) - {moves}) <= 0) {
-                //    confirmFailure();
-                //}
             }
             console.log('time out');
     
-            //console.log(cardsOpened);
+            isChecking = false;
     
             setTimeout(() => {
                 gameboard.current.addEventListener('click', clickable); // game.childNodes[0]
-            }, 800); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
+            }, 500); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
     
-        }, 900); // this time allows to see two opend tiles for user - he can check whether they match or not
+        }, 1400); // this time allows to see two opend tiles for user - he can check whether they match or not
     }
         
     function confirmSuccess() {
@@ -535,43 +512,48 @@ function Game(props) {
     function handleState() {
 
         // PREVENT FIRSTCLICK AND SECONDCLICK MULTIPLE TIMES INVOKING WHEN USER KEEPS PRESSING THE SAME TILE / SOME TILES MULTIPLE TIMES !!!!
+        console.log('isChecking: ' +isChecking)
+        if(isChecking) {return;}
 
-        if(gameboard.current.dataset.animation !== 'off') {return;}
+        if(gameboard.current.dataset.animation === 'off') {
 
-        console.log('handleState invoked...')
+            console.log('handleState invoked...')
 
-        if((handleCount < 1) && (cardsOpened.length === 1)) {
-            cardsOpened[0].parentNode.classList.add('target');
-            handleCheck = 0;
-            levels[`lvl${level-1}`].onFirstClickFlag();
+            if((handleCount < 1) && (cardsOpened.length === 1)) {
+                cardsOpened[0].parentNode.classList.add('target');
+                handleCheck = 0;
+                levels[`lvl${level-1}`].onFirstClickFlag();
+            }
+
+            else if((handleCheck < 1) && (cardsOpened.length > 1)) {
+                cardsOpened[1].parentNode.classList.add('target');
+                levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles);
+                handleCheck++;
+            }
+
+            handleCount++;
         }
-
-        else if((handleCheck < 1) && (cardsOpened.length > 1)) {
-            cardsOpened[1].parentNode.classList.add('target');
-            levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles);
-            handleCheck++;
-        }
-
-        handleCount++;
         //console.log(handleCount);
 
         //if(handleCount === 1) {
          //       
          //   levels[`lvl${level-1}`].onFirstClickFlag();
        // }
-
-        setTimeout(() => {
             
-            if(cardsOpened.length > 1) {
+        if(cardsOpened.length > 1) {
 
+            setTimeout(() => {
                 for(let i=0; i < cardsOpened.length; i++) {
                     cardsOpened[i].parentNode.classList.remove('target');
                 }
 
+                console.log(cardsOpened);
+                //isChecking = false;
+
                 if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
                     console.log('conditions passed')
                     return;
-                }
+                } 
 
                 if(levels[`lvl${level-1}`].counter.turns !== null) {
                     setMoves(moves + 1);
@@ -587,15 +569,17 @@ function Game(props) {
                     setScoreMultiplier(1);
                     scoreAddon = 0;  // if u lose, but the last pair doesn't match
                 }
-        
-                // Block the scope and prevents from fast-clicking turn decreasing behaviour
-                // Please do find a better solution than this....
-                // useEffect for below lines of code
-                //handleCheck = 0;
-            } 
+
+            }, 1200) 
+            // Block the scope and prevents from fast-clicking turn decreasing behaviour
+            // Please do find a better solution than this....
+            // useEffect for below lines of code
             handleCount = 0;
-        }, 1200) // block the scope and prevents from fast-clicking turn decreasing behaviour, please keep 1200 ms, value OK
-        handleCount = 0;
+        } 
+            //handleCount = 0;
+        // block the scope and prevents from fast-clicking turn decreasing behaviour, please keep 1200 ms, value OK, 
+               //please check this since it causes bugs - when u delay second click, state does not update
+        //handleCount = 0;
     }
     /* useLayoutEffect(() => {
 

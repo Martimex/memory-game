@@ -8,6 +8,7 @@ const flags = {
     
     // LVL 1
     loadBorders_1: function() {
+        //document.querySelector('.board').dataset.animation = 'off'
         anime({
             targets: '.tile',
             duration: 1600,
@@ -230,6 +231,7 @@ const flags = {
     // LVL 5
 
     skewTo0Deg_5: function() {
+        document.querySelector('.bg-5').style = 'background-image: unset';
         anime({
             targets: '.board',
             duration: 1000,
@@ -326,20 +328,55 @@ const flags = {
         })
     },
 
-    hideFirstType_5: async function() {
+    createAnimatedDots_5: function() {
+        let animationContainer = document.querySelector('.animationContainer');
+        let dots = [];
+        for(let i=0; i<40; i++) {
+            let dot = document.createElement('div');
+            let topv = Math.floor(Math.random()*90)+1;
+            let leftv = Math.floor(Math.random()*90)+1;
+           // console.log(topv)
+            dot.classList.add('dot-g');
+            animationContainer.appendChild(dot);
+            let thisdot = document.querySelector(`.dot-g:nth-child(${i+1})`);
+            dots.push(thisdot);
+            console.log(thisdot);
+           // dot.style = `absolute;`;
+            dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`); // = ` ${topv};`;//topv; //style.top = `19%`;
+           // dot.left = `${leftv};`; // = `41%`;
+            //thisdot.style += `left: ${Math.floor(Math.random() * 90)+1}%`;
+        }
+
+        anime({
+            targets: '.dot-g',
+            duration: 7000,
+            backgroundColor: ['hsl(122, 66%, 32%)', 'hsl(352, 86%, 62%)'],
+            delay: anime.stagger(120),
+            opacity: ['0.4', '0.8'],
+            translateY: [0, '16rem'],
+            translateX: [0, '10rem'],
+            direction: 'alternate',
+            easing: 'easeInOutSine',
+            loop: true,
+        })
+    },
+
+    hideFirstType_5: function(cardsOpened, tiles, foundTiles) {
         const firstType = document.querySelectorAll('.tileType1');
         const secondType = document.querySelectorAll('.tileType2');
 
+/*         secondType.forEach(type => {
+            type.style += 'pointer-events: auto;';
+        }) */
+
         document.querySelector('.board').dataset.animation = 'on';
-        //firstType.forEach(first => first.style = 'visibilty: hidden;');
-       // secondType.forEach(second => second.style = 'visibility: visible;');
 
         async function wait() {
             const a1 = anime({
                 targets: [firstType, 'svg'],
                 delay: 1000,
                 duration: 1000,
-                backgroundColor: ['#48c', '#75a'],
+                borderColor: ['hsl(122, 86%, 32%)', 'hsl(0, 0%, 0%)'],
                 opacity: 0,
                 //pointerEvents: ['none', 'none'],
                 //visibility: 'hidden',
@@ -350,7 +387,7 @@ const flags = {
                 targets: [secondType, 'svg'],
                 delay: 1000,
                 duration: 1000,
-                backgroundColor: ['#48c', '#75a'],
+                borderColor: ['hsl(0, 0%, 0%)', 'hsl(122, 86%, 32%)'],
                 opacity: 1,
                 //pointerEvents: ['auto', 'auto'],
                 //visibility: 'visible',
@@ -362,26 +399,31 @@ const flags = {
 
         wait().then(() => {
             setTimeout(() => {
+/*                 firstType.forEach(type => {
+                    type.style += 'pointer-events: none;';
+                }) */
                 document.querySelector('.board').dataset.animation = 'off';
             }, 2000);
         })
 
     },
 
-    hideSecondType_5: function() {
+    hideSecondType_5: function(cardsOpened, tiles, foundTiles) {
         const secondType = document.querySelectorAll('.tileType2');
         const firstType = document.querySelectorAll('.tileType1');
 
+/*         firstType.forEach(type => {
+            type.style += 'pointer-events: auto;';
+        })
+ */
         document.querySelector('.board').dataset.animation = 'on';
-        //secondType.forEach(second => second.style = 'visibilty: hidden;');
-        //firstType.forEach(first => first.style = 'visibility: visible;');
 
         async function wait() {
             const a1 = anime({
                 targets: [secondType, 'svg'],
                 delay: 1000,
                 duration: 1000,
-                backgroundColor: ['#48c', '#75a'],
+                borderColor: ['hsl(122, 86%, 32%)', 'hsl(0, 0%, 0%)'],
                 opacity: 0,
                 //pointerEvents: ['none', 'none'],
                 //visibility: 'hidden',
@@ -393,7 +435,7 @@ const flags = {
                 targets: [firstType, 'svg'],
                 delay: 1000,
                 duration: 1000,
-                backgroundColor: ['#48c', '#75a'],
+                borderColor: ['hsl(0, 0%, 0%)', 'hsl(122, 86%, 32%)'],
                 opacity: 1,
                 //pointerEvents: ['auto', 'auto'],
                 //visibility: 'visible',
@@ -405,6 +447,9 @@ const flags = {
 
         wait().then(() => {
             setTimeout(() => {
+/*                 secondType.forEach(type => {
+                    type.style += 'pointer-events: none;';
+                }) */
                 document.querySelector('.board').dataset.animation = 'off';
             }, 2000);
         })
