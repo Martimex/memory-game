@@ -612,7 +612,7 @@
     height: 100vh;
 }
 
-.dot-g {
+.dot-g, .dot-g-4, .dot-g-2 {
     background-color: hsl(122, 66%, 32%);
     width: 1rem;
     z-index: -10;
@@ -622,13 +622,99 @@
 }
 
 .level-5 {
- 
+    color: hsl(122, 66%, 32%);
+    font-weight: 200;
+    
 }
 
 .counter-5 {
-  
+    color: hsl(122, 66%, 32%);
+    font-weight: 200;
 }
 
 .score-5 {
-  
+    color: hsl(122, 66%, 32%);
+    font-weight: 200;
+}
+
+
+/* LEVEL 6 */
+
+.bg-6 {
+    overflow: hidden;
+   position: absolute; top: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   background-image: linear-gradient(132deg, hsl(52, 80%, 60%), hsl(282, 80%, 40%));
+   z-index: -50;
+}
+
+.aContainer-6 {
+   overflow: hidden;
+   position: absolute; bottom: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   pointer-events: none;
+}
+
+.game-6 {
+
+}
+
+.board-6 {
+    padding: -1rem;
+    /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
+    border-block: initial;
+    border-radius: 10%;
+}
+
+.fa-icon-6 {
+   color: hsla(282, 80%, 40%, 80%);
+   font-size: 1.2rem;
+   /*color: hsl(105, 70%, 60%);*/
+}
+
+
+.t-6 {  /* Front size of card */ 
+    border-radius: 20%;
+    border: .3rem solid hsla(282, 80%, 40%, 15%);
+    background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%));
+}
+
+
+
+.tf-6 { /* Have no clue what this class is for */
+}
+
+
+
+.tb-6 {  /* Back side of card */
+    color: hsl(51, 94%, 53%);
+}
+
+.level-6::after, .score-6::after {
+   content: '';
+   display: block;
+}
+
+.counter-6::after, .counter-6::before  {
+    content: '';
+    display: block;
+    
+}
+
+.level-6 {
+    color: hsl(122, 66%, 32%);
+    font-weight: 200;
+    
+}
+
+.counter-6 {
+    color: hsl(122, 66%, 32%);
+    font-weight: 200;
+}
+
+.score-6 {
+    color: hsl(122, 66%, 32%);
+    font-weight: 200;
 }

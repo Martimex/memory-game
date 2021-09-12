@@ -361,6 +361,16 @@ const flags = {
         })
     },
 
+    /* animateLevelInfo_5: function() {
+        anime({
+            targets: ['.level-5', '.score-5', '.counter-5'],
+            duration: 3000,
+            opacity: [0, 1],
+            direction: 'alternate',
+            loop: true,
+        })
+    },  REMOVED BECAUSE IT INVOLVES BUGS */
+
     hideFirstType_5: function(cardsOpened, tiles, foundTiles) {
         const firstType = document.querySelectorAll('.tileType1');
         const secondType = document.querySelectorAll('.tileType2');
@@ -454,6 +464,97 @@ const flags = {
             }, 2000);
         })
     },
+
+    generateNewDots_5: function(cardsOpened, tiles, foundTiles, iter) {
+        console.log('IVALUE: '+iter.value);
+        console.log('TILES: '+tiles);
+        console.log('FOUND: '+foundTiles);
+        let animationContainer = document.querySelector('.animationContainer');
+        if((parseInt(tiles/4) <= parseInt(foundTiles)) && (iter.value < 1)) {
+            iter.value = 1;
+            //console.log('ITER:::: '+iter);
+            for(let i=0; i<20; i++) {
+                let dot = document.createElement('div');
+                let topv = Math.floor(Math.random()*90)+1;
+                let leftv = Math.floor(Math.random()*90)+1;
+                dot.classList.add('dot-g-4');
+                animationContainer.appendChild(dot);
+                dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`); // = ` ${topv};`;//topv; //style.top = `19%`;
+            }
+            anime({
+                targets: '.dot-g-4',
+                duration: 7000,
+                backgroundColor: ['hsl(122, 66%, 32%)', 'hsl(352, 86%, 62%)'],
+                delay: anime.stagger(120),
+                opacity: ['0.4', '0.8'],
+                translateY: [0, '-16rem'],
+                translateX: [0, '-10rem'],
+                direction: 'alternate',
+                easing: 'easeInOutSine',
+                loop: true,
+            })
+        }
+        else if((parseInt(tiles/2) <= parseInt(foundTiles)) && (iter.value < 2)) {
+            iter.value = 2;
+            //console.log('ITER:::: '+iter);
+            for(let i=0; i<20; i++) {
+                let dot = document.createElement('div');
+                let topv = Math.floor(Math.random()*90)+1;
+                let leftv = Math.floor(Math.random()*90)+1;
+                dot.classList.add('dot-g-2');
+                animationContainer.appendChild(dot);
+                dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`); // = ` ${topv};`;//topv; //style.top = `19%`;
+            }
+            anime({
+                targets: '.dot-g-2',
+                duration: 5000,
+                backgroundColor: ['hsl(22, 66%, 32%)', 'hsl(122, 66%, 32%)'],
+                delay: anime.stagger(120),
+                opacity: ['0.4', '0.8'],
+                translateY: [0, '20rem'],
+                translateX: [0, '20rem'],
+                rotate: 90,
+                direction: 'alternate',
+                easing: 'easeInOutSine',
+                loop: true,
+            })
+        }
+    }, 
+
+
+
+    // LVL 6
+
+    resetBgImg_6: function() {
+        document.querySelector('.bg-6').style = '';
+    },
+
+    rotateBoard_6: function() {
+        let board = document.querySelector('.board-6');
+        anime({
+            targets: board,
+            duration: 14000,
+            keyframes:[
+                {rotate: [0, 90]},
+                {rotate: [90, 180]},
+                {rotate: [180, 270]},
+                {rotate: [270, 360]},
+            ],
+            easing: 'easeOutExpo',
+            direction: 'alternate',
+            loop: true,
+        });
+    },
+
+    animateTarget_6: function() {
+        anime({
+            targets: '.target',
+            duration: 2800,
+            backgroundImage: ['radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%))', 'radial-gradient(hsl(29, 80%, 60%) 20%, hsl(52, 80%, 60%) 45%, hsl(282, 80%, 40%))'],
+            loop: true,
+            direction: 'alternate',
+        })
+    }
 }
 
 export default flags;

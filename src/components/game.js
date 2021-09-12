@@ -23,6 +23,10 @@ let usedIcons = [];
 let randomizedIcons = [];
 
 //let highscore = 0; // Your total score count
+let iter = {value: 0};  // EXTRA VALUES FOR FLAG FUNCTIONS :
+let iter2 = {value: 0};
+let strike = {value: 0};
+
 
 let cardsOpened = [];
 let handleCount = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag poprzez kliknięcie - dotyczy onFirstClick
@@ -522,12 +526,12 @@ function Game(props) {
             if((handleCount < 1) && (cardsOpened.length === 1)) {
                 cardsOpened[0].parentNode.classList.add('target');
                 handleCheck = 0;
-                levels[`lvl${level-1}`].onFirstClickFlag();
+                levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, tiles, foundTiles);
             }
 
             else if((handleCheck < 1) && (cardsOpened.length > 1)) {
                 cardsOpened[1].parentNode.classList.add('target');
-                levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles);
+                levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles, iter);
                 handleCheck++;
             }
 

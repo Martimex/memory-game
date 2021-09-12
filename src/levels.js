@@ -136,21 +136,46 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 31, // 31
+            turns: 34, // 31
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles) {
             flags.skewTo0Deg_5(); // temporary function, remove it before deploying to production
             flags.addTilesIdentifer_5(cardsOpened, tiles, foundTiles);
             flags.resetIcons_5(cardsOpened, tiles, foundTiles);
             flags.createAnimatedDots_5();
+            //flags.animateLevelInfo_5();
             flags.hideSecondType_5();
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles) {
             flags.hideFirstType_5(cardsOpened, tiles, foundTiles);
             
         },
-        onSecondClickFlag: function(cardsOpened, tiles, foundTiles) {
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.hideSecondType_5(cardsOpened, tiles, foundTiles);
+            flags.generateNewDots_5(cardsOpened, tiles, foundTiles, iter);
+        },
+    },
+
+    lvl6: {
+        lv: 6,
+        rows: 6,
+        columns: 6,
+        tile_size: 61,
+        tiles: 36,  // 30
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: 34, // 31
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles) {
+            flags.resetBgImg_6();
+            flags.rotateBoard_6();
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles) {
+            flags.animateTarget_6();
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.animateTarget_6();
         },
     },
 }
