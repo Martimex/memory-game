@@ -525,7 +525,8 @@ const flags = {
 
     // LVL 6
 
-    resetBgImg_6: function() {
+    resetBgImg_6: function(cardsOpened, tiles, foundTiles, iter) {
+        iter.value = 0;
         document.querySelector('.bg-6').style = '';
     },
 
@@ -546,15 +547,79 @@ const flags = {
         });
     },
 
+    createTornados_6: function() {
+        const animationContainer = document.querySelector('.animationContainer');
+        for(let i=0; i<4; i++) {
+            let tornado = document.createElement('div');
+            tornado.classList.add('tornado', `tornado-${i+1}`);
+            animationContainer.appendChild(tornado);
+            for(let x=0; x<9; x++) {
+                let tornadoElem = document.createElement('div');
+                tornadoElem.classList.add('tornado-elem');
+                tornado.appendChild(tornadoElem);
+            }
+        }
+    },
+
+    rotateTornados_6: function() {
+        anime({
+            targets: `.tornado-1`,
+            duration: 4800,
+            rotate: 360,
+            easing: 'linear',
+            loop: true,
+        })
+
+        anime({
+            targets: `.tornado-2`,
+            duration: 6200,
+            rotate: -360,
+            easing: 'linear',
+            loop: true,
+        })
+
+        anime({
+            targets: `.tornado-3`,
+            duration: 6200,
+            rotate: -360,
+            easing: 'linear',
+            loop: true,
+        })
+
+        anime({
+            targets: `.tornado-4`,
+            duration: 4800,
+            rotate: 360,
+            easing: 'linear',
+            loop: true,
+        })
+
+    },
+
     animateTarget_6: function() {
         anime({
             targets: '.target',
-            duration: 2800,
-            backgroundImage: ['radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%))', 'radial-gradient(hsl(29, 80%, 60%) 20%, hsl(52, 80%, 60%) 45%, hsl(282, 80%, 40%))'],
-            loop: true,
-            direction: 'alternate',
+            duration: 6400,
+            keyframes: [
+                {backgroundImage: ['radial-gradient(hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%))', 'radial-gradient(hsl(29, 80%, 60%) 20%, hsl(52, 80%, 60%) 45%, hsl(282, 80%, 40%))']},
+                {backgroundImage: 'radial-gradient(hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%))'},
+                {backgroundImage: 'radial-gradient(hsl(29, 80%, 60%) 20%, hsl(52, 80%, 60%) 45%, hsl(282, 80%, 40%))'},
+                {backgroundImage: 'radial-gradient(hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%))'},
+            ],
+            loop: false,
         })
-    }
+    },
+
+    animateMatch_6: function(cardsOpened, tiles, foundTiles, iter) {
+        console.log('ITER NEW VALUE::: '+iter.value)
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            anime({
+                targets: [cardsOpened[0], cardsOpened[1]],
+                duration: 1800,
+                backgroundImage: 'radial-gradient(hsl(67, 80%, 60%) 20%, hsl(44, 80%, 60%) 45%, hsl(297, 80%, 60%))',
+            })
+        }
+    },
 }
 
 export default flags;
