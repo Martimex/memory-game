@@ -152,6 +152,10 @@ function Game(props) {
         handleCount = 0;
         handleCheck = 0;
 
+        iter.value = 0;
+        iter2.value = 0;
+        strike.value = 0;
+
         cleanup();
     }
 
@@ -396,6 +400,7 @@ function Game(props) {
             isChecking = true;
         }, 200)
         console.log('checking...');
+
         setTimeout(() => {
 
             if(cardsOpened[1] === undefined) { cardsOpened.pop(); return;} // prevents from time bug
@@ -451,7 +456,7 @@ function Game(props) {
     
             setTimeout(() => {
                 gameboard.current.addEventListener('click', clickable); // game.childNodes[0]
-            }, 500); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
+            }, 300); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
     
         }, 1400); // this time allows to see two opend tiles for user - he can check whether they match or not
     }
@@ -517,42 +522,45 @@ function Game(props) {
 
         // PREVENT FIRSTCLICK AND SECONDCLICK MULTIPLE TIMES INVOKING WHEN USER KEEPS PRESSING THE SAME TILE / SOME TILES MULTIPLE TIMES !!!!
         console.log('isChecking: ' +isChecking)
+        console.log(`%c handleCount is  ${handleCount}`, 'background: #d49; color: #70eb4a');
         if(isChecking) {return;}
 
         if(gameboard.current.dataset.animation === 'off') {
 
             console.log('handleState invoked...')
 
-            if((handleCount < 1) && (cardsOpened.length === 1)) {
+            if((handleCount < 1) && (cardsOpened[0])) {
                 cardsOpened[0].parentNode.classList.add('target');
-                handleCheck = 0;
-                levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, tiles, foundTiles);
+                if(cardsOpened.length === 1) {
+                    handleCheck = 0;
+                    handleCount++;
+                    levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, tiles, foundTiles);
+                }
             }
 
-            else if((handleCheck < 1) && (cardsOpened.length > 1)) {
+            else if((handleCheck < 1) && (cardsOpened[1]))  {
                 cardsOpened[1].parentNode.classList.add('target');
-                levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles, iter);
-                handleCheck++;
+                if(cardsOpened.length > 1) {
+                    levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles, iter);
+                    handleCheck++;
+                    handleCount = 0;
+                }       
             }
 
-            handleCount++;
-        }
-        //console.log(handleCount);
-
-        //if(handleCount === 1) {
-         //       
-         //   levels[`lvl${level-1}`].onFirstClickFlag();
-       // }
             
-        if(cardsOpened.length > 1) {
+        }
+            
+        if((cardsOpened.length > 1) && (!(isChecking))) {
+
+            for(let i=0; i < cardsOpened.length; i++) {
+                cardsOpened[i].parentNode.classList.remove('target');
+            }
 
             setTimeout(() => {
-                for(let i=0; i < cardsOpened.length; i++) {
-                    cardsOpened[i].parentNode.classList.remove('target');
-                }
 
                 console.log(cardsOpened);
                 //isChecking = false;
+                if(cardsOpened.length <= 1) {return;} 
 
                 if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
                     console.log('conditions passed')

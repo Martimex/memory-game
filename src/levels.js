@@ -87,7 +87,7 @@ const levels = {
         tiles: 20,  // 20
         iconSet: 'fas',
         counter: {
-            time: 48, //  45, 50, 48
+            time: 54, //  45, 50, 48, 54
             turns: null, // 17
         },
         onStartFlag: function() {
