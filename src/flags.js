@@ -530,10 +530,16 @@ const flags = {
         document.querySelector('.bg-6').style = '';
     },
 
-    rotateBoard_6: function() {
+    rotateBoard_6: function(cardsOpened, tiles, foundTiles, iter) {
+        let game = document.querySelector('.game-6');
         let board = document.querySelector('.board-6');
-        anime({
-            targets: board,
+        let spinningBox = document.createElement('div');
+        spinningBox.classList.add('spinning');
+        //spinningBox.style = //'position: absolute; width: 100%; height: 100%;';
+        game.appendChild(spinningBox);
+        spinningBox.appendChild(board);
+        const rotation = anime({
+            targets: spinningBox,
             duration: 14000,
             keyframes:[
                 {rotate: [0, 90]},
@@ -545,6 +551,17 @@ const flags = {
             direction: 'alternate',
             loop: true,
         });
+        //flags.check_6(rotation, tiles, foundTiles);
+        //iter.value++;
+
+    },
+
+    check_6: function(rotation, tiles, foundTiles) {
+        if(foundTiles+2 === tiles) {
+            console.log('Would it pause then ?')
+            rotation.pause();
+            document.querySelector('.board-6').onclick = rotation.pause();
+        }  
     },
 
     createTornados_6: function() {
@@ -618,8 +635,43 @@ const flags = {
                 duration: 1800,
                 backgroundImage: 'radial-gradient(hsl(67, 80%, 60%) 20%, hsl(44, 80%, 60%) 45%, hsl(297, 80%, 60%))',
             })
+
+            //let b7 = document.querySelector('.board-6');
         }
     },
+
+    isGameFinished_6: function(cardsOpened, tiles, foundTiles, iter) {
+        if(foundTiles+2 === tiles) {
+            anime({
+                targets: '.target',
+                duration: 500,
+                opacity: [0.5, 0],
+                easing: 'linear',
+            });
+            let randomDiv = document.createElement('div');
+            let game = document.querySelector('.game');
+            let board = document.querySelector('.board');
+            game.appendChild(board);
+            let spinningBox = document.querySelector('.spinning');
+            randomDiv.appendChild(spinningBox);
+            randomDiv.remove();
+        }
+    },
+
+
+
+    // LVL 7
+
+    resetRotatingBoard_7: function() {
+        // TEMPORARY. PLEASE TEMOVE IT DURING PRODUCTION
+        let randomDiv = document.createElement('div');
+        let game = document.querySelector('.game');
+        let board = document.querySelector('.board');
+        game.appendChild(board);
+        let spinningBox = document.querySelector('.spinning');
+        randomDiv.appendChild(spinningBox);
+        randomDiv.remove();
+    }
 }
 
 export default flags;

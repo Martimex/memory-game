@@ -141,7 +141,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles) {
             flags.skewTo0Deg_5(); // temporary function, remove it before deploying to production
             flags.addTilesIdentifer_5(cardsOpened, tiles, foundTiles);
-            flags.resetIcons_5(cardsOpened, tiles, foundTiles);
+            flags.resetIcons_5(cardsOpened, tiles, foundTiles); 
             flags.createAnimatedDots_5();
             //flags.animateLevelInfo_5();
             flags.hideSecondType_5();
@@ -158,10 +158,10 @@ const levels = {
 
     lvl6: {
         lv: 6,
-        rows: 6,
-        columns: 6,
+        rows: 6,  // 6
+        columns: 6,  // 6
         tile_size: 61,
-        tiles: 36,  // 30
+        tiles: 36,  // 36
         iconSet: 'fas',
         counter: {
             time: null,
@@ -169,7 +169,7 @@ const levels = {
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.resetBgImg_6(cardsOpened, tiles, foundTiles, iter);
-            flags.rotateBoard_6();
+            flags.rotateBoard_6(cardsOpened, tiles, foundTiles, iter);
             flags.createTornados_6();
             flags.rotateTornados_6();
         },
@@ -179,6 +179,29 @@ const levels = {
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateTarget_6();
             flags.animateMatch_6(cardsOpened, tiles, foundTiles, iter);
+            flags.isGameFinished_6(cardsOpened, tiles, foundTiles, iter);
+        },
+    },
+
+    lvl7: {
+        lv: 7,
+        rows: 5,
+        columns: 8,
+        tile_size: 44,
+        tiles: 40,  // 30
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: 36, // 31
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.resetRotatingBoard_7();
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },
     },
 }
