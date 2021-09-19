@@ -534,7 +534,7 @@ function Game(props) {
                 if(cardsOpened.length === 1) {
                     handleCheck = 0;
                     handleCount++;
-                    levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, tiles, foundTiles);
+                    levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, tiles, foundTiles, iter);
                 }
             }
 

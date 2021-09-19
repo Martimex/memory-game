@@ -787,9 +787,12 @@
    position: absolute; top: 0; left: 0;
    width: 100vw;
    height: 100vh;
-   background-image: linear-gradient(132deg, hsl(204, 80%, 60%),hsl(9, 80%, 40%));
-   background: hsla(0, 55%, 50%, 1);
+  /* background-image: linear-gradient(132deg, hsl(204, 80%, 60%),hsl(9, 80%, 40%));*/
+   /*background: hsla(0, 55%, 50%, 1);*/
    z-index: -50;
+   background-color: #000000;
+   background-image: url('../bgs/bg-7.svg');
+   background-repeat: repeat;
 }
 
 .aContainer-7 {
@@ -812,17 +815,19 @@
 }
 
 .fa-icon-7 {
-   color: hsla(145, 72%, 100%, .8);
+   color: hsla(282, 66%, 60%, .8);
    font-size: 1.2rem;
    /*color: hsl(105, 70%, 60%);*/
 }
+
+
 
 
 .t-7 {  /* Front size of card */ 
     box-shadow: #000000;
     border-radius: 35%;
     border: .8rem solid rgba(36, 141, 5, 0);
-    background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 45%, hsl(282, 80%, 0%));
+    background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 45%, hsl(282, 80%, 60%));
 }
 
 .t-7::before, .t-7::after {
@@ -834,7 +839,7 @@
     left: -50%;
     height: 5rem;
     border-radius: 50%;
-    background: hsla(0, 55%, 50%, 0.3);
+    background: hsla(156, 55%, 50%, 0.35);
 }
 
 .tf-7 { /* Have no clue what this class is for */
@@ -844,8 +849,43 @@
 
 .tb-7 {  /* Back side of card */
     color: hsl(51, 94%, 53%);
+    /*background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 45%, hsl(282, 80%, 60%));*/
+    border-radius: 40%;
 }
 
+.animationBox {
+    position: absolute;
+    width: 6rem;
+    height: 6rem;
+    background: #000;
+    z-index: -40;
+    border-radius: 10%;
+}
+
+.animationBoxInner {
+    position: absolute;
+    width: 6rem;
+    height: 6rem;
+    background: #000;
+    z-index: -40;
+    border-radius: 10%;
+}
+
+.animationBox-1 {
+    top: calc(0% + (6rem/2)); left: calc(0% + (6rem/2));
+}
+
+.animationBoxInner-1 {
+    top: calc(0% + 6rem); left: calc(0% + 6rem);
+}
+
+.animationBox-2 {
+    bottom: calc(0% + (6rem/2)); right: calc(0% + (6rem/2));
+}
+
+.animationBoxInner-2 {
+    bottom: calc(0% + 4rem ); right: calc(0% + (5.5rem));
+}
 
 .level-7::after, .score-7::after, .counter-7::after {
    content: '';

@@ -671,6 +671,110 @@ const flags = {
         let spinningBox = document.querySelector('.spinning');
         randomDiv.appendChild(spinningBox);
         randomDiv.remove();
+    },
+
+    changeAllIconColors_7: function(cardsOpened, tiles, foundTiles, iter) {
+        iter.value++;
+        if(iter.value%4 === 0) {
+            let svgs = document.querySelectorAll('svg');
+            console.log(svgs);
+            svgs.forEach(svg => {
+                let hue = Math.floor(Math.random() * 360)+1;
+                let saturate  = Math.floor(Math.random() * 80)+11;
+                let lightness = Math.floor(Math.random() * 80)+11;
+                svg.style = `color: hsl(${hue}, ${saturate}%, ${lightness}%);`;
+                let back = svg.parentNode;
+                back.setAttribute('style', `background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 25%, hsl(${hue}, 50%, 50%));`); 
+            });
+        }
+    },
+
+    addAnimationBoxes_7: function(cardsOpened, tiles, foundTiles, iter) {
+        const animationContainer = document.querySelector('.animationContainer');
+        for(let i=0; i<2; i++) {
+            let animationBox = document.createElement('div');
+            animationBox.classList.add('animationBox', `animationBox-${i+1}`);
+            animationContainer.appendChild(animationBox);
+        }
+
+        for(let i=0; i<2; i++) {
+            let animationBoxInner = document.createElement('div');
+            animationBoxInner.classList.add('animationBoxInner', `animationBoxInner-${i+1}`);
+            animationContainer.appendChild(animationBoxInner);
+        }
+
+
+        anime({
+            targets: '.animationBox-1',
+            duration: 14400,
+            keyframes: [
+                {translateY: 0, translateX: '87vw', scale: ['100%', '200%'], duration: 5000},
+                {translateY: '80vh', translateX: '87vw', scale: ['200%', '100%'], duration: 3000},
+                {translateY: '80vh', translateX: '0vw',  scale: ['100%', '200%'],  duration: 5000},
+                {translateY: 0, translateX: 0,  scale: ['200%', '100%'], duration: 3000},
+            ],
+            easing: 'linear',
+            loop: true,
+        })
+
+        anime({
+            targets: '.animationBoxInner-1',
+            duration: 14400,
+            keyframes: [
+                {translateY: 0, translateX: '77vw', scale: ['100%', '200%'], duration: 3500},
+                {translateY: '70vh', translateX: '77vw', scale: ['200%', '100%'], duration: 2500},
+                {translateY: '70vh', translateX: '0vw',  scale: ['100%', '200%'],  duration: 3500},
+                {translateY: 0, translateX: 0,  scale: ['200%', '100%'], duration: 2500},
+            ],
+            easing: 'linear',
+            loop: true,
+        })
+
+        anime({
+            targets: '.animationBox-2',
+            duration: 14400,
+            keyframes: [
+                {translateY: 0, translateX: '-87vw', scale: ['200%', '100%'], duration: 5000},
+                {translateY: '-80vh', translateX: '-87vw', scale: ['100%', '200%'], duration: 3000},
+                {translateY: '-80vh', translateX: '0vw', scale: ['200%', '100%'], duration: 5000},
+                {translateY: 0, translateX: 0,  scale: ['100%', '200%'], duration: 3000},
+            ],
+            easing: 'linear',
+            loop: true,
+        })
+
+        anime({
+            targets: '.animationBoxInner-2',
+            duration: 14400,
+            keyframes: [
+                {translateY: 0, translateX: '-77vw', scale: ['100%', '200%'], duration: 3500},
+                {translateY: '-70vh', translateX: '-77vw', scale: ['200%', '100%'], duration: 2500},
+                {translateY: '-70vh', translateX: '0vw',  scale: ['100%', '200%'],  duration: 3500},
+                {translateY: 0, translateX: 0,  scale: ['200%', '100%'], duration: 2500},
+            ],
+            easing: 'linear',
+            loop: true,
+        })
+    },
+
+    colorAnimationBoxes_7: function(cardsOpened, tiles, foundTiles, iter) {
+        if(cardsOpened.length <= 1) {  // Jeśli kolorujemy większe pudełko
+            if(iter.value%2 > 0) {  // Jeśli to jest pierwsza, lub każda nieparzysta tura
+
+            }
+            else {
+
+            }
+        }
+
+        else {
+            if(iter.value%2 > 0) {
+
+            }
+            else {
+
+            }
+        }
     }
 }
 

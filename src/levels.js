@@ -187,7 +187,7 @@ const levels = {
         lv: 7,
         rows: 5,
         columns: 8,
-        tile_size: 44,
+        tile_size: 65,
         tiles: 40,  // 30
         iconSet: 'fas',
         counter: {
@@ -196,12 +196,15 @@ const levels = {
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.resetRotatingBoard_7();
+            flags.addAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
+           // flags.moveAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
         },
-        onFirstClickFlag: function(cardsOpened, tiles, foundTiles) {
-
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.changeAllIconColors_7(cardsOpened, tiles, foundTiles, iter);
+            flags.colorAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.colorAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }
