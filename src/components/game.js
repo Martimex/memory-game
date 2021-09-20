@@ -530,7 +530,7 @@ function Game(props) {
             console.log('handleState invoked...')
 
             if((handleCount < 1) && (cardsOpened[0])) {
-                cardsOpened[0].parentNode.classList.add('target');
+                cardsOpened[0].parentNode.classList.add('target', 'target-1');
                 if(cardsOpened.length === 1) {
                     handleCheck = 0;
                     handleCount++;
@@ -539,7 +539,7 @@ function Game(props) {
             }
 
             else if((handleCheck < 1) && (cardsOpened[1]))  {
-                cardsOpened[1].parentNode.classList.add('target');
+                cardsOpened[1].parentNode.classList.add('target', 'target-2');
                 if(cardsOpened.length > 1) {
                     levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles, iter);
                     handleCheck++;
@@ -554,6 +554,8 @@ function Game(props) {
 
             for(let i=0; i < cardsOpened.length; i++) {
                 cardsOpened[i].parentNode.classList.remove('target');
+                cardsOpened[i].parentNode.classList.remove('target-1');
+                cardsOpened[i].parentNode.classList.remove('target-2');
             }
 
             setTimeout(() => {
@@ -625,7 +627,7 @@ function Game(props) {
                     <GameInfo level={level}  moves={moves} time={time} score={score}  />
                 </div>
 
-                <div onClick={() => {confirmSuccess()}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
+                <div onClick={() => {setLevel(level + 7); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className={`game game-${level-1}`} ref={game}>
                
                     <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`}}>

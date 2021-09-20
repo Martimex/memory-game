@@ -4,6 +4,8 @@ import Game from './components/game.js';
 //import { tiles, foundTiles } from './components/game.js';
 //let gameboard = useRef(null);
 
+// WINNING CONDITION :  if(foundTiles+2 === tiles) equals true
+
 const flags = {
     
     // LVL 1
@@ -670,7 +672,7 @@ const flags = {
         game.appendChild(board);
         let spinningBox = document.querySelector('.spinning');
         randomDiv.appendChild(spinningBox);
-        randomDiv.remove();
+        randomDiv.remove(); 
     },
 
     changeAllIconColors_7: function(cardsOpened, tiles, foundTiles, iter) {
@@ -684,7 +686,7 @@ const flags = {
                 let lightness = Math.floor(Math.random() * 80)+11;
                 svg.style = `color: hsl(${hue}, ${saturate}%, ${lightness}%);`;
                 let back = svg.parentNode;
-                back.setAttribute('style', `background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 25%, hsl(${hue}, 50%, 50%));`); 
+                back.setAttribute('backgroundImage', `radial-gradient(hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 25%, hsl(${hue}, 50%, 50%))`); 
             });
         }
     },
@@ -758,22 +760,58 @@ const flags = {
     },
 
     colorAnimationBoxes_7: function(cardsOpened, tiles, foundTiles, iter) {
+        let targetTile;
+        let selector;
         if(cardsOpened.length <= 1) {  // Jeśli kolorujemy większe pudełko
             if(iter.value%2 > 0) {  // Jeśli to jest pierwsza, lub każda nieparzysta tura
-
+                targetTile = document.querySelector('.target-1');
+                selector = '.animationBox-1';
             }
             else {
-
+                targetTile = document.querySelector('.target-1');
+                selector = '.animationBox-2';
             }
         }
 
         else {
             if(iter.value%2 > 0) {
-
+                targetTile = document.querySelector('.target-2');
+                selector = '.animationBoxInner-1';
             }
             else {
-
+                targetTile = document.querySelector('.target-2');
+                selector = '.animationBoxInner-2';
             }
+        }
+
+        let newColor = targetTile.querySelector('.tile-back');
+        let color = newColor.getAttribute('backgroundImage');
+        if(color) {
+            color = color.replace('(hsl(52, 80%, 60%)', '(hsla(5, 0%, 0%, 70%)');
+        }
+
+        anime({
+            targets: selector,
+            duration: 2000,
+            backgroundImage:  color,
+            loop: false,
+            easing: 'linear',
+        })
+    },
+
+    winAnimation_7: function(cardsOpened, tiles, foundTiles, iter) {
+        if(foundTiles+2 === tiles) {
+            anime({
+                targets: ['.animationBox', '.animationBoxInner'],
+                duration: 12200,
+                keyframes: [
+                    {scale: ['0%', '350%'], duration: 4000},
+                    {scale: ['350%', '100%'], duration: 8000},
+                ],
+                delay: anime.stagger(1000),
+                opacity: [1, 0],
+                easing: 'easeInOutQuint',
+            })
         }
     }
 }

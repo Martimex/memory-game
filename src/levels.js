@@ -188,14 +188,14 @@ const levels = {
         rows: 5,
         columns: 8,
         tile_size: 65,
-        tiles: 40,  // 30
+        tiles: 40,  // 40
         iconSet: 'fas',
         counter: {
-            time: null,
-            turns: 36, // 31
+            time: 150,  // 152, 150
+            turns: null, // 31
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            flags.resetRotatingBoard_7();
+            //flags.resetRotatingBoard_7();  PLEASE MOVE IT BACK TO THE GAME SOONER
             flags.addAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
            // flags.moveAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
         },
@@ -205,6 +205,29 @@ const levels = {
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.colorAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
+            flags.winAnimation_7(cardsOpened, tiles, foundTiles, iter);
+        },
+    },
+
+    lvl8: {
+        lv: 8,
+        rows: 6,
+        columns: 9,
+        tile_size: 52,
+        tiles: 54,  // 54
+        iconSet: 'fas',
+        counter: {
+            time: null,  // 
+            turns: 46, // 46
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },
     },
 }
