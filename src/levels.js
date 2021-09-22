@@ -195,7 +195,7 @@ const levels = {
             turns: null, // 31
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            //flags.resetRotatingBoard_7();  PLEASE MOVE IT BACK TO THE GAME SOONER
+            //flags.resetRotatingBoard_7();  //PLEASE MOVE IT BACK TO THE GAME SOONER
             flags.addAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
            // flags.moveAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
         },
@@ -221,13 +221,14 @@ const levels = {
             turns: 46, // 46
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.setColorfulBorders_8(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.checkTargetBorderColor_8(cardsOpened, tiles, foundTiles, iter);
+            flags.setColorfulBorders_8(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.setColorfulBorders_8(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }

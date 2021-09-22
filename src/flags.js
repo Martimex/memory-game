@@ -5,6 +5,8 @@ import Game from './components/game.js';
 //let gameboard = useRef(null);
 
 // WINNING CONDITION :  if(foundTiles+2 === tiles) equals true
+// GET THE RIGHT TILE'S CHILD NODES [NOT #TEXT AND SUCH] BY A TARGET CLASS: 
+    /* let target = document.querySelector(.target-1); targetTile.querySelector('.tile-back'); */
 
 const flags = {
     
@@ -813,7 +815,72 @@ const flags = {
                 easing: 'easeInOutQuint',
             })
         }
-    }
+    },
+
+
+
+    // LVL 8 
+
+    checkTargetBorderColor_8: function(cardsOpened, tiles, foundTiles, iter) {
+        let target = document.querySelector('.target-1');
+        let svg = target.querySelector('svg');
+        //console.log(target);
+        console.log(svg.style.borderColor);
+        if(svg.style.borderColor === 'rgb(230, 105, 76)') {  // if the color is red
+            console.log('cardsOpened elem 1st removed');
+            cardsOpened.pop(); // it is bad solution, work on better ones
+            anime({
+                targets: '.target-1',
+                duration: 1500,
+                rotateY: 0,
+                easing: 'linear',
+            })
+        }
+        else{
+            console.log('cardsOpened remain untouched');
+        }
+    },
+
+    setColorfulBorders_8: function(cardsOpened, tiles, foundTiles, iter) {
+        let allTiles = document.querySelectorAll('.t-8');
+        //let activeTiles = 0;  // this variable indicates the number of visible tiles
+        // Remember that all found tiles exists; they are just not visible
+        let existingTiles = [];
+        allTiles.forEach(tile => {
+            if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target')))) {
+                existingTiles.push(tile);
+                //activeTiles++;
+            }
+        })
+        //console.log(existingTiles);
+
+        // Now spread out existingTiles array between green and red borders (half and half)
+        let greenTiles = [];
+        let activeTiles = existingTiles.length;
+        //console.log(activeTiles);
+        
+        for(let x=0; x<(activeTiles/2); x++) {
+            let rand = Math.floor(Math.random() * existingTiles.length);
+            greenTiles.push(existingTiles[rand]);
+            existingTiles.splice(rand, 1);
+        }
+
+        let redTiles = [...existingTiles];
+        //console.log(existingTiles);
+
+        for(let y=0; y<greenTiles.length; y++) {
+            let svg = greenTiles[y].querySelector('svg');
+            svg.style = 'color: hsl(110, 75%, 60%); border-color: hsl(110, 75%, 60%);'
+            greenTiles[y].style = 'border-color: hsl(110, 75%, 60%); background-image: radial-gradient( hsla(110, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));';
+        }
+
+        for(let z=0; z<redTiles.length; z++) {
+            let svg = redTiles[z].querySelector('svg');
+            svg.style = 'color: hsl(11, 75%, 60%); border-color: hsl(11, 75%, 60%);';
+            redTiles[z].style = 'border-color: hsl(11, 75%, 60%); background-image: radial-gradient( hsla(11, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));';
+        }
+
+    },
 }
 
 export default flags;
