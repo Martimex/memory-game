@@ -217,7 +217,7 @@ const levels = {
         tiles: 54,  // 54
         iconSet: 'fas',
         counter: {
-            time: 240,  // 
+            time: 252,  // 
             turns: null, // 46
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -230,6 +230,28 @@ const levels = {
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.setColorfulBorders_8(cardsOpened, tiles, foundTiles, iter);
             flags.blockRedTilesClick_8(cardsOpened, tiles, foundTiles, iter);
+        },
+    },
+
+    lvl9: {
+        lv: 9,
+        rows: 6,
+        columns: 7,
+        tile_size: 60,
+        tiles: 42,  // 42
+        iconSet: 'fas',
+        counter: {
+            time: null,  // 
+            turns: 22, // 22
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },
     },
 }

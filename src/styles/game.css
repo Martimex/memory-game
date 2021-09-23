@@ -1075,3 +1075,142 @@
     border-radius: 30%;
     padding: 0 2rem;
 }
+
+
+
+/* LEVEL 9 */
+
+.bg-9 {
+    overflow: hidden;
+   position: absolute; top: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+  /* background-image: linear-gradient(132deg, hsl(204, 80%, 60%),hsl(9, 80%, 40%));*/
+   /*background: hsla(0, 55%, 50%, 1);*/
+   z-index: -50;
+   background-color: hsl(6, 0%, 0%);
+   background-image: url('../bgs/bg-9.svg');
+   background-repeat: repeat;
+   background-size: cover;
+}
+
+.aContainer-9 {
+   overflow: hidden;
+   position: absolute; bottom: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   pointer-events: none;
+}
+
+.game-9 {
+    padding: .3rem;
+}
+
+.board-9 {
+    padding: -1rem;
+    /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
+    border-block: initial;
+    padding: 0 2rem;
+    border-radius: 10%;
+
+    background-image: linear-gradient(135deg, hsla(48, 48%, 48%, 18%), hsla(0, 0%, 0%, 50%), hsla(343, 48%, 48%, 18%));
+
+}
+
+.fa-icon-9 {
+   color: inherit;
+   border: .1rem solid inherit;
+   /* color: hsla(110, 75%, 60%, 0.8);
+   border: .1rem solid hsl(110, 75%, 60%); */
+   background:#000;
+   border-radius: 20%;
+   padding: 1.3rem; /* 4rem xd */
+   z-index: 20;
+   font-size: 1.2rem;
+   /*color: hsl(105, 70%, 60%);*/
+}
+
+
+.t-9 {  /* Front size of card */ 
+    box-shadow: #000000;
+    border-radius: 35%;
+    border: .4rem solid hsla(11, 0%, 0%, 20%);
+    background-color: inherit;
+}
+
+.t-9::before, .t-9::after {
+    content: '';
+    display: block;
+    position: absolute;
+}
+
+.tf-9 { /* Have no clue what this class is for */
+}
+
+
+
+.tb-9 {  /* Back side of card */
+    color: hsl(51, 94%, 53%);
+    /*background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 45%, hsl(282, 80%, 60%));*/
+    border-radius: 40%;
+}
+
+/* Here is some space for animation stuff */
+
+.level-9::before, .level-9::after, .score-9::before, .score-9::after, .counter-9::before, .counter-9::after {
+   content: '';
+   display: block;
+   position: absolute;
+   width: 100%;
+   height: 1vh;
+}
+
+.level-9::before {
+
+}
+
+.counter-9::before  {
+
+}
+
+.score-9::before {
+
+}
+
+.level-9::after{
+
+}
+
+.counter-9::after{
+ 
+}
+
+.score-9::after {
+ 
+}
+
+.level-9 {
+    color: hsla(0, 0%, 0%, 70%);
+    border: .4rem solid hsla(11, 60%, 40%, 50%);
+    background-image: radial-gradient(hsl(11, 60%, 60%), hsl(20, 60%, 60%));
+    border-radius: 30%;
+    padding: 0 2rem;
+    
+}
+
+.counter-9 {
+    color: hsla(0, 0%, 0%, 70%);
+    border: .4rem solid hsla(11, 60%, 40%, 50%);
+    background-image: radial-gradient(hsl(11, 60%, 60%), hsl(20, 60%, 60%));
+    border-radius: 30%;
+    padding: 0 2rem;
+
+}
+
+.score-9 {
+    color: hsla(0, 0%, 0%, 70%);
+    border: .4rem solid hsla(11, 60%, 40%, 50%);
+    background-image: radial-gradient(hsl(11, 60%, 60%), hsl(20, 60%, 60%));
+    border-radius: 30%;
+    padding: 0 2rem;
+}
