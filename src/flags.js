@@ -5,6 +5,7 @@ import Game from './components/game.js';
 //let gameboard = useRef(null);
 
 // WINNING CONDITION :  if(foundTiles+2 === tiles) equals true
+// IF TWO CARDS MATCH:  if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])
 // GET THE RIGHT TILE'S CHILD NODES [NOT #TEXT AND SUCH] BY A TARGET CLASS: 
     /* let target = document.querySelector(.target-1); targetTile.querySelector('.tile-back'); */
 
@@ -821,24 +822,64 @@ const flags = {
 
     // LVL 8 
 
-    checkTargetBorderColor_8: function(cardsOpened, tiles, foundTiles, iter) {
-        let target = document.querySelector('.target-1');
+    blockRedTilesClick_8: function(cardsOpened, tiles, foundTiles, iter) {
+        // CARDS OPENED IS PASSED BY VALUE, NOT BY REFERENCE SO MODYFING IT HERE HAS NO EFFECT FOR GAME COMPONENT. FIND ALTERNATIVE APPROACH FOR THISFUNC
+ 
+        let allTiles = document.querySelectorAll('.tile');
+        let redTiles = [];
+        allTiles.forEach(tile => {
+            let svg = tile.querySelector('svg');
+            let svgColor = svg.style.color;
+            if(svgColor === 'rgb(230, 105, 76)')  { // if red
+                tile.style = 'pointer-events: none;';
+            }
+        })
+
+        /* let target;
+        iter.value++;
+        console.log(cardsOpened.length)
+        if(cardsOpened.length <= 1) { // first card
+            //target = cardsOpened[0].parentNode;
+            target = document.querySelector('.target-1');
+        } else { // second card border checking
+            //target = cardsOpened[1].parentNode;
+            target = document.querySelector('.target-2');
+        }
+
         let svg = target.querySelector('svg');
-        //console.log(target);
+
         console.log(svg.style.borderColor);
+        console.log(target)
         if(svg.style.borderColor === 'rgb(230, 105, 76)') {  // if the color is red
-            console.log('cardsOpened elem 1st removed');
-            cardsOpened.pop(); // it is bad solution, work on better ones
-            anime({
-                targets: '.target-1',
-                duration: 1500,
-                rotateY: 0,
-                easing: 'linear',
+            //document.querySelector('.board').dataset.animation = 'on';
+            async function revertRed() {
+                const a1 = anime({
+                    targets: target,
+                    duration: 500,
+                    rotateY: '0deg',
+                    scale: '200%',
+                    easing: 'linear',
+                }) 
+                console.log('cardsOpened elem removed');
+               // Promise.all([a1]);
+            } 
+            revertRed().then(() => {
+                while(cardsOpened.length > 0) {
+                    cardsOpened.pop(); 
+                } 
+                console.log('successfull');
+                //document.querySelector('.board').dataset.animation = 'off';
+                target.classList.remove('target-1');
+                target.classList.remove('target-2');
+                console.log('flag length:  '+cardsOpened.length)
+                return cardsOpened;
             })
         }
+
         else{
             console.log('cardsOpened remain untouched');
-        }
+            return cardsOpened;
+        } */
     },
 
     setColorfulBorders_8: function(cardsOpened, tiles, foundTiles, iter) {
@@ -871,16 +912,64 @@ const flags = {
         for(let y=0; y<greenTiles.length; y++) {
             let svg = greenTiles[y].querySelector('svg');
             svg.style = 'color: hsl(110, 75%, 60%); border-color: hsl(110, 75%, 60%);'
-            greenTiles[y].style = 'border-color: hsl(110, 75%, 60%); background-image: radial-gradient( hsla(110, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));';
+            greenTiles[y].style = 'border: .8rem solid hsla(110, 93%, 29%, 20%);';
         }
 
         for(let z=0; z<redTiles.length; z++) {
             let svg = redTiles[z].querySelector('svg');
             svg.style = 'color: hsl(11, 75%, 60%); border-color: hsl(11, 75%, 60%);';
-            redTiles[z].style = 'border-color: hsl(11, 75%, 60%); background-image: radial-gradient( hsla(11, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));';
+            redTiles[z].style = 'border: .8rem solid hsla(11, 93%, 29%, 20%); backgroundImage: radial-gradient(hsla(11, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));';
+        }
+
+        anime({
+            targets: greenTiles,
+            duration: 1600,
+            easing: 'easeInOutCirc',
+            backgroundImage: ['radial-gradient(hsla(110, 80%, 60%, 30%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 20%))', 'radial-gradient(hsla(110, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%))'],
+            /*rotate: 180, That seems quite fun*/
+        })
+
+        if((cardsOpened.length < 2) || ((cardsOpened[0].childNodes[0].classList[1] !== cardsOpened[1].childNodes[0].classList[1]))) {
+            anime({
+                targets: redTiles,
+                duration: 1600,
+                easing: 'easeInOutCirc',
+                rotate: -90,
+                filter: 'sepia(30%)',
+                /*rotateX: 180,*/
+            })
+        }
+
+        else {
+            anime({
+                targets: redTiles,
+                duration: 1600,
+                easing: 'easeInOutCirc',
+                rotate: 270,
+                filter: 'sepia(30%)',
+                /*rotateX: 180,*/
+            })
         }
 
     },
+
+    lastPairTurnGreen_8: function(cardsOpened, tiles, foundTiles, iter) {
+        if(foundTiles+2 === tiles) {  // last pair before win has to be green of course
+            let allTiles = document.querySelectorAll('.t-8');
+            let lastPair = [];
+            allTiles.forEach(tile => {
+                if(tile.style.visibility !== 'hidden') {
+                    lastPair.push(tile);
+                }
+            })
+            for(let m=0; m<lastPair.length; m++) {
+                let svg = lastPair[m].querySelector('svg');
+                svg.style = 'color: hsl(110, 75%, 60%); border-color: hsl(110, 75%, 60%);'
+                lastPair[m].style = 'border: .8rem solid hsla(110, 93%, 29%, 20%); radial-gradient(hsla(110, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));';
+            }
+        }
+    }
+
 }
 
 export default flags;

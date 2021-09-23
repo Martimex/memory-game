@@ -995,7 +995,7 @@
 .t-8 {  /* Front size of card */ 
     box-shadow: #000000;
     border-radius: 35%;
-    /* border: .8rem solid hsla(106, 93%, 29%, 0); */
+    border: .8rem solid hsla(11, 93%, 29%, 20%);
     background-image: radial-gradient( hsla(11, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));
 }
 
@@ -1051,16 +1051,27 @@
 }
 
 .level-8 {
-    color: hsl(0, 0%, 0%);
+    color: hsla(0, 0%, 0%, 70%);
+    border: .4rem solid hsla(11, 60%, 40%, 50%);
+    background-image: radial-gradient(hsl(11, 60%, 60%), hsl(20, 60%, 60%));
+    border-radius: 30%;
+    padding: 0 2rem;
     
 }
 
 .counter-8 {
-    color: hsl(0, 0%, 0%);
+    color: hsla(0, 0%, 0%, 70%);
+    border: .4rem solid hsla(11, 60%, 40%, 50%);
+    background-image: radial-gradient(hsl(11, 60%, 60%), hsl(20, 60%, 60%));
+    border-radius: 30%;
+    padding: 0 2rem;
 
 }
 
 .score-8 {
-    color: hsl(0, 0%, 0%);
-
+    color: hsla(0, 0%, 0%, 70%);
+    border: .4rem solid hsla(11, 60%, 40%, 50%);
+    background-image: radial-gradient(hsl(11, 60%, 60%), hsl(20, 60%, 60%));
+    border-radius: 30%;
+    padding: 0 2rem;
 }

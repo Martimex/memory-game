@@ -280,7 +280,6 @@ function Game(props) {
             //setMoves(moves + 1);
         } else {
             console.log('nope');
-            handleCount++;
         }
     }
 
@@ -370,7 +369,7 @@ function Game(props) {
       console.log(cardsOpened.length);
       //target.classList.add('target');
       // Czy user wybrał już 2 karty ?
-    
+
        checkParentOrigin(cardsOpened, target); // Prevents from tile + outer tile border click bug
         console.log(card)
        
@@ -527,7 +526,8 @@ function Game(props) {
 
         if(gameboard.current.dataset.animation === 'off') {
 
-            console.log('handleState invoked...')
+            console.log('%c handleState invoked...', 'background: #46b; color: #882')
+            console.log(cardsOpened.length);
 
             if((handleCount < 1) && (cardsOpened[0])) {
                 cardsOpened[0].parentNode.classList.add('target', 'target-1');
@@ -535,6 +535,7 @@ function Game(props) {
                     handleCheck = 0;
                     handleCount++;
                     levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, tiles, foundTiles, iter);
+                    console.log('final length: '+cardsOpened.length);
                 }
             }
 
@@ -542,6 +543,7 @@ function Game(props) {
                 cardsOpened[1].parentNode.classList.add('target', 'target-2');
                 if(cardsOpened.length > 1) {
                     levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles, iter);
+                    console.log('final length: '+cardsOpened.length);
                     handleCheck++;
                     handleCount = 0;
                 }       

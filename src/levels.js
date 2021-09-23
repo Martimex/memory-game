@@ -217,18 +217,19 @@ const levels = {
         tiles: 54,  // 54
         iconSet: 'fas',
         counter: {
-            time: null,  // 
-            turns: 46, // 46
+            time: 240,  // 
+            turns: null, // 46
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.setColorfulBorders_8(cardsOpened, tiles, foundTiles, iter);
+            flags.blockRedTilesClick_8(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            flags.checkTargetBorderColor_8(cardsOpened, tiles, foundTiles, iter);
-            flags.setColorfulBorders_8(cardsOpened, tiles, foundTiles, iter);
+            flags.lastPairTurnGreen_8(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.setColorfulBorders_8(cardsOpened, tiles, foundTiles, iter);
+            flags.blockRedTilesClick_8(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }
