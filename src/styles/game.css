@@ -1120,13 +1120,11 @@
 .fa-icon-9 {
    color: inherit;
    border: .1rem solid inherit;
-   /* color: hsla(110, 75%, 60%, 0.8);
-   border: .1rem solid hsl(110, 75%, 60%); */
-   background:#000;
-   border-radius: 20%;
-   padding: 1.3rem; /* 4rem xd */
+   color: hsla(194, 94%, 53%, 40%);
+   background: inherit;
+   padding: 1.3rem;
    z-index: 20;
-   font-size: 1.2rem;
+   font-size: 2.5rem;
    /*color: hsl(105, 70%, 60%);*/
 }
 
@@ -1150,9 +1148,8 @@
 
 
 .tb-9 {  /* Back side of card */
-    color: hsl(51, 94%, 53%);
     /*background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 45%, hsl(282, 80%, 60%));*/
-    border-radius: 40%;
+    border-radius: 20%;
 }
 
 /* Here is some space for animation stuff */
@@ -1165,52 +1162,50 @@
    height: 1vh;
 }
 
-.level-9::before {
-
-}
-
-.counter-9::before  {
-
-}
-
-.score-9::before {
-
+.level-9::before, .level-9::after, .counter-9::before, .score-9::before, .counter-9::after, .score-9::after  {
+    content: '';
+    width: 1rem;
+    position: relative;
+    top: 10%; left: 0%;
+    height: 1rem;
+    transform: rotate(-45deg);
+    color: hsla(194, 94%, 53%, 40%);
+    background: hsla(194, 94%, 53%, 40%);
 }
 
 .level-9::after{
+    top: 10%; left: 100%;
+}
 
+.counter-9::before  {
+    top: 10%; left: 0%;
+}
+
+.score-9::before {
+    top: 10%; left: 0%;
 }
 
 .counter-9::after{
- 
+    top: 10%; left: 100%;
 }
 
 .score-9::after {
- 
+    top: 10%; left: 100%;
 }
 
 .level-9 {
-    color: hsla(0, 0%, 0%, 70%);
-    border: .4rem solid hsla(11, 60%, 40%, 50%);
-    background-image: radial-gradient(hsl(11, 60%, 60%), hsl(20, 60%, 60%));
-    border-radius: 30%;
-    padding: 0 2rem;
+    color: hsla(0, 100%, 100%, 60%);
+    font-style:italic;
     
 }
 
 .counter-9 {
-    color: hsla(0, 0%, 0%, 70%);
-    border: .4rem solid hsla(11, 60%, 40%, 50%);
-    background-image: radial-gradient(hsl(11, 60%, 60%), hsl(20, 60%, 60%));
-    border-radius: 30%;
-    padding: 0 2rem;
+    color: hsla(0, 100%, 100%, 60%);
+    font-style:italic;
 
 }
 
 .score-9 {
-    color: hsla(0, 0%, 0%, 70%);
-    border: .4rem solid hsla(11, 60%, 40%, 50%);
-    background-image: radial-gradient(hsl(11, 60%, 60%), hsl(20, 60%, 60%));
-    border-radius: 30%;
-    padding: 0 2rem;
+    color: hsla(0, 100%, 100%, 60%);
+    font-style:italic;
 }

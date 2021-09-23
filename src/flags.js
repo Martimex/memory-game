@@ -968,7 +968,7 @@ const flags = {
                 lastPair[m].style = 'border: .8rem solid hsla(110, 93%, 29%, 20%); radial-gradient(hsla(110, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));';
             }
         }
-    }
+    },
 
 }
 
