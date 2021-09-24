@@ -1120,7 +1120,7 @@
 .fa-icon-9 {
    color: inherit;
    border: .1rem solid inherit;
-   color: hsla(194, 94%, 53%, 40%);
+   color: hsla(194, 94%, 53%, 0.4);
    background: inherit;
    padding: 1.3rem;
    z-index: 20;
@@ -1153,6 +1153,50 @@
 }
 
 /* Here is some space for animation stuff */
+
+.mutatingBox {
+    position: absolute;
+    top: calc(90% - 5rem);
+    left: calc(90% - 5rem);
+    background-color: hsla(194, 94%, 53%, 40%);
+    height: 5rem; 
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: -1px 2px 6px 20px rgba(0,0,0,0.5) inset;
+    -webkit-box-shadow: -1px 2px 6px 20px rgba(0,0,0,0.5) inset;
+    -moz-box-shadow: -1px 2px 6px 20px rgba(0,0,0,0.5) inset;
+
+}
+
+.mutatingBox::before, .mutatingBox::after {
+    content: '';
+    position: relative;
+    width: 3rem;
+    height: 3rem;
+    transform: rotate(45deg);
+    background-color:hsla(194, 0%, 0%, 20%);
+}
+
+.mutatingBox::before {
+    top:-10%;
+    left: -10%;
+}
+
+.mutatingBox::after {
+    bottom: -10%;
+    right: -10%;
+}
+
+.mbText {
+    font-size: 1.7rem;
+    color:hsl(41, 70%, 52%);
+    font-style: italic;
+    border-radius: 25%;
+    /* border: .2rem solid hsla(194, 94%, 53%, 50%); */
+}
+
 
 .level-9::before, .level-9::after, .score-9::before, .score-9::after, .counter-9::before, .counter-9::after {
    content: '';

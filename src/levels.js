@@ -197,7 +197,6 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             //flags.resetRotatingBoard_7();  //PLEASE MOVE IT BACK TO THE GAME SOONER
             flags.addAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
-           // flags.moveAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.changeAllIconColors_7(cardsOpened, tiles, foundTiles, iter);
@@ -241,17 +240,20 @@ const levels = {
         tiles: 42,  // 42
         iconSet: 'fas',
         counter: {
-            time: null,  // 
-            turns: 22, // 22
+            time: 165,  // 
+            turns: null, // 22, 34, 40
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.createMutatingBox_9(cardsOpened, tiles, foundTiles, iter);
+            flags.enlargeIcons_9(cardsOpened,tiles,foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.checkIconModify_9(cardsOpened, tiles, foundTiles, iter);
+            flags.mutateBox_9(cardsOpened, tiles, foundTiles, iter);
+            flags.winAnimation_9(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }

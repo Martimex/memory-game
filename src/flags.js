@@ -883,7 +883,7 @@ const flags = {
     },
 
     setColorfulBorders_8: function(cardsOpened, tiles, foundTiles, iter) {
-        let allTiles = document.querySelectorAll('.t-8');
+        let allTiles = document.querySelectorAll('.tile');
         //let activeTiles = 0;  // this variable indicates the number of visible tiles
         // Remember that all found tiles exists; they are just not visible
         let existingTiles = [];
@@ -954,8 +954,8 @@ const flags = {
     },
 
     lastPairTurnGreen_8: function(cardsOpened, tiles, foundTiles, iter) {
-        if(foundTiles+2 === tiles) {  // last pair before win has to be green of course
-            let allTiles = document.querySelectorAll('.t-8');
+        if((foundTiles+4 === tiles) || (foundTiles+2 === tiles)) {  // last pair before win has to be green of course
+            let allTiles = document.querySelectorAll('.tile');
             let lastPair = [];
             allTiles.forEach(tile => {
                 if(tile.style.visibility !== 'hidden') {
@@ -967,6 +967,156 @@ const flags = {
                 svg.style = 'color: hsl(110, 75%, 60%); border-color: hsl(110, 75%, 60%);'
                 lastPair[m].style = 'border: .8rem solid hsla(110, 93%, 29%, 20%); radial-gradient(hsla(110, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));';
             }
+        }
+    },
+
+
+
+
+    // LVL 9
+    
+    createMutatingBox_9: function(cardsOpened, tiles, foundTiles, iter) {
+        const animationContainer = document.querySelector('.animationContainer');
+        
+
+        let mutatingBox = document.createElement('div');
+        mutatingBox.classList.add('mutatingBox');
+
+        let mbText = document.createElement('div');
+        mbText.classList.add('mbText');
+
+
+        mutatingBox.appendChild(mbText);
+        animationContainer.appendChild(mutatingBox);
+
+        anime({
+            targets: mutatingBox,
+            duration: 2200,
+            scale: '140%',
+            easing: 'easeInBounce',
+        })
+    },
+
+    enlargeIcons_9: function(cardsOpened,tiles,foundTiles, iter) {
+
+        iter.value = 2.5;
+
+        let iconsArr = [];
+        let allIcons = document.querySelectorAll('.fa-icon-9');
+        allIcons.forEach(icon => iconsArr.push(icon));
+
+        console.log(iconsArr);
+
+        anime({
+            targets: iconsArr,
+            duration: 2100,
+            scale: ['10%', '100%'],
+            //fontSize: ['0.8rem', '2.5rem'],
+            delay: anime.stagger(50, {from: 'center'}),  // Don't do that at home
+            easing: 'easeInOutExpo',
+        })
+    },
+
+    checkIconModify_9: function(cardsOpened, tiles, foundTiles, iter) {
+
+        let allIcons = document.querySelectorAll('.fa-icon-9');
+
+        function setIconsColor(iter) {
+            if(iter.value >= 2) { //blue
+                anime({ targets: allIcons, duration: 1000, fontSize: `${iter.value}rem`,
+                    color: 'hsla(194, 70%, 30%, 0.6)', 
+                })
+            } else if(iter.value >= 1.5) {  //green
+                anime({ targets: allIcons, duration: 1000, fontSize: `${iter.value}rem`,
+                    color: 'hsla(102, 70%, 30%, 0.6)', 
+                })
+            } else if(iter.value >= 1) {  //yellow
+                anime({ targets: allIcons, duration: 1000, fontSize: `${iter.value}rem`,
+                    color: 'hsla(45, 70%, 30%, 0.6)', 
+                })
+            }
+            else {  //red
+                anime({ targets: allIcons, duration: 1000, fontSize: `${iter.value}rem`,
+                    color: 'hsla(7, 70%, 30%, 0.6)', 
+                })
+            }
+        }
+
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            
+            if(iter.value <= .5) {
+                iter.value +=1;
+            }
+
+            iter.value+=.25;
+
+            setIconsColor(iter);
+            
+        }
+        else {
+            // Minify icons
+
+            console.log(iter.value);
+
+            if(iter.value <= 0.3) {return;}
+
+            iter.value-=.2;
+
+            setIconsColor(iter);
+
+        }
+    },
+
+    mutateBox_9: function(cardsOpened, tiles, foundTiles, iter) {
+        let mutatingBox = document.querySelector('.mutatingBox');
+        let mbText = mutatingBox.querySelector('.mbText');
+        mbText.textContent = Math.ceil(iter.value*10);
+        if(iter.value >= 2) { //blue
+            anime({ targets: mbText, duration: 1200, opacity: [0.6, 1],
+                color: 'hsla(199, 70%, 45%, 0.9)'})
+            anime({targets: mutatingBox, duration: 1500, backgroundColor: 'hsla(199, 70%, 45%, 0.5)'})
+
+        } else if(iter.value >= 1.5) {  //green
+            anime({ targets: mbText, duration: 1200, opacity: [0.6, 1],
+                color: 'hsla(102, 70%, 45%, 0.9)' })
+            anime({targets: mutatingBox, duration: 1500, backgroundColor: 'hsla(102, 70%, 45%, 0.5)'})
+
+        } else if(iter.value >= 1) {  //yellow
+            anime({ targets: mbText, duration: 1200, opacity: [0.6, 1],
+                color: 'hsla(45, 70%, 45%, 0.9)' })
+            anime({targets: mutatingBox, duration: 1500, backgroundColor: 'hsla(45, 70%, 45%, 0.5)'})
+
+        }
+        else if(iter.value > 0.3){  //red
+            anime({ targets: mbText, duration: 1200, opacity: [0.6, 1],
+                color: 'hsla(7, 70%, 45%, 0.9)' })
+            anime({targets: mutatingBox, duration: 1500, backgroundColor: 'hsla(7, 70%, 45%, 0.5)'})
+        }
+        mbText.style += `borderRadius: calc(50% - (${iter.value*10});`;
+    },
+
+    winAnimation_9: function(cardsOpened, tiles, foundTiles, iter) {
+        if(foundTiles+2 === tiles) {
+            let board = document.querySelector('.board');
+            let mutatingBox = document.querySelector('.mutatingBox');
+            let mbFinalColor = mutatingBox.style.backgroundColor;
+            console.log(mbFinalColor);
+        
+            anime({
+                targets: board,
+                duration: 3800,
+                opacity: [0.6, 1],
+                background: mbFinalColor,
+                easing: 'easeOutCubic',
+
+            })
+
+            anime({
+                targets: mutatingBox,
+                duration: 2200,
+                scale: '140%',
+                easing: 'easeInBounce',
+            })
         }
     },
 
