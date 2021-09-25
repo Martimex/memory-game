@@ -1120,6 +1120,23 @@ const flags = {
         }
     },
 
+
+
+
+
+
+    // LVL 10
+
+    animateBorders_10: function(cardsOpened, tiles, foundTiles, iter) {
+        let target = document.querySelectorAll('.target');
+
+        anime({
+            targets: target,
+            duration: 1800,
+            borderColor: 'hsla(229, 91%, 28%, .6)',
+            easing: 'easeInQuad',
+        })
+    }
 }
 
 export default flags;
