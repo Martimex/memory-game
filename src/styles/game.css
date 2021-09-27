@@ -1297,7 +1297,7 @@
 .fa-icon-10 {
    color: inherit;
    border: .1rem solid inherit;
-   color: hsla(229, 91%, 28%, .6);
+   color: hsla(229, 91%, 52%, .6); /*hsla(229, 91%, 28%, .6);*/
    background: inherit;
    z-index: 20;
    font-size: 1.8rem;

@@ -1,6 +1,7 @@
 import anime from 'animejs/lib/anime.es.js';
 import { useRef } from 'react/cjs/react.development';
 import Game from './components/game.js';
+import levels from './levels.js';
 //import { tiles, foundTiles } from './components/game.js';
 //let gameboard = useRef(null);
 
@@ -471,9 +472,9 @@ const flags = {
     },
 
     generateNewDots_5: function(cardsOpened, tiles, foundTiles, iter) {
-        console.log('IVALUE: '+iter.value);
-        console.log('TILES: '+tiles);
-        console.log('FOUND: '+foundTiles);
+        //console.log('IVALUE: '+iter.value);
+        //console.log('TILES: '+tiles);
+        //console.log('FOUND: '+foundTiles);
         let animationContainer = document.querySelector('.animationContainer');
         if((parseInt(tiles/4) <= parseInt(foundTiles)) && (iter.value < 1)) {
             iter.value = 1;
@@ -1128,15 +1129,281 @@ const flags = {
     // LVL 10
 
     animateBorders_10: function(cardsOpened, tiles, foundTiles, iter) {
+        let focusedIcon = [];
         let target = document.querySelectorAll('.target');
+        target.forEach(el => {
+            let back = el.querySelector('.tile-back');
+            el.classList.add('focused'); 
+            focusedIcon.push(back.childNodes[0]);
+        });
 
-        anime({
-            targets: target,
-            duration: 1800,
-            borderColor: 'hsla(229, 91%, 28%, .6)',
-            easing: 'easeInQuad',
-        })
-    }
+        let currTarget = document.querySelector('.target-2') || document.querySelector('.target-1');
+        console.log(currTarget);
+        let back = currTarget.querySelector('.tile-back');
+        let svg = back.childNodes[0];
+
+        let newBg = {color: 'n'};
+        let newBor = {color: 'n'};
+
+        if(iter.amount === 0) {
+            newBg.color = 'hsla(229, 50%, 40%, .4)';
+            newBor.color = 'hsla(229, 60%, 50%, .5)';
+        }
+
+
+        else if(iter.amount%5 === 0) {
+            newBg.color =  `hsla(8, 0%, 0%, .4)`;
+            newBor.color =  `hsla(8, 0%, 0%, .5)`;
+
+        }
+        else if(iter.amount%4 === 0) {
+            newBg.color =  `hsla(8, 50%, 40%, .4)`;
+            newBor.color =  `hsla(8, 60%, 50%, .5)`;
+
+        }
+        else if(iter.amount%3 === 0) {
+            newBg.color =  `hsla(55, 50%, 40%, .4)`;
+            newBor.color =  `hsla(55, 60%, 50%, .5)`;
+
+        }
+        else if(iter.amount%2 === 0) {
+            newBg.color =  `hsla(317, 50%, 40%, .4)`;
+            newBor.color =  `hsla(317, 60%, 50%, .5)`;
+
+        }
+        else if(iter.amount%1 === 0) {
+            newBg.color =  `hsla(266, 50%, 40%, .4)`;
+            newBor.color =  `hsla(266, 60%, 50%, .5)`;
+
+        }
+        else {
+            newBg.color =  `hsla(177, 50%, 40%, .4)`;
+            newBor.color =  `hsla(177, 60%, 50%, .5)`;
+        }
+
+        //if(iter.amount%2 === 0) {
+            anime({
+                targets: target,
+                duration: 1800,
+                borderColor: `${newBor.color}`,
+                backgroundColor: `${newBg.color}`,
+                easing: 'easeInQuad',
+            })
+
+            /* anime({
+                targets: svg,
+                duration: 1200,
+                color: 'hsla(229, 91%, 52%, .6)',
+                easing: 'easeInQuad',
+            }) */
+
+       /*  } else {
+            anime({
+                targets: target,
+                duration: 1800,
+                borderColor: 'hsla(110, 60%, 50%, .5)',
+                backgroundColor: 'hsla(110, 50%, 40%, .4)',
+                easing: 'easeInQuad',
+            })
+
+            /* anime({
+                targets: svg,
+                duration: 1200,
+                color: 'hsla(110, 91%, 52%, .6)',
+                easing: 'easeInQuad',
+            }) */
+        //} */
+    },
+
+    randomizeIcons_10: function(cardsOpened, tiles, foundTiles, iter) {
+        let allTiles = document.querySelectorAll('.tile');
+        let activeIcons = [];
+        let notFocusedTiles = [];
+        let focusedTiles = [];
+
+        iter.value++;
+
+        console.log(iter);
+
+        if(iter.value%6 === 0) { /* 6 */
+
+            document.querySelector('.board').dataset.animation = 'on';
+            iter.amount++;
+
+            setTimeout(() => {
+
+                allTiles.forEach(tile => {
+                    //let back = tile.querySelector('.tile-back');
+                    if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('focused')))) {
+                        //tile.style += 'border: .4rem solid hsla(110, 60%, 50%, 50%);';
+                        activeIcons.push(tile.childNodes[2].childNodes[0]);
+                        tile.childNodes[2].childNodes[0].remove();
+                    }
+                })
+    
+                //console.log(activeIcons);
+        
+                allTiles.forEach(tile => {
+                    if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('focused')))) {
+                        let rand = Math.floor(Math.random() * activeIcons.length);
+                        let back = tile.querySelector('.tile-back');
+                        //(iter.amount%2)? activeIcons[rand].style = 'color: hsla(229, 91%, 52%, .6);' : activeIcons[rand].style = 'color: hsla(110, 91%, 52%, .6);';
+                        if(iter.amount%6 === 0) {activeIcons[rand].style = 'color: hsla(8, 0%, 0%, .6);';}
+                        else if(iter.amount%5 === 0) {activeIcons[rand].style = 'color: hsla(8, 91%, 52%, .6);';}
+                        else if(iter.amount%4 === 0) {activeIcons[rand].style = 'color: hsla(55, 91%, 52%, .6);';}
+                        else if(iter.amount%3 === 0) {activeIcons[rand].style = 'color: hsla(317, 91%, 52%, .6);';}
+                        else if(iter.amount%2 === 0) {activeIcons[rand].style = 'color: hsla(266, 91%, 52%, .6);';}
+                        else if(iter.amount%1 === 0) {activeIcons[rand].style = 'color: hsla(229, 91%, 52%, .6);';}
+                       
+                        if(!(tile.classList.contains('focused'))) {notFocusedTiles.push(tile);} else {focusedTiles.push(tile);}
+                        back.appendChild(activeIcons[rand]);
+                        activeIcons.splice(rand, 1);
+                    }
+                })
+
+                async function wait() {
+                    let newBg = {color: 'n'};
+                    let newBor = {color: 'n'};
+                    let oldBg = {color: 'o'};
+                    let oldBor = {color: 'o'};
+
+                        if(iter.amount%6 === 0) {
+                            newBg.color =  `hsla(8, 0%, 0%, .4)`;
+                            newBor.color =  `hsla(8, 0%, 0%, .5)`;
+                            oldBg.color =  `hsla(8, 50%, 40%, .4)`;
+                            oldBor.color =  `hsla(8, 60%, 50%, .5)`;
+                        }
+
+                        else if(iter.amount%5 === 0) {
+                            newBg.color =  `hsla(8, 50%, 40%, .4)`;
+                            newBor.color =  `hsla(8, 60%, 50%, .5)`;
+                            oldBg.color = `hsla(55, 50%, 40%, .4)`;
+                            oldBor.color = `hsla(55, 60%, 50%, .5)`;
+                        }
+                        else if(iter.amount%4 === 0) {
+                            newBg.color =  `hsla(55, 50%, 40%, .4)`;
+                            newBor.color =  `hsla(55, 60%, 50%, .5)`;
+                            oldBg.color = `hsla(317, 50%, 40%, .4)`;
+                            oldBor.color = `hsla(317, 60%, 50%, .5)`;
+                        }
+                        else if(iter.amount%3 === 0) {
+                            newBg.color =  `hsla(317, 50%, 40%, .4)`;
+                            newBor.color =  `hsla(317, 60%, 50%, .5)`;
+                            oldBg.color = `hsla(266, 50%, 40%, .4)`;
+                            oldBor.color = `hsla(266, 60%, 50%, .5)`;
+                        }
+                        else if(iter.amount%2 === 0) {
+                            newBg.color =  `hsla(266, 50%, 40%, .4)`;
+                            newBor.color =  `hsla(266, 60%, 50%, .5)`;
+                            oldBg.color = `hsla(229, 50%, 40%, .4)`;
+                            oldBor.color = `hsla(229, 60%, 50%, .5)`;
+                        }
+                        else if(iter.amount%1 === 0) {
+                            newBg.color =  `hsla(229, 50%, 40%, .4)`;
+                            newBor.color =  `hsla(229, 60%, 50%, .5)`;
+                            oldBg.color = `hsla(110, 50%, 40%, .4)`;
+                            oldBor.color = `hsla(110, 60%, 50%, .5)`;
+                        }
+                        else {
+                            newBg.color =  `hsla(177, 50%, 40%, .4)`;
+                            newBor.color =  `hsla(177, 60%, 50%, .5)`;
+                        }
+
+                    console.log(newBg.color);
+                    console.log(newBor.color);
+                    //if(iter.amount%2 === 0) {
+                        const a1 = anime({
+                            targets: notFocusedTiles,
+                            duration: 2500,
+                            borderColor:  [`${oldBor.color}`, `${newBor.color}`],//['hsla(110, 60%, 50%, .5)', 'hsla(229, 60%, 50%, .5)'],
+                            backgroundColor: [`${oldBg.color}`, `${newBg.color}`], //['hsla(110, 50%, 40%, .4)', 'hsla(229, 50%, 40%, .4)'],
+                            easing: 'easeOutExpo',       
+                        })
+
+                        const a2 = anime({
+                            targets:focusedTiles,
+                            duration: 200,
+                            borderColor: `${newBor.color}`, //'hsla(229, 60%, 50%, .5)',
+                            backgroundColor: `${newBg.color}`, //'hsla(229, 50%, 40%, .4)',
+                            easing: 'easeOutExpo',
+                        })
+
+                        Promise.all([a1, a2]);
+                    //} else {
+/*                         const a1 = anime({
+                            targets: notFocusedTiles,
+                            duration: 2500,
+                            borderColor: ['hsla(229, 60%, 50%, .5)', 'hsla(110, 60%, 50%, .5)'],
+                            backgroundColor: ['hsla(229, 50%, 40%, .4)', 'hsla(110, 50%, 40%, .4)'],
+                            easing: 'easeOutExpo',       
+                        })
+
+                        const a2 = anime({
+                            targets:focusedTiles,
+                            duration: 200,
+                            borderColor: 'hsla(110, 60%, 50%, .5)',
+                            backgroundColor: 'hsla(110, 50%, 40%, .4)',
+                            easing: 'easeOutExpo',
+                        })
+
+                        Promise.all([a1, a2]);
+                    }    */  
+                }
+
+                wait().then(animate())
+                .then(() => {
+                    setTimeout(() => {
+                        console.log('all resolved')
+                        document.querySelector('.board').dataset.animation = 'off';
+                    },3000)
+                })
+                
+                async function animate() {
+                    let focusedElems = document.querySelectorAll('.focused');
+                    focusedElems.forEach(el => el.classList.remove('focused'));
+                    let activeTiles = [];
+                    let tilesToAnimate = [];
+                    //iter.amount++;
+                    allTiles.forEach(tile => {
+                        if(tile.style.visibility !== 'hidden') activeTiles.push(tile);
+                    })
+                    // Tu zrób animację odsłonięcia pewnej części kart (% z obecnej liczby  kart)
+                    console.log(levels[`lvl10`].tiles); // It's level 10 !
+                    for(let i=0; i<(levels[`lvl10`].tiles - foundTiles)/2; i++) {  // show only half of all tiles
+                        let rand = Math.floor(Math.random() * activeTiles.length);
+                        tilesToAnimate.push(activeTiles[rand]);
+                        activeTiles.splice(rand, 1);
+                    }
+
+                    const inverseReverse = anime.timeline({
+                        duration: 1400,
+                        easing: 'easeInOutQuart',
+                    })
+            
+                    inverseReverse
+                    .add ({
+                        targets: tilesToAnimate,
+                        transitionProperty: 'all',
+                        rotateY: '180deg',
+                        loop: false,
+                    })
+            
+                    .add ({
+                        targets: tilesToAnimate,
+                        transitionProperty: 'all',
+                        rotateY: '0deg',
+                        loop: false,
+                    }, '+=600')
+        
+
+                    Promise.all([inverseReverse]);
+                }
+
+            }, 2000);
+
+
+        }
+    },
 }
 
 export default flags;

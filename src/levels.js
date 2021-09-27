@@ -276,6 +276,7 @@ const levels = {
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateBorders_10(cardsOpened, tiles, foundTiles, iter);
+            flags.randomizeIcons_10(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }

@@ -23,9 +23,14 @@ let usedIcons = [];
 let randomizedIcons = [];
 
 //let highscore = 0; // Your total score count
-let iter = {value: 0};  // EXTRA VALUES FOR FLAG FUNCTIONS :
-let iter2 = {value: 0};
-let strike = {value: 0};
+
+let iter = {
+    /* basic value*/ value: 0, 
+    /* value v2*/ amount: 0,
+    /*value in series*/ streak: 0,
+    /*turn addon/penalty*/ extraTurns: 0,
+    /*determines whether you passed level specific conditions - if not, value = false and u lose the level*/ passCondition: true,
+};  // EXTRA VALUES FOR FLAG FUNCTIONS
 
 
 let cardsOpened = [];
@@ -153,8 +158,10 @@ function Game(props) {
         handleCheck = 0;
 
         iter.value = 0;
-        iter2.value = 0;
-        strike.value = 0;
+        iter.amount = 0;
+        iter.streak = 0;
+        iter.extraTurns = 0;
+        iter.passCondition = true;
 
         cleanup();
     }
