@@ -260,13 +260,13 @@ const levels = {
     lvl10: {
         lv: 10,
         rows: 4,
-        columns: 13,
+        columns: 11,
         tile_size: 66,
-        tiles: 52,  // 42
+        tiles: 44,  // 42, 52, 44
         iconSet: 'fas',
         counter: {
             time: null,  // 
-            turns: 38, // 22, 34, 40
+            turns: 43, // 22, 34, 40, 44
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
 

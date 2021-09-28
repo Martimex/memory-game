@@ -1225,7 +1225,7 @@ const flags = {
 
         console.log(iter);
 
-        if(iter.value%6 === 0) { /* 6 */
+        if(iter.value%7 === 0) { /* 6 */
 
             document.querySelector('.board').dataset.animation = 'on';
             iter.amount++;
@@ -1266,10 +1266,12 @@ const flags = {
                     let newBor = {color: 'n'};
                     let oldBg = {color: 'o'};
                     let oldBor = {color: 'o'};
+                    let gameBg = {color: '?'}
 
                         if(iter.amount%6 === 0) {
                             newBg.color =  `hsla(8, 0%, 0%, .4)`;
                             newBor.color =  `hsla(8, 0%, 0%, .5)`;
+                            gameBg.color = `hsla(8, 0%, 0%, .8)`;
                             oldBg.color =  `hsla(8, 50%, 40%, .4)`;
                             oldBor.color =  `hsla(8, 60%, 50%, .5)`;
                         }
@@ -1277,30 +1279,35 @@ const flags = {
                         else if(iter.amount%5 === 0) {
                             newBg.color =  `hsla(8, 50%, 40%, .4)`;
                             newBor.color =  `hsla(8, 60%, 50%, .5)`;
+                            gameBg.color = `hsla(8, 90%, 30%, .8)`;
                             oldBg.color = `hsla(55, 50%, 40%, .4)`;
                             oldBor.color = `hsla(55, 60%, 50%, .5)`;
                         }
                         else if(iter.amount%4 === 0) {
                             newBg.color =  `hsla(55, 50%, 40%, .4)`;
                             newBor.color =  `hsla(55, 60%, 50%, .5)`;
+                            gameBg.color = `hsla(55, 90%, 30%, .8)`;
                             oldBg.color = `hsla(317, 50%, 40%, .4)`;
                             oldBor.color = `hsla(317, 60%, 50%, .5)`;
                         }
                         else if(iter.amount%3 === 0) {
                             newBg.color =  `hsla(317, 50%, 40%, .4)`;
                             newBor.color =  `hsla(317, 60%, 50%, .5)`;
+                            gameBg.color = `hsla(317, 90%, 30%, .8)`;
                             oldBg.color = `hsla(266, 50%, 40%, .4)`;
                             oldBor.color = `hsla(266, 60%, 50%, .5)`;
                         }
                         else if(iter.amount%2 === 0) {
                             newBg.color =  `hsla(266, 50%, 40%, .4)`;
                             newBor.color =  `hsla(266, 60%, 50%, .5)`;
+                            gameBg.color = `hsla(266, 90%, 30%, .8)`;
                             oldBg.color = `hsla(229, 50%, 40%, .4)`;
                             oldBor.color = `hsla(229, 60%, 50%, .5)`;
                         }
                         else if(iter.amount%1 === 0) {
                             newBg.color =  `hsla(229, 50%, 40%, .4)`;
                             newBor.color =  `hsla(229, 60%, 50%, .5)`;
+                            gameBg.color = `hsla(229, 90%, 30%, .8)`;
                             oldBg.color = `hsla(110, 50%, 40%, .4)`;
                             oldBor.color = `hsla(110, 60%, 50%, .5)`;
                         }
@@ -1308,6 +1315,9 @@ const flags = {
                             newBg.color =  `hsla(177, 50%, 40%, .4)`;
                             newBor.color =  `hsla(177, 60%, 50%, .5)`;
                         }
+
+                        let newGameBackground = document.querySelector('.bg-10');
+                        console.log(newGameBackground)
 
                     console.log(newBg.color);
                     console.log(newBor.color);
@@ -1320,6 +1330,7 @@ const flags = {
                             easing: 'easeOutExpo',       
                         })
 
+                        
                         const a2 = anime({
                             targets:focusedTiles,
                             duration: 200,
@@ -1328,7 +1339,14 @@ const flags = {
                             easing: 'easeOutExpo',
                         })
 
-                        Promise.all([a1, a2]);
+                        const a3 = anime({
+                            targets: newGameBackground,
+                            duration: 2200,
+                            backgroundColor: `${gameBg.color}`,
+                            easing: 'linear',
+                        })
+
+                        Promise.all([a1, a2, a3]);
                     //} else {
 /*                         const a1 = anime({
                             targets: notFocusedTiles,
@@ -1375,28 +1393,29 @@ const flags = {
                         activeTiles.splice(rand, 1);
                     }
 
-                    const inverseReverse = anime.timeline({
-                        duration: 1400,
-                        easing: 'easeInOutQuart',
-                    })
-            
-                    inverseReverse
-                    .add ({
-                        targets: tilesToAnimate,
-                        transitionProperty: 'all',
-                        rotateY: '180deg',
-                        loop: false,
-                    })
-            
-                    .add ({
-                        targets: tilesToAnimate,
-                        transitionProperty: 'all',
-                        rotateY: '0deg',
-                        loop: false,
-                    }, '+=600')
-        
+                    if(tilesToAnimate.length > 0) {
+                        const inverseReverse = anime.timeline({
+                            duration: 2000,
+                            easing: 'easeInOutQuart',
+                        })
+                
+                        inverseReverse
+                        .add ({
+                            targets: tilesToAnimate,
+                            transitionProperty: 'all',
+                            rotateY: '180deg',
+                            loop: false,
+                        })
+                
+                        .add ({
+                            targets: tilesToAnimate,
+                            transitionProperty: 'all',
+                            rotateY: '0deg',
+                            loop: false,
+                        }, '+=600')
 
-                    Promise.all([inverseReverse]);
+                        Promise.all([inverseReverse]);
+                    }
                 }
 
             }, 2000);

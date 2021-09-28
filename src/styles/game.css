@@ -1269,7 +1269,7 @@
   /* background-image: linear-gradient(132deg, hsl(204, 80%, 60%),hsl(9, 80%, 40%));*/
    /*background: hsla(0, 55%, 50%, 1);*/
    z-index: -50;
-   background-color: hsla(229, 90%, 30%, .8);
+   background-color: hsla(110, 90%, 30%, .8); /*hsla(229, 90%, 30%, .8);*/
    background-image: url('../bgs/bg-10.svg');
    background-size: cover;
 }
