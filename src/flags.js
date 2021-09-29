@@ -1317,10 +1317,10 @@ const flags = {
                         }
 
                         let newGameBackground = document.querySelector('.bg-10');
-                        console.log(newGameBackground)
+                        //console.log(newGameBackground)
 
-                    console.log(newBg.color);
-                    console.log(newBor.color);
+                    //console.log(newBg.color);
+                    //console.log(newBor.color);
                     //if(iter.amount%2 === 0) {
                         const a1 = anime({
                             targets: notFocusedTiles,
@@ -1371,7 +1371,7 @@ const flags = {
                 wait().then(animate())
                 .then(() => {
                     setTimeout(() => {
-                        console.log('all resolved')
+                        //console.log('all resolved')
                         document.querySelector('.board').dataset.animation = 'off';
                     },3000)
                 })
@@ -1423,6 +1423,31 @@ const flags = {
 
         }
     },
+
+
+
+
+
+    // LVL 11
+
+
+    setBountyQuest_11: function(cardsOpened, tiles, foundTiles, iter) {
+        let allTiles = document.querySelectorAll('.tile');
+        let rand = Math.floor(Math.random() * allTiles.length);
+        let textDiv = document.createElement('div');
+        let theText = document.createElement('div');
+        textDiv.classList.add('textDiv');
+        theText.classList.add('theText');
+        theText.textContent = 'Find me!';
+
+        console.log(allTiles[rand]);
+        allTiles[rand].style = 'border-color: hsla(138, 30%, 40%, .7); border-width: .55rem;';
+        const front = allTiles[rand].querySelector('.tile-front');
+        textDiv.appendChild(theText);
+        front.appendChild(textDiv);
+
+    }
+
 }
 
 export default flags;

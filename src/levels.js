@@ -266,7 +266,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,  // 
-            turns: 43, // 22, 34, 40, 44
+            turns: 44, // 22, 34, 40, 44
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
@@ -277,6 +277,28 @@ const levels = {
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateBorders_10(cardsOpened, tiles, foundTiles, iter);
             flags.randomizeIcons_10(cardsOpened, tiles, foundTiles, iter);
+        },
+    },
+
+    lvl11: {
+        lv: 11,
+        rows: 4,
+        columns: 11,
+        tile_size: 66,
+        tiles: 44,  // 42, 52, 44
+        iconSet: 'fas',
+        counter: {
+            time: null,  // 
+            turns: 44, // 22, 34, 40, 44
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.setBountyQuest_11(cardsOpened, tiles, foundTiles, iter);
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },
     },
 }

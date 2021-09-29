@@ -1366,3 +1366,114 @@
 .score-10 {
     color: hsla(144, 60%, 50%, 40%);
 }
+
+
+
+
+
+
+/* LEVEL 11 */
+
+.bg-11 {
+    overflow: hidden;
+   position: absolute; top: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   z-index: -50;
+   background-color: hsl(122, 20%, 30%); 
+   background-image: url('../bgs/bg-11.svg');
+   background-size: cover;
+}
+
+.aContainer-11 {
+   overflow: hidden;
+   position: absolute; bottom: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   pointer-events: none;
+}
+
+.game-11 {
+    padding: .3rem;
+}
+
+.board-11 {
+    padding: -1rem;
+    /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
+    border-block: initial;
+    padding: 3rem 3rem;
+
+}
+
+.fa-icon-11 {
+   color: inherit;
+   border: .1rem solid inherit;
+   color: hsla(122, 35%, 30%, .65); /*hsla(229, 91%, 28%, .6);*/
+    
+   z-index: 20;
+   font-size: 1.8rem;
+   /*color: hsl(105, 70%, 60%);*/
+}
+
+
+.t-11 {  /* Front size of card */ 
+    border-start-end-radius: 70%;
+    border: .15rem solid hsl(122, 20%, 30%);
+    border-style: ridge;
+    background-color: inherit;
+    background: inherit;
+    background-image: url('../bgs/bg-11.svg');
+    background-size: contain;
+}
+
+.t-11::before, .t-11::after {
+    content: '';
+    display: block;
+    position: absolute;
+}
+
+.tf-11 { /* Have no clue what this class is for */
+    
+}
+
+
+
+.tb-11 {  /* Back side of card */
+    /*background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 45%, hsl(282, 80%, 60%));*/
+    border-radius: 20%;
+
+}
+
+/* Here is some space for animation stuff */
+
+.textDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; height: 100%;
+    display: block;
+    background-image: url('../bgs/bg-11.svg');
+    color: #0000;
+}
+
+.theText {
+    border-radius: 30%;
+    background: #0000;
+    background-image: url('../bgs/bg-11.svg');
+}
+
+.textDiv:hover {
+    display: block;
+    font-size: 1rem;
+    color:hsla(50, 40%, 50%, .8);
+}
+
+.level-11, .counter-11, .score-11 {
+    background: -webkit-linear-gradient(135deg, hsla(132, 73%, 49%, 0.58), hsla(99, 64%, 49%, 0.68));
+    filter: contrast(120%) saturate(120%); 
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 3px 3px 3px hsla(155, 73%, 49%, 0.68);
+    
+}
