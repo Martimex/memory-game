@@ -25,6 +25,7 @@ let randomizedIcons = [];
 //let highscore = 0; // Your total score count
 
 let iter = {
+    // Add more keys if necessary
     /* basic value*/ value: 0, 
     /* value v2*/ amount: 0,
     /*value in series*/ streak: 0,
@@ -579,7 +580,7 @@ function Game(props) {
                 } 
 
                 if(levels[`lvl${level-1}`].counter.turns !== null) {
-                    setMoves(moves + 1);
+                    setMoves(moves + 1 + iter.extraTurns);
                 }
 
                 if((cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {

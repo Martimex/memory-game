@@ -5,10 +5,12 @@ import levels from './levels.js';
 //import { tiles, foundTiles } from './components/game.js';
 //let gameboard = useRef(null);
 
-// WINNING CONDITION :  if(foundTiles+2 === tiles) equals true
-// IF TWO CARDS MATCH:  if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])
-// GET THE RIGHT TILE'S CHILD NODES [NOT #TEXT AND SUCH] BY A TARGET CLASS: 
-    /* let target = document.querySelector(.target-1); targetTile.querySelector('.tile-back'); */
+// #1 WINNING CONDITION :  if(foundTiles+2 === tiles) equals true
+// #2 IF TWO CARDS MATCH:  if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])
+// #3 GET THE RIGHT TILE'S CHILD NODES [NOT #TEXT AND SUCH] BY A TARGET CLASS: 
+      /* let target = document.querySelector(.target-1); targetTile.querySelector('.tile-back'); */
+// #4 DO SOME STUFF ONLY FOR TILES THAT HAS NOT BEEN FOUND YET : allTiles.forEach(tile => {if(tile.style.visibility !== 'hidden') **some stuff here** })
+// #5 BLOCK CLICK EVENTS FOR TILES :  document.querySelector('.board').dataset.animation = 'on';   -> REMEMBER TO CHANGE IT TO 'OFF' AFTER ALL
 
 const flags = {
     
@@ -1430,23 +1432,213 @@ const flags = {
 
     // LVL 11
 
+    createWantedQuestBoxes_11: function(cardsOpened, tiles, foundTiles, iter) {
+        const animationContainer = document.querySelector('.animationContainer');
+        for(let i=0; i<2; i++) {  // Generating two Wanted Boxes
+            let wBox = document.createElement('div');
+            let headerText = document.createElement('div');
+            let svgContainer = document.createElement('div');
+            
+            wBox.classList.add('wBox', `wBox-${i+1}`);
+            headerText.classList.add('hText');
+            svgContainer.classList.add('svgContainer');
+
+            headerText.textContent = 'WANTED';
+
+            wBox.appendChild(headerText);
+            wBox.appendChild(svgContainer);
+            animationContainer.appendChild(wBox);
+        }
+
+    },
 
     setBountyQuest_11: function(cardsOpened, tiles, foundTiles, iter) {
         let allTiles = document.querySelectorAll('.tile');
-        let rand = Math.floor(Math.random() * allTiles.length);
-        let textDiv = document.createElement('div');
+        let activeTiles = [];
+
+        if(foundTiles+6 >= tiles)  { // Two from last pairs, so it's unnecessary to generate new bounties
+            return;
+        }
+
+        allTiles.forEach(tile => {
+            if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target')))) activeTiles.push(tile);
+        });
+
+        let rand = Math.floor(Math.random() * activeTiles.length);
+/*         let textDiv = document.createElement('div');
         let theText = document.createElement('div');
         textDiv.classList.add('textDiv');
         theText.classList.add('theText');
-        theText.textContent = 'Find me!';
+        theText.textContent = 'Find me!'; */
+ 
+        console.log(activeTiles[rand]);
+        //activeTiles[rand].style = 'border-color: hsla(138, 30%, 40%, .7); border-width: .55rem;';
+        anime({
+            targets: activeTiles[rand],
+            duration: 800,
+            borderColor: 'hsla(138, 30%, 40%, .7)',
+            borderWidth: '.55rem',
+            easing: 'linear',
+        })
+        const front = activeTiles[rand].querySelector('.tile-front');
+/*         textDiv.appendChild(theText);
+        front.appendChild(textDiv); */
 
-        console.log(allTiles[rand]);
-        allTiles[rand].style = 'border-color: hsla(138, 30%, 40%, .7); border-width: .55rem;';
-        const front = allTiles[rand].querySelector('.tile-front');
-        textDiv.appendChild(theText);
-        front.appendChild(textDiv);
+        console.log(activeTiles[rand])
 
-    }
+        activeTiles[rand].classList.add('bounty-q');
+        //let textD = allTiles[rand].querySelector('.textDiv');
+        //let theT = allTiles[rand].querySelector('.theText');
+
+        // 
+
+       /*  //Calculate current  bounty quest position on the screen
+        let topPos = allTiles[rand].offsetTop;
+        console.log(topPos);
+        let leftPos = allTiles[rand].offsetLeft;
+        console.log(leftPos);
+
+        // Create dialog items
+        let cr1 = document.createElement('div');
+        let cr2 = document.createElement('div');
+        let dialogBox = document.createElement('div');
+
+        //append to animation Container
+        animationContainer.appendChild(cr1);
+        animationContainer.appendChild(cr2);
+        animationContainer.appendChild(dialogBox);
+
+
+        cr1.classList.add('cr');
+        cr1.style = `top: ${topPos + 140}px; left: ${leftPos + 140}px;`;
+        //cr1.setAttribute(`top`, `${topPos+20}px`); //left:calc(${leftPos}+20)px;`;
+        //cr1.setAttribute(`left`, `${leftPos+20}px`);
+
+        cr2.classList.add('cr');
+        cr2.style = `top: ${topPos + 120}px; left: ${leftPos + 120}px;`;
+        //cr2.setAttribute(`top`, `${topPos+40}px`);
+       // cr2.setAttribute(`left`, `${leftPos+40}px`)
+       // cr2.style = `top: calc(${topPos}+40)px; left:calc(${leftPos}+40)px;`;
+
+        dialogBox.classList.add('dialogBox');
+        /* dialogBox.style = `top: ${topPos - 80}px; left: ${leftPos - 80}px;`; */
+
+
+       // animationContainer.appendChild(dialogBox); */
+
+    },
+
+    resetBountyReward_11: function(cardsOpened, tiles, foundTiles, iter) {
+        iter.extraTurns = 0;
+    },
+
+    rotateChosenTile_11: function(cardsOpened, tiles, foundTiles, iter) {
+        //const bountyQuest = document.querySelector('.bounty-q');
+        let currTarget;
+        if(cardsOpened.length <= 1) {
+            currTarget = document.querySelector('.target-1');
+        } else {
+            currTarget = document.querySelector('.target-2');
+        }
+
+        async function animate() {
+            let random = Math.floor(Math.random() * 2);
+            document.querySelector('.board').dataset.animation = 'on';
+            document.querySelector('.board').setAttribute('pointerEvents', 'none');
+            let rotation;
+            if(random%2) { 
+                rotation = '-90';
+                const a1 = anime({
+                    targets: currTarget,
+                    duration: 400,
+                    rotate: `${rotation}`,
+                    easing: 'linear',
+                })
+                Promise.all([a1]);
+            }
+            else  { 
+                rotation = '270';
+                const a1 = anime({
+                    targets: currTarget,
+                    duration: 1200,
+                    rotate: `${rotation}`,
+                    easing: 'linear',
+                })
+                Promise.all([a1]);
+            }
+        }
+
+        animate().then(() => {
+            setTimeout(() => {
+                document.querySelector('.board').dataset.animation = 'off';
+                document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+            }, 1200)
+        })
+        
+
+    },
+
+    checkBountyQuestState_11: function(cardsOpened, tiles, foundTiles, iter) {
+        let targetFirst = document.querySelector('.target-1');
+        let targetSecond = document.querySelector('.target-2');
+
+        console.log(targetFirst);
+        console.log(targetSecond);
+
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) { // if pairs match
+            // lets check if player found bountyQuest
+            if((cardsOpened[0].parentNode.classList.contains('bounty-q') || (cardsOpened[1].parentNode.classList.contains('bounty-q')))) {
+                iter.extraTurns = -4;
+                
+                if(cardsOpened[0].parentNode.classList.contains('bounty-q')) {
+                    this.setWantedQuest_11(cardsOpened, tiles, foundTiles, iter); // Please do not remove it even it's not showin up in levels main obj
+                }
+
+                let foundBounty = document.querySelector('.bounty-q');
+                foundBounty.classList.remove('bounty-q');
+
+                // INIT NEW BOUNTY GENERATOR
+                this.setBountyQuest_11(cardsOpened, tiles, foundTiles, iter);
+            }
+        }
+    },
+
+    setWantedQuest_11: function(cardsOpened, tiles, foundTiles, iter) {
+        console.log('WANTED QUEST CREATION');
+        let allTiles = document.querySelectorAll('.tile');
+        let activeTiles = [];
+
+        allTiles.forEach(tile => {
+            if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target')))) activeTiles.push(tile);
+        });
+
+        let rand = Math.floor(Math.random() * activeTiles.length);
+
+        let wantedSvg = activeTiles[rand].querySelector('svg');
+        let newSvg = wantedSvg.cloneNode(true);
+
+        console.log(newSvg);
+
+        let svgCont = document.querySelector('.svgContainer');
+        svgCont.appendChild(newSvg);
+
+        console.log(wantedSvg);
+
+        /* Zrób sprawdzenie, ile WANTED questów jest aktywnych i wrzucaj do odpowiedniego boxa:
+            - Gdy WANTED jest puste:  wrzuć do 1. pojemnika;
+            - Gdy WANTED jest, ale tylko 1:  wrzuć do 2. pojemnika;
+            - Gdy WANTED jest 2: usuń 1. WANTED i zastąp go nowym 
+                (lub lepsza opjca: usuń 1. WANTED, wrzuć w to miejsce 2. WANTED i w dawne miejsce 2. WANTED'a wrzuć najnowszy WANTED)
+        
+          Dodaj mechanizm sprawdzający, czy WANTED quest został przez gracza znaleziony
+            - Dodaj nagrodę (dodatkowe tury) gdy gracz znajdzie WANTED questa - i usuń znalezisko z boxa;
+            - Rozważ też opcję kolejkowania i podmiany(tak jak powyżej) w przypadku, gdy są 2 WANTED questy i gracz znajdzie 1. z nich
+        
+          Rozważ, czy bounty quest może być tym samym co WANTED quest. Jeśli nie, zrób odpowiedni mechanizm blokujący taką sytuację
+
+          Dodaj warunek, że przy mniej niż x pozostałych kafelków nie generują się nowe WANTED questy (tak jak przy bounty)
+        */
+    },
 
 }
 
