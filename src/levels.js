@@ -289,7 +289,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,  // 
-            turns: 12, // 22, 34, 40, 44
+            turns: 27, // 20, 22, 27, 32, 34, 40, 44
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createWantedQuestBoxes_11(cardsOpened, tiles, foundTiles, iter);

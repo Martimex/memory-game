@@ -1454,14 +1454,20 @@ const flags = {
 
     setBountyQuest_11: function(cardsOpened, tiles, foundTiles, iter) {
         let allTiles = document.querySelectorAll('.tile');
+        let svgCont = document.querySelectorAll('.svgContainer');
         let activeTiles = [];
 
-        if(foundTiles+6 >= tiles)  { // Two from last pairs, so it's unnecessary to generate new bounties
+        if(foundTiles+12 >= tiles)  { // Five from last pairs, so it's unnecessary to generate new bounties / +12
             return;
         }
 
         allTiles.forEach(tile => {
-            if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target')))) activeTiles.push(tile);
+            let back = tile.querySelector('.tile-back');
+            if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target')))) {
+                if((svgCont[0].childNodes.length <= 0) && (svgCont[1].childNodes.length <= 0)) {activeTiles.push(tile);}
+                else if ((back.childNodes[0].classList[1] !== svgCont[0].childNodes[0].classList[1]) && (!(svgCont[1].hasChildNodes()))) {activeTiles.push(tile);}
+                else if ((back.childNodes[0].classList[1] !== svgCont[0].childNodes[0].classList[1]) && (back.childNodes[0].classList[1] !== svgCont[1].childNodes[0].classList[1])) {activeTiles.push(tile);}
+            } 
         });
 
         let rand = Math.floor(Math.random() * activeTiles.length);
@@ -1587,9 +1593,14 @@ const flags = {
 
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) { // if pairs match
             // lets check if player found bountyQuest
+
+            iter.extraTurns = 1;
+
+            this.removeWantedQuest_11(cardsOpened, tiles, foundTiles, iter); // Please do not remove it even it's not showin up in levels main obj
+
             if((cardsOpened[0].parentNode.classList.contains('bounty-q') || (cardsOpened[1].parentNode.classList.contains('bounty-q')))) {
-                iter.extraTurns = -4;
-                
+                iter.extraTurns = -5; // 3 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+
                 if(cardsOpened[0].parentNode.classList.contains('bounty-q')) {
                     this.setWantedQuest_11(cardsOpened, tiles, foundTiles, iter); // Please do not remove it even it's not showin up in levels main obj
                 }
@@ -1599,6 +1610,64 @@ const flags = {
 
                 // INIT NEW BOUNTY GENERATOR
                 this.setBountyQuest_11(cardsOpened, tiles, foundTiles, iter);
+            } 
+            else {  // else if its not wanted quest 
+                anime({
+                    targets: '.target',
+                    duration: 1500,
+                    borderColor: 'hsla(0, 63%, 48%, .7)',
+                    easing: 'easeInQuad',
+                })
+            }
+        }
+    },
+
+    removeWantedQuest_11: function(cardsOpened, tiles, foundTiles, iter) {
+        // Remove found WANTED icons - if pair match
+        let allSvgConts = document.querySelectorAll('.svgContainer');
+        console.log(allSvgConts[0].childNodes.length);
+
+
+        if(allSvgConts[1].childNodes.length > 0) {
+            if(cardsOpened[0].childNodes[0].classList[1] === allSvgConts[1].childNodes[0].classList[1]) {
+                iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                async function animation() {
+                    const a1 =  anime({
+                        targets: allSvgConts[1].childNodes[0],
+                        duration: 800,
+                        opacity: [1, 0],
+                        easing: 'linear',
+                    })
+
+                    Promise.all([a1]);
+                }
+
+                animation().then(() => allSvgConts[1].childNodes[0].remove());
+            }
+            else if(cardsOpened[0].childNodes[0].classList[1] === allSvgConts[0].childNodes[0].classList[1]) {
+                iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                let svgSecond = allSvgConts[1].childNodes[0];
+                allSvgConts[0].childNodes[0].remove();
+                allSvgConts[0].appendChild(svgSecond);
+                //allSvgConts[1].childNodes[0].remove();
+            }
+        }
+
+        else if(allSvgConts[0].childNodes.length > 0) {
+            if(cardsOpened[0].childNodes[0].classList[1] === allSvgConts[0].childNodes[0].classList[1]) {
+                iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                async function animation() {
+                    const a1 =  anime({
+                        targets: allSvgConts[0].childNodes[0],
+                        duration: 800,
+                        opacity: [1, 0],
+                        easing: 'linear',
+                    })
+
+                    Promise.all([a1]);
+                }
+
+                animation().then(() => allSvgConts[0].childNodes[0].remove());
             }
         }
     },
@@ -1606,10 +1675,22 @@ const flags = {
     setWantedQuest_11: function(cardsOpened, tiles, foundTiles, iter) {
         console.log('WANTED QUEST CREATION');
         let allTiles = document.querySelectorAll('.tile');
+        let allSvgConts = document.querySelectorAll('.svgContainer');
+        let alreadyWantedIcon_1;
+
+        if(document.querySelector('.svgContainer').childNodes.length > 0) {
+            alreadyWantedIcon_1= document.querySelector('.svgContainer svg').classList[1];
+        } else {
+            alreadyWantedIcon_1 = 'no-class';
+        }
+
         let activeTiles = [];
 
         allTiles.forEach(tile => {
-            if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target')))) activeTiles.push(tile);
+            let back = tile.querySelector('.tile-back');
+            if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target'))) && (alreadyWantedIcon_1 !== back.childNodes[0].classList[1])) {
+                activeTiles.push(tile);
+            }
         });
 
         let rand = Math.floor(Math.random() * activeTiles.length);
@@ -1619,24 +1700,29 @@ const flags = {
 
         console.log(newSvg);
 
-        let svgCont = document.querySelector('.svgContainer');
-        svgCont.appendChild(newSvg);
+
+        // Push new WANTED quests to container 
+
+
+        if(allSvgConts[0].childNodes.length <= 0) {
+            allSvgConts[0].appendChild(newSvg);
+        } 
+        else if(allSvgConts[1].childNodes.length <= 0) {
+            allSvgConts[1].appendChild(newSvg);
+        }
+        else if((allSvgConts[0].childNodes.length > 0) && (allSvgConts[1].childNodes.length > 0)) {
+            let svgSecond = allSvgConts[1].childNodes[0];
+            allSvgConts[0].childNodes[0].remove();
+            allSvgConts[0].appendChild(svgSecond);
+
+            allSvgConts[1].appendChild(newSvg);
+        }
+        //svgCont.appendChild(newSvg);
 
         console.log(wantedSvg);
 
-        /* Zrób sprawdzenie, ile WANTED questów jest aktywnych i wrzucaj do odpowiedniego boxa:
-            - Gdy WANTED jest puste:  wrzuć do 1. pojemnika;
-            - Gdy WANTED jest, ale tylko 1:  wrzuć do 2. pojemnika;
-            - Gdy WANTED jest 2: usuń 1. WANTED i zastąp go nowym 
-                (lub lepsza opjca: usuń 1. WANTED, wrzuć w to miejsce 2. WANTED i w dawne miejsce 2. WANTED'a wrzuć najnowszy WANTED)
-        
-          Dodaj mechanizm sprawdzający, czy WANTED quest został przez gracza znaleziony
-            - Dodaj nagrodę (dodatkowe tury) gdy gracz znajdzie WANTED questa - i usuń znalezisko z boxa;
-            - Rozważ też opcję kolejkowania i podmiany(tak jak powyżej) w przypadku, gdy są 2 WANTED questy i gracz znajdzie 1. z nich
-        
+        /* 
           Rozważ, czy bounty quest może być tym samym co WANTED quest. Jeśli nie, zrób odpowiedni mechanizm blokujący taką sytuację
-
-          Dodaj warunek, że przy mniej niż x pozostałych kafelków nie generują się nowe WANTED questy (tak jak przy bounty)
         */
     },
 

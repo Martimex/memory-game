@@ -1507,10 +1507,11 @@
 }
 
 .svgContainer svg {
-    width: 7rem;
-    height: 7rem;
+    width: 5rem;
+    height: 9rem;
     z-index: 10;
-    color: pink;
+    color: hsla(122, 35%, 30%, .95);
+    font-size: 5rem;
 }
 
 .level-11, .counter-11, .score-11 {
