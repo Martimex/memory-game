@@ -1457,7 +1457,7 @@ const flags = {
         let svgCont = document.querySelectorAll('.svgContainer');
         let activeTiles = [];
 
-        if(foundTiles+12 >= tiles)  { // Five from last pairs, so it's unnecessary to generate new bounties / +12
+        if(foundTiles+10 >= tiles)  { // Four from last pairs, so it's unnecessary to generate new bounties / +12
             return;
         }
 
@@ -1534,6 +1534,27 @@ const flags = {
 
     },
 
+    markBountyQuestAnswer_11: function(cardsOpened, tiles, foundTiles, iter) {
+        let bounty = document.querySelector('.bounty-q');
+        let bountyBack = bounty.querySelector('.tile-back');
+        let allTiles = document.querySelectorAll('.tile');
+        let bountyAnswer = [];
+
+        allTiles.forEach(tile => {
+            if((!(tile.classList.contains('bounty-q'))) && (bountyBack.childNodes[0].classList[1] === tile.querySelector('.tile-back').childNodes[0].classList[1])) {
+                bountyAnswer.push(tile);
+            }
+        })
+
+        anime({
+            targets: bountyAnswer,
+            duration: 1200,
+            borderColor: ['#a7c', 'hsl(122, 20%, 30%)'],
+            easing: 'linear',
+        })
+
+    },
+
     resetBountyReward_11: function(cardsOpened, tiles, foundTiles, iter) {
         iter.extraTurns = 0;
     },
@@ -1585,11 +1606,12 @@ const flags = {
     },
 
     checkBountyQuestState_11: function(cardsOpened, tiles, foundTiles, iter) {
-        let targetFirst = document.querySelector('.target-1');
-        let targetSecond = document.querySelector('.target-2');
+        let targetBackFirst = document.querySelector('.target-1 .tile-back');
+        let targetBackSecond = document.querySelector('.target-2 .tile-back');
+        let allSvgConts = document.querySelectorAll('.svgContainer');
 
-        console.log(targetFirst);
-        console.log(targetSecond);
+        //console.log(targetFirst);
+        //console.log(targetSecond);
 
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) { // if pairs match
             // lets check if player found bountyQuest
@@ -1599,7 +1621,7 @@ const flags = {
             this.removeWantedQuest_11(cardsOpened, tiles, foundTiles, iter); // Please do not remove it even it's not showin up in levels main obj
 
             if((cardsOpened[0].parentNode.classList.contains('bounty-q') || (cardsOpened[1].parentNode.classList.contains('bounty-q')))) {
-                iter.extraTurns = -5; // 3 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
 
                 if(cardsOpened[0].parentNode.classList.contains('bounty-q')) {
                     this.setWantedQuest_11(cardsOpened, tiles, foundTiles, iter); // Please do not remove it even it's not showin up in levels main obj
@@ -1611,13 +1633,27 @@ const flags = {
                 // INIT NEW BOUNTY GENERATOR
                 this.setBountyQuest_11(cardsOpened, tiles, foundTiles, iter);
             } 
-            else {  // else if its not wanted quest 
-                anime({
-                    targets: '.target',
-                    duration: 1500,
-                    borderColor: 'hsla(0, 63%, 48%, .7)',
-                    easing: 'easeInQuad',
-                })
+            else if(allSvgConts[1].hasChildNodes()) {
+                if(/* (targetBackFirst.childNodes[0].classList[1] !== allSvgConts[0].childNodes[0].classList[1]) &&  */(targetBackSecond.childNodes[0].classList[1] !== allSvgConts[1].childNodes[0].classList[1])) {  // else if its not wanted quest 
+                    anime({
+                        targets: '.target',
+                        duration: 1500,
+                        borderColor: 'hsla(0, 63%, 48%, .7)',
+                        easing: 'easeInQuad',
+                    })
+                }
+            }
+
+            else if(allSvgConts[0].hasChildNodes()) { // if any wanted quest exists
+            
+                if(targetBackFirst.childNodes[0].classList[1] !== allSvgConts[0].childNodes[0].classList[1]) {  // else if its not wanted quest 
+                    anime({
+                        targets: '.target',
+                        duration: 1500,
+                        borderColor: 'hsla(0, 63%, 48%, .7)',
+                        easing: 'easeInQuad',
+                    })
+                }
             }
         }
     },
@@ -1630,7 +1666,7 @@ const flags = {
 
         if(allSvgConts[1].childNodes.length > 0) {
             if(cardsOpened[0].childNodes[0].classList[1] === allSvgConts[1].childNodes[0].classList[1]) {
-                iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                iter.extraTurns = -3; // 1 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
                 async function animation() {
                     const a1 =  anime({
                         targets: allSvgConts[1].childNodes[0],
@@ -1645,7 +1681,7 @@ const flags = {
                 animation().then(() => allSvgConts[1].childNodes[0].remove());
             }
             else if(cardsOpened[0].childNodes[0].classList[1] === allSvgConts[0].childNodes[0].classList[1]) {
-                iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                iter.extraTurns = -3; // 1 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
                 let svgSecond = allSvgConts[1].childNodes[0];
                 allSvgConts[0].childNodes[0].remove();
                 allSvgConts[0].appendChild(svgSecond);
@@ -1655,7 +1691,7 @@ const flags = {
 
         else if(allSvgConts[0].childNodes.length > 0) {
             if(cardsOpened[0].childNodes[0].classList[1] === allSvgConts[0].childNodes[0].classList[1]) {
-                iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                iter.extraTurns = -3; // 1 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
                 async function animation() {
                     const a1 =  anime({
                         targets: allSvgConts[0].childNodes[0],

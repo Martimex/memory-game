@@ -285,15 +285,16 @@ const levels = {
         rows: 4,
         columns: 11,
         tile_size: 66,
-        tiles: 16,  // 42, 52, 44
+        tiles: 44,  // 42, 52, 44
         iconSet: 'fas',
         counter: {
             time: null,  // 
-            turns: 27, // 20, 22, 27, 32, 34, 40, 44
+            turns: 26, // 20, 22, 23, 26, 27, 32, 34, 40, 44
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createWantedQuestBoxes_11(cardsOpened, tiles, foundTiles, iter);
             flags.setBountyQuest_11(cardsOpened, tiles, foundTiles, iter);
+            flags.markBountyQuestAnswer_11(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.resetBountyReward_11(cardsOpened, tiles, foundTiles, iter);
