@@ -11,6 +11,7 @@ import levels from './levels.js';
       /* let target = document.querySelector(.target-1); targetTile.querySelector('.tile-back'); */
 // #4 DO SOME STUFF ONLY FOR TILES THAT HAS NOT BEEN FOUND YET : allTiles.forEach(tile => {if(tile.style.visibility !== 'hidden') **some stuff here** })
 // #5 BLOCK CLICK EVENTS FOR TILES :  document.querySelector('.board').dataset.animation = 'on';   -> REMEMBER TO CHANGE IT TO 'OFF' AFTER ALL
+// #6 GRAB ANIMATION CONTAINER:  const animationContainer = document.querySelector('.animationContainer');
 
 const flags = {
     
@@ -1457,7 +1458,7 @@ const flags = {
         let svgCont = document.querySelectorAll('.svgContainer');
         let activeTiles = [];
 
-        if(foundTiles+10 >= tiles)  { // Four from last pairs, so it's unnecessary to generate new bounties / +12
+        if(foundTiles+12 >= tiles)  { // Five from last pairs, so it's unnecessary to generate new bounties / +12
             return;
         }
 
@@ -1761,6 +1762,77 @@ const flags = {
           Rozważ, czy bounty quest może być tym samym co WANTED quest. Jeśli nie, zrób odpowiedni mechanizm blokujący taką sytuację
         */
     },
+
+
+
+
+
+    // LVL 12
+
+    createGlowingDots_12: function(cardsOpened, tiles, foundTiles, iter) {
+        const animationContainer = document.querySelector('.animationContainer');
+        for(let i=0; i<24; i++) {
+            let dot = document.createElement('div');
+            dot.classList.add('glowing-dot', `glowing-${(i+1)%4}`);
+            animationContainer.appendChild(dot);
+
+            let topv = Math.floor( Math.random() * 80) + 10; // 10 to 90
+            let leftv = Math.floor( Math.random() * 80) + 10; // 10 to 90
+
+            dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`);
+        }
+
+        let duration = 3200;
+        let delay = 300;
+        let transY = 12;
+        let transX = 12;
+
+        anime({
+            targets: '.glowing-0',
+            duration: duration,
+            delay: anime.stagger(delay),
+            translateY: [0, `${transY}`],
+            translateX: [0, `${transX}`],
+            direction: 'alternate',
+            loop: true,
+
+        })
+
+        anime({
+            targets: '.glowing-1',
+            duration: duration,
+            delay: anime.stagger(delay),
+            translateY: [0, `-${transY}`],
+            translateX: [0, `-${transX}`],
+            direction: 'alternate',
+            loop: true,
+
+        })
+
+        anime({
+            targets: '.glowing-2',
+            duration: duration,
+            delay: anime.stagger(delay),
+            translateY: [0, `${transY}`],
+            translateX: [0, `-${transX}`],
+            direction: 'alternate',
+            loop: true,
+
+        })
+
+        anime({
+            targets: '.glowing-3',
+            duration: duration,
+            delay: anime.stagger(delay),
+            translateY: [0, `-${transY}`],
+            translateX: [0, `${transX}`],
+            direction: 'alternate',
+            loop: true,
+
+        })
+
+    },
+
 
 }
 
