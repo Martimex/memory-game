@@ -294,7 +294,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createWantedQuestBoxes_11(cardsOpened, tiles, foundTiles, iter);
             flags.setBountyQuest_11(cardsOpened, tiles, foundTiles, iter);
-            //flags.markBountyQuestAnswer_11(cardsOpened, tiles, foundTiles, iter); TEMPORARY REMOVE FOR LVL 12
+            flags.markBountyQuestAnswer_11(cardsOpened, tiles, foundTiles, iter); //TEMPORARY REMOVE FOR LVL 12
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.resetBountyReward_11(cardsOpened, tiles, foundTiles, iter);
@@ -308,23 +308,26 @@ const levels = {
 
     lvl12: {
         lv: 12,
-        rows: 8,
+        rows: 5,
         columns: 10,
         tile_size: 46,
-        tiles: 80,  // 42, 52, 44
+        tiles: 50,  // 42, 52, 44
         iconSet: 'fas',
         counter: {
-            time: null,  // 
-            turns: 26, // 20, 22, 23, 26, 27, 32, 34, 40, 44
+            time: 264,  //
+            turns: null, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.prepareIterArray_12(cardsOpened, tiles, foundTiles, iter);
             flags.createGlowingDots_12(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.animateTileClick_12(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.animateTileClick_12(cardsOpened, tiles, foundTiles, iter);
+            flags.moveDots_12(cardsOpened, tiles, foundTiles, iter);  // REMOVE ONLY FOR DEVELOPMENT PURPOSES
+            flags.checkDotRemoval_12(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }

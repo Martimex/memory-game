@@ -1534,7 +1534,7 @@
 }
 
 .game-12 {
-
+    margin: 1.4rem;
 }
 
 .board-12 {
@@ -1542,7 +1542,7 @@
     /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
     border : .1rem dotted hsla(0, 0%, 0%, .5);
     border-radius: 10%;
-    padding: 1rem 1rem;
+    padding: 2.5rem 2.5rem;
 
 }
 
@@ -1603,35 +1603,35 @@
 }
 
 .glowing-0, .glowing-0::before {
-    box-shadow: 0 0 20px rgba(134,255,0,1),
-    0 0 40px rgba(134,255,0,1),
-    0 0 60px rgba(134,255,0,1), 
-    0 0 80px rgba(134,255,0,1),
-    0 0 0 8px rgba(134,255,0,.1);
+    box-shadow: 0 0 1.5rem rgba(134,255,0,1),
+    0 0 3rem rgba(134,255,0,1),
+    0 0 4.5rem rgba(134,255,0,1), 
+    0 0 6rem rgba(134,255,0,1),
+    0 0 0 .5rem rgba(134,255,0,.2);
 }
 
 .glowing-1, .glowing-1::before {
-    box-shadow: 0 0 20px rgba(225,0,255,1),
-    0 0 40px rgba(225,0,255,1),
-    0 0 60px rgba(225,0,255,1),
-    0 0 80px rgba(225,0,255,1),
-    0 0 0 8px rgba(225,0,255,.1);
+    box-shadow: 0 0 1.5rem rgba(225,0,255,1),
+    0 0 3rem rgba(225,0,255,1),
+    0 0 4.5rem rgba(225,0,255,1),
+    0 0 6rem rgba(225,0,255,1),
+    0 0 0 .5rem rgba(225,0,255,.2);
 }
 
 .glowing-2, .glowing-2::before {
-    box-shadow: 0 0 20px rgba(255,238,0,1),
-    0 0 40px rgba(255,238,0,1),
-    0 0 60px rgba(255,238,0,1),
-    0 0 80px rgba(255,238,0,1),
-    0 0 0 8px rgba(255,238,0,.1);
+    box-shadow: 0 0 1.5rem rgba(255,238,0,1),
+    0 0 3rem rgba(255,238,0,1),
+    0 0 4.5rem rgba(255,238,0,1),
+    0 0 6rem rgba(255,238,0,1),
+    0 0 0 .5rem rgba(255,238,0,.2);
 }
 
 .glowing-3, .glowing-3::before {
-    box-shadow: 0 0 20px rgba(0,132,255,1),
-    0 0 40px rgba(0,132,255,1),
-    0 0 60px rgba(0,132,255,1),
-    0 0 80px rgba(0,132,255,1),
-    0 0 0 8px rgba(0,132,255,.1);
+    box-shadow: 0 0 1.5rem rgba(0,132,255,1),
+    0 0 3rem rgba(0,132,255,1),
+    0 0 4.5rem rgba(0,132,255,1),
+    0 0 6rem rgba(0,132,255,1),
+    0 0 0 .5rem rgba(0,132,255,.2);
 }
 
 .level-12, .counter-12, .score-12 {

@@ -30,6 +30,7 @@ let iter = {
     /* value v2*/ amount: 0,
     /*value in series*/ streak: 0,
     /*turn addon/penalty*/ extraTurns: 0,
+    /*used for more advanced animation stuff*/ array: [],
     /*determines whether you passed level specific conditions - if not, value = false and u lose the level*/ passCondition: true,
 };  // EXTRA VALUES FOR FLAG FUNCTIONS
 
@@ -162,6 +163,7 @@ function Game(props) {
         iter.amount = 0;
         iter.streak = 0;
         iter.extraTurns = 0;
+        iter.array = [];
         iter.passCondition = true;
 
         cleanup();
@@ -395,7 +397,7 @@ function Game(props) {
         }
     }
     
-    console.log(gameboard);
+    //console.log(gameboard);
 
     function doCardsMatch(cardsOpened) {
         // Block the click listener for a brief checkout duration

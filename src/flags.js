@@ -1769,9 +1769,15 @@ const flags = {
 
     // LVL 12
 
+    prepareIterArray_12: function(cardsOpened, tiles, foundTiles, iter) {
+        for(let i=0; i<4; i++) {
+            iter.array.push(0);
+        }
+    },
+
     createGlowingDots_12: function(cardsOpened, tiles, foundTiles, iter) {
         const animationContainer = document.querySelector('.animationContainer');
-        for(let i=0; i<24; i++) {
+        for(let i=0; i<(levels[`lvl12`].tiles / 2); i++) { //  it stands for number of pairs
             let dot = document.createElement('div');
             dot.classList.add('glowing-dot', `glowing-${(i+1)%4}`);
             animationContainer.appendChild(dot);
@@ -1782,12 +1788,12 @@ const flags = {
             dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`);
         }
 
-        let duration = 3200;
-        let delay = 300;
+        let duration = 2400;
+        let delay = 200;
         let transY = 12;
         let transX = 12;
 
-        anime({
+       /*  anime({
             targets: '.glowing-0',
             duration: duration,
             delay: anime.stagger(delay),
@@ -1829,8 +1835,159 @@ const flags = {
             direction: 'alternate',
             loop: true,
 
-        })
+        }) */
 
+    },
+
+    animateTileClick_12: function(cardsOpened, tiles, foundTiles, iter) {
+        let rand = Math.floor(Math.random() * 4);
+        let colorArr = ['hsla(144, 50%, 55%, .85)', 'hsla(33, 50%, 55%, .85)', 'hsla(178, 50%, 55%, .85)', 'hsla(232, 50%, 55%, .85)' ]
+
+        switch (cardsOpened.length) {
+            case 1: {
+                anime({
+                    targets: '.target-1',
+                    duration: 1600,
+                    borderColor: ['none', `${colorArr[rand]}`],
+                    borderWidth: '.2rem',
+                })
+                anime({
+                    targets: '.target-1 div svg',
+                    duration: 1600,
+                    color: ['none', `${colorArr[rand]}`],
+                })
+                break;
+            }
+
+            case 2: {
+
+                anime({
+                    targets: '.target-2',
+                    duration: 1600,
+                    borderColor: ['none', `${colorArr[rand]}`],
+                    borderWidth: '.2rem',
+                })
+                anime({
+                    targets: '.target-2 div svg',
+                    duration: 1600,
+                    color: ['none', `${colorArr[rand]}`],
+                })
+
+                break;
+            }
+        }
+    },
+
+
+    moveDots_12: function(cardsOpened, tiles, foundTiles, iter) {
+        //if(cardsOpened[0].childNodes[0].classList[1] !== cardsOpened[1].childNodes[0].classList[1]) {  // if pair does NOT match 
+            const animationContainer = document.querySelector('.animationContainer');
+
+            let rand = Math.floor(Math.random() * 4);
+
+            let randDotType = animationContainer.querySelectorAll(`.glowing-${rand}`);
+
+            if(randDotType.length !== 0) {
+                    if(iter.array[rand] % 4 === 0) {
+                        anime({
+                            targets: randDotType,
+                            duration: 1400,
+                            translateX: '-=3rem',
+                            translateY: '-=3rem',
+                            easing: 'easeOutExpo',
+        
+                        })
+                        iter.array[rand]++;
+                    }
+                    else if(iter.array[rand] % 4 === 1) {
+                        anime({
+                            targets: randDotType,
+                            duration: 1400,
+                            translateX: '+=3rem',
+                            translateY: '-=3rem',
+                            rotate: '90deg',
+                            easing: 'easeOutExpo',
+        
+                        })
+                        iter.array[rand]++;
+                    }
+                    else if(iter.array[rand] % 4 === 2) {
+                        anime({
+                            targets: randDotType,
+                            duration: 1400,
+                            translateX: '+=3rem',
+                            translateY: '+=3rem',
+                            rotate: '90deg',
+                            easing: 'easeOutExpo',
+        
+                        })
+                        iter.array[rand]++;
+                    }
+                    else if(iter.array[rand] % 4 === 3) {
+                        anime({
+                            targets: randDotType,
+                            duration: 1400,
+                            translateX: '-=3rem',
+                            translateY: '+=3rem',
+                            rotate: '90deg',
+                            easing: 'easeOutExpo',
+        
+                        })
+                        iter.array[rand]++;
+                    }
+            }
+        //}
+    },
+
+
+    checkDotRemoval_12: function(cardsOpened, tiles, foundTiles, iter) {
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+
+            if(foundTiles+12 < tiles) {
+                // Remove all visible borders
+                const allTiles = document.querySelectorAll('.tile');
+                
+                anime({
+                    targets: allTiles,
+                    duration: 1000,
+                    borderColor: 'none',
+                    borderWidth: '0rem',
+                    easing: 'linear',
+                })
+            }  
+
+            // Remove 1 dot from the map
+
+            const animationContainer = document.querySelector('.animationContainer');
+            const time = 1800;
+
+            async function fade() {
+                const a1 = anime({
+                    targets: '.glowing-dot:nth-of-type(1)',
+                    duration: time,
+                    easing: 'linear',
+                    opacity: [1, 0],
+                })
+
+                Promise.all([a1]);
+            }
+
+            fade().then(() => {
+                setTimeout(() => {
+                    animationContainer.querySelector('.glowing-dot:nth-of-type(1)').remove();
+                    const allDots = document.querySelectorAll('.glowing-dot');
+                    anime({
+                        targets: allDots,
+                        duration: 1000,
+                        opacity: [1, 0],
+                        easing: 'linear',
+                        direction: 'alternate',
+                    })
+                    this.moveDots_12(cardsOpened, tiles, foundTiles, iter);
+                }, time)
+            })
+            
+        }
     },
 
 
