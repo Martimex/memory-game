@@ -1942,11 +1942,10 @@ const flags = {
 
     checkDotRemoval_12: function(cardsOpened, tiles, foundTiles, iter) {
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            const allTiles = document.querySelectorAll('.tile');
 
-            if(foundTiles+12 < tiles) {
-                // Remove all visible borders
-                const allTiles = document.querySelectorAll('.tile');
-                
+            if(foundTiles+14 < tiles) {
+                // Remove all visible borders  
                 anime({
                     targets: allTiles,
                     duration: 1000,
@@ -1954,7 +1953,39 @@ const flags = {
                     borderWidth: '0rem',
                     easing: 'linear',
                 })
-            }  
+            }  else if(foundTiles+8 > tiles) {
+                anime({
+                    targets: allTiles,
+                    duration: 1800,
+                    borderColor: ['hsl(0, 0%, 0%)','hsl(15, 40%, 60%)'],
+                    borderWidth: ['0rem', '.4rem'],
+                    easing: 'linear',
+                })
+            }   else  {
+                // Help finding tiles
+                let helpArr = [];
+                allTiles.forEach(tile => { if(tile.style.visibility !== 'hidden') {
+                    
+                    helpArr.push(tile);
+                }})
+
+                let rand = Math.floor(Math.random() * helpArr.length);
+                let rand2 = Math.floor(Math.random() * helpArr.length);
+                let helpTile = helpArr[rand];
+                let helpTile2 = helpArr[rand2];
+
+                console.log(helpArr);
+                console.log(helpTile);
+
+                anime({
+                    targets: [helpTile, helpTile2],
+                    duration: 1800,
+                    borderColor: ['hsl(0, 0%, 0%)','hsl(15, 40%, 60%)'],
+                    borderWidth: ['0rem', '.4rem'],
+                    easing: 'linear',
+                })
+            }
+            
 
             // Remove 1 dot from the map
 
@@ -1969,23 +2000,23 @@ const flags = {
                     opacity: [1, 0],
                 })
 
-                Promise.all([a1]);
+                await Promise.all([a1]);
             }
 
-            fade().then(() => {
-                setTimeout(() => {
-                    animationContainer.querySelector('.glowing-dot:nth-of-type(1)').remove();
-                    const allDots = document.querySelectorAll('.glowing-dot');
-                    anime({
-                        targets: allDots,
-                        duration: 1000,
-                        opacity: [1, 0],
-                        easing: 'linear',
-                        direction: 'alternate',
-                    })
-                    this.moveDots_12(cardsOpened, tiles, foundTiles, iter);
-                }, time)
-            })
+            fade().then(() => {animationContainer.querySelector('.glowing-dot:nth-of-type(1)').remove();}) // this lineo nly for development
+
+            /* fade().then(() => {
+                animationContainer.querySelector('.glowing-dot:nth-of-type(1)').remove();
+                const allDots = document.querySelectorAll('.glowing-dot');
+                anime({
+                    targets: allDots,
+                    duration: 1000,
+                    opacity: [1, 0],
+                    easing: 'linear',
+                    direction: 'alternate',
+                })
+                this.moveDots_12(cardsOpened, tiles, foundTiles, iter);
+            }) */
             
         }
     },
