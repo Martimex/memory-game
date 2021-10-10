@@ -330,6 +330,28 @@ const levels = {
             flags.checkDotRemoval_12(cardsOpened, tiles, foundTiles, iter);
         },
     },
+
+    lvl13: {
+        lv: 13,
+        rows: 5,
+        columns: 10,
+        tile_size: 46,
+        tiles: 50,  // 42, 52, 44
+        iconSet: 'fas',
+        counter: {
+            time: null,  // 264
+            turns: 16, 
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+    },
 }
 
 
