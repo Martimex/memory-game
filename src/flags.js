@@ -2027,7 +2027,51 @@ const flags = {
 
     // LVL 13
 
-    
+    styleElements_13: function(cardsOpened, tiles, foundTiles, iter) {
+        console.log(levels[`lvl13`].tiles);
+        let divideNum = levels[`lvl13`].columns;
+        const allTiles = document.querySelectorAll('.tile');
+
+        allTiles.forEach((tile, index) => {
+            let back = tile.querySelector('.tile-back');
+            let icon = back.childNodes[0];
+
+            if(index%divideNum < (divideNum/3)) {
+                tile.style = 'border: .3rem solid hsla(23, 40%, 50%, .5); background-image: radial-gradient(hsl(166, 0%, 0%), hsl(23, 40%, 50%), hsl(62, 0%, 0%));';
+                icon.style =  'color: hsl(23, 50%, 60%)';
+            }
+
+            else if(index%divideNum >= ((divideNum * 2)/3)) {
+                tile.style = 'border: .3rem solid hsla(62, 40%, 50%, .5); background-image: radial-gradient(hsl(166, 0%, 0%), hsl(62, 40%, 50%), hsl(23, 0%, 0%));';
+                icon.style =  'color: hsl(62, 50%, 60%)';
+            }
+        })
+    },
+
+    startAnimateTiles_13: function(cardsOpened, tiles, foundTiles, iter) {
+        const allTiles = document.querySelectorAll('.tile');
+        anime({
+            targets: allTiles,
+            duration: 800,
+            rotate: [120, 360],
+            translateX: ['1.3rem', '0rem'],
+        })
+    },
+
+    addInteractiveStrips_13: function(cardsOpened, tiles, foundTiles, iter) {
+        const board = document.querySelector('.board');
+        const boardbox = document.createElement('div');
+        boardbox.classList.add('bbox');
+        board.appendChild(boardbox);
+
+        for(let i=0; i<(levels[`lvl13`].columns * 2); i++) {
+            let strip = document.createElement('div');
+            strip.classList.add('strip');
+            //strip.style = '';
+            strip.setAttribute('style', `top:${5}%;left:${i * (levels[`lvl13`].columns / 3)}%;`);
+            boardbox.appendChild(strip);
+        }
+    },
 
 
 }

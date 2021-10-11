@@ -1683,9 +1683,7 @@
 
 .fa-icon-13 {
    color: inherit;
-   border: .1rem solid inherit;
-   color: hsla(122, 100%, 100%, .35); /*hsla(229, 91%, 28%, .6);*/
-    
+   color: hsl(166, 50%, 60%);
    z-index: 20;
    font-size: 1.8rem;
    /*color: hsl(105, 70%, 60%);*/
@@ -1693,9 +1691,12 @@
 
 
 .t-13 {  /* Front size of card */ 
-    border: 0rem solid #fff;
+    border: .3rem solid hsla(166, 40%, 50%, .5);/*hsl(62, 40%, 70%);*/
+    padding: 1.6rem;
+    border-radius: 15% 10% 15% 10%;
     outline: 0px solid transparent;
     border-style: ridge;
+    background-image: radial-gradient(hsl(23, 0%, 0%), hsl(166, 40%, 50%), hsl(62, 0%, 0%));
     
 }
 
@@ -1719,55 +1720,27 @@
 
 /* Animation stuff */
 
-.glowing-dot {
-    z-index: -60;
+.boardbox {
+    width: 100%;
+    height: 100%;
+    padding: -2.5rem -2.5rem;
+    margin: 2rem;
+}
+
+.strip {
+    display: block;
+    z-index: -40;
+    height: 80%;
+    width: 4%;
+    background: hsl(118, 50%, 50%);
     position: absolute;
-    border-radius: 50%;
-    height: .1rem;
-    width: .1rem;
+    margin: 3rem;
 }
 
-.glowing-dot::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 1.4rem;
-    height: 1.4rem;
-
-    border-radius: 50%;    
+.strip:nth-last-child(1), .strip:nth-last-child(2) {
+    visibility: hidden;
 }
 
-.glowing-0, .glowing-0::before {
-    box-shadow: 0 0 1.5rem rgba(134,255,0,1),
-    0 0 3rem rgba(134,255,0,1),
-    0 0 4.5rem rgba(134,255,0,1), 
-    0 0 6rem rgba(134,255,0,1),
-    0 0 0 .5rem rgba(134,255,0,.2);
-}
-
-.glowing-1, .glowing-1::before {
-    box-shadow: 0 0 1.5rem rgba(225,0,255,1),
-    0 0 3rem rgba(225,0,255,1),
-    0 0 4.5rem rgba(225,0,255,1),
-    0 0 6rem rgba(225,0,255,1),
-    0 0 0 .5rem rgba(225,0,255,.2);
-}
-
-.glowing-2, .glowing-2::before {
-    box-shadow: 0 0 1.5rem rgba(255,238,0,1),
-    0 0 3rem rgba(255,238,0,1),
-    0 0 4.5rem rgba(255,238,0,1),
-    0 0 6rem rgba(255,238,0,1),
-    0 0 0 .5rem rgba(255,238,0,.2);
-}
-
-.glowing-3, .glowing-3::before {
-    box-shadow: 0 0 1.5rem rgba(0,132,255,1),
-    0 0 3rem rgba(0,132,255,1),
-    0 0 4.5rem rgba(0,132,255,1),
-    0 0 6rem rgba(0,132,255,1),
-    0 0 0 .5rem rgba(0,132,255,.2);
-}
 
 .level-13, .counter-13, .score-13 {
     background: -webkit-linear-gradient(135deg, hsla(132, 73%, 49%, 0.58), hsla(99, 64%, 49%, 0.68));

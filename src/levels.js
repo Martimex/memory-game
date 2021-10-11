@@ -333,17 +333,19 @@ const levels = {
 
     lvl13: {
         lv: 13,
-        rows: 5,
-        columns: 10,
+        rows: 6,
+        columns: 12,
         tile_size: 46,
-        tiles: 50,  // 42, 52, 44
+        tiles: 72,  // 42, 52, 44
         iconSet: 'fas',
         counter: {
             time: null,  // 264
-            turns: 16, 
+            turns: 45, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.styleElements_13(cardsOpened, tiles, foundTiles, iter);
+            flags.startAnimateTiles_13(cardsOpened, tiles, foundTiles, iter);
+            flags.addInteractiveStrips_13(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
