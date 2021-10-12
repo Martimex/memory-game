@@ -1730,15 +1730,23 @@
 .strip {
     display: block;
     z-index: -40;
-    height: 80%;
-    width: 4%;
+    height: 70%;
+    width: 8.2%;
     background: hsl(118, 50%, 50%);
     position: absolute;
-    margin: 3rem;
+    margin: 3rem 0;
+    padding: .1rem;
 }
 
-.strip:nth-last-child(1), .strip:nth-last-child(2) {
-    visibility: hidden;
+.strip:nth-child(1) {
+    margin-left:  2rem;
+    border-radius: 10%;
+}
+
+.strip:nth-last-child(1) {
+    margin-right:  50%;
+    border-radius: 10%;
+    width:4%;
 }
 
 

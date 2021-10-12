@@ -2045,6 +2045,10 @@ const flags = {
                 tile.style = 'border: .3rem solid hsla(62, 40%, 50%, .5); background-image: radial-gradient(hsl(166, 0%, 0%), hsl(62, 40%, 50%), hsl(23, 0%, 0%));';
                 icon.style =  'color: hsl(62, 50%, 60%)';
             }
+
+            else {
+                icon.style =  'color: hsl(166, 50%, 60%)';
+            }
         })
     },
 
@@ -2064,12 +2068,93 @@ const flags = {
         boardbox.classList.add('bbox');
         board.appendChild(boardbox);
 
-        for(let i=0; i<(levels[`lvl13`].columns * 2); i++) {
+        for(let i=0; i<(levels[`lvl13`].columns); i++) {
             let strip = document.createElement('div');
             strip.classList.add('strip');
-            //strip.style = '';
-            strip.setAttribute('style', `top:${5}%;left:${i * (levels[`lvl13`].columns / 3)}%;`);
+            let bgcolor;
+            if(i < (levels[`lvl13`].columns)/3) {
+                bgcolor = 'background-color: hsl(23, 50%, 60%)';
+                strip.classList.add('s-brown');
+            } else if( i < ((levels[`lvl13`].columns)/1.5)) {
+                bgcolor = 'background-color: hsl(166, 50%, 60%)';
+                strip.classList.add('s-silver');
+            } else {
+                bgcolor = 'background-color: hsl(62, 50%, 60%)';
+                strip.classList.add('s-gold');
+            }
+            strip.setAttribute('style', `top:${10}%;left:${i * (100/(levels[`lvl13`].columns))}%; ${bgcolor}; `); //visibility: hidden;
+
             boardbox.appendChild(strip);
+        }
+    },
+
+    visibleStrips_13: function(cardsOpened, tiles, foundTiles, iter) {
+        console.log(cardsOpened[1].childNodes[0].style.color)//.getAttribute('color'))
+        if(cardsOpened[1].childNodes[0].style.color === 'rgb(102, 204, 180)') {  // silver
+            async function aSerires() {
+                const a1 = anime({
+                    targets: '.s-silver',
+                    duration: 2000,
+                    delay: anime.stagger(600, {from: 'center'}),
+                    /* visibility: 'visible', */
+                    opacity: [0, 1],
+                    easing: 'easeOutExpo',
+                })
+
+                await Promise.all([a1]);
+            } 
+
+            async function holeSeries() {
+                const a2 = anime({
+                    targets: '.s-silver',
+                    duration: 2400,
+                    backgroundImage: 'radial-gradient(hsl(23, 0%, 0%), hsl(166, 40%, 50%), hsl(62, 0%, 0%))',
+                })
+
+                await Promise.all([a2]);
+            }
+
+            async function aFinish() {
+                const a3 = anime({
+                    targets: '.s-silver',
+                    duration: 2000,
+                    delay: anime.stagger(600, {from: 'center'}),
+                    /* visibility: 'visible', */
+                    opacity: [1, 0],
+                    easing: 'easeInExpo',
+                })
+
+                await Promise.all([a3]);
+            }
+
+            async function init() {
+                await aSerires();
+                await holeSeries();
+                await aFinish();
+            }
+
+            init();
+
+        } else if(cardsOpened[1].childNodes[0].style.color === 'rgb(204, 141, 102)') { // brown
+            anime({
+                targets: '.s-brown',
+                duration: 2000,
+                delay: anime.stagger(600),
+                /* visibility: 'visible', */
+                opacity: [0, 1],
+                easing: 'easeOutExpo',
+                direction: 'alternate',
+            })
+        } else { // gold
+            anime({
+                targets: '.s-gold',
+                duration: 2000,
+                delay: anime.stagger(600),
+                /* visibility: 'visible', */
+                opacity: [0, 1],
+                easing: 'easeOutExpo',
+                direction: 'alternate',
+            })
         }
     },
 

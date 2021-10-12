@@ -351,7 +351,7 @@ const levels = {
 
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.visibleStrips_13(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }
