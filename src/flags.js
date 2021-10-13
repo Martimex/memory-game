@@ -2090,74 +2090,169 @@ const flags = {
 
     visibleStrips_13: function(cardsOpened, tiles, foundTiles, iter) {
         console.log(cardsOpened[1].childNodes[0].style.color)//.getAttribute('color'))
+
         if(cardsOpened[1].childNodes[0].style.color === 'rgb(102, 204, 180)') {  // silver
             async function aSerires() {
                 const a1 = anime({
                     targets: '.s-silver',
                     duration: 2000,
                     delay: anime.stagger(600, {from: 'center'}),
-                    /* visibility: 'visible', */
+                    backgroundImage: 'radial-gradient(hsl(23, 0%, 0%), hsl(166, 40%, 50%), hsl(62, 0%, 0%))',
                     opacity: [0, 1],
                     easing: 'easeOutExpo',
-                })
+                }).finished;
 
                 await Promise.all([a1]);
             } 
 
-            async function holeSeries() {
+            async function aFinish() {
                 const a2 = anime({
                     targets: '.s-silver',
-                    duration: 2400,
-                    backgroundImage: 'radial-gradient(hsl(23, 0%, 0%), hsl(166, 40%, 50%), hsl(62, 0%, 0%))',
-                })
-
-                await Promise.all([a2]);
-            }
-
-            async function aFinish() {
-                const a3 = anime({
-                    targets: '.s-silver',
-                    duration: 2000,
+                    duration: 1000,
                     delay: anime.stagger(600, {from: 'center'}),
                     /* visibility: 'visible', */
                     opacity: [1, 0],
                     easing: 'easeInExpo',
-                })
+                }).finished;
 
-                await Promise.all([a3]);
+                await Promise.all([a2]);
             }
 
             async function init() {
                 await aSerires();
-                await holeSeries();
                 await aFinish();
             }
 
             init();
 
         } else if(cardsOpened[1].childNodes[0].style.color === 'rgb(204, 141, 102)') { // brown
-            anime({
-                targets: '.s-brown',
-                duration: 2000,
-                delay: anime.stagger(600),
-                /* visibility: 'visible', */
-                opacity: [0, 1],
-                easing: 'easeOutExpo',
-                direction: 'alternate',
-            })
+            async function aSerires() {
+                const a1 = anime({
+                    targets: '.s-brown',
+                    duration: 2000,
+                    delay: anime.stagger(600),
+                    backgroundImage: 'radial-gradient(hsl(23, 0%, 0%), hsl(23, 40%, 50%), hsl(62, 0%, 0%))',
+                    opacity: [0, 1],
+                    easing: 'easeOutExpo',
+                }).finished;
+
+                await Promise.all([a1]);
+            } 
+
+            async function aFinish() {
+                const a2 = anime({
+                    targets: '.s-brown',
+                    duration: 1000,
+                    delay: anime.stagger(600),
+                    opacity: [1, 0],
+                    easing: 'easeInExpo',
+                }).finished;
+
+                await Promise.all([a2]);
+            }
+
+            async function init() {
+                await aSerires();
+                await aFinish();
+            }
+
+            init();
+
         } else { // gold
-            anime({
-                targets: '.s-gold',
-                duration: 2000,
-                delay: anime.stagger(600),
-                /* visibility: 'visible', */
-                opacity: [0, 1],
-                easing: 'easeOutExpo',
-                direction: 'alternate',
-            })
+
+            async function aSerires() {
+                const a1 = anime({
+                    targets: '.s-gold',
+                    duration: 2000,
+                    delay: anime.stagger(600, {from: 'last'}),
+                    backgroundImage: 'radial-gradient(hsl(23, 0%, 0%), hsl(62, 40%, 50%), hsl(62, 0%, 0%))',
+                    opacity: [0, 1],
+                    easing: 'easeOutExpo',
+                }).finished;
+
+                await Promise.all([a1]);
+            } 
+
+            async function aFinish() {
+                const a2 = anime({
+                    targets: '.s-gold',
+                    duration: 1000,
+                    delay: anime.stagger(600),
+                    opacity: [1, 0],
+                    easing: 'easeInExpo',
+                }).finished;
+
+                await Promise.all([a2]);
+            }
+
+            async function init() {
+                await aSerires();
+                await aFinish();
+            }
+
+            init();
         }
     },
 
+    animateCardSide_13: function(cardsOpened, tiles, foundTiles, iter) {
+        let currTarget;
+        let elemBg = {color: '', newColor: ''};
+
+        if(cardsOpened.length <= 1) {
+            currTarget = document.querySelector('.target-1');
+        } else {
+            currTarget = document.querySelector('.target-2');
+        }
+
+        let back = currTarget.querySelector('.tile-back');
+
+        if(back.childNodes[0].style.color === 'rgb(204, 141, 102)') {  // if brown
+            elemBg.color = 'radial-gradient(hsl(0, 0%, 0%), hsl(23, 40%, 50%), hsl(0, 0%, 0%))';
+            elemBg.newColor = 'radial-gradient(hsl(23, 40%, 50%), hsl(0, 0%, 0%), hsl(23, 40%, 50%))';
+        } else if (back.childNodes[0].style.color === 'rgb(102, 204, 180)') {  // if silver
+            elemBg.color = 'radial-gradient(hsl(0, 0%, 0%), hsl(166, 40%, 50%), hsl(0, 0%, 0%))';
+            elemBg.newColor = 'radial-gradient(hsl(166, 40%, 50%), hsl(0, 0%, 0%), hsl(166, 40%, 50%))';
+        } else { // if gold
+            elemBg.color = 'radial-gradient(hsl(0, 0%, 0%), hsl(62, 40%, 50%), hsl(0, 0%, 0%))';
+            elemBg.newColor = 'radial-gradient(hsl(62, 40%, 50%), hsl(0, 0%, 0%), hsl(62, 40%, 50%))';
+        }
+
+        async function first() {
+            const a1 = anime({
+                targets: currTarget,
+                duration: 2200,
+                keyframes: [
+                    {backgroundImage: `${elemBg.newColor}`, duration: 1600,  easing: 'easeInExpo'},
+                    {backgroundImage: `${elemBg.color}`,  easing: 'easeInBounce'},
+                ],
+            })
+
+            await Promise.all([a1]);
+        }
+
+        async function second() { 
+            console.log(cardsOpened)
+            if(cardsOpened.length > 1) {
+                anime({
+                    targets: '.target',
+                    duration: 800,
+                    /* backgroundImage: [`${elemBg.newColor}`, `${elemBg.color}`], */
+                    opacity: .1,
+                })
+            }
+        }
+
+        async function init() {
+            await first();
+            await second();
+        }
+
+        init();
+    },
+
+    cardsMatchAnimation_13(cardsOpened, tiles, foundTiles, iter) {
+
+    },
 
 }
 

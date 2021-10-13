@@ -348,10 +348,12 @@ const levels = {
             flags.addInteractiveStrips_13(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.animateCardSide_13(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.visibleStrips_13(cardsOpened, tiles, foundTiles, iter);
+            flags.animateCardSide_13(cardsOpened, tiles, foundTiles, iter);
+            flags.cardsMatchAnimation_13(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }
