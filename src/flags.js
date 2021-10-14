@@ -2052,6 +2052,13 @@ const flags = {
         })
     },
 
+    createSubstractionVisuals_13: function(cardsOpened, tiles, foundTiles, iter) {
+        const animationContainer = document.querySelector('.animationContainer');
+        let substractCounter = document.createElement('div');
+        substractCounter.classList.add('substract');
+        animationContainer.appendChild(substractCounter);
+    },
+
     startAnimateTiles_13: function(cardsOpened, tiles, foundTiles, iter) {
         const allTiles = document.querySelectorAll('.tile');
         anime({
@@ -2095,7 +2102,7 @@ const flags = {
             async function aSerires() {
                 const a1 = anime({
                     targets: '.s-silver',
-                    duration: 2000,
+                    duration: 1500,
                     delay: anime.stagger(600, {from: 'center'}),
                     backgroundImage: 'radial-gradient(hsl(23, 0%, 0%), hsl(166, 40%, 50%), hsl(62, 0%, 0%))',
                     opacity: [0, 1],
@@ -2108,7 +2115,7 @@ const flags = {
             async function aFinish() {
                 const a2 = anime({
                     targets: '.s-silver',
-                    duration: 1000,
+                    duration: 700,
                     delay: anime.stagger(600, {from: 'center'}),
                     /* visibility: 'visible', */
                     opacity: [1, 0],
@@ -2129,7 +2136,7 @@ const flags = {
             async function aSerires() {
                 const a1 = anime({
                     targets: '.s-brown',
-                    duration: 2000,
+                    duration: 1500,
                     delay: anime.stagger(600),
                     backgroundImage: 'radial-gradient(hsl(23, 0%, 0%), hsl(23, 40%, 50%), hsl(62, 0%, 0%))',
                     opacity: [0, 1],
@@ -2142,7 +2149,7 @@ const flags = {
             async function aFinish() {
                 const a2 = anime({
                     targets: '.s-brown',
-                    duration: 1000,
+                    duration: 700,
                     delay: anime.stagger(600),
                     opacity: [1, 0],
                     easing: 'easeInExpo',
@@ -2163,7 +2170,7 @@ const flags = {
             async function aSerires() {
                 const a1 = anime({
                     targets: '.s-gold',
-                    duration: 2000,
+                    duration: 1500,
                     delay: anime.stagger(600, {from: 'last'}),
                     backgroundImage: 'radial-gradient(hsl(23, 0%, 0%), hsl(62, 40%, 50%), hsl(62, 0%, 0%))',
                     opacity: [0, 1],
@@ -2176,7 +2183,7 @@ const flags = {
             async function aFinish() {
                 const a2 = anime({
                     targets: '.s-gold',
-                    duration: 1000,
+                    duration: 700,
                     delay: anime.stagger(600),
                     opacity: [1, 0],
                     easing: 'easeInExpo',
@@ -2250,8 +2257,44 @@ const flags = {
         init();
     },
 
-    cardsMatchAnimation_13(cardsOpened, tiles, foundTiles, iter) {
+    cardsMatchCheckoutAndAnimation_13(cardsOpened, tiles, foundTiles, iter) {
+        if(foundTiles+2 === tiles) {
+            // Remove strips appended to board comp
+            let bbox = document.querySelector('.bbox');
+            if(bbox !== null) {
+                bbox.remove(); // remove this div with all it's ancestors (strip class)
+            }
+        }
+        else if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            anime({
+                targets: [cardsOpened[0].parentNode, cardsOpened[1].parentNode],
+                duration: 2000,
+                easing: 'linear',
+                scale: ['100%', '20%'],
+            })
+            iter.streak = 0;
+            iter.extraTurns = 0;
+        }
+        else {  // if cards does not match
+            let number = 3;
+            if(iter.streak > number) {
+                iter.extraTurns = iter.streak - number;
 
+                let substract = document.querySelector('.substract');
+                substract.textContent = `-${iter.extraTurns+1}`;
+    
+                anime({
+                    targets: substract,
+                    duration: 2100,
+                    keyframes: [
+                        {opacity: 1, translateY: 0, duration: 400},
+                        {opacity: .4, translateY: 40, duration: 700},
+                        {opacity: 0, translateY: 70, duration: 1000},
+                    ],
+                })
+            }
+            iter.streak++;
+        }
     },
 
 }

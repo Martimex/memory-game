@@ -1718,7 +1718,18 @@
 
 }
 
-/* Animation stuff */
+/* Animation stuff  - Personal branding to twój wizerunek siebie (to kim jesteś), to twoje wyobrażenia o sobie oraz opinia o tobie w środowskiu */
+
+.substract {
+    position: absolute;
+    top: 10%;
+    left: 48%; /* 48% + (width / 2) === 50%, so it's centered */
+    width: 4%;
+    height: 3rem;
+   /*  background: hsl(20, 60%, 60%); */
+    font-size: 2.5rem;
+    color: hsl(0, 63%, 48%);
+}
 
 .boardbox {
     width: 100%;

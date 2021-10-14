@@ -340,10 +340,11 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,  // 264
-            turns: 45, 
+            turns: 132, // 123 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.styleElements_13(cardsOpened, tiles, foundTiles, iter);
+            flags.createSubstractionVisuals_13(cardsOpened, tiles, foundTiles, iter);
             flags.startAnimateTiles_13(cardsOpened, tiles, foundTiles, iter);
             flags.addInteractiveStrips_13(cardsOpened, tiles, foundTiles, iter);
         },
@@ -353,7 +354,7 @@ const levels = {
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.visibleStrips_13(cardsOpened, tiles, foundTiles, iter);
             flags.animateCardSide_13(cardsOpened, tiles, foundTiles, iter);
-            flags.cardsMatchAnimation_13(cardsOpened, tiles, foundTiles, iter);
+            flags.cardsMatchCheckoutAndAnimation_13(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }
