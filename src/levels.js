@@ -195,7 +195,7 @@ const levels = {
             turns: null, // 31
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            //flags.resetRotatingBoard_7();  //PLEASE MOVE IT BACK TO THE GAME SOONER
+            flags.resetRotatingBoard_7();  //PLEASE MOVE IT BACK TO THE GAME SOONER
             flags.addAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -355,6 +355,28 @@ const levels = {
             flags.visibleStrips_13(cardsOpened, tiles, foundTiles, iter);
             flags.animateCardSide_13(cardsOpened, tiles, foundTiles, iter);
             flags.cardsMatchCheckoutAndAnimation_13(cardsOpened, tiles, foundTiles, iter);
+        },
+    },
+
+    lvl14: {
+        lv: 14,
+        rows: 6,
+        columns: 8,
+        tile_size: 55,
+        tiles: 48,  // 42, 52, 44
+        iconSet: 'fas',
+        counter: {
+            time: null,  // 264
+            turns: 40, // 123 
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.temporaryRemovalFunction_14(cardsOpened, tiles, foundTiles, iter);
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },
     },
 }

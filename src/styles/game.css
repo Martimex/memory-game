@@ -1760,13 +1760,142 @@
     width:4%;
 }
 
-
 .level-13, .counter-13, .score-13 {
-    background: -webkit-linear-gradient(135deg, hsla(132, 73%, 49%, 0.58), hsla(99, 64%, 49%, 0.68));
-    filter: contrast(120%) saturate(120%); 
+    font-weight: 800;
+}
+
+.level-13 {
+    color: hsl(23, 40%, 50%)
+} .counter-13 {
+    color: hsl(166, 40%, 50%);
+} .score-13 { 
+    color: hsl(62, 40%, 50%)
+}
+
+
+
+
+
+
+
+/* LEVEL 14 */
+
+.bg-14 {
+    overflow: hidden;
+   position: absolute; top: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   z-index: -50;
+   background-color: hsl(0, 5%, 5%); 
+   background-image: url('../bgs/bg-14.svg');
+   background-size: cover;
+}
+
+.aContainer-14 {
+   overflow: hidden;
+   position: absolute; bottom: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   pointer-events: none;
+}
+
+.game-14 {
+    margin: 1.4rem;
+}
+
+.board-14 {
+    /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
+    border-radius: 5%;
+
+}
+
+.fa-icon-14 {
+   color: inherit;
+   color: hsl(166, 50%, 60%);
+   z-index: 20;
+   font-size: 1.8rem;
+   /*color: hsl(105, 70%, 60%);*/
+}
+
+
+.t-14 {  /* Front size of card */ 
+    border: .3rem solid hsla(166, 40%, 50%, .5);/*hsl(62, 40%, 70%);*/
+    padding: 1.6rem;
+    border-radius: 50%;
+    outline: 0px solid transparent;
+    border-style: ridge;
+    background-image: radial-gradient(hsl(23, 0%, 0%), hsl(166, 40%, 50%), hsl(62, 0%, 0%));
     
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 3px 3px 3px hsla(155, 73%, 49%, 0.68);
+}
+
+.t-14::before, .t-14::after {
+    content: '';
+    display: block;
+    position: absolute;
+}
+
+.tf-14 { /* Have no clue what this class is for */
     
+}
+
+
+
+.tb-14 {  /* Back side of card */
+    /*background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 0%) 45%, hsl(282, 80%, 60%));*/
+    border-radius: 20%;
+
+}
+
+/* Animation stuff  - Personal branding to twój wizerunek siebie (to kim jesteś), to twoje wyobrażenia o sobie oraz opinia o tobie w środowskiu */
+
+.substract {
+    position: absolute;
+    top: 10%;
+    left: 48%; /* 48% + (width / 2) === 50%, so it's centered */
+    width: 4%;
+    height: 3rem;
+   /*  background: hsl(20, 60%, 60%); */
+    font-size: 2.5rem;
+    color: hsl(0, 63%, 48%);
+}
+
+.boardbox {
+    width: 100%;
+    height: 100%;
+    padding: -2.5rem -2.5rem;
+    margin: 2rem;
+}
+
+.strip {
+    display: block;
+    z-index: -40;
+    height: 70%;
+    width: 8.2%;
+    background: hsl(118, 50%, 50%);
+    position: absolute;
+    margin: 3rem 0;
+    padding: .1rem;
+}
+
+.strip:nth-child(1) {
+    margin-left:  2rem;
+    border-radius: 10%;
+}
+
+.strip:nth-last-child(1) {
+    margin-right:  50%;
+    border-radius: 10%;
+    width:4%;
+}
+
+.level-14, .counter-14, .score-14 {
+    font-weight: 800;
+}
+
+.level-14 {
+    color: hsl(23, 40%, 50%)
+} .counter-14 {
+    color: hsl(166, 40%, 50%);
+} .score-14 { 
+    color: hsl(62, 40%, 50%)
 }

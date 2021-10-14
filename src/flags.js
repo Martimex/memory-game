@@ -2297,6 +2297,21 @@ const flags = {
         }
     },
 
+
+
+
+
+
+
+
+    // LVL 14
+
+    temporaryRemovalFunction_14: function(cardsOpened, tiles, foundTiles, iter) {
+        let bbox = document.querySelector('.bbox');
+            if(bbox !== null) {
+                bbox.remove(); // remove this div with all it's ancestors (strip class)
+            }
+    },
 }
 
 export default flags;
