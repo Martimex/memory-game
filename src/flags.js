@@ -2312,6 +2312,37 @@ const flags = {
                 bbox.remove(); // remove this div with all it's ancestors (strip class)
             }
     },
+
+    iconsAppear_14: function(cardsOpened, tiles, foundTiles, iter) {
+        const allTiles = document.querySelectorAll('.tile');
+        anime({
+            targets: allTiles,
+            duration: 2600,
+            backgroundImage: ['none', 'linear-gradient(45deg, hsl(99, 100%, 100%) 10%, hsl(60, 1%, 40%))'],
+            easing: 'easeInSine',
+        })
+    },
+
+    tileBackgroundRetrieve_14: function(cardsOpened, tiles, foundTiles, iter) {
+        anime({
+            targets: '.target-1',
+            duration: 1400,
+            backgroundImage: 'linear-gradient(45deg, hsl(99, 100%, 100%) 10%, hsl(60, 1%, 40%))',
+            easing: 'easeOutSine',
+        })
+    },
+
+    blockSecondTileReveal_14: function(cardsOpened, tiles, foundTiles, iter) {
+        document.querySelector('.target-2').style = 'background-image: none;';
+
+        anime({
+            targets: '.target-2',
+            duration: 1800,
+            easing: 'easeOutInCirc',
+            backgroundImage: 'none',
+            opacity: [0, 1],
+        })
+    },
 }
 
 export default flags;

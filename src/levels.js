@@ -363,20 +363,21 @@ const levels = {
         rows: 6,
         columns: 8,
         tile_size: 55,
-        tiles: 48,  // 42, 52, 44
+        tiles: 48, 
         iconSet: 'fas',
         counter: {
-            time: null,  // 264
-            turns: 40, // 123 
+            time: null,
+            turns: 56, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            flags.temporaryRemovalFunction_14(cardsOpened, tiles, foundTiles, iter);
+            flags.temporaryRemovalFunction_14(cardsOpened, tiles, foundTiles, iter); /* TEMPORARY */
+            flags.iconsAppear_14(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.tileBackgroundRetrieve_14(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.blockSecondTileReveal_14(cardsOpened, tiles, foundTiles, iter);
         },
     },
 }
