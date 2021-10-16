@@ -2321,6 +2321,13 @@ const flags = {
             backgroundImage: ['none', 'linear-gradient(45deg, hsl(99, 100%, 100%) 10%, hsl(60, 1%, 40%))'],
             easing: 'easeInSine',
         })
+
+        // Plus give their tilebacks identifier class (silver);
+        allTiles.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            back.classList.add('silver');
+        })
+
     },
 
     tileBackgroundRetrieve_14: function(cardsOpened, tiles, foundTiles, iter) {
@@ -2343,6 +2350,82 @@ const flags = {
             opacity: [0, 1],
         })
     },
+
+/*     pushTileGenre_14: function (cardsOpened, tiles, foundTiles, iter) {
+       if(cardsOpened.length <= 1) {
+           iter.array.push(cardsOpened[0].parentNode);
+       } else {
+           iter.array.push(cardsOpened[1].parentNode);
+       }
+    }, */
+
+    checkForPairCombo_14(cardsOpened, tiles, foundTiles, iter) {
+        const allTiles = document.querySelectorAll('.tile');
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+
+            // Do some operations here//
+
+            let firstBg = cardsOpened[0].classList[cardsOpened[0].classList.length-1];
+            let secBg =  cardsOpened[1].classList[cardsOpened[1].classList.length-1];
+
+           /* console.log('first tile: '+ firstBg);
+           console.log('second tile: '+secBg); */
+
+           if(firstBg === secBg) {
+                document.querySelector('.board').dataset.animation = 'on';
+                document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+                let typeArr = [];
+
+                if(firstBg === 'silver') { // Two silvers combined
+                    // Reveal only GOLD tiles
+                    allTiles.forEach(tile => {
+                        let back = tile.querySelector('.tile-back');
+                        if(back.classList.contains('gold')) typeArr.push(back.parentNode);
+                    })
+                }
+
+                else if(firstBg === 'gold') {
+                    // Reveal only SILVER tiles
+                    console.log(' OK ::::::::::: REVEAL SILVERS')
+                    allTiles.forEach(tile => {
+                        let back = tile.querySelector('.tile-back');
+                        if(back.classList.contains('silver')) typeArr.push(back.parentNode);
+                    })
+                }
+
+                async function reveal() {
+                    const typeAppear = anime({
+                        targets: typeArr,
+                        keyframes: [
+                            {rotateY: '+=180deg', duration: 500, easing: 'easeInSine'},
+                            {rotateY: '-=180deg', duration: 500, delay: 950, easing: 'easeOutSine'},
+                        ],
+                        easing: 'easeInExpo',
+                    }).finished;
+
+                   await Promise.all([typeAppear]);
+                }
+
+                async function init() {
+                    await reveal()
+                        .then(() => {
+                            console.log('unblokced'); 
+                            document.querySelector('.board').dataset.animation = 'off';
+                            document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                        })
+                }
+
+                init();
+           }
+
+        }
+
+        // And then... //
+        cardsOpened[0].classList.replace(cardsOpened[0].classList[cardsOpened[0].classList.length-1], 'silver');
+        cardsOpened[1].classList.replace(cardsOpened[1].classList[cardsOpened[1].classList.length-1], 'gold');
+    },
+
 }
 
 export default flags;

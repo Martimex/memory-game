@@ -367,7 +367,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 56, 
+            turns: 50, // very fun level, not gonna lie :p 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.temporaryRemovalFunction_14(cardsOpened, tiles, foundTiles, iter); /* TEMPORARY */
@@ -375,8 +375,11 @@ const levels = {
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.tileBackgroundRetrieve_14(cardsOpened, tiles, foundTiles, iter);
+            //flags.pushTileGenre_14(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            //flags.pushTileGenre_14(cardsOpened, tiles, foundTiles, iter);
+            flags.checkForPairCombo_14(cardsOpened, tiles, foundTiles, iter);
             flags.blockSecondTileReveal_14(cardsOpened, tiles, foundTiles, iter);
         },
     },
