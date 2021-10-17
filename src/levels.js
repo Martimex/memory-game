@@ -375,12 +375,32 @@ const levels = {
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.tileBackgroundRetrieve_14(cardsOpened, tiles, foundTiles, iter);
-            //flags.pushTileGenre_14(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            //flags.pushTileGenre_14(cardsOpened, tiles, foundTiles, iter);
             flags.checkForPairCombo_14(cardsOpened, tiles, foundTiles, iter);
             flags.blockSecondTileReveal_14(cardsOpened, tiles, foundTiles, iter);
+        },
+    },
+
+    lvl15: {
+        lv: 15,
+        rows: 6,
+        columns: 11,
+        tile_size: 44,
+        tiles: 66, 
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: 33,
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },
     },
 }

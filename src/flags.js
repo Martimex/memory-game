@@ -2351,14 +2351,6 @@ const flags = {
         })
     },
 
-/*     pushTileGenre_14: function (cardsOpened, tiles, foundTiles, iter) {
-       if(cardsOpened.length <= 1) {
-           iter.array.push(cardsOpened[0].parentNode);
-       } else {
-           iter.array.push(cardsOpened[1].parentNode);
-       }
-    }, */
-
     checkForPairCombo_14(cardsOpened, tiles, foundTiles, iter) {
         const allTiles = document.querySelectorAll('.tile');
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
@@ -2426,6 +2418,15 @@ const flags = {
         cardsOpened[1].classList.replace(cardsOpened[1].classList[cardsOpened[1].classList.length-1], 'gold');
     },
 
+
+
+
+
+
+
+
+    // LVL 15
+    
 }
 
 export default flags;

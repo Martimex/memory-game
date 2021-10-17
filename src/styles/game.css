@@ -1874,3 +1874,105 @@
 } .score-14 { 
     color: hsl(60, 10%, 50%);
 }
+
+
+
+
+
+
+/* LEVEL 15 */
+
+.bg-15 {
+    overflow: hidden;
+   position: absolute; top: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   z-index: -50;
+   background-color: hsl(11, 60%, 40%); 
+   background-image: url('../bgs/bg-15.svg');
+   background-size: cover;
+}
+
+.aContainer-15 {
+   overflow: hidden;
+   position: absolute; bottom: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   pointer-events: none;
+}
+
+.game-15 {
+    margin: 1.4rem;
+}
+
+.board-15 {
+    /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
+    border-radius: 5%;
+
+}
+
+.fa-icon-15 {
+   color: hsla(60, 1%, 40%, .65);
+   z-index: 20;
+   font-size: 1.4rem;
+   /*color: hsl(105, 70%, 60%);*/
+}
+
+/* .t-15::before {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    background:linear-gradient(135deg, hsl(60, 1%, 40%), hsl(99, 100%, 100%));
+    width: 2rem;
+    height: 2rem;
+}
+
+.t-15::after {
+    content: '';
+    display: block;
+    position: relative;
+    top: 0%; left: 0%;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background: hsl(60, 55%, 40%, .2);
+} */
+
+.t-15 {  /* Front size of card */ 
+    border: .3rem solid hsl(99, 0%, 0%);/*hsl(62, 40%, 70%);*/
+    padding: 1.6rem;
+    border-radius: 50%;
+    background-image: radial-gradient(hsl(99, 0%, 0%), hsl(60, 10%, 10%), hsl(60, 15%, 15%), hsl(60, 10%, 10%), hsl(60, 0%, 0%));
+    visibility: hidden; /* temporary, then remove this line */
+}
+
+.t-15::before, .t-15::after {
+    content: '';
+    display: block;
+    position: absolute;
+}
+
+.tf-15 { /* Have no clue what this class is for */
+
+}
+
+
+
+.tb-15 {  /* Back side of card */
+
+}
+
+/* Animation stuff  - Personal branding to twój wizerunek siebie (to kim jesteś), to twoje wyobrażenia o sobie oraz opinia o tobie w środowskiu */
+
+
+
+.level-15, .counter-15, .score-15 {
+  font-size: 200;
+}
+
+.level-15 {
+    color: hsl(60, 10%, 50%);
+} .counter-15 {
+    color: hsl(60, 10%, 50%);
+} .score-15 { 
+    color: hsl(60, 10%, 50%);
+}
