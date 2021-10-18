@@ -27,8 +27,8 @@
      width="1400mm"
      units="px"
      inkscape:zoom="1.6462963"
-     inkscape:cx="815.46683"
-     inkscape:cy="355.03937"
+     inkscape:cx="1064.8144"
+     inkscape:cy="531.79977"
      inkscape:window-width="1366"
      inkscape:window-height="705"
      inkscape:window-x="-8"
@@ -41,6 +41,24 @@
      inkscape:snap-others="true" />
   <defs
      id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient19120">
+      <stop
+         style="stop-color:#050101;stop-opacity:1"
+         offset="0"
+         id="stop19116" />
+      <stop
+         style="stop-color:#c03327;stop-opacity:0.70588231"
+         offset="1"
+         id="stop19118" />
+    </linearGradient>
+    <rect
+       x="1037.4803"
+       y="496.87289"
+       width="94.758155"
+       height="54.668166"
+       id="rect4026" />
     <rect
        x="818.80766"
        y="408.18898"
@@ -945,6 +963,17 @@
        x2="278.79364"
        y2="-73.998589"
        gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient19120"
+       id="radialGradient19084"
+       cx="1054.0582"
+       cy="505.09824"
+       fx="1054.0582"
+       fy="505.09824"
+       r="33.715469"
+       gradientTransform="matrix(1.9835466,0.02602466,-0.00425568,0.18742039,-1034.5659,383.62462)"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <g
      inkscape:label="Warstwa 1"
@@ -1682,7 +1711,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:'MS Reference Sans Serif';-inkscape-font-specification:'MS Reference Sans Serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;white-space:pre;shape-inside:url(#rect130432);mix-blend-mode:exclusion;fill:url(#linearGradient134625);fill-opacity:1;stroke:none;stroke-width:0.680405"><tspan
          x="982.8125"
          y="235.72759"
-         id="tspan170893">:)</tspan></text>
+         id="tspan20132">:)</tspan></text>
     <text
        xml:space="preserve"
        transform="scale(0.26458333)"
@@ -1700,5 +1729,13 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'Colonna MT';-inkscape-font-specification:'Colonna MT, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583;fill:url(#linearGradient169244);fill-opacity:1.0"
          x="224.69495"
          y="-61.510044">|||||||||</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.39218479,0.26744657,-0.3518373,0.51593573,43.465028,-415.2908)"
+       id="text4024"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.2546px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;white-space:pre;shape-inside:url(#rect4026);fill:url(#radialGradient19084);fill-opacity:1;stroke:none;stroke-width:0.485953"><tspan
+         x="1037.4805"
+         y="510.90492"
+         id="tspan20134">你去哪兒？</tspan></text>
   </g>
 </svg>

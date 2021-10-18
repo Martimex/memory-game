@@ -1889,7 +1889,7 @@
    height: 100vh;
    z-index: -50;
    background-color: hsl(11, 60%, 40%); 
-   background-image: url('../bgs/bg-15.svg');
+ /*   background-image: url('../bgs/bg-15.svg'); */
    background-size: cover;
 }
 
@@ -1908,6 +1908,7 @@
 .board-15 {
     /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
     border-radius: 5%;
+    padding: 2rem;
 
 }
 
@@ -1920,14 +1921,16 @@
 
 /* .t-15::before {
     content: '';
+    position: relative;
+    top: -50%;
     display: block;
-    border-radius: 50%;
     background:linear-gradient(135deg, hsl(60, 1%, 40%), hsl(99, 100%, 100%));
-    width: 2rem;
-    height: 2rem;
-}
+    width: .3rem;
+    transform: rotateY(62deg);
+    height: 3rem;
+} */
 
-.t-15::after {
+/* .t-15::after {
     content: '';
     display: block;
     position: relative;
@@ -1939,10 +1942,11 @@
 
 .t-15 {  /* Front size of card */ 
     border: .3rem solid hsl(99, 0%, 0%);/*hsl(62, 40%, 70%);*/
-    padding: 1.6rem;
+    padding: 2rem;
     border-radius: 50%;
-    background-image: radial-gradient(hsl(99, 0%, 0%), hsl(60, 10%, 10%), hsl(60, 15%, 15%), hsl(60, 10%, 10%), hsl(60, 0%, 0%));
+    background-image: radial-gradient(hsl(0, 20%, 20%), hsl(0, 15%, 15%), hsl(0, 10%, 10%), hsl(0, 5%, 5%), hsl(0, 0%, 0%));
     visibility: hidden; /* temporary, then remove this line */
+    visibility: visible;
 }
 
 .t-15::before, .t-15::after {
@@ -1958,10 +1962,11 @@
 
 
 .tb-15 {  /* Back side of card */
-
+    background-image: none;
+    background-image: radial-gradient(#deb, #c09);
 }
 
-/* Animation stuff  - Personal branding to twój wizerunek siebie (to kim jesteś), to twoje wyobrażenia o sobie oraz opinia o tobie w środowskiu */
+/* Animation stuff  */
 
 
 

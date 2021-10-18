@@ -2426,7 +2426,44 @@ const flags = {
 
 
     // LVL 15
-    
+    createAdditionalTiles_15: function(cardsOpened, tiles, foundTiles, iter) {
+        const board = document.querySelector('.board');
+        for(let i=0; i<levels[`lvl15`].columns; i++) {
+            // Front
+            let front = document.createElement('div');
+            front.classList.add('tile-front', 'tf-15');
+            // Back
+            let back = document.createElement('div');
+            back.classList.add('tile-back', 'tb-15');
+
+            // Img (svg)
+            let svg = document.createElementNS('svg');
+            svg.alt = '';
+            svg.src = `./extras/bombicon.svg`;
+            svg.classList.add('fa-icon-15', `fake-${i}`);
+
+            let newTile = document.createElement('div');
+            newTile.classList.add('tile', 't-15');
+
+            back.appendChild(svg);
+
+            newTile.appendChild(front);
+            newTile.appendChild(back);
+
+            board.appendChild(newTile);
+            console.log('created');
+        }
+    },
+
+    redistributeIcons_15: function(cardsOpened,tiles,foundTiles, iter) {
+        const iconsArray = [];
+        const allTiles = document.querySelectorAll('.tile');
+        console.log(allTiles.length); // 77
+        allTiles.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            iconsArray.push(back.childNodes[0]);
+        })
+    },
 }
 
 export default flags;

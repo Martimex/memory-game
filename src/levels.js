@@ -384,7 +384,7 @@ const levels = {
 
     lvl15: {
         lv: 15,
-        rows: 6,
+        rows: 7,
         columns: 11,
         tile_size: 44,
         tiles: 66, 
@@ -394,7 +394,8 @@ const levels = {
             turns: 33,
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            
+            flags.createAdditionalTiles_15(cardsOpened, tiles, foundTiles, iter);
+            flags.redistributeIcons_15(cardsOpened,tiles,foundTiles, iter); // plus add some bomb icons
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
