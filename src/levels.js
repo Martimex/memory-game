@@ -143,7 +143,7 @@ const levels = {
             flags.addTilesIdentifer_5(cardsOpened, tiles, foundTiles);
             flags.resetIcons_5(cardsOpened, tiles, foundTiles); 
             flags.createAnimatedDots_5();
-            //flags.animateLevelInfo_5();
+            //flags.animateLevelInfo_5(); // Nope, it causes some bugs
             flags.hideSecondType_5();
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles) {
@@ -384,24 +384,27 @@ const levels = {
 
     lvl15: {
         lv: 15,
-        rows: 7,
-        columns: 11,
-        tile_size: 44,
-        tiles: 66, 
+        rows: 5,
+        columns: 10,
+        tile_size: 48,
+        tiles: 40, 
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 33,
+            turns: 120, // 33
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.darkenBeginningAnimation_15(cardsOpened, tiles, foundTiles, iter);
+            flags.createSubstractionVisuals_15(cardsOpened, tiles, foundTiles, iter);
             flags.createAdditionalTiles_15(cardsOpened, tiles, foundTiles, iter);
             flags.redistributeIcons_15(cardsOpened,tiles,foundTiles, iter); // plus add some bomb icons
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.animateChosenTile_15(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.animateChosenTile_15(cardsOpened, tiles, foundTiles, iter);
+            flags.isBombRevealed_15(cardsOpened,tiles,foundTiles, iter);
         },
     },
 }

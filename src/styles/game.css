@@ -1888,8 +1888,9 @@
    width: 100vw;
    height: 100vh;
    z-index: -50;
-   background-color: hsl(11, 60%, 40%); 
- /*   background-image: url('../bgs/bg-15.svg'); */
+   /* background-color: hsl(11, 60%, 40%);  */
+   background-color: hsl(11, 10%, 10%); 
+   background-image: url('../bgs/bg-15.svg');
    background-size: cover;
 }
 
@@ -1941,7 +1942,7 @@
 } */
 
 .t-15 {  /* Front size of card */ 
-    border: .3rem solid hsl(99, 0%, 0%);/*hsl(62, 40%, 70%);*/
+    border: .3rem solid hsl(0, 5%, 5%);/*hsl(62, 40%, 70%);*/
     padding: 2rem;
     border-radius: 50%;
     background-image: radial-gradient(hsl(0, 20%, 20%), hsl(0, 15%, 15%), hsl(0, 10%, 10%), hsl(0, 5%, 5%), hsl(0, 0%, 0%));
@@ -1966,7 +1967,15 @@
     background-image: radial-gradient(#deb, #c09);
 }
 
+
+.scaledImg {
+    width: 3rem;
+    height: 3rem;
+}
+
 /* Animation stuff  */
+
+
 
 
 

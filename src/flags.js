@@ -1,3 +1,4 @@
+import { icon } from '@fortawesome/fontawesome-svg-core';
 import anime from 'animejs/lib/anime.es.js';
 import { useRef } from 'react/cjs/react.development';
 import Game from './components/game.js';
@@ -2379,7 +2380,7 @@ const flags = {
 
                 else if(firstBg === 'gold') {
                     // Reveal only SILVER tiles
-                    console.log(' OK ::::::::::: REVEAL SILVERS')
+                    //console.log(' OK ::::::::::: REVEAL SILVERS')
                     allTiles.forEach(tile => {
                         let back = tile.querySelector('.tile-back');
                         if(back.classList.contains('silver')) typeArr.push(back.parentNode);
@@ -2426,6 +2427,28 @@ const flags = {
 
 
     // LVL 15
+    darkenBeginningAnimation_15: function(cardsOpened, tiles, foundTiles, iter) {
+        const aContainer = document.querySelector('.animationContainer');
+        anime({
+            targets: aContainer,
+            duration: 2700,
+            keyframes: [
+                {backgroundColor: 'hsla(1, 0%, 0%, 1)'}, //hsla(144, 50%, 55%, .85)
+                {backgroundColor: 'hsla(1, 0%, 0%, .8)', duration: 900},
+                {backgroundColor: 'hsla(1, 0%, 0%, .4)', duration: 900},
+                {backgroundColor: 'hsla(1, 0%, 0%, .0)', duration: 900},
+            ],
+            easing: 'easeInSine',
+        })
+    },
+
+    createSubstractionVisuals_15: function(cardsOpened, tiles, foundTiles, iter) {
+        const animationContainer = document.querySelector('.animationContainer');
+        let substractCounter = document.createElement('div');
+        substractCounter.classList.add('substract');
+        animationContainer.appendChild(substractCounter);
+    },
+
     createAdditionalTiles_15: function(cardsOpened, tiles, foundTiles, iter) {
         const board = document.querySelector('.board');
         for(let i=0; i<levels[`lvl15`].columns; i++) {
@@ -2437,10 +2460,11 @@ const flags = {
             back.classList.add('tile-back', 'tb-15');
 
             // Img (svg)
-            let svg = document.createElementNS('svg');
-            svg.alt = '';
-            svg.src = `./extras/bombicon.svg`;
-            svg.classList.add('fa-icon-15', `fake-${i}`);
+            //let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            let svg = document.createElement('img');
+            //svg.alt = '';
+            svg.src = `bombicon-${(i%3)+1}.svg`;
+            svg.classList.add('fa-icon-15', `fake-${i}`, `scaledImg`); // fake-${i} is NOT styling based class
 
             let newTile = document.createElement('div');
             newTile.classList.add('tile', 't-15');
@@ -2457,12 +2481,89 @@ const flags = {
 
     redistributeIcons_15: function(cardsOpened,tiles,foundTiles, iter) {
         const iconsArray = [];
+        const colors = {1: 'hsla(25, 50%, 44%, .35)', 2: 'hsla(144, 50%, 44%, .35)', 3: 'hsla(299, 50%, 44%, .35'};
         const allTiles = document.querySelectorAll('.tile');
         console.log(allTiles.length); // 77
-        allTiles.forEach(tile => {
+        // push elems to array & remove it from DOM 
+        allTiles.forEach((tile, index) => {
             let back = tile.querySelector('.tile-back');
             iconsArray.push(back.childNodes[0]);
+            back.childNodes[0].style = `color: ${colors[(index%3)+ 1]};`;
+            back.childNodes[0].remove();
         })
+
+        // now let's randomize order & append it to DOM back
+        allTiles.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            let rand = Math.floor(Math.random() * iconsArray.length);
+            back.appendChild(iconsArray[rand]);
+            iconsArray.splice(rand, 1);
+        })
+        console.log('after');
+        console.log(iconsArray);
+    },
+
+    animateChosenTile_15: function(cardsOpened,tiles,foundTiles, iter) {
+        let currTarget;
+
+        if(cardsOpened.length <= 1) {
+            currTarget = document.querySelector('.target-1');
+        } else {
+            currTarget = document.querySelector('.target-2');
+        }
+
+        anime({
+            targets: currTarget,
+            duration: 700,
+            scale: ['100%', '120%'],
+
+        })
+    },
+
+    isBombRevealed_15: function(cardsOpened,tiles,foundTiles, iter)  {
+        iter.amount = 0;
+        iter.extraTurns = 0;
+        for(let i=0; i<cardsOpened.length; i++) {
+            if(cardsOpened[i].childNodes[0].classList.contains('scaledImg')) {
+                //console.log(':(((');
+                iter.extraTurns+=3;
+                iter.amount++;
+
+                anime({
+                    targets: '.details-item',
+                    duration: 1400,
+                    color: 'hsl(11, 60%, 40%)',
+                    direction: 'alternate',
+                }) 
+            }
+        }
+
+        if(iter.amount >= 2) {
+            iter.extraTurns+=3;
+
+            anime({
+                targets: '.background',
+                duration: 1400,
+                backgroundColor: 'hsl(11, 60%, 40%)',
+                direction: 'alternate',
+            }) 
+        }
+
+        if(iter.amount > 0) {
+            let substract = document.querySelector('.substract');
+            substract.textContent = `-${iter.extraTurns+1}`;
+    
+            anime({
+                targets: substract,
+                duration: 2100,
+                keyframes: [
+                    {opacity: 1, translateY: 0, duration: 400},
+                    {opacity: .4, translateY: 40, duration: 700},
+                    {opacity: 0, translateY: 70, duration: 1000},
+                ],
+            })   
+        } 
+
     },
 }
 
