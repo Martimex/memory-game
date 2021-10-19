@@ -405,6 +405,29 @@ const levels = {
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateChosenTile_15(cardsOpened, tiles, foundTiles, iter);
             flags.isBombRevealed_15(cardsOpened,tiles,foundTiles, iter);
+            flags.ifWinRemoveFakeTiles_15(cardsOpened,tiles,foundTiles, iter);
+        },
+    },
+
+    lvl16: {
+        lv: 16,
+        rows: 2,
+        columns: 12,
+        tile_size: 48,
+        tiles: 24, 
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: 120, // 33
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },
     },
 }

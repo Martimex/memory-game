@@ -2565,6 +2565,54 @@ const flags = {
         } 
 
     },
+
+    ifWinRemoveFakeTiles_15: function(cardsOpened,tiles,foundTiles, iter) {
+        if(foundTiles+2 === tiles) {
+            let allTiles = document.querySelectorAll('.tile');
+            let allFakeTiles = [];
+            allTiles.forEach(tile => {
+                if(tile.style.visibility !== 'hidden') {allFakeTiles.push(tile);}
+            })
+
+            async function animateWin() {
+                const a1 = anime({
+                    targets: allFakeTiles,
+                    duration: 2400,
+                    scale: '0%',
+                    easing: 'easeInBounce',
+                })
+                await Promise.all([a1]);
+            }
+
+            async function init() {
+                await animateWin()
+                .then(() => {
+                    while(allFakeTiles.length > 0) {
+                        allFakeTiles[0].remove();
+                        allFakeTiles.shift();
+                    }
+                })
+            }
+
+            init();
+        }
+    },
+
+
+
+
+
+    // LVL 16
+    temporaryBombsRemoval_16: function(cardsOpened, tiles, foundTiles, iter) {
+        let allBombs = document.querySelectorAll('.scaledImg');
+        let bombsArr = [...allBombs];
+        if(allBombs.length > 0) {
+            while(bombsArr.length > 0) {
+                bombsArr[0].parentNode.parentNode.remove();
+                bombsArr.shift();
+            }
+        }
+    },
 }
 
 export default flags;
