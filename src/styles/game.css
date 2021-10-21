@@ -2004,7 +2004,7 @@
    height: 100vh;
    z-index: -50;
    /* background-color: hsl(11, 60%, 40%);  */
-   background-color: hsla(236, 50%, 49%, .9); 
+   background-color: hsla(236, 0%, 9%, .9); 
    background-image: url('../bgs/bg-16.svg');
    background-size: cover;
 }
@@ -2057,7 +2057,7 @@
 } */
 
 .t-16 {  /* Front size of card */ 
-    border: .3rem solid hsl(0, 5%, 5%);/*hsl(62, 40%, 70%);*/
+    border: .3rem solid hsla(0, 5%, 5%, .4);/*hsl(62, 40%, 70%);*/
     padding: 2rem;
     border-radius: 50%;
     visibility: hidden; /* temporary, then remove this line */
