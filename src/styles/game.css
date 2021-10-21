@@ -2024,12 +2024,18 @@
 .board-16 {
     /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
     border-radius: 5%;
-    padding: 2rem;
+    padding: 0 1.6rem 1.6rem 0;
 
 }
 
 .fa-icon-16 {
-   color: hsla(60, 1%, 40%, .65);
+    /* color: hsla(0, 100%, 100%, .8); */
+    background: -webkit-linear-gradient(135deg, hsla(132, 100%, 100%, 0.58), hsla(100, 100%, 100%, 0.68));
+    filter: contrast(120%) saturate(120%); 
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 3px 3px 3px hsla(155, 0%, 0%, 0.68);
    z-index: 20;
    font-size: 1.4rem;
    /*color: hsl(105, 70%, 60%);*/
@@ -2057,9 +2063,11 @@
 } */
 
 .t-16 {  /* Front size of card */ 
-    border: .3rem solid hsla(0, 5%, 5%, .4);/*hsl(62, 40%, 70%);*/
+    border: .3rem solid hsla(0, 100%, 100%, .6);/*hsl(62, 40%, 70%);*/
     padding: 2rem;
-    border-radius: 50%;
+    border-radius: 30%;
+    background-image: radial-gradient(hsla(0, 0%, 0%, 0) 45%, hsla(0, 100%, 100%, .8));
+    transform: rotateX(45deg) rotateY(45deg);
     visibility: hidden; /* temporary, then remove this line */
     visibility: visible;
 }
@@ -2092,12 +2100,18 @@
 
 .level-16, .counter-16, .score-16 {
   font-size: 200;
+  background: -webkit-linear-gradient(135deg, hsla(132, 100%, 100%, 0.58), hsla(100, 100%, 100%, 0.68));
+  filter: contrast(120%) saturate(120%); 
+  
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 3px 3px 3px hsla(155, 0%, 0%, 0.68);
 }
-
+/* 
 .level-16 {
     color: hsl(60, 10%, 50%);
 } .counter-16 {
     color: hsl(60, 10%, 50%);
 } .score-16 { 
     color: hsl(60, 10%, 50%);
-}
+} */

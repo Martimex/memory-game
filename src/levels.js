@@ -336,7 +336,7 @@ const levels = {
         rows: 6,
         columns: 12,
         tile_size: 46,
-        tiles: 72,  // 42, 52, 44
+        tiles: 72, 
         iconSet: 'fas',
         counter: {
             time: null,  // 264
@@ -411,14 +411,14 @@ const levels = {
 
     lvl16: {
         lv: 16,
-        rows: 2,
-        columns: 12,
+        rows: 7,
+        columns: 8,
         tile_size: 48,
-        tiles: 24, 
+        tiles: 56, 
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 120, // 33
+            turns: 60, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
