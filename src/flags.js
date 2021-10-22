@@ -2613,6 +2613,80 @@ const flags = {
             }
         }
     },
+
+    isUnfreezingTime_16: function(cardsOpened, tiles, foundTiles, iter) {
+        if(foundTiles+16 >= tiles) {
+            iter.amount++;
+        }
+
+        if(iter.amount === 1) {
+
+            let unfreezedElems = [];
+
+            while(iter.array.length > 0) {
+                iter.array[0].parentNode.style = 'pointer-events: auto;';
+                unfreezedElems.push(iter.array[0].parentNode);
+                iter.array.shift();
+            }
+
+            anime({
+                targets: unfreezedElems,
+                duration: 2400,
+                delay: anime.stagger(200),
+                backgroundImage: 'radial-gradient(hsla(0, 0%, 0%, 0) 45%, hsla(0, 100%, 100%, .8)',
+                borderWidth: ['.6rem', '.3rem'],
+                rotate: 180,
+            })
+        }
+
+    },
+
+    testFreezingCondition_16: function(cardsOpened, tiles, foundTiles, iter) {
+        if(cardsOpened[0].childNodes[0].classList[1] !== cardsOpened[1].childNodes[0].classList[1]) {
+            
+            if(iter.amount > 0) {return; }
+
+            for(let i=0; i<2; i++) {
+                cardsOpened[i].parentNode.style = 'pointer-events: none;';
+                iter.array.push(cardsOpened[i]);
+            }
+
+            let unfreezedElems = [];
+
+            if(iter.array.length >= 8) {
+                while(iter.array.length > 6) {
+                    iter.array[0].parentNode.style = 'pointer-events: auto;';
+                    unfreezedElems.push(iter.array[0].parentNode);
+                    iter.array.shift();
+                }
+
+                // Animate unfreezing process
+                anime({
+                    targets: unfreezedElems,
+                    duration: 1900,
+                    //scale: '130%',
+                    backgroundImage: 'radial-gradient(hsla(0, 0%, 0%, 0) 45%, hsla(0, 100%, 100%, .8)',
+                    borderWidth: ['.6rem', '.3rem'],
+                }) 
+            }
+
+            // Freeze new elems
+            anime({
+                targets: '.target',
+                duration: 1900,
+                //rotateX: 55,
+                backgroundImage: ['radial-gradient(hsla(0, 0%, 0%, 0) 5%, hsl(0, 100%, 100%)', 'radial-gradient(hsla(0, 0%, 0%, 0) 5%, hsl(0, 100%, 100%)'],
+                borderWidth: '.6rem',
+            })
+        } else {
+            anime({
+                targets: '.target',
+                duration: 1900,
+                backgroundImage: 'radial-gradient(hsla(0, 0%, 0%, 0) 85%, hsla(0, 100%, 100%, .4)',
+                borderWidth: ['.3rem', '.15rem'],
+            })
+        }
+    },
 }
 
 export default flags;

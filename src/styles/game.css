@@ -2067,7 +2067,7 @@
     padding: 2rem;
     border-radius: 30%;
     background-image: radial-gradient(hsla(0, 0%, 0%, 0) 45%, hsla(0, 100%, 100%, .8));
-    transform: rotateX(45deg) rotateY(45deg);
+/*     transform: rotateX(45deg) rotateY(45deg); */
     visibility: hidden; /* temporary, then remove this line */
     visibility: visible;
 }

@@ -418,17 +418,18 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 60, 
+            turns: 81, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+        
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
-        },
+            flags.isUnfreezingTime_16(cardsOpened, tiles, foundTiles, iter);
+            flags.testFreezingCondition_16(cardsOpened, tiles, foundTiles, iter);
+        },  
     },
 }
 
