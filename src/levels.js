@@ -422,7 +422,7 @@ const levels = {
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
-            flags.startingAnimation_16(cardsOpened, tiles, foundTiles, iter);
+            //flags.startingAnimation_16(cardsOpened, tiles, foundTiles, iter); PLEASE JUST REMOVE DURING LV 17 DEV
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
         
@@ -430,6 +430,28 @@ const levels = {
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.isUnfreezingTime_16(cardsOpened, tiles, foundTiles, iter);
             flags.testFreezingCondition_16(cardsOpened, tiles, foundTiles, iter);
+        },  
+    },
+
+    lvl17: {
+        lv: 17,
+        rows: 6,
+        columns: 6,
+        tile_size: 51,
+        tiles: 36, 
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: 44, 
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+        
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },  
     },
 }
