@@ -2614,6 +2614,61 @@ const flags = {
         }
     },
 
+    startingAnimation_16: function(cardsOpened, tiles, foundTiles, iter) {
+
+        document.querySelector('.board').dataset.animation = 'on';
+        document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+        const bg = document.querySelector('.background');
+
+        async function hideBg() {
+           const hide = anime ({
+               targets: bg,
+               duration: 300,
+               opacity: [.2, 0],
+               easing: 'linear',
+           }).finished;
+
+           await Promise.all([hide])
+        }
+
+        async function reveal() {
+            const reveal = anime({
+                targets: '.tile',
+                keyframes: [
+                    {rotateY: '+=180deg', duration: 1400, delay: 1300, easing: 'easeOutExpo'},
+                ],
+                direction: 'alternate',
+            }).finished;
+
+           await Promise.all([reveal]);
+        }
+
+        async function showBg() {
+            const show = anime ({
+                targets: bg,
+                duration: 2500,
+                opacity: [0, 1],
+                easing: 'linear',
+            }).finished;
+ 
+            await Promise.all([show])
+         }
+
+        async function init() {
+            await hideBg()
+            await showBg()
+            await reveal()
+                .then(() => {
+                    console.log('unblokced'); 
+                    document.querySelector('.board').dataset.animation = 'off';
+                    document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                })
+        }
+
+        init();
+    },
+
     isUnfreezingTime_16: function(cardsOpened, tiles, foundTiles, iter) {
         if(foundTiles+16 >= tiles) {
             iter.amount++;

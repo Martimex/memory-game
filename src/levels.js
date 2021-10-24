@@ -422,6 +422,7 @@ const levels = {
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
+            flags.startingAnimation_16(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
         
