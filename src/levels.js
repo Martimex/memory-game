@@ -435,14 +435,14 @@ const levels = {
 
     lvl17: {
         lv: 17,
-        rows: 6,
+        rows: 8,
         columns: 6,
-        tile_size: 51,
-        tiles: 36, 
+        tile_size: 48,
+        tiles: 48, // it's actually 48 + 24 + 12 + 6 + 3 = 93, but
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 44, 
+            turns: 64, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
