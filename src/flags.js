@@ -2748,7 +2748,205 @@ const flags = {
 
 
     // LVL 17
+    divideIntoPhases_17: function(cardsOpened, tiles, foundTiles, iter) {
+        iter.amount++;
+        if(iter.amount === -2) iter.value = 48;
+        else if(iter.amount === -1) iter.value = 24;
+        else if(iter.amount === 1) iter.value = 12;  // 48
+        else if(iter.amount === 2) iter.value = 6; // 6
+        else if(iter.amount === 3) iter.value = 2;
+        // iter.amount represents the phase count
+        // iter.value indicates how much icons should appear at very first phase
+
+        let iconsArr = []; // we need some of the icons
+        let stepArr = []; // length according to current phase
+        let updatedTilesCount = [];
+
+
+        const allTiles = document.querySelectorAll('.tile'); 
+        allTiles.forEach((tile, index) => {
+            let back = tile.querySelector('.tile-back');
+            iconsArr.push(back.childNodes[0]);
+            if(index >= iter.value) {
+                tile.remove();
+            } else {
+                updatedTilesCount.push(tile);
+            }
+        })
+
+
+        // Sorting part
+
+        function sortSvgs(array) {
+            let compareArr = [];
+            for(let x=0; x<array.length; x++) {
+                compare(array[x], compareArr);
+            }
+            return compareArr;
+        }
+
+        function compare(item, compareArr) {
+            compareArr.unshift(item);
+            if(compare.length > 1) {
+                for(let y=1; y<compareArr.length; y++) {
+                    if(item.classList[1] > compareArr[y].classList[1]) {
+                        let z = compareArr[y];
+                        compareArr[y] = compareArr[y-1];
+                        compareArr[y-1] = z;
+                    }
+                }
+            } else {
+                return compareArr;
+            }
+        }
+
+        // Now replace old, random icons 
+
+        let sortediconsArr = sortSvgs(iconsArr);
+
+        //console.log(sortediconsArr);
+
+        for(let i=0; i<iter.value; i++) {
+            stepArr.push(sortediconsArr[i]);
+        }
+
+        //console.log(stepArr)
+        //console.log(allTiles.length)
+        // Now randomize icons, append them to tiles and remove chosen icon from array
+
+        updatedTilesCount.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            if(back.hasChildNodes()) {
+                back.childNodes[0].remove();
+            }
+            let rand = Math.floor( Math.random () * stepArr.length);
+            //console.log(stepArr[rand])
+            back.appendChild(stepArr[rand]);
+
+            stepArr.splice(rand, 1);
+        })
+
+        console.log(sortediconsArr);
+        
+        this.calcPhaseTilesCount_17(cardsOpened, tiles, foundTiles, iter);
+    },
+
+    calcPhaseTilesCount_17: function(cardsOpened, tiles, foundTiles, iter) {
+        iter.array.push(iter.value);
+    },
+
+    tileClickAnimation_17: function(cardsOpened, tiles, foundTiles, iter) {
+        console.log('TILES: ' + tiles);
+        console.log('TILES (LONGER DESC): ' + levels[`lvl17`].tiles);
+        console.log('ITER.VALUE: ' + iter.value);
+        console.log('FOUND TILES: ' + foundTiles);
+    },
+
+    animatePairMatch_17: function(cardsOpened, tiles, foundTiles, iter) {
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            // push items svg to this arr
+            iter.nextArr.push(cardsOpened[0].childNodes[0]); // we have now found svg 
+            iter.nextArr.push(cardsOpened[1].childNodes[0]); // duplicate of above
+        }
+    },
+
+    lookForNextPhase_17: function(cardsOpened, tiles, foundTiles, iter) {
+        if((foundTiles+4 >= iter.value) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
+            iter.value += (((foundTiles+2)/2)+1);
+            console.log(iter.value);
+            console.log(foundTiles);
+            this.calcPhaseTilesCount_17(cardsOpened, tiles, foundTiles, iter);
+
+            // Now let's create fadeAnimation + newblocks creation
+            this.prepareNextPart_ex(cardsOpened, tiles, foundTiles, iter);  // ex stands for 'extra' function
+        }
+    },
+
+    prepareNextPart_ex(cardsOpened, tiles, foundTiles, iter) {
+        const bg = document.querySelector('.background');
+        const board = document.querySelector('.board');
+
+        document.querySelector('.board').dataset.animation = 'on';
+        document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+        async function changePartStart() {
+            const a1 = anime({
+                targets: bg,
+                duration: 2400,
+                backgroundColor: ['#000', '#000'],
+                direction: 'alternate',
+            })
     
+            const a2 = anime({
+                targets: board,
+                duration: 2000,
+                opacity: 0,
+            })
+
+            console.log('f1');
+            await Promise.all([a1, a2]);
+        }
+
+        async function showReadyTiles() {
+            const a3 = anime({
+                targets: board,
+                duration: 2000,
+                opacity: [0, 1],
+            })
+
+            console.log('f3')
+            await Promise.all([a3]);
+        }
+
+        async function init() {
+            await changePartStart()
+            .then(() => {
+                 // Remove all previous tiles from map
+                const allTiles = document.querySelectorAll('.tile');
+                allTiles.forEach(tile => tile.remove());
+
+                console.log(iter.array);
+                let count = (iter.array[iter.array.length-1] - iter.array[iter.array.length-2]);
+
+                console.log(count);
+                console.log(iter.nextArr);
+
+                for(let i=0; i<count; i++) {
+                    // Front
+                    let front = document.createElement('div');
+                    front.classList.add('tile-front', 'tf-17');
+                    // Back
+                    let back = document.createElement('div');
+                    back.classList.add('tile-back', 'tb-17');
+
+                    let svg = iter.nextArr[i];
+
+                    console.log(svg)
+
+                    let newTile = document.createElement('div');
+                    newTile.classList.add('tile', 't-17');
+
+                    back.appendChild(svg);
+
+                    newTile.appendChild(front);
+                    newTile.appendChild(back);
+
+                    board.appendChild(newTile);
+                }
+                this.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
+                console.log('f2');
+            }) // Prepare map
+            await showReadyTiles()
+            .then(() => {
+                document.querySelector('.board').dataset.animation = 'off';
+                document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+            })
+        }
+
+        init();
+
+
+    },
 }
 
 export default flags;

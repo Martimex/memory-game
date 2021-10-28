@@ -2131,7 +2131,7 @@
    z-index: -50;
    /* background-color: hsl(11, 60%, 40%);  */
    background-color: hsla(236, 0%, 9%, .9); 
-   background-image: url('../bgs/bg-17.svg');
+   background-image: url('../bgs/bg-17.svg'); 
    background-size: cover;
 }
 

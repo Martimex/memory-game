@@ -31,6 +31,7 @@ let iter = {
     /*value in series*/ streak: 0,
     /*turn addon/penalty*/ extraTurns: 0,
     /*used for more advanced animation stuff*/ array: [],
+    /*additional array for lvl 17 purposes*/ nextArr: [],
     /*determines whether you passed level specific conditions - if not, value = false and u lose the level*/ passCondition: true,
 };  // EXTRA VALUES FOR FLAG FUNCTIONS
 

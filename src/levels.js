@@ -438,20 +438,23 @@ const levels = {
         rows: 8,
         columns: 6,
         tile_size: 48,
-        tiles: 48, // it's actually 48 + 24 + 12 + 6 + 3 = 93, but
+        tiles: 93, // it's actually 48 + 24 + 12 + 6 + 3 = 93, but level is divided into phases (steps)
         iconSet: 'fas',
         counter: {
             time: null,
             turns: 64, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
+            //flags.calcPhaseTilesCount_17(cardsOpened, tiles, foundTiles, iter); it's within above function
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-        
+            flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
+            flags.animatePairMatch_17(cardsOpened, tiles, foundTiles, iter);
+            flags.lookForNextPhase_17(cardsOpened, tiles, foundTiles, iter);
         },  
     },
 }
