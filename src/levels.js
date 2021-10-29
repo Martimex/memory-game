@@ -438,11 +438,11 @@ const levels = {
         rows: 8,
         columns: 6,
         tile_size: 48,
-        tiles: 93, // it's actually 48 + 24 + 12 + 6 + 3 = 93, but level is divided into phases (steps)
+        tiles: 90, // it's actually 48 + 24 + 12 + 6 + 2 = 92, but level is divided into phases (steps) + at the start 2 tiles are omitted
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 64, 
+            turns: 122, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
