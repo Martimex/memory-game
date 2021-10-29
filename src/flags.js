@@ -2762,18 +2762,76 @@ const flags = {
         let stepArr = []; // length according to current phase
         let updatedTilesCount = [];
 
+        const allTiles = document.querySelectorAll('.tile');
+        const board = document.querySelector('.board');
 
-        const allTiles = document.querySelectorAll('.tile'); 
+        if(iter.amount > 1) {
+
+            allTiles.forEach(tile => tile.remove());
+
+            console.log(iter.array);
+            let count = (iter.array[iter.array.length-1] - iter.array[iter.array.length-2]);
+
+            console.log(count);
+            console.log(iter.nextArr);
+
+            for(let i=0; i<count; i++) {
+                // Front
+                let front = document.createElement('div');
+                front.classList.add('tile-front', 'tf-17');
+                // Back
+                let back = document.createElement('div');
+                back.classList.add('tile-back', 'tb-17');
+
+                let svg = iter.nextArr[i];
+
+                console.log(svg)
+
+                let newTile = document.createElement('div');
+                newTile.classList.add('tile', 't-17');
+
+                back.appendChild(svg);
+
+                newTile.appendChild(front);
+                newTile.appendChild(back);
+
+                board.appendChild(newTile);
+            }
+
+        }
+
+
+        console.log(allTiles)
+
         allTiles.forEach((tile, index) => {
             let back = tile.querySelector('.tile-back');
+            console.log(back.childNodes[0]);
             iconsArr.push(back.childNodes[0]);
-            if(index >= iter.value) {
+            if(index >= iter.value) {  // Jeśli nr kafelka (zaczynając od 0) jest większy od il. dozwolonych kafelków w fazie, to usuń nadliczbowe
                 tile.remove();
-            } else {
+            } else {  // Jeśli nie, wrzuć cały kafelek do tablicy
                 updatedTilesCount.push(tile);
             }
         })
+    
+        // Let's remove undefined icons from this array
 
+        iconsArr.sort(); // DONT REMOVE - ITS VERY IMPORTANT
+        console.log(iconsArr);
+
+        if(iconsArr[iconsArr.length-1] === undefined) {
+            while(iconsArr[iconsArr.length-1] === undefined) {
+                iconsArr.pop();
+            }
+        }
+
+        console.log(iconsArr);
+        console.log(updatedTilesCount)
+
+        updatedTilesCount.forEach(tile => {
+            let b = tile.querySelector('.tile-back');
+            console.log(b.childNodes[0]);
+        })
 
         // Sorting part
 
@@ -2789,6 +2847,7 @@ const flags = {
             compareArr.unshift(item);
             if(compare.length > 1) {
                 for(let y=1; y<compareArr.length; y++) {
+                    //console.log(item);
                     if(item.classList[1] > compareArr[y].classList[1]) {
                         let z = compareArr[y];
                         compareArr[y] = compareArr[y-1];
@@ -2847,12 +2906,17 @@ const flags = {
             // push items svg to this arr
             iter.nextArr.push(cardsOpened[0].childNodes[0]); // we have now found svg 
             iter.nextArr.push(cardsOpened[1].childNodes[0]); // duplicate of above
+            console.log(iter)
         }
     },
 
     lookForNextPhase_17: function(cardsOpened, tiles, foundTiles, iter) {
-        if((foundTiles+4 >= iter.value) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
-            iter.value += (((foundTiles+2)/2)+1);
+        let stepsTotal = 0;
+        for(let step of iter.array) {
+            stepsTotal += step;
+        }
+        if((foundTiles+4 >= stepsTotal) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
+            stepsTotal += (((foundTiles+2)/2)+1);
             console.log(iter.value);
             console.log(foundTiles);
             this.calcPhaseTilesCount_17(cardsOpened, tiles, foundTiles, iter);
@@ -2869,6 +2933,10 @@ const flags = {
         document.querySelector('.board').dataset.animation = 'on';
         document.querySelector('.board').setAttribute('pointerEvents', 'none');
 
+        setTimeout(() => {
+            this.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
+        }, 2000);
+
         async function changePartStart() {
             const a1 = anime({
                 targets: bg,
@@ -2880,7 +2948,7 @@ const flags = {
             const a2 = anime({
                 targets: board,
                 duration: 2000,
-                opacity: 0,
+                opacity: [0, 0],
             })
 
             console.log('f1');
@@ -2900,42 +2968,6 @@ const flags = {
 
         async function init() {
             await changePartStart()
-            .then(() => {
-                 // Remove all previous tiles from map
-                const allTiles = document.querySelectorAll('.tile');
-                allTiles.forEach(tile => tile.remove());
-
-                console.log(iter.array);
-                let count = (iter.array[iter.array.length-1] - iter.array[iter.array.length-2]);
-
-                console.log(count);
-                console.log(iter.nextArr);
-
-                for(let i=0; i<count; i++) {
-                    // Front
-                    let front = document.createElement('div');
-                    front.classList.add('tile-front', 'tf-17');
-                    // Back
-                    let back = document.createElement('div');
-                    back.classList.add('tile-back', 'tb-17');
-
-                    let svg = iter.nextArr[i];
-
-                    console.log(svg)
-
-                    let newTile = document.createElement('div');
-                    newTile.classList.add('tile', 't-17');
-
-                    back.appendChild(svg);
-
-                    newTile.appendChild(front);
-                    newTile.appendChild(back);
-
-                    board.appendChild(newTile);
-                }
-                this.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
-                console.log('f2');
-            }) // Prepare map
             await showReadyTiles()
             .then(() => {
                 document.querySelector('.board').dataset.animation = 'off';
