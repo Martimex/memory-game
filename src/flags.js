@@ -2754,7 +2754,7 @@ const flags = {
 
         if(iter.streak === 0) iter.value = 12;  // BASE STEP -> 48 , 24 , 12 , 6 , 2
         else if(iter.streak === 1) iter.value = 6;
-        else if(iter.streak === 2) iter.value = 6;
+        else if(iter.streak === 2) iter.value = 12;
         else if(iter.streak === 3) iter.value = 6;
         else if(iter.streak === 4) iter.value = 2;
 
@@ -2784,6 +2784,15 @@ const flags = {
             // REMOVE ALL TILES, AND CREATE NEW ONES
             allTiles.forEach(tile => tile.remove());
 
+
+            let iconArr = [];
+
+            for(let x=0; x<iter.value; x++) {
+                iconArr.push(iter.array[x]);
+            }
+
+            console.log(iconArr)
+
             for(let i=0; i<iter.value; i++) {
                 // Front
                 let front = document.createElement('div');
@@ -2796,87 +2805,98 @@ const flags = {
                 newTile.classList.add('tile', 't-17');
     
 
+                let rand = Math.floor( Math.random() * iconArr.length);
+
                 newTile.appendChild(front);
                 newTile.appendChild(back);
 
-                back.appendChild(iter.array[i]);
+                back.appendChild(iconArr[rand]);
+
+                iconArr.splice(rand, 1);
     
                 board.appendChild(newTile);
                 console.log('created');
             }
-        }
 
-        allTiles.forEach(tile => {
-            let back = tile.querySelector('.tile-back');
-            console.log(back.childNodes[0])
-            iconsArray.push(back.childNodes[0]);
-        })
-
-        iconsArray.sort();
-        iconsArray.reverse();
-            if(iconsArray[0] === undefined) {
-                while(iconsArray[0] === undefined) {
-                    iconsArray.shift();
+            allTiles.forEach((tile, index) => {
+                if(index >= iter.value) {
+                    tile.remove();
                 }
-            }
-        iconsArray.reverse();
-        console.log(iconsArray);
-
-        function sortSvgs(array) {
-            let compareArr = [];
-            for(let x=0; x<array.length; x++) {
-                compare(array[x], compareArr);
-            }
-            return compareArr;
+            })
         }
 
-        function compare(item, compareArr) {
-            compareArr.unshift(item);
-            if(compare.length > 1) {
-                for(let y=1; y<compareArr.length; y++) {
-                    if(item.classList[1] > compareArr[y].classList[1]) {
-                        let z = compareArr[y];
-                        compareArr[y] = compareArr[y-1];
-                        compareArr[y-1] = z;
+        else {
+            allTiles.forEach(tile => {
+                let back = tile.querySelector('.tile-back');
+                console.log(back.childNodes[0])
+                iconsArray.push(back.childNodes[0]);
+            })
+
+            iconsArray.sort();
+            iconsArray.reverse();
+                if(iconsArray[0] === undefined) {
+                    while(iconsArray[0] === undefined) {
+                        iconsArray.shift();
                     }
                 }
-            } else {
+            iconsArray.reverse();
+            console.log(iconsArray);
+
+            function sortSvgs(array) {
+                let compareArr = [];
+                for(let x=0; x<array.length; x++) {
+                    compare(array[x], compareArr);
+                }
                 return compareArr;
             }
-        }
 
-        let sortediconsArr = sortSvgs(iconsArray);
-        console.log(sortediconsArr);
-
-        // Let's reduce sortedIcons array
-        while(sortediconsArr.length !== iter.value) {
-            sortediconsArr.pop();
-        }
-
-        if(iter.streak <= 1) {
-            iter.array = [...sortediconsArr];
-        }
-
-        console.log(iter.array)
-
-        console.log(sortediconsArr);
-
-
-        allTiles.forEach((tile, index) => {
-            if(index < iter.value) {
-                console.log('tile detected !');
-                let back = tile.querySelector('.tile-back');
-                if(back.hasChildNodes()) { back.childNodes[0].remove(); }
-            
-                // Now randomize, append, and slowly reduce the array length
-                let rand = Math.floor(Math.random() * sortediconsArr.length);
-                back.appendChild(sortediconsArr[rand]);
-                sortediconsArr.splice(rand, 1);
-
-            } else {
-                tile.remove();
+            function compare(item, compareArr) {
+                compareArr.unshift(item);
+                if(compare.length > 1) {
+                    for(let y=1; y<compareArr.length; y++) {
+                        if(item.classList[1] > compareArr[y].classList[1]) {
+                            let z = compareArr[y];
+                            compareArr[y] = compareArr[y-1];
+                            compareArr[y-1] = z;
+                        }
+                    }
+                } else {
+                    return compareArr;
+                }
             }
-        })
+
+            let sortediconsArr = sortSvgs(iconsArray);
+            console.log(sortediconsArr);
+
+            // Let's reduce sortedIcons array
+            while(sortediconsArr.length !== iter.value) {
+                sortediconsArr.pop();
+            }
+
+
+            iter.array = [...sortediconsArr];
+
+            console.log(iter.array)
+
+            console.log(sortediconsArr);
+
+            allTiles.forEach((tile, index) => {
+                if(index < iter.value) {
+                    console.log('tile detected !');
+                    let back = tile.querySelector('.tile-back');
+                    if(back.hasChildNodes()) { back.childNodes[0].remove(); }
+                
+                    // Now randomize, append, and slowly reduce the array length
+                    let rand = Math.floor(Math.random() * sortediconsArr.length);
+                    back.appendChild(sortediconsArr[rand]);
+                    sortediconsArr.splice(rand, 1);
+    
+                } else {
+                    tile.remove();
+                }
+            })
+
+        }
 
         console.log(allTiles.length);
 
@@ -2902,12 +2922,22 @@ const flags = {
             
             setTimeout(() => {
                 this.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
-            }, 5000);
+            }, 3000);
 
             anime({
                 targets: '.background',
                 duration: 2400,
                 backgroundColor: '#000',
+               // opacity: [1, 0],
+               filter: 'blur(10px)',
+                direction: 'alternate',
+            })
+
+            anime({
+                targets: '.board',
+                duration: 2400,
+                opacity: [1, 0],
+                direction: 'alternate',
             })
         }
     },
