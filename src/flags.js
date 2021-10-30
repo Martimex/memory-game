@@ -2748,13 +2748,21 @@ const flags = {
 
 
     // LVL 17
+    fadeInBoard_17: function(cardsOpened, tiles, foundTiles, iter) {
+        anime({
+            targets: '.board',
+            duration: 600,
+            opacity: [0, 1],
+        })
+    },
+
     divideIntoPhases_17: function(cardsOpened, tiles, foundTiles, iter) {
 
         // STEPS / PHASES
 
-        if(iter.streak === 0) iter.value = 12;  // BASE STEP -> 48 , 24 , 12 , 6 , 2
+        if(iter.streak === 0) iter.value = 6;  // BASE STEP -> 48 , 24 , 12 , 6 , 2
         else if(iter.streak === 1) iter.value = 6;
-        else if(iter.streak === 2) iter.value = 12;
+        else if(iter.streak === 2) iter.value = 6;
         else if(iter.streak === 3) iter.value = 6;
         else if(iter.streak === 4) iter.value = 2;
 
@@ -2925,20 +2933,49 @@ const flags = {
             }, 3000);
 
             anime({
-                targets: '.background',
-                duration: 2400,
-                backgroundColor: '#000',
-               // opacity: [1, 0],
-               filter: 'blur(10px)',
-                direction: 'alternate',
-            })
-
-            anime({
                 targets: '.board',
                 duration: 2400,
                 opacity: [1, 0],
                 direction: 'alternate',
             })
+
+            if(iter.streak === 1) {
+                anime({
+                    targets: '.background',
+                    duration: 2400,
+                    backgroundColor: '#000',
+                   // opacity: [1, 0],
+                   filter: 'blur(10px)',
+                    direction: 'alternate',
+                })
+            } else if(iter.streak === 2) {
+                anime({
+                    targets: '.background',
+                    duration: 2400,
+                    backgroundColor: '#000',
+                    filter: 'hue-rotate(70deg)',
+                    //direction: 'alternate',
+                })
+            } else if(iter.streak === 3) {
+                anime({
+                    targets: '.background',
+                    duration: 2400,
+                    backgroundColor: '#fff',
+                    filter: 'saturate(190%) invert(90%)',
+                    easing: 'easeInSine',
+                    //direction: 'alternate',
+                })
+            } else if(iter.streak === 4) {
+                anime({
+                    targets: '.background',
+                    duration: 2400,
+                    backgroundColor: '#fff',
+                    filter: 'brightness(30%) invert(0%) sepia(35%)',
+                    easing: 'easeInSine',
+                    //direction: 'alternate',
+                })
+            }
+
         }
     },
 

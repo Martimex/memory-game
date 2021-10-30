@@ -445,6 +445,7 @@ const levels = {
             turns: 122, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.fadeInBoard_17(cardsOpened, tiles, foundTiles, iter);
             flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
             //flags.calcPhaseTilesCount_17(cardsOpened, tiles, foundTiles, iter); it's within above function
         },
