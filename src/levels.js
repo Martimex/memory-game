@@ -442,12 +442,11 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 122, 
+            turns: 91, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.fadeInBoard_17(cardsOpened, tiles, foundTiles, iter);
             flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
-            //flags.calcPhaseTilesCount_17(cardsOpened, tiles, foundTiles, iter); it's within above function
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);

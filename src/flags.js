@@ -2760,9 +2760,9 @@ const flags = {
 
         // STEPS / PHASES
 
-        if(iter.streak === 0) iter.value = 6;  // BASE STEP -> 48 , 24 , 12 , 6 , 2
-        else if(iter.streak === 1) iter.value = 6;
-        else if(iter.streak === 2) iter.value = 6;
+        if(iter.streak === 0) iter.value = 48;  // BASE STEP -> 48 , 24 , 12 , 6 , 2
+        else if(iter.streak === 1) iter.value = 24;
+        else if(iter.streak === 2) iter.value = 12;
         else if(iter.streak === 3) iter.value = 6;
         else if(iter.streak === 4) iter.value = 2;
 
@@ -2915,21 +2915,74 @@ const flags = {
     },
 
     tileClickAnimation_17: function(cardsOpened, tiles, foundTiles, iter) {
-        console.log('TILES: ' + tiles);
+ /*        console.log('TILES: ' + tiles);
         console.log('CURRENT STEP: ' + iter.value);
         console.log('FOUND TILES: ' + foundTiles);
         console.log('FOUND TARGET: ' + iter.amount);
+ */
+        let currTarget;
+
+        if(cardsOpened.length <= 1) {
+            currTarget = document.querySelector('.target-1');
+        } else {
+            currTarget = document.querySelector('.target-2');
+        }
+
+        anime({
+            targets: currTarget,
+            duration: 900,
+            borderWidth: ['.4rem', '.7rem'],
+            borderRadius: ['20% 50% 20% 50%', '50% 20% 50% 20%'],
+            direction: 'alternate',
+
+        })
+    },
+
+    increaseVisualDifficulty_17(cardsOpened, tiles, foundTiles, iter) {
+
+        const allTiles = document.querySelectorAll('.tile');
+        let degs = [20, 40, 60, 80, 100, 120, 140, 160, 200, 220, 240, 260, 280, 300, 320, 340];
+
+        if(iter.streak === 2) {
+            allTiles.forEach(tile => {
+                let back = tile.querySelector('.tile-back');
+                back.childNodes[0].style = 'color: hsla(0, 0%, 0%, .4)';
+            })
+        } else if(iter.streak === 3) {
+            allTiles.forEach(tile => {
+                let back = tile.querySelector('.tile-back');
+                let rand = Math.floor( Math.random() * degs.length);
+                back.childNodes[0].style = `color: hsla(0, 100%, 100%, .3); transform: rotate(${degs[rand]}deg)`;
+            })
+        } else if(iter.streak === 4) {
+            allTiles.forEach(tile => {
+                let back = tile.querySelector('.tile-back');
+                let rand = Math.floor( Math.random() * degs.length);
+                back.childNodes[0].style = `color: hsla(0, 0%, 0%, .2); transform: rotate(${degs[rand]}deg)`;
+            })
+        }
     },
 
     animatePairMatch_17: function(cardsOpened, tiles, foundTiles, iter) {
-
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            anime({
+                targets: '.target',
+                duration: 2400,
+                backgroundImage: ['radial-gradient(hsl(0, 20%, 20%), hsla(0, 20%, 20%, .7))', 'radial-gradient(hsl(0, 0%, 0%), hsla(0, 0%, 0%, .7))'],
+            })
+        }
     },
 
     lookForNextPhase_17: function(cardsOpened, tiles, foundTiles, iter) {
         if((cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) && (foundTiles+4 >= iter.amount)) {
             
+            document.querySelector('.board').dataset.animation = 'on';
+            document.querySelector('.board').setAttribute('pointerEvents', 'none');
             setTimeout(() => {
                 this.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
+                this.increaseVisualDifficulty_17(cardsOpened, tiles, foundTiles, iter);
+                document.querySelector('.board').dataset.animation = 'off';
+                document.querySelector('.board').setAttribute('pointerEvents', 'auto');
             }, 3000);
 
             anime({
@@ -2979,9 +3032,7 @@ const flags = {
         }
     },
 
-    prepareNextPart_ex(cardsOpened, tiles, foundTiles, iter) {
-  
-    },
+
 }
 
 export default flags;
