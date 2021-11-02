@@ -2283,7 +2283,8 @@
 
 .board-18 {
     /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
-    border-radius: 5%;
+    border-radius: 0%;
+    padding: 1rem 5rem;
 /*     box-shadow: 0px 0px 15px 15px hsla(0, 0%, 0%, 0.75) inset;
     -webkit-box-shadow: 0px 0px 15px 15px hsla(0, 0%, 0%, 0.75) inset;
     -moz-box-shadow: 0px 0px 15px 15px hsla(0, 0%, 0%, 0.75) inset; */
@@ -2291,7 +2292,7 @@
 }
 
 .fa-icon-18 {
-    color: hsla(0, 0%, 0%, .6);
+    color: hsla(0, 0%, 0%, .25);
    /*  background: -webkit-linear-gradient(135deg, hsl(299, 70%, 70%), hsla(299, 30%, 30%, 0.68)); */
     filter: saturate(80%);
     -webkit-background-clip: text;
@@ -2300,7 +2301,7 @@
 
 }
 
- .t-18::before {
+/*  .t-18::before {
     content: '';
     position: relative;
     left: -12%;
@@ -2320,17 +2321,23 @@
     width: 100%; height: 100%;
     border-radius: 50%;
     background: radial-gradient(hsla(177, 55%, 40%, .6), hsla(0, 0%, 0%, .8), hsl(1, 50%, 50%) 90% );
-}
+} */
 
 .t-18 {  /* Front size of card */ 
-    border: .32rem solid hsla(177, 30%, 30%, .3);/*hsl(62, 40%, 70%);*/
+    border: .1rem solid inherit;/*hsl(62, 40%, 70%);*/
     border-radius: 50%;
-    background-image: radial-gradient(hsla(177, 30%, 30%, .7) 5%, hsla(0, 0%, 0%, .8));
+  /*   background-image: radial-gradient(hsla(177, 30%, 30%, .7) 5%, hsla(0, 0%, 0%, .8)); */
 /*     transform: rotateX(45deg) rotateY(45deg); */
     visibility: visible;
-    box-shadow: 0px 0px 5px 10px hsla(0, 0%, 0%, 0.75);
-    -webkit-box-shadow: 0px 0px 5px 10px hsla(0, 0%, 0%, 0.75);
-    -moz-box-shadow: 0px 0px 5px 10px hsla(0, 0%, 0%, 0.75);
+    border: .22rem solid hsla(202, 40%, 70%, .65);
+    background-image: radial-gradient(hsla(112, 40%, 70%, .8), hsla(223, 60%, 60%, .2), hsla(112, 40%, 70%, .85));
+    box-shadow: hsla(112, 40%, 70%, 0.4) -5px 5px, hsla(202, 40%, 70%, 0.3) -10px 10px, hsla(112, 40%, 70%, 0.2) -15px 15px, hsla(202, 40%, 70%, 0.1) -20px 20px, hsla(112, 40%, 70%, 0.05) -25px 25px;
+}
+
+.t-18:nth-of-type(2n) {
+    border: .22rem solid hsla(266, 40%, 70%, .65);
+    background-image: radial-gradient(hsla(343, 40%, 70%, .8), hsla(287, 60%, 60%, .2), hsla(343, 40%, 70%, .85));
+    box-shadow: hsla(343, 40%, 70%, 0.4) 5px 5px, hsla(266, 40%, 70%, 0.3) 10px 10px, hsla(343, 40%, 70%, 0.2) 15px 15px, hsla(266, 40%, 70%, 0.1) 20px 20px, hsla(343, 40%, 70%, 0.05) 25px 25px;
 }
 
 .t-18::before, .t-18::after {
@@ -2346,11 +2353,11 @@
 
 
 .tb-18 {  /* Back side of card */
-    border: .4rem solid hsla(1, 40%, 40%, .75);
+    /* border: .4rem solid hsla(1, 40%, 40%, .75);
     border-radius: 20% 50% 20% 50%;
     border-style: double;
     background-image: none;
-    background-image: radial-gradient(hsla(1, 0%, 0%, .5), hsl(177, 25%, 25%)); 
+    background-image: radial-gradient(hsla(1, 0%, 0%, .5), hsl(177, 25%, 25%));  */
 }
 
 

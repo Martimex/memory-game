@@ -463,7 +463,7 @@ const levels = {
         rows: 6,
         columns: 6,
         tile_size: 58,
-        tiles: 2, // 36
+        tiles: 36, // 36
         iconSet: 'fas',
         counter: {
             time: null,
