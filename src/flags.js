@@ -1,4 +1,5 @@
 import { icon } from '@fortawesome/fontawesome-svg-core';
+import { set } from 'animejs';
 import anime from 'animejs/lib/anime.es.js';
 import { useRef } from 'react/cjs/react.development';
 import Game from './components/game.js';
@@ -3039,8 +3040,159 @@ const flags = {
 
 
     // LVL 18
-    
+    createCombinations_18: function(cardsOpened, tiles, foundTiles, iter) {
+        for(let i=1; i<=(levels[`lvl18`].rows); i++) {
+            iter.array.push(`r${i}`, `c${i}`);
+        }
+        
+    },
 
+    setChallenge_18: function(cardsOpened, tiles, foundTiles, iter) {
+
+        iter.nextArr = [];
+
+        iter.amount = Math.floor(Math.random() * iter.array.length);
+        let randomControl = iter.array[iter.amount];
+        
+        let dimension = randomControl.charAt(0);
+        let num = randomControl.charAt(1);
+
+        let allTiles = document.querySelectorAll('.tile');
+
+        if(dimension === 'r') {  // if we want to mark some row
+            for(let x=0; x<(levels[`lvl18`].rows); x++) {
+                allTiles[((levels[`lvl18`].rows) * (num - 1)) + x].classList.add('tile-challenge');
+            }
+        }
+
+        else if(dimension === 'c') {  // if we want to mark some column
+            for(let y=0; y<(levels[`lvl18`].columns); y++) {
+                allTiles[(levels[`lvl18`].columns * y) + (num - 1)].classList.add(`tile-challenge`);
+            }
+        }
+
+        let allChallengeTiles = document.querySelectorAll('.tile-challenge');
+        allChallengeTiles.forEach(ctile => {
+            if(ctile.style.visibility === 'hidden') {
+                ctile.classList.remove(`tile-challenge`);
+            }
+        })
+
+        //iter.array.splice(random, 1); // BUT ONLY IF THE CHALLENGE HAS BEEN PASSED ! so not in this func
+        let finalChallengeTiles = document.querySelectorAll('.tile-challenge');
+        iter.value = finalChallengeTiles.length * 2; // indicates how much turns u have to find all marked tiles
+    },
+
+    matchChallengeClassRemoval_18: function(cardsOpened, tiles, foundTiles, iter) {
+
+        // Decrease available turns by one
+
+        iter.value = iter.value - 1;
+
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])
+        {
+            // Next array keeps all the tiles found during the current challenge
+            iter.nextArr.push(cardsOpened[0], cardsOpened[1]);
+
+            // Here add some animations
+
+            if((cardsOpened[0].parentNode.classList.contains('tile-challenge') || (cardsOpened[1].parentNode.classList.contains('tile-challenge')))) {
+
+                cardsOpened[0].parentNode.classList.remove('tile-challenge');
+                cardsOpened[1].parentNode.classList.remove('tile-challenge');
+            }
+
+        }
+    },
+
+    checkChallengeProgress_18: function(cardsOpened, tiles, foundTiles, iter) {
+        let challengeTiles = document.querySelectorAll('.tile-challenge');
+
+        // First, check if player resolved random challenge
+        console.log(challengeTiles.length);
+
+        if(challengeTiles.length === 0) {
+            iter.array.splice(iter.amount, 1);
+
+            // Anyway, check which iter array combinations are outdated
+            //this.testRemainCombinations_18(iter);
+
+            setTimeout(() => {
+                this.testRemainCombinations_18(iter);
+                this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
+                console.log(document.querySelector('.board'))
+            }, 2200);
+
+        } 
+        // Next - if not resolved, check if he has some turns left
+        else if(iter.value === 0) {
+            // Reset icons and then set new challenge
+            this.resetIcons_18(iter);
+            setTimeout(() => {
+                this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
+            }, 2200);
+
+        }
+    },
+
+    testRemainCombinations_18(iter) {
+        for(let m=0; m<iter.array.length; m++) {
+            let allTiles = document.querySelectorAll('.tile');
+            let testArr = [];
+            let dimension = iter.array[m].charAt(0);
+            let num = iter.array[m].charAt(1);
+
+            if(dimension === 'r') {
+                for(let x=0; x<(levels[`lvl18`].rows); x++) {
+                    if(allTiles[((levels[`lvl18`].rows) * (num - 1)) + x].style.visibility === 'hidden') {
+                        testArr.push(iter.array[m]);
+                    }
+                }
+            } else if(dimension === 'c') {
+                for(let y=0; y<(levels[`lvl18`].columns); y++) {
+                    if(allTiles[(levels[`lvl18`].columns * y) + (num - 1)].style.visibility === 'hidden') {
+                        testArr.push(iter.array[m]);
+                    }
+                }
+            }
+
+            if((testArr.length >= (levels[`lvl18`].rows)) || (testArr.length >= (levels[`lvl18`].columns))) {
+                iter.array.splice(m, 1);
+            }
+        }
+    },
+
+    resetIcons_18: function(iter) {
+        const allTiles = document.querySelectorAll('.tile');
+
+        for(let p=0; p<iter.nextArr.length; p++) {
+            iter.nextArr[p].parentNode.style  = 'visibility: visible';
+        }
+
+        let visibleTiles = [];
+        let visibleIcons = [];
+        
+        allTiles.forEach(tile => {
+            if(tile.style.visibility === 'visible') {
+                tile.classList.remove('tile-challenge');
+                let back = tile.querySelector('.tile-back');
+                visibleIcons.push(back.childNodes[0]);
+                visibleTiles.push(tile);
+            }
+        })
+
+        for(let i=0; i<visibleTiles.length; i++) {
+            let rand = Math.floor(Math.random() * visibleIcons.length);
+            let back = visibleTiles[i].querySelector('.tile-back');
+            if(back.hasChildNodes()) {
+                back.childNodes[0].remove();
+            }
+            back.appendChild(visibleIcons[rand]);
+
+            visibleIcons.splice(rand, 1);
+        }
+
+    },
 
 }
 

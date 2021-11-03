@@ -470,13 +470,16 @@ const levels = {
             turns: 91, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.createCombinations_18(cardsOpened, tiles, foundTiles, iter);
+            flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.matchChallengeClassRemoval_18(cardsOpened, tiles, foundTiles, iter);
+            flags.checkChallengeProgress_18(cardsOpened, tiles, foundTiles, iter);
+            console.log(iter.array);
         },  
     },
 }
