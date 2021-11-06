@@ -3051,6 +3051,14 @@ const flags = {
 
         iter.nextArr = [];
 
+        // Remove challenge class from remain tiles if challenge has been failed
+        let allCTiles = document.querySelectorAll('.tile-challenge');
+        if(allCTiles.length > 0) {
+            allCTiles.forEach(ctile => {
+                ctile.classList.remove('tile-challenge');
+            })
+        }
+
         iter.amount = Math.floor(Math.random() * iter.array.length);
         let randomControl = iter.array[iter.amount];
         
@@ -3091,15 +3099,58 @@ const flags = {
 
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])
         {
-            // Next array keeps all the tiles found during the current challenge
-            iter.nextArr.push(cardsOpened[0], cardsOpened[1]);
+
+            let isChallengePassed = checkPassCondition();
 
             // Here add some animations
+            if((cardsOpened[0].parentNode.classList.contains('tile-challenge') || (cardsOpened[1].parentNode.classList.contains('tile-challenge'))) && (iter.value === 0) && (isChallengePassed === false)) {
+                const comparableClass = cardsOpened[0].childNodes[0].classList[1];
+                console.log(comparableClass);
+                cardsOpened[0].childNodes[0].classList.replace(comparableClass, 'fake-class');
+                console.log(cardsOpened[0].childNodes[0].classList[1]);
 
-            if((cardsOpened[0].parentNode.classList.contains('tile-challenge') || (cardsOpened[1].parentNode.classList.contains('tile-challenge')))) {
+                setTimeout(() => {
+                    let fake = document.querySelector('.fake-class');
+                    fake.classList.replace('fake-class', comparableClass);
+                }, 2000); 
+            }
+
+            else if((cardsOpened[0].parentNode.classList.contains('tile-challenge') || (cardsOpened[1].parentNode.classList.contains('tile-challenge')))) {
+
+                // Next array keeps all the tiles found during the current challenge
+                iter.nextArr.push(cardsOpened[0], cardsOpened[1]);
+
+                setTimeout(() => {
+                    iter.fTilesModifier = 0;
+                    console.log('FOUND TILES : = '+ foundTiles);
+                }, 2000);
 
                 cardsOpened[0].parentNode.classList.remove('tile-challenge');
-                cardsOpened[1].parentNode.classList.remove('tile-challenge');
+                cardsOpened[1].parentNode.classList.remove('tile-challenge');  // DONT REMOVE THIS DECLARATIONS PLEASE
+            } else {
+                const comparableClass = cardsOpened[0].childNodes[0].classList[1];
+                console.log(comparableClass);
+                cardsOpened[0].childNodes[0].classList.replace(comparableClass, 'fake-class');
+                console.log(cardsOpened[0].childNodes[0].classList[1]);
+
+                setTimeout(() => {
+                    let fake = document.querySelector('.fake-class');
+                    fake.classList.replace('fake-class', comparableClass);
+                }, 2000); 
+            }
+
+            function checkPassCondition() {
+
+                // Czy gdy znaleźliśmy ostatnią parę w ostatniej turze challengu
+                let allChallengeTiles = document.querySelectorAll('.tile-challenge');
+                let remainCount = 0;
+                allChallengeTiles.forEach(ctile => {
+                    if(!(ctile.classList.contains('target'))) {
+                        remainCount++;
+                    }
+                })
+                if(remainCount === 0) return true;
+                else return false;
             }
 
         }
@@ -3127,9 +3178,37 @@ const flags = {
         // Next - if not resolved, check if he has some turns left
         else if(iter.value === 0) {
             // Reset icons and then set new challenge
-            this.resetIcons_18(iter);
+            this.resetIcons_18(iter, foundTiles);
             setTimeout(() => {
                 this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
+
+                document.querySelector('.board').dataset.animation = 'on';
+                document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+                async function reveal() {
+                    const appear = anime({
+                        targets: '.tile',
+                        keyframes: [
+                            {rotateY: '+=180deg', duration: 1100, easing: 'easeInSine'},
+                            {rotateY: '-=180deg', duration: 1100, delay: 1700, easing: 'easeOutSine'},
+                        ],
+                        easing: 'easeInExpo',
+                    }).finished;
+
+                await Promise.all([appear]);
+                }
+
+                async function init() {
+                    await reveal()
+                        .then(() => {
+                            console.log('unblokced'); 
+                            document.querySelector('.board').dataset.animation = 'off';
+                            document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                        })
+                }
+
+                init();
+
             }, 2200);
 
         }
@@ -3162,8 +3241,13 @@ const flags = {
         }
     },
 
-    resetIcons_18: function(iter) {
+    resetIcons_18: function(iter, foundTiles) {
         const allTiles = document.querySelectorAll('.tile');
+
+        console.log(iter.nextArr.length);
+        iter.fTilesModifier=  0 - (iter.nextArr.length); // +2 because we are waiting for an found event
+        foundTiles -= iter.fTilesModifier;
+
 
         for(let p=0; p<iter.nextArr.length; p++) {
             iter.nextArr[p].parentNode.style  = 'visibility: visible';
@@ -3192,6 +3276,10 @@ const flags = {
             visibleIcons.splice(rand, 1);
         }
 
+    },
+
+    count: function(foundTiles) {
+        console.log('FOUNDTILES IS: '+ foundTiles);
     },
 
 }

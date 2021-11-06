@@ -467,14 +467,14 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 91, 
+            turns: 321, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createCombinations_18(cardsOpened, tiles, foundTiles, iter);
             flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.count(foundTiles);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.matchChallengeClassRemoval_18(cardsOpened, tiles, foundTiles, iter);

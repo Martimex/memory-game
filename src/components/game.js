@@ -30,6 +30,7 @@ let iter = {
     /* value v2*/ amount: 0,
     /*value in series*/ streak: 0,
     /*turn addon/penalty*/ extraTurns: 0,
+    /*used ONLY for lvl 18 and prob 19 - it modifies your find tiles*/ fTilesModifier: 0, // if lower than 0, it lowers foundTiles count
     /*used for more advanced animation stuff*/ array: [],
     /*additional array for lvl 17 purposes*/ nextArr: [],
     /*determines whether you passed level specific conditions - if not, value = false and u lose the level*/ passCondition: true,
@@ -164,7 +165,9 @@ function Game(props) {
         iter.amount = 0;
         iter.streak = 0;
         iter.extraTurns = 0;
+        iter.fTilesModifier = 0;    
         iter.array = [];
+        iter.nextArr = [];
         iter.passCondition = true;
 
         cleanup();
@@ -587,7 +590,7 @@ function Game(props) {
                 }
 
                 if((cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
-                    setFoundTiles(foundTiles + 2);
+                    setFoundTiles(foundTiles + 2 + iter.fTilesModifier);
                     setScore(score +(scorePerPair * scoreMultiplier));
                     scoreAddon = ((scorePerPair * scoreMultiplier) +50);  // if u lose, but the last pair match
                     setScoreMultiplier(scoreMultiplier + 0.5);
