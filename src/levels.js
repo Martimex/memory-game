@@ -472,6 +472,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createCombinations_18(cardsOpened, tiles, foundTiles, iter);
             flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
+            flags.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.count(foundTiles);

@@ -3164,6 +3164,7 @@ const flags = {
 
         if(challengeTiles.length === 0) {
             iter.array.splice(iter.amount, 1);
+            iter.streak++;  // INDICATES CURRENT CHALLENGE No (starting from index 0);
 
             // Anyway, check which iter array combinations are outdated
             //this.testRemainCombinations_18(iter);
@@ -3171,6 +3172,7 @@ const flags = {
             setTimeout(() => {
                 this.testRemainCombinations_18(iter);
                 this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
+                this.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
                 console.log(document.querySelector('.board'))
             }, 2200);
 
@@ -3181,8 +3183,8 @@ const flags = {
             this.resetIcons_18(iter, foundTiles);
             setTimeout(() => {
                 this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
-
-                document.querySelector('.board').dataset.animation = 'on';
+                this.failedChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
+               /*  document.querySelector('.board').dataset.animation = 'on';
                 document.querySelector('.board').setAttribute('pointerEvents', 'none');
 
                 async function reveal() {
@@ -3207,7 +3209,7 @@ const flags = {
                         })
                 }
 
-                init();
+                init(); */
 
             }, 2200);
 
@@ -3241,6 +3243,78 @@ const flags = {
         }
     },
 
+    winChallengeAnimation_18: function(cardsOpened, tiles, foundTiles, iter) {
+        document.querySelector('.board').dataset.animation = 'on';
+        document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+        async function showChallengeTiles() {
+            const show = anime({
+                targets: '.tile-challenge',
+                keyframes: [
+                    {rotateY: '+=180deg', duration: 900, easing: 'easeInExpo'},
+                    {rotateY: '-=180deg', duration: 900, delay: 3200, easing: 'easeOutQuint'},
+                ],
+            }).finished;
+
+            await Promise.all([show]);
+        }
+
+        async function init() {
+            await showChallengeTiles()
+                .then(() => {
+                    document.querySelector('.board').dataset.animation = 'off';
+                    document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                })
+        }
+
+        init();
+
+    },
+
+
+    failedChallengeAnimation_18: function(cardsOpened, tiles, foundTiles, iter) {
+        if(iter.streak <= 0) {
+            document.querySelector('.board').dataset.animation = 'on';
+            document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+            async function reveal() {
+                const appear = anime({
+                    targets: '.tile',
+                    keyframes: [
+                        {rotateY: '+=180deg', duration: 1100, easing: 'easeInSine'},
+                        {rotateY: '-=180deg', duration: 1100, delay: 1700, easing: 'easeOutSine'},
+                    ],
+                    easing: 'easeInExpo',
+                }).finished;
+
+            await Promise.all([appear]);
+            }
+
+            async function showChallengeTiles() {
+                const show = anime({
+                    targets: '.tile-challenge',
+                    keyframes: [
+                        {rotateY: '+=180deg', duration: 900, easing: 'easeInExpo'},
+                        {rotateY: '-=180deg', duration: 900, delay: 3200, easing: 'easeOutQuint'},
+                    ],
+                }).finished;
+
+                await Promise.all([show]);
+            }
+
+            async function init() {
+                await reveal()
+                await showChallengeTiles()
+                    .then(() => {
+                        document.querySelector('.board').dataset.animation = 'off';
+                        document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                    })
+            }
+
+            init();
+        }
+    },
+
     resetIcons_18: function(iter, foundTiles) {
         const allTiles = document.querySelectorAll('.tile');
 
@@ -3252,6 +3326,8 @@ const flags = {
         for(let p=0; p<iter.nextArr.length; p++) {
             iter.nextArr[p].parentNode.style  = 'visibility: visible';
         }
+
+        /* UNCOMMENT FOR RANDOM ICON EFFECT
 
         let visibleTiles = [];
         let visibleIcons = [];
@@ -3274,7 +3350,7 @@ const flags = {
             back.appendChild(visibleIcons[rand]);
 
             visibleIcons.splice(rand, 1);
-        }
+        } */
 
     },
 
