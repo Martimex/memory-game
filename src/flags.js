@@ -3047,6 +3047,21 @@ const flags = {
         
     },
 
+    createChallengeCountdown_18: function(cardsOpened, tiles, foundTiles, iter) {
+        const animationContainer = document.querySelector('.animationContainer');
+
+        let countdownBox = document.createElement('div');
+        countdownBox.classList.add('countdown-box');
+
+        let countdown = document.createElement('div');
+        countdown.classList.add('countdown');
+
+        countdown.textContent = `${iter.value}`;
+
+        countdownBox.appendChild(countdown);
+        animationContainer.appendChild(countdownBox);
+    },
+
     setChallenge_18: function(cardsOpened, tiles, foundTiles, iter) {
 
         iter.nextArr = [];
@@ -3089,6 +3104,8 @@ const flags = {
         //iter.array.splice(random, 1); // BUT ONLY IF THE CHALLENGE HAS BEEN PASSED ! so not in this func
         let finalChallengeTiles = document.querySelectorAll('.tile-challenge');
         iter.value = finalChallengeTiles.length * 2; // indicates how much turns u have to find all marked tiles
+
+        this.updateCountdown_18(cardsOpened, tiles, foundTiles, iter);
     },
 
     matchChallengeClassRemoval_18: function(cardsOpened, tiles, foundTiles, iter) {
@@ -3100,10 +3117,13 @@ const flags = {
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])
         {
 
-            let isChallengePassed = checkPassCondition();
+            let isChallengePassed = checkPassCondition(cardsOpened);
+            console.log(isChallengePassed);
 
             // Here add some animations
+            
             if((cardsOpened[0].parentNode.classList.contains('tile-challenge') || (cardsOpened[1].parentNode.classList.contains('tile-challenge'))) && (iter.value === 0) && (isChallengePassed === false)) {
+                // If at the last available challenge turn very last challenge tiles did not match
                 const comparableClass = cardsOpened[0].childNodes[0].classList[1];
                 console.log(comparableClass);
                 cardsOpened[0].childNodes[0].classList.replace(comparableClass, 'fake-class');
@@ -3139,13 +3159,17 @@ const flags = {
                 }, 2000); 
             }
 
-            function checkPassCondition() {
+            function checkPassCondition(cardsOpened) {
 
                 // Czy gdy znaleźliśmy ostatnią parę w ostatniej turze challengu
                 let allChallengeTiles = document.querySelectorAll('.tile-challenge');
                 let remainCount = 0;
                 allChallengeTiles.forEach(ctile => {
-                    if(!(ctile.classList.contains('target'))) {
+                    let ctile_back = ctile.querySelector('.tile-back');
+                   /*  if(!(ctile.classList.contains('target'))) {
+                        remainCount++;
+                    } */
+                    if((ctile_back.childNodes[0].classList[1] !==  cardsOpened[0].childNodes[0].classList[1]) && (ctile_back.childNodes[0].classList[1] !==  cardsOpened[1].childNodes[0].classList[1])) {
                         remainCount++;
                     }
                 })
@@ -3171,6 +3195,7 @@ const flags = {
 
             setTimeout(() => {
                 this.testRemainCombinations_18(iter);
+                this.randomizeRemainIcons_18(cardsOpened, tiles, foundTiles, iter);
                 this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
                 this.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
                 console.log(document.querySelector('.board'))
@@ -3180,8 +3205,8 @@ const flags = {
         // Next - if not resolved, check if he has some turns left
         else if(iter.value === 0) {
             // Reset icons and then set new challenge
-            this.resetIcons_18(iter, foundTiles);
             setTimeout(() => {
+                this.resetIcons_18(iter, foundTiles);
                 this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
                 this.failedChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
                /*  document.querySelector('.board').dataset.animation = 'on';
@@ -3273,9 +3298,11 @@ const flags = {
 
 
     failedChallengeAnimation_18: function(cardsOpened, tiles, foundTiles, iter) {
+
+        document.querySelector('.board').dataset.animation = 'on';
+        document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
         if(iter.streak <= 0) {
-            document.querySelector('.board').dataset.animation = 'on';
-            document.querySelector('.board').setAttribute('pointerEvents', 'none');
 
             async function reveal() {
                 const appear = anime({
@@ -3312,14 +3339,36 @@ const flags = {
             }
 
             init();
+        } else {
+            async function showChallengeTiles() {
+                const show = anime({
+                    targets: '.tile-challenge',
+                    keyframes: [
+                        {rotateY: '+=180deg', duration: 900, easing: 'easeInExpo'},
+                        {rotateY: '-=180deg', duration: 900, delay: 3200, easing: 'easeOutQuint'},
+                    ],
+                }).finished;
+
+                await Promise.all([show]);
+            }
+
+            async function init() {
+                await showChallengeTiles()
+                    .then(() => {
+                        document.querySelector('.board').dataset.animation = 'off';
+                        document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                    })
+            }
+
+            init();
         }
     },
 
     resetIcons_18: function(iter, foundTiles) {
-        const allTiles = document.querySelectorAll('.tile');
+        //const allTiles = document.querySelectorAll('.tile');
 
         console.log(iter.nextArr.length);
-        iter.fTilesModifier=  0 - (iter.nextArr.length); // +2 because we are waiting for an found event
+        iter.fTilesModifier=  0 - (iter.nextArr.length); 
         foundTiles -= iter.fTilesModifier;
 
 
@@ -3352,6 +3401,43 @@ const flags = {
             visibleIcons.splice(rand, 1);
         } */
 
+    },
+
+    randomizeRemainIcons_18: function (cardsOpened, tiles, foundTiles, iter) {
+        // THIS HAPPENS ONLY WHEN YOU WIN A CHALLENGE
+        const allTiles = document.querySelectorAll('.tile');
+
+        let visibleTiles = [];
+        let visibleIcons = [];
+        
+        allTiles.forEach(tile => {
+            if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target')))) {
+                //tile.classList.remove('tile-challenge');
+                let back = tile.querySelector('.tile-back');
+                visibleIcons.push(back.childNodes[0]);
+                visibleTiles.push(tile);
+            }
+        })
+
+        console.log(`%c visibleTiles:  ${visibleTiles}`, `background: #89b; color: #a2e; font-weight: 700;`);
+        console.log(`%c visibleIcons:  ${visibleIcons}`, `background: #a2e; color: #89b; font-weight: 700;`);
+
+        for(let i=0; i<visibleTiles.length; i++) {
+            let rand = Math.floor(Math.random() * visibleIcons.length);
+            let back = visibleTiles[i].querySelector('.tile-back');
+            if(back.hasChildNodes()) {
+                back.childNodes[0].remove();
+            }
+            back.appendChild(visibleIcons[rand]);
+
+            visibleIcons.splice(rand, 1);
+        }
+    },
+
+
+    updateCountdown_18: function(cardsOpened, tiles, foundTiles, iter) {
+        let countdown = document.querySelector('.countdown');
+        countdown.textContent = `${iter.value}`;
     },
 
     count: function(foundTiles) {

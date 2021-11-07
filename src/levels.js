@@ -467,10 +467,11 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 321, 
+            turns: 111, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createCombinations_18(cardsOpened, tiles, foundTiles, iter);
+            flags.createChallengeCountdown_18(cardsOpened, tiles, foundTiles, iter);
             flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
             flags.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
         },
@@ -480,6 +481,7 @@ const levels = {
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.matchChallengeClassRemoval_18(cardsOpened, tiles, foundTiles, iter);
             flags.checkChallengeProgress_18(cardsOpened, tiles, foundTiles, iter);
+            flags.updateCountdown_18(cardsOpened, tiles, foundTiles, iter);
             console.log(iter.array);
         },  
     },

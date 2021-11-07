@@ -2383,8 +2383,32 @@
 
 /* Animation stuff  */
 
+.countdown {
+    font-size: 2rem;
+    color:hsl(20, 60%, 60%);
+    font-weight: 650;
+}
+
+.countdown-box {
+    width: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.2rem;
+    height: 2.2rem;
+    background:hsl(1, 50%, 50%);
+    position: absolute; bottom: 10%; right: 10%;
+}
+
 .tile-challenge, .tile-challenge:nth-of-type(2n) {
-    background-image: linear-gradient(73deg, #a25, #88b);
+    border: .22rem dotted hsla(55, 80%, 50%, .3);
+    background-image: radial-gradient(hsla(266, 40%, 70%, .62), hsla(55, 40%, 70%, .62)); 
+
+    box-shadow: hsla(11, 40%, 70%, 0.4) -5px 5px, hsla(55, 40%, 70%, 0.3) -10px 10px, hsla(11, 40%, 70%, 0.2) -15px 15px, hsla(55, 40%, 70%, 0.1) -20px 20px, hsla(11, 40%, 70%, 0.05) -25px 25px;
+}
+
+.tile-challenge:nth-of-type(2n) {
+    box-shadow: hsla(55, 40%, 70%, 0.4) 5px 5px, hsla(11, 40%, 70%, 0.3) 10px 10px, hsla(55, 40%, 70%, 0.2) 15px 15px, hsla(11, 40%, 70%, 0.1) 20px 20px, hsla(55, 40%, 70%, 0.05) 25px 25px;
 }
 
 .level-18, .counter-18, .score-18 {
