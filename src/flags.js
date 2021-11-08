@@ -3190,6 +3190,8 @@ const flags = {
             iter.array.splice(iter.amount, 1);
             iter.streak++;  // INDICATES CURRENT CHALLENGE No (starting from index 0);
 
+            const timer = 2200;
+
             // Anyway, check which iter array combinations are outdated
             //this.testRemainCombinations_18(iter);
 
@@ -3197,46 +3199,231 @@ const flags = {
                 this.testRemainCombinations_18(iter);
                 this.randomizeRemainIcons_18(cardsOpened, tiles, foundTiles, iter);
                 this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
-                this.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
                 console.log(document.querySelector('.board'))
-            }, 2200);
+            }, timer);
+
+            async function winCAnimtion() {
+                const a1 = anime({
+                    targets: '.background',
+                    duration: timer,
+                    backgroundColor: '#000',
+                    easing: 'easeInExpo',
+                }).finished;
+
+                const a2 = anime({
+                    targets: ['.board', '.countdown-box'],
+                    duration: (timer/2),
+                    opacity: [1, 0],
+                    easing: 'easeOutSine',
+                }).finished;
+
+                await Promise.all([a1, a2]);
+            }
+
+            async function challengeCompletion() {
+                const a1 = anime({
+                    targets: '.completion-box',
+                    duration: 2200,
+                    opacity: [0, 1],
+                    easing: 'easeOutQuint',
+                    direction: 'alternate',
+                }).finished;
+
+                await Promise.all([a1]);
+            }
+
+            async function finishAnimation() {
+                const a1 = anime({
+                    targets: '.background',
+                    duration: 1800,
+                    backgroundColor: 'hsla(231, 65%, 25%, 0.7)',
+                    easing: 'easeInExpo',
+                }).finished;
+
+                const a2 = anime({
+                    targets: ['.board', '.countdown-box'],
+                    duration: (timer/2),
+                    opacity: [0, 1],
+                    easing: 'easeInSine',
+                }).finished;
+
+                await Promise.all([a1, a2]);
+            }
+
+            async function showChallengeTiles() {
+                const show = anime({
+                    targets: '.tile-challenge',
+                    keyframes: [
+                        {rotateY: '+=180deg', duration: 900, easing: 'easeInExpo'},
+                        {rotateY: '-=180deg', duration: 900, delay: 3200, easing: 'easeOutQuint'},
+                    ],
+                }).finished;
+    
+                await Promise.all([show]);
+            }
+
+            async function init() {
+
+                document.querySelector('.board').dataset.animation = 'on';
+                document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+                await winCAnimtion()
+                .then(() => {
+                    const animationContainer = document.querySelector('.animationContainer');
+                    const completionBox = document.createElement('div');
+                    const completionText = document.createElement('div');
+    
+                    completionBox.classList.add('completion-box');
+                    completionText.classList.add('completion-text', 'completion-success');
+    
+                    completionText.textContent = 'Challenge completed'
+
+                    completionBox.appendChild(completionText);
+                    animationContainer.appendChild(completionBox);
+
+                    console.log('all ok!')
+                })
+                await challengeCompletion()
+                .then(() => {
+                    const animationContainer = document.querySelector('.animationContainer');
+                    const completionBox = animationContainer.querySelector('.completion-box');
+                    completionBox.remove();
+                })
+                await finishAnimation()
+                await showChallengeTiles()
+                .then(() => {
+
+                    document.querySelector('.board').dataset.animation = 'off';
+                    document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                })
+            }
+            
+            init();
+
 
         } 
         // Next - if not resolved, check if he has some turns left
         else if(iter.value === 0) {
             // Reset icons and then set new challenge
+            const timer = 2200;
+
             setTimeout(() => {
                 this.resetIcons_18(iter, foundTiles);
                 this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
-                this.failedChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
-               /*  document.querySelector('.board').dataset.animation = 'on';
+                //this.failedChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
+            }, timer);
+
+            async function loseCAnimtion() {
+                const a1 = anime({
+                    targets: '.background',
+                    duration: timer,
+                    backgroundColor: 'hsl(1, 60%, 30%)',
+                    easing: 'easeInExpo',
+                }).finished;
+
+                const a2 = anime({
+                    targets: ['.board', '.countdown-box'],
+                    duration: (timer/2),
+                    opacity: [1, 0],
+                    easing: 'easeOutSine',
+                }).finished;
+
+                await Promise.all([a1, a2]);
+            }
+
+            async function challengeCompletion() {
+                const a1 = anime({
+                    targets: '.completion-box',
+                    duration: 2200,
+                    opacity: [0, 1],
+                    easing: 'easeOutQuint',
+                    direction: 'alternate',
+                }).finished;
+
+                await Promise.all([a1]);
+            }
+
+            async function finishAnimation() {
+                const a1 = anime({
+                    targets: '.background',
+                    duration: 1800,
+                    backgroundColor: 'hsla(231, 65%, 25%, 0.7)',
+                    easing: 'linear',
+                }).finished;
+
+                const a2 = anime({
+                    targets: ['.board', '.countdown-box'],
+                    duration: (timer/2),
+                    opacity: [0, 1],
+                    easing: 'easeInSine',
+                }).finished;
+
+                await Promise.all([a1, a2]);
+            }
+
+            async function reveal() {
+                const appear = anime({
+                    targets: '.tile',
+                    keyframes: [
+                        {rotateY: '+=180deg', duration: 1100, easing: 'easeInSine'},
+                        {rotateY: '-=180deg', duration: 1100, delay: 1700, easing: 'easeOutSine'},
+                    ],
+                    easing: 'easeInExpo',
+                }).finished;
+
+            await Promise.all([appear]);
+            }
+
+            async function showChallengeTiles() {
+                const show = anime({
+                    targets: '.tile-challenge',
+                    keyframes: [
+                        {rotateY: '+=180deg', duration: 900, easing: 'easeInExpo'},
+                        {rotateY: '-=180deg', duration: 900, delay: 3200, easing: 'easeOutQuint'},
+                    ],
+                }).finished;
+    
+                await Promise.all([show]);
+            }
+
+            async function init() {
+
+                document.querySelector('.board').dataset.animation = 'on';
                 document.querySelector('.board').setAttribute('pointerEvents', 'none');
 
-                async function reveal() {
-                    const appear = anime({
-                        targets: '.tile',
-                        keyframes: [
-                            {rotateY: '+=180deg', duration: 1100, easing: 'easeInSine'},
-                            {rotateY: '-=180deg', duration: 1100, delay: 1700, easing: 'easeOutSine'},
-                        ],
-                        easing: 'easeInExpo',
-                    }).finished;
+                await loseCAnimtion()
+                .then(() => {
+                    const animationContainer = document.querySelector('.animationContainer');
+                    const completionBox = document.createElement('div');
+                    const completionText = document.createElement('div');
+    
+                    completionBox.classList.add('completion-box');
+                    completionText.classList.add('completion-text', 'completion-failure');
+    
+                    completionText.textContent = 'Challenge failed'
 
-                await Promise.all([appear]);
-                }
+                    completionBox.appendChild(completionText);
+                    animationContainer.appendChild(completionBox);
 
-                async function init() {
-                    await reveal()
-                        .then(() => {
-                            console.log('unblokced'); 
-                            document.querySelector('.board').dataset.animation = 'off';
-                            document.querySelector('.board').setAttribute('pointerEvents', 'auto');
-                        })
-                }
+                    console.log('all ok!')
+                })
+                await challengeCompletion()
+                .then(() => {
+                    const animationContainer = document.querySelector('.animationContainer');
+                    const completionBox = animationContainer.querySelector('.completion-box');
+                    completionBox.remove();
+                })
+                await finishAnimation()
+                if(iter.streak <= 0) { await reveal() }
+                await showChallengeTiles()
+                .then(() => {
 
-                init(); */
-
-            }, 2200);
+                    document.querySelector('.board').dataset.animation = 'off';
+                    document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                })
+            }
+            
+            init();
 
         }
     },
@@ -3292,12 +3479,11 @@ const flags = {
                 })
         }
 
-        init();
-
+        init(); 
     },
 
 
-    failedChallengeAnimation_18: function(cardsOpened, tiles, foundTiles, iter) {
+    /* failedChallengeAnimation_18: function(cardsOpened, tiles, foundTiles, iter) {
 
         document.querySelector('.board').dataset.animation = 'on';
         document.querySelector('.board').setAttribute('pointerEvents', 'none');
@@ -3362,7 +3548,7 @@ const flags = {
 
             init();
         }
-    },
+    }, */
 
     resetIcons_18: function(iter, foundTiles) {
         //const allTiles = document.querySelectorAll('.tile');

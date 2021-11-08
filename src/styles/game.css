@@ -2263,7 +2263,7 @@
    height: 100vh;
    z-index: -50;
    /* background-color: hsl(11, 60%, 40%);  */
-   background-color: rgba(23, 36, 107, 0.7); 
+   background-color: hsla(231, 65%, 25%, 0.7); 
    background-image: url('../bgs/bg-18.svg'); 
    background-size: cover;
 }
@@ -2385,19 +2385,52 @@
 
 .countdown {
     font-size: 2rem;
-    color:hsl(20, 60%, 60%);
     font-weight: 650;
+    background: -webkit-linear-gradient(85deg, hsl(266, 40%, 40%), hsl(55, 0%, 0%));
+    font-variant: small-caps;
+    filter: hue-rotate(5deg) brightness(200%); 
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .countdown-box {
-    width: 6rem;
+    width: 3.2rem;
+    border-radius: 30%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1.2rem;
-    height: 2.2rem;
-    background:hsl(1, 50%, 50%);
+    height: 3.2rem;
+   /*  background:hsla(177, 50%, 50%, .3); */
+    background-image: url('../bgs/bg-18.svg');
     position: absolute; bottom: 10%; right: 10%;
+    box-shadow: 0px 0px 5px 10px hsla(266, 40%, 70%, .8), 0px 0px 15px 20px hsla(55, 40%, 70%, .8);
+    -webkit-box-shadow: 0px 0px 5px 10px hsla(266, 40%, 70%, .8), 0px 0px 15px 20px hsla(55, 40%, 70%, .8);
+    -moz-box-shadow: 0px 0px 5px 10px hsla(266, 40%, 70%, .8), 0px 0px 15px 20px hsla(55, 40%, 70%, .8);
+}
+
+.completion-box {
+    position: absolute; top: 30%; left: 30%;
+    width: 40%;
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.completion-text {
+    font-size: 7rem;
+    font-family: monospace;
+    font-weight: 700;
+}
+
+.completion-success {
+    color:hsl(118, 63%, 36%);
+}
+
+.completion-failure {
+    color: hsl(12, 63%, 36%);
 }
 
 .tile-challenge, .tile-challenge:nth-of-type(2n) {
