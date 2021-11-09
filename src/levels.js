@@ -460,10 +460,10 @@ const levels = {
 
     lvl18: {
         lv: 18,
-        rows: 4,
-        columns: 4,
+        rows: 6,
+        columns: 6,
         tile_size: 58,
-        tiles: 16, // 36
+        tiles: 36, // 36
         iconSet: 'fas',
         counter: {
             time: null,

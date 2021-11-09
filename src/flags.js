@@ -3205,9 +3205,9 @@ const flags = {
             async function winCAnimtion() {
                 const a1 = anime({
                     targets: '.background',
-                    duration: timer,
+                    duration: 1000,
                     backgroundColor: '#000',
-                    easing: 'easeInExpo',
+                    easing: 'linear',
                 }).finished;
 
                 const a2 = anime({
@@ -3235,9 +3235,9 @@ const flags = {
             async function finishAnimation() {
                 const a1 = anime({
                     targets: '.background',
-                    duration: 1800,
+                    duration: 1000,
                     backgroundColor: 'hsla(231, 65%, 25%, 0.7)',
-                    easing: 'easeInExpo',
+                    easing: 'linear',
                 }).finished;
 
                 const a2 = anime({
@@ -3248,6 +3248,46 @@ const flags = {
                 }).finished;
 
                 await Promise.all([a1, a2]);
+            }
+
+            async function showRandomizeBox() {
+                const show = anime({
+                    targets: '.randomize-box',
+                    duration: 1100,
+                    easing: 'linear',
+                    opacity: [0, 1],
+                })
+
+                await Promise.all([show]);
+            }
+
+            async function animateThreeDots() {
+                const animate = anime({
+                    targets: '.challenge-dot',
+                    keyframes: [
+                        {duration: 800,  translateY: '-=8rem', easing: 'linear'},
+                        {duration: 800,  translateY: '+=8rem', easing: 'easeOutBounce'},
+                        {duration: 800,  translateY: '-=8rem', easing: 'linear'},
+                        {duration: 800,  translateY: '+=8rem', easing: 'easeOutBounce'},
+                        {duration: 800,  translateY: '-=8rem', easing: 'linear'},
+                        {duration: 800,  translateY: '+=8rem', easing: 'easeOutBounce'},
+
+                    ],
+                    delay: anime.stagger(400),
+                }).finished;
+
+                await Promise.all([animate]);
+            }
+
+            async function fadeRandomizeBox() {
+                const fade = anime({
+                    targets: '.randomize-box',
+                    duration: 700,
+                    opacity: [1, 0],
+                    easing: 'linear',
+                }).finished;
+
+                await Promise.all([fade]);
             }
 
             async function showChallengeTiles() {
@@ -3289,6 +3329,35 @@ const flags = {
                     const completionBox = animationContainer.querySelector('.completion-box');
                     completionBox.remove();
                 })
+                .then(() => {
+                    const animationContainer = document.querySelector('.animationContainer');
+
+                    const randomizeBox = document.createElement('div');
+                    const randomizeInfo = document.createElement('div');
+
+                    randomizeBox.appendChild(randomizeInfo);
+
+                    for(let i=0; i<3; i++) {
+                        let dot = document.createElement('div');
+                        dot.classList.add('challenge-dot');
+                        randomizeBox.appendChild(dot);
+                    }
+
+                    randomizeBox.classList.add('randomize-box');
+                    randomizeInfo.classList.add('randomize-info');
+
+                    randomizeInfo.textContent = 'Reset icons';
+
+                    animationContainer.appendChild(randomizeBox);
+                })
+                await showRandomizeBox()
+                await animateThreeDots()
+                await fadeRandomizeBox()
+                .then(() => {
+                    const animationContainer = document.querySelector('.animationContainer');
+                    const randomizeBox = animationContainer.querySelector('.randomize-box');
+                    randomizeBox.remove();
+                })
                 await finishAnimation()
                 await showChallengeTiles()
                 .then(() => {
@@ -3316,9 +3385,9 @@ const flags = {
             async function loseCAnimtion() {
                 const a1 = anime({
                     targets: '.background',
-                    duration: timer,
+                    duration: 1000,
                     backgroundColor: 'hsl(1, 60%, 30%)',
-                    easing: 'easeInExpo',
+                    easing: 'linear',
                 }).finished;
 
                 const a2 = anime({
@@ -3346,7 +3415,7 @@ const flags = {
             async function finishAnimation() {
                 const a1 = anime({
                     targets: '.background',
-                    duration: 1800,
+                    duration: 1000,
                     backgroundColor: 'hsla(231, 65%, 25%, 0.7)',
                     easing: 'linear',
                 }).finished;
