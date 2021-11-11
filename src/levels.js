@@ -446,7 +446,7 @@ const levels = {
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.fadeInBoard_17(cardsOpened, tiles, foundTiles, iter); 
-            //flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter); //PLEASE UNCOMMENT AFTER LV 18 DEV
+            flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter); 
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
@@ -472,17 +472,38 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createCombinations_18(cardsOpened, tiles, foundTiles, iter);
             flags.createChallengeCountdown_18(cardsOpened, tiles, foundTiles, iter);
-            flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
+            //flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter);  //PLEASE UNCOMMENT AFTER LV 19 DEV
             flags.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            flags.count(foundTiles);
+
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.matchChallengeClassRemoval_18(cardsOpened, tiles, foundTiles, iter);
             flags.checkChallengeProgress_18(cardsOpened, tiles, foundTiles, iter);
             flags.updateCountdown_18(cardsOpened, tiles, foundTiles, iter);
-            console.log(iter.array);
+        },  
+    },
+
+    lvl19: {
+        lv: 19,
+        rows: 4,
+        columns: 4,
+        tile_size: 89,
+        tiles: 16, // 36
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: 17, 
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },  
     },
 }

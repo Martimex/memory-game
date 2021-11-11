@@ -3695,9 +3695,13 @@ const flags = {
         countdown.textContent = `${iter.value}`;
     },
 
-    count: function(foundTiles) {
-        console.log('FOUNDTILES IS: '+ foundTiles);
-    },
+
+
+
+
+
+
+    // LVL 19
 
 }
 
