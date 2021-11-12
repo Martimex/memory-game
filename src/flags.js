@@ -3702,6 +3702,143 @@ const flags = {
 
 
     // LVL 19
+    createDummyIcons_19: function(cardsOpened, tiles, foundTiles, iter) {
+        let allTiles = document.querySelectorAll('.tile');
+        allTiles.forEach((tile, index) => {
+            let back = tile.querySelector('.tile-back');
+            iter.array.push(back.childNodes[0]);
+            if(index >= ((levels[`lvl19`].rows) * (levels[`lvl19`].columns))) {
+                tile.remove();
+            }
+        })
+
+        function sortSvgs(array) {
+            let compareArr = [];
+            for(let x=0; x<array.length; x++) {
+                compare(array[x], compareArr);
+            }
+            return compareArr;
+        }
+
+        function compare(item, compareArr) {
+            compareArr.unshift(item);
+            if(compare.length > 1) {
+                for(let y=1; y<compareArr.length; y++) {
+                    if(item.classList[1] > compareArr[y].classList[1]) {
+                        let z = compareArr[y];
+                        compareArr[y] = compareArr[y-1];
+                        compareArr[y-1] = z;
+                    }
+                }
+            } else {
+                return compareArr;
+            }
+        }
+
+        let sortediconsArr = sortSvgs(iter.array);
+
+       // console.log(iter.array);  // UNTOUCHED
+       // console.log(sortediconsArr);  // SORTED
+        
+        let actualIcons = [];
+
+        for(let i=0; i<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); i++) {
+            actualIcons.push(sortediconsArr[0]);
+            sortediconsArr.shift();
+        }
+
+        // Before allTiles.length === 126
+        allTiles = document.querySelectorAll('.tile');
+        // Mow allTiles.length === 42
+
+        for(let x=0; x<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); x++) {
+            let rand = Math.floor(Math.random() * actualIcons.length);
+            let back = allTiles[x].querySelector('.tile-back');
+            if(back.hasChildNodes()) {
+                back.childNodes[0].remove();
+            }
+            back.appendChild(actualIcons[rand]);
+            actualIcons.splice(rand, 1);
+        }
+
+        /*for(let x=0; x<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); x++) {
+            let back = allTiles[x].querySelector('.tile-back');
+            //console.log(back.childNodes[0].classList[1]);
+        } */
+
+        console.log(sortediconsArr.length);
+
+        // Now we can empty our dummy array...
+        iter.array = [];
+        // ... and fill once again
+
+        for(let a=0; a<sortediconsArr.length; a=a+2) {
+            iter.array.push(sortediconsArr[a]);
+        }
+
+        // After all we have 1 times every dummy icon (total: 42);
+
+        console.log(iter.array);
+
+    },
+
+    appendDummyIcons_19: function(cardsOpened, tiles, foundTiles, iter) {
+
+        const board = document.querySelector('.board');
+
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            setTimeout(() => {
+                console.log('wait until the found pair will disappear');
+            }, 2200);
+        }
+
+        // WHAT IS THE MAIN CONDITION TO FIRE THAT FUNCTION ?  ->  TURNS USED, OR TILES FOUND ? let it be tiles, turns used is impossible !!
+        // it'll be fired 7 times - 6 tiles per every count
+
+        if((foundTiles+2 > (((levels[`lvl19`].rows) * (levels[`lvl19`].columns)) / 3)) && (iter.streak <= 0) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) { 
+            // if  ftiles > 42 / 3 -> if ftiles > 14
+            let newDummiesCount = 6;  // it has to be lower or equal yet found tiles in order to place new dummies in grid
+            iter.streak++;
+
+            let allTiles = document.querySelectorAll('.tile');
+            allTiles.forEach(tile => {
+                if(tile.style.visibility === 'hidden') {
+                    tile.remove();
+                }
+            })
+
+
+            for(let d=0; d<newDummiesCount; d++) {
+                // Front
+                let front = document.createElement('div');
+                front.classList.add('tile-front', 'tf-19');
+                // Back
+                let back = document.createElement('div');
+                back.classList.add('tile-back', 'tb-19');
+    
+                let newTile = document.createElement('div');
+                newTile.classList.add('tile', 't-19');
+    
+
+                let rand = Math.floor( Math.random() * iter.array.length);
+
+                newTile.appendChild(front);
+                newTile.appendChild(back);
+
+                back.appendChild(iter.array[rand]);
+
+                iter.array.splice(rand, 1);
+    
+                board.appendChild(newTile);
+                console.log('created');
+            }
+
+            // Now let's redistibute icons - grab all icons and set it randomly to already existing tiles, BUT WAIT FOR A WHILE AND LET
+            // THE LAST PAIR TO DISAPPEAR FROM THE SCREEN
+        }
+    },
+
+
 
 }
 

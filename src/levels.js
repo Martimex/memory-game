@@ -487,23 +487,23 @@ const levels = {
 
     lvl19: {
         lv: 19,
-        rows: 4,
-        columns: 4,
-        tile_size: 89,
-        tiles: 16, // 36
+        rows: 6,
+        columns: 7,
+        tile_size: 50,
+        tiles: 126, // it's 42 + (2 * 42) = 126 ;
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 17, 
+            turns: 75, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+           flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.appendDummyIcons_19(cardsOpened, tiles, foundTiles, iter);
         },  
     },
 }
