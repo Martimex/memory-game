@@ -1,5 +1,5 @@
 import { icon } from '@fortawesome/fontawesome-svg-core';
-import { set } from 'animejs';
+import { get, set } from 'animejs';
 import anime from 'animejs/lib/anime.es.js';
 import { useRef } from 'react/cjs/react.development';
 import Game from './components/game.js';
@@ -3702,6 +3702,13 @@ const flags = {
 
 
     // LVL 19
+    addPseudoClasses_19: function(cardsOpened, tiles, foundTiles, iter) {
+        const allTiles = document.querySelectorAll('.tile');
+        allTiles.forEach(tile =>  {
+            tile.classList.add(`gem-${iter.streak}`);
+        })
+    },
+
     createDummyIcons_19: function(cardsOpened, tiles, foundTiles, iter) {
         let allTiles = document.querySelectorAll('.tile');
         allTiles.forEach((tile, index) => {
@@ -3941,15 +3948,27 @@ const flags = {
         let content = {
             dummy1: {
                 text: 'Do NOT trust all the tiles',
+                hueR: '55deg',
+                visBg: '55, 46%, 36%',
+                gemBackColor: '55',
             },
             dummy2: {
-                text: '',
+                text: `Let's see what have changed`,
+                hueR: '110deg',
+                visBg: '344, 46%, 36%',
+                gemBackColor: '344',
             },
             dummy3: {
-                text: '',
+                text: `Already feel exhasuted ?`,
+                hueR: '160deg',
+                visBg: '107, 46%, 36%',
+                gemBackColor: '171',
             },
             dummy4: {
-                text: '',
+                text: `Good luck :)`,
+                hueR: '220deg',
+                visBg: '283, 46%, 36%,',
+                gemBackColor: '283',
             },
         }
 
@@ -3961,33 +3980,92 @@ const flags = {
                 easing: 'easeInQuad',
             }).finished;
 
-            Promise.all([a1]);
+            await Promise.all([a1]);
         }
-
-        async function showMessageText() {
-
-            const getMsgDiv = document.querySelector('.msg-div');
+        
+        async function showVis() {
             const allVis = document.querySelectorAll('.vis-black');
 
             const a2 = anime({
-                targets: getMsgDiv,
-                duration: 2100,
-                opacity: [0, 1],
-                easing: 'easeInBounce',
-            }).finished;
-
-            const a3 = anime({
                 targets: allVis,
-                duration: 1000,
-                delay: anime.stagger(500, {from: 'center'}),
+                duration: 700,
+                delay: anime.stagger(300, {from: 'center'}),
                 easing: 'linear',
                 opacity: [0, 1],
             }).finished;
 
-            Promise.all([a2, a3]);
+           await Promise.all([a2]);
+
+        }
+
+        async function showMessageText() {
+
+            const getMsgText = document.querySelector('.msg-text');
+            getMsgText.style = 'visibility: visible;';
+
+            const a3 = anime({
+                targets: getMsgText,
+                duration: 2100,
+                opacity: [0, 1],
+                visibility: ['visible', 'visible'],
+                easing: 'easeInSine',
+            }).finished;
+
+
+
+           await Promise.all([a3]);
+        }
+
+        async function hideVis() {
+            const allVis = document.querySelectorAll('.vis-black');
+            const getMsgText = document.querySelector('.msg-text');
+
+            const a4  = anime({
+                targets: allVis,
+                duration: 1800,
+                easing: 'linear',
+                delay: anime.stagger(300),
+                opacity: [1, 0],
+            }).finished;
+
+            const a4b = anime({
+                targets: getMsgText,
+                duration: 1800,
+                easing: 'easeInCirc',
+                filter: `hue-rotate(${content[`dummy${iter.streak}`].hueR})`,
+            })
+
+            await Promise.all([a4, a4b]);
         }
         
+        async function hideMessageText() {
+            const getMsgText = document.querySelector('.msg-text');
+
+            const a5 = anime({
+                targets: getMsgText,
+                duration: 1500,
+                scale: [1, 0],
+                easing: 'easeOutCirc',
+            }).finished;
+
+            await Promise.all([a5]);
+        }
+        
+        async function retrieveBoard() {
+            const a6 = anime({
+                targets: board,
+                duration: 2200,
+                translateY: '-=2200',
+                easing: 'easeOutQuad',
+            }).finished;
+
+            await Promise.all([a6]);
+        }
+
         async function init() {
+            document.querySelector('.board').dataset.animation = 'on';
+            document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
             await moveBoard()
             .then(() => {
                 const animationContainer = document.querySelector('.animationContainer');
@@ -3999,6 +4077,8 @@ const flags = {
                     let vis = document.createElement('div');
                     vis.classList.add('vis-black');
                     messageDiv.appendChild(vis);
+
+                    vis.style = `box-shadow: 0px -1px 5px 17px hsla(${content[`dummy${iter.streak}`].visBg}, 0.81); background:hsla(0, 0%, 0%, 0.9);`;
                 }
 
                 messageDiv.classList.add('msg-div');
@@ -4006,11 +4086,37 @@ const flags = {
 
                 messageText.textContent = content[`dummy${iter.streak}`].text;
 
-                //messageDiv.appendChild(messageText);
+                messageDiv.appendChild(messageText);
                 animationContainer.appendChild(messageText);
                 animationContainer.appendChild(messageDiv);
             })
+            await showVis()
             await showMessageText()
+            .then(() => {
+                const allTiles = document.querySelectorAll('.tile');
+                allTiles.forEach(tile =>  {
+                    let back = tile.querySelector('.tile-back');
+                    back.style = `background-image: radial-gradient(hsla(${content[`dummy${iter.streak}`].gemBackColor}, 40%, 40%, .65), hsla(202, 40%, 40%, .65));`
+                    tile.classList.remove(`gem-${iter.streak - 1}`);
+                    tile.classList.add(`gem-${iter.streak}`);
+                })
+            })
+            await hideVis()
+            await hideMessageText()
+            await retrieveBoard()
+            .then(() => {
+                const messageText = document.querySelector('.msg-text');
+                const messageDiv = document.querySelector('.msg-div');
+
+                messageText.remove();
+                messageDiv.remove();
+
+                document.querySelector('.board').dataset.animation = 'off';
+                document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+            })
+            .then(() => {
+                
+            })
         }
 
         init();
