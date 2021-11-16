@@ -3786,7 +3786,7 @@ const flags = {
         const animationContainer = document.querySelector('.animationContainer');
         let progressBar = document.createElement('div');
         progressBar.classList.add('p-bar');
-        for(let j=0; j<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); j++) {
+        for(let j=0; j<(((levels[`lvl19`].rows) * (levels[`lvl19`].columns)) / 2); j++) {  // half of tiles, because wa are counting pairs !!
             let progressStep = document.createElement('div');
             progressStep.classList.add('p-step');
             progressBar.appendChild(progressStep);
@@ -3805,24 +3805,36 @@ const flags = {
             let newDummiesCount = 12;          
             iter.streak++;
             this.modifyGrid_19(iter, newDummiesCount);
+
+            // SOME ASYNC ANIMATIONS HERE
+            this.asyncDummyChapter(iter, newDummiesCount);
         }
         else if((foundTiles+2 > (((levels[`lvl19`].rows) * (levels[`lvl19`].columns)) / 2)) && (iter.streak === 2) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
             // if  ftiles > 42 / 2 -> if ftiles > 21
-            let newDummiesCount = 8;
+            let newDummiesCount = 6;
             iter.streak++;
             this.modifyGrid_19(iter, newDummiesCount);
+
+            // SOME ASYNC ANIMATIONS HERE
+            this.asyncDummyChapter(iter, newDummiesCount);
         }
         else if((foundTiles+2 > (((levels[`lvl19`].rows) * (levels[`lvl19`].columns)) / 3)) && (iter.streak === 1) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
             // if  ftiles > 42 / 3 -> if ftiles > 14
             let newDummiesCount = 8;
             iter.streak++;
             this.modifyGrid_19(iter, newDummiesCount);
+
+            // SOME ASYNC ANIMATIONS HERE
+            this.asyncDummyChapter(iter, newDummiesCount);
         }
         else if((foundTiles+2 > (((levels[`lvl19`].rows) * (levels[`lvl19`].columns)) / 6)) && (iter.streak <= 0) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) { 
             // if  ftiles > 42 / 6 -> if ftiles > 7
-            let newDummiesCount = 6;  // it has to be lower or equal yet found tiles in order to place new dummies in grid
+            let newDummiesCount = 8;  // it has to be lower or equal yet found tiles in order to place new dummies in grid
             iter.streak++;
             this.modifyGrid_19(iter, newDummiesCount);
+
+            // SOME ASYNC ANIMATIONS HERE
+            this.asyncDummyChapter(iter, newDummiesCount);
         }
     },
 
@@ -3830,17 +3842,36 @@ const flags = {
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
             let progressBar = document.querySelector('.p-bar');
             let pBarItem = progressBar.querySelector(`.p-step:nth-of-type(${((foundTiles + 2) / 2)})`);
-            pBarItem.style = 'background-image: radial-gradient(hsl(85, 30%, 50%), hsl(281, 40%, 50%) 25%, hsl(140, 50%, 60%));';
+            //pBarItem.style = 'background-image: radial-gradient(hsl(85, 30%, 50%), hsl(281, 40%, 50%) 25%, hsl(140, 50%, 60%));';
+            //pBarItem.style = 'background-image: linear-gradient(120deg, hsl(185, 30%, 50%), hsl(215, 40%, 50%) 25%, hsl(0, 0%, 0%))';
+            
+            anime({
+                targets: pBarItem,
+                duration: 2400,
+                backgroundImage: [' inherit', 'linear-gradient(120deg, hsl(185, 30%, 50%), hsl(215, 40%, 50%) 25%, hsl(0, 0%, 0%))'],
+                easing: 'easeInSine',
+            })
+        
         }
     },
 
     checkLevelProgress_19: function(cardsOpened, tiles, foundTiles, iter) {
-        if(foundTiles+2 === ((levels[`lvl19`].rows) * (levels[`lvl19`].columns))) {
+        if((foundTiles+4 >= ((levels[`lvl19`].rows) * (levels[`lvl19`].columns))) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
             console.log('YOU WON LV 19')
             // ADD STUFF
             iter.fTilesModifier = ((levels[`lvl19`].rows) * (levels[`lvl19`].columns) * 2);
+            this.destroyAllFakes(cardsOpened, tiles, foundTiles, iter);
         }
     },
+
+    /* Create following animations :
+    
+    - When you add some dummy tiles (async + anime);
+    - Update progress bar (anime);   - ok, but might be improved
+    - When you (almost) win the game - fade those remain dummies (anime):
+    - Pair match  (?) -> (anime);
+    
+    */
 
     modifyGrid_19(iter, newDummiesCount) {
 
@@ -3904,6 +3935,90 @@ const flags = {
         console.log(allIcons);
     },
 
+    asyncDummyChapter: function(iter, newDummiesCount) {
+        const board = document.querySelector('.board');
+
+        let content = {
+            dummy1: {
+                text: 'Do NOT trust all the tiles',
+            },
+            dummy2: {
+                text: '',
+            },
+            dummy3: {
+                text: '',
+            },
+            dummy4: {
+                text: '',
+            },
+        }
+
+        async function moveBoard() {
+            const a1 = anime({
+                targets: board,
+                duration: 2200,
+                translateY: '+=2200',
+                easing: 'easeInQuad',
+            }).finished;
+
+            Promise.all([a1]);
+        }
+
+        async function showMessageText() {
+
+            const getMsgDiv = document.querySelector('.msg-div');
+            const allVis = document.querySelectorAll('.vis-black');
+
+            const a2 = anime({
+                targets: getMsgDiv,
+                duration: 2100,
+                opacity: [0, 1],
+                easing: 'easeInBounce',
+            }).finished;
+
+            const a3 = anime({
+                targets: allVis,
+                duration: 1000,
+                delay: anime.stagger(500, {from: 'center'}),
+                easing: 'linear',
+                opacity: [0, 1],
+            }).finished;
+
+            Promise.all([a2, a3]);
+        }
+        
+        async function init() {
+            await moveBoard()
+            .then(() => {
+                const animationContainer = document.querySelector('.animationContainer');
+
+                const messageDiv = document.createElement('div');
+                const messageText = document.createElement('div');
+
+                for(let i=0; i<20; i++) {
+                    let vis = document.createElement('div');
+                    vis.classList.add('vis-black');
+                    messageDiv.appendChild(vis);
+                }
+
+                messageDiv.classList.add('msg-div');
+                messageText.classList.add('msg-text');
+
+                messageText.textContent = content[`dummy${iter.streak}`].text;
+
+                //messageDiv.appendChild(messageText);
+                animationContainer.appendChild(messageText);
+                animationContainer.appendChild(messageDiv);
+            })
+            await showMessageText()
+        }
+
+        init();
+    },
+
+    destroyAllFakes: function(cardsOpened, tiles, foundTiles, iter) {
+        console.log('destroyed');
+    },
 
 }
 

@@ -2621,21 +2621,62 @@
 
 /* Animation stuff  */
 
+.msg-div {
+    z-index: 10;
+    position: absolute; top: 30%; left: 0%;
+    width: 100%;
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vis-black {
+    background:hsl(0, 0%, 0%);
+    width: 5%;
+    height: 100%;
+}
+
+.msg-text{
+    z-index: 40;
+    position: absolute; top: 30%; left: 20%;
+    width: 60%;
+    height: 40%;
+    font-size: 4rem;
+    font-family: monospace;
+    font-style: italic;
+    font-weight: 700;
+
+    background: -webkit-linear-gradient(29deg, hsl(344, 70%, 56%), hsl(171, 70%, 56%));
+    filter: contrast(120%) saturate(120%); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 9px 9px 9px hsla(283, 46%, 36%, 0.5);
+    padding: .3rem;
+}
+
 .p-bar {
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute; bottom: 0%; left: 0%;
+    background-image: linear-gradient(120deg, hsl(185, 30%, 50%), hsl(215, 40%, 50%) 25%, hsl(0, 0%, 0%));
+    border-radius: 0% 30% 0% 30%;
     width: 100%;
     height: 8%;
 }
 
 .p-step {
-    background-image: radial-gradient(hsl(185, 30%, 50%), hsl(215, 40%, 50%) 25%, hsl(0, 0%, 0%));
-    border-radius: 35% 0 35% 0;
-    width: 2.4%;
-    height: 80%;
+    /* background-image: radial-gradient(hsl(185, 30%, 50%), hsl(215, 40%, 50%) 25%, hsl(0, 0%, 0%)); */
+    border-radius: 0% 30% 0% 30%;
+    width: 5%;
+    height: 100%;
 }
+
+.p-step:nth-of-type(2n) {
+    border-radius: 30% 0% 30% 0%;
+}
+
 
 .level-19, .counter-19, .score-19 {
   font-size: 200;
