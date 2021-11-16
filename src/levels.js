@@ -494,7 +494,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 199, 
+            turns: 125, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
            flags.addPseudoClasses_19(cardsOpened, tiles, foundTiles, iter);

@@ -3891,7 +3891,6 @@ const flags = {
             }
         })
 
-
         for(let d=0; d<newDummiesCount; d++) {
             // Front
             let front = document.createElement('div');
@@ -3911,6 +3910,7 @@ const flags = {
 
             back.appendChild(iter.array[rand]);
 
+            iter.nextArr.push(iter.array[rand]);
             iter.array.splice(rand, 1);
 
             board.appendChild(newTile);
@@ -4022,7 +4022,7 @@ const flags = {
 
             const a4  = anime({
                 targets: allVis,
-                duration: 1800,
+                duration: 1400,
                 easing: 'linear',
                 delay: anime.stagger(300),
                 opacity: [1, 0],
@@ -4115,7 +4115,40 @@ const flags = {
                 document.querySelector('.board').setAttribute('pointerEvents', 'auto');
             })
             .then(() => {
-                
+                if(iter.streak === 1) {
+                    for(let i=0; i<iter.nextArr.length; i++) {
+                        iter.nextArr[i].style = 'color: hsla(7, 70%, 40%, .75);';
+                    }
+                }
+                else if((iter.streak === 2) || (iter.streak === 3)) {
+                    for(let i=0; i<iter.nextArr.length; i++) {
+                        iter.nextArr[i].style = 'color: hsla(0, 0%, 0%, .65);';
+                    }
+                    document.querySelector('.board').dataset.animation = 'on';
+                    document.querySelector('.board').setAttribute('pointerEvents', 'none');
+            
+                    async function showTiles() {
+                        const show = anime({
+                            targets: '.tile',
+                            keyframes: [
+                                {rotateY: '+=180deg', duration: 900, easing: 'easeInExpo'},
+                                {rotateY: '-=180deg', duration: 900, delay: 1400, easing: 'easeOutQuint'},
+                            ],
+                        }).finished;
+            
+                        await Promise.all([show]);
+                    }
+            
+                    async function init2() {
+                        await showTiles()
+                            .then(() => {
+                                document.querySelector('.board').dataset.animation = 'off';
+                                document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                            })
+                    }
+            
+                    init2(); 
+                }   
             })
         }
 
@@ -4123,6 +4156,39 @@ const flags = {
     },
 
     destroyAllFakes: function(cardsOpened, tiles, foundTiles, iter) {
+        document.querySelector('.board').dataset.animation = 'on';
+        document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+        let tilesToDestroy = [];
+
+        for(let i=0; i<iter.nextArr.length; i++) {
+            let tile = iter.nextArr[i].parentNode.parentNode;
+            tilesToDestroy.push(tile);
+        }
+
+        async function destroy() {
+            const a1 = anime({
+                targets: tilesToDestroy,
+                duration: 2400,
+                rotate: 360,
+                scale: [1, 0],
+            }).finished;
+
+            await Promise.all([a1]);
+        }
+
+        async function init3() {
+            await destroy()
+            .then(() => {
+                for(let i=0; i<tilesToDestroy.length; i++) {
+                    tilesToDestroy[i].remove();
+                }
+                document.querySelector('.board').dataset.animation = 'off';
+                document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+            })
+        }
+
+        init3(); 
         console.log('destroyed');
     },
 
