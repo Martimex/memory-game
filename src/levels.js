@@ -494,17 +494,19 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 125, 
+            turns: 112, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+           flags.quickFadeInOut_19(cardsOpened, tiles, foundTiles, iter);
            flags.addPseudoClasses_19(cardsOpened, tiles, foundTiles, iter);
            flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter);
            flags.createProgressBar_19(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.animateGem_19(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.animateGem_19(cardsOpened, tiles, foundTiles, iter);
             flags.appendDummyIcons_19(cardsOpened, tiles, foundTiles, iter);
             flags.updateProgressBar_19(cardsOpened, tiles, foundTiles, iter);
             flags.checkLevelProgress_19(cardsOpened, tiles, foundTiles, iter);

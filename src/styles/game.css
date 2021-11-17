@@ -2538,6 +2538,7 @@
    position: absolute; bottom: 0; left: 0;
    width: 100vw;
    height: 100vh;
+   background-color: hsl(0, 0%, 0%);
    pointer-events: none;
 }
 
@@ -2729,12 +2730,12 @@
 
 .level-19, .counter-19, .score-19 {
   font-size: 200;
-  background: -webkit-linear-gradient(29deg, hsl(343, 40%, 70%), hsl(112, 40%, 70%));
-  filter: contrast(120%) saturate(120%); 
+  background: -webkit-linear-gradient(180deg, hsla(344, 70%, 30%, .85), hsla(191, 70%, 30%, .85), hsla(277, 70%, 30%, .85));
+  filter:  saturate(170%); 
   
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 3px 3px 3px hsla(202, 40%, 70%, .65);
+  text-shadow: 4px 4px 4px hsla(299, 60%, 60%, .4);
 }
 
 

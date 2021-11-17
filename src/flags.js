@@ -3702,10 +3702,22 @@ const flags = {
 
 
     // LVL 19
+    quickFadeInOut_19(cardsOpened, tiles, foundTiles, iter) {
+        const animationContainer = document.querySelector('.animationContainer');
+
+        anime({
+            targets: animationContainer,
+            duration: 700,
+            backgroundColor: 'hsla(0, 0%, 0%, 0)',
+            easing: 'linear',
+        })
+    },
+
     addPseudoClasses_19: function(cardsOpened, tiles, foundTiles, iter) {
         const allTiles = document.querySelectorAll('.tile');
         allTiles.forEach(tile =>  {
             tile.classList.add(`gem-${iter.streak}`);
+            tile.style = 'visibility: hidden;';
         })
     },
 
@@ -3716,6 +3728,8 @@ const flags = {
             iter.array.push(back.childNodes[0]);
             if(index >= ((levels[`lvl19`].rows) * (levels[`lvl19`].columns))) {
                 tile.remove();
+            } else {
+                tile.style = 'visibility: visible;';
             }
         })
 
@@ -3801,6 +3815,23 @@ const flags = {
         animationContainer.appendChild(progressBar);
     },
 
+    animateGem_19: function(cardsOpened, tiles, foundTiles, iter) {
+        let currTarget;
+
+        if(cardsOpened.length <= 1) {
+            currTarget = document.querySelector('.target-1');
+        } else {
+            currTarget = document.querySelector('.target-2');
+        }
+
+        anime({
+            targets: currTarget,
+            duration: 400,
+            opacity: ['.5'],
+            direction: 'alternate',
+        })
+    },
+
     appendDummyIcons_19: function(cardsOpened, tiles, foundTiles, iter) {
 
         // WHAT IS THE MAIN CONDITION TO FIRE THAT FUNCTION ?  ->  TURNS USED, OR TILES FOUND ? let it be tiles, turns used is impossible !!
@@ -3864,9 +3895,14 @@ const flags = {
 
     checkLevelProgress_19: function(cardsOpened, tiles, foundTiles, iter) {
         if((foundTiles+4 >= ((levels[`lvl19`].rows) * (levels[`lvl19`].columns))) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
+            console.log('FOUND TILES !!!  '+foundTiles);
+            if(iter.amount > 0) {return; }
+
+            iter.amount++;
             console.log('YOU WON LV 19')
             // ADD STUFF
             iter.fTilesModifier = ((levels[`lvl19`].rows) * (levels[`lvl19`].columns) * 2);
+            //iter.extraTurns = -1;
             this.destroyAllFakes(cardsOpened, tiles, foundTiles, iter);
         }
     },
@@ -4022,7 +4058,7 @@ const flags = {
 
             const a4  = anime({
                 targets: allVis,
-                duration: 1400,
+                duration: 900,
                 easing: 'linear',
                 delay: anime.stagger(300),
                 opacity: [1, 0],
@@ -4177,15 +4213,90 @@ const flags = {
             await Promise.all([a1]);
         }
 
+        async function fadeBoard() {
+            const a2 = anime({
+                targets: '.board',
+                duration: 500,
+                opacity: [1, 0],
+                easing: 'easeInSine',
+            }).finished;
+
+            await Promise.all([a2]);
+        }
+
+        async function showMsg() {
+            const getMsgText = document.querySelector('.msg-text');
+            getMsgText.style = 'visibility: visible;';
+
+            const a3 = anime({
+                targets: getMsgText,
+                duration: 1300,
+                opacity: [0, 1],
+                translateY: ['-=2200', '+=2200'],
+                easing: 'easeInExpo',
+            }).finished;
+
+            await Promise.all([a3]);
+        }
+
+        async function fadeMsg() {
+            const getMsgText = document.querySelector('.msg-text');
+
+            const a4 = anime({
+                targets: getMsgText,
+                delay: 800,
+                duration: 1400,
+                backgroundImage: 'linear-gradient(45deg, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0))',
+                textShadow: '0px 0px 0px hsla(0, 0%, 0%, 0)',
+
+            }).finished;
+
+            await Promise.all([a4]);
+        }
+
+        async function showBoard() {
+            const a5  = anime({
+                targets: '.board',
+                duration: 1600,
+                opacity: [0, 1],
+                rotate: '180deg',
+                easing: 'easeInBounce',
+            }).finished;
+
+            await Promise.all([a5]);
+        }
+
         async function init3() {
             await destroy()
+            await fadeBoard()
+            .then(() => {
+                const animationContainer = document.querySelector('.animationContainer');
+
+                const messageDiv = document.createElement('div');
+                const messageText = document.createElement('div');
+
+                messageDiv.classList.add('msg-div');
+                messageText.classList.add('msg-text');
+
+                messageText.textContent = 'Surprised ?';
+
+                messageDiv.appendChild(messageText);
+                animationContainer.appendChild(messageText);
+                animationContainer.appendChild(messageDiv);
+            })
+            await showMsg()
+            await fadeMsg()
             .then(() => {
                 for(let i=0; i<tilesToDestroy.length; i++) {
                     tilesToDestroy[i].remove();
                 }
+            })
+            await showBoard()
+            .then(() => {
                 document.querySelector('.board').dataset.animation = 'off';
                 document.querySelector('.board').setAttribute('pointerEvents', 'auto');
             })
+
         }
 
         init3(); 
