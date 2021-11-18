@@ -472,7 +472,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createCombinations_18(cardsOpened, tiles, foundTiles, iter);
             flags.createChallengeCountdown_18(cardsOpened, tiles, foundTiles, iter);
-            //flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter);  //PLEASE UNCOMMENT AFTER LV 19 DEV
+            flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter); 
             flags.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -499,7 +499,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
            flags.quickFadeInOut_19(cardsOpened, tiles, foundTiles, iter);
            flags.addPseudoClasses_19(cardsOpened, tiles, foundTiles, iter);
-           flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter);
+           //flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter); //PLEASE UNCOMMENT AFTER LV 20 DEV
            flags.createProgressBar_19(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -507,9 +507,31 @@ const levels = {
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateGem_19(cardsOpened, tiles, foundTiles, iter);
-            flags.appendDummyIcons_19(cardsOpened, tiles, foundTiles, iter);
+            flags.appendDummyIcons_19(cardsOpened, tiles, foundTiles, iter); 
             flags.updateProgressBar_19(cardsOpened, tiles, foundTiles, iter);
             flags.checkLevelProgress_19(cardsOpened, tiles, foundTiles, iter);
+        },  
+    },
+
+    lvl20: {
+        lv: 20,
+        rows: 8,
+        columns: 8,
+        tile_size: 41,
+        tiles: 4,
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: 42, 
+        },
+        onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
+        },
+        onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+
         },  
     },
 }

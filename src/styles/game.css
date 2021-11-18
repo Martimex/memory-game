@@ -2740,3 +2740,128 @@
 
 
 
+
+
+
+
+/* LEVEL 20 */
+
+.bg-20 {
+    overflow: hidden;
+   position: absolute; top: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   z-index: -50;
+   /* background-color: hsl(11, 60%, 40%);  */
+   background-color: hsla(0, 0%, 0%, 0.9); 
+   background-image: url('../bgs/bg-20.svg'); 
+   /* filter: hue-rotate(12deg); */
+   background-size: cover;
+}
+
+.aContainer-20 {
+   overflow: hidden;
+   position: absolute; bottom: 0; left: 0;
+   width: 100vw;
+   height: 100vh;
+   background-color: hsl(0, 0%, 0%);
+   pointer-events: none;
+}
+
+.game-20 {
+    margin: 0rem;
+    
+}
+
+.board-20 {
+    /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
+    border-radius: 0%;
+    padding: 1rem 5rem;
+/*     box-shadow: 0px 0px 15px 15px hsla(0, 0%, 0%, 0.75) inset;
+    -webkit-box-shadow: 0px 0px 15px 15px hsla(0, 0%, 0%, 0.75) inset;
+    -moz-box-shadow: 0px 0px 15px 15px hsla(0, 0%, 0%, 0.75) inset; */
+
+}
+
+.fa-icon-20 {
+    color: hsla(0, 0%, 0%, .65);
+   /*  background: -webkit-linear-gradient(135deg, hsl(299, 70%, 70%), hsla(299, 30%, 30%, 0.68)); */
+    filter: saturate(80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+   font-size: 1.6rem;
+
+}
+
+.t-20::before {
+    content: '';
+}
+
+ .t-20::after {
+    content: '';
+    display: block;
+    position: relative;
+    top: 0%; left: 0%;
+    width: 130%; height: 130%;
+    border-radius: 0% 0% 50% 50%;
+    background: radial-gradient(hsla(315, 55%, 40%, 0.8), hsla(0, 0%, 0%, .8) 48%, hsla(194, 50%, 50%, .8) 94% );
+} 
+
+ 
+.t-20 {  /* Front size of card */ 
+    border: .1rem solid inherit;/*hsl(62, 40%, 70%);*/
+    border-radius: 0% 0% 50% 50%;
+  /*   background-image: radial-gradient(hsla(177, 30%, 30%, .7) 5%, hsla(0, 0%, 0%, .8)); */
+    visibility: visible;
+    border: .4rem solid hsla(0, 0%, 0%, .85);
+    box-shadow: -2px -2px 2px 2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -2px -2px 2px 2px rgba(0,0,0,0.75);
+    -moz-box-shadow: -2px -2px 2px 2px rgba(0,0,0,0.75);
+    
+}
+
+.t-20::before, .t-20::after {
+    content: '';
+    display: block;
+    position: absolute;
+}
+
+.tf-20 { /* Have no clue what this class is for */
+    
+}
+
+
+
+.tb-20 {  /* Back side of card */
+
+    border-radius: 0% 0% 50% 50%;
+
+    background-image: radial-gradient(hsla(276, 40%, 40%, .65), hsla(202, 40%, 40%, .65));
+}
+
+.t-20 .tb-20 {
+    border: .15rem solid hsla(202, 40%, 70%, .65);
+
+}
+
+
+.scaledImg {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Animation stuff  */
+
+
+.level-20, .counter-20, .score-20 {
+  font-size: 200;
+  background: -webkit-linear-gradient(180deg, hsla(344, 70%, 30%, .85), hsla(191, 70%, 30%, .85), hsla(277, 70%, 30%, .85));
+  filter:  saturate(170%); 
+  
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 4px 4px 4px hsla(299, 60%, 60%, .4);
+}
+
+
+
