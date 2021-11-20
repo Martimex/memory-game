@@ -4313,6 +4313,43 @@ const flags = {
     // LVL 20 - Final level !
 
     createSeparateRooms_20: function(cardsOpened, tiles, foundTiles, iter) {
+        const board = document.querySelector('.board');
+        const novaGrid = document.createElement('div');
+        novaGrid.classList.add('main-grid');
+        board.appendChild(novaGrid);
+        let allTiles = document.querySelectorAll('.tile');
+        let roomsCount = 4;
+        let directoriesCount = 5;
+        for(let a=0; a<roomsCount; a++) {
+            let room = document.createElement('div');
+            room.classList.add('room', `room-${a + 1}`);
+
+            for(let b=(a * (allTiles.length / roomsCount)); b<((a + 1) * (allTiles.length / roomsCount)); b++) {
+                let currentRoom = document.querySelector(`.room-${a + 1}`);
+                console.log(currentRoom);
+                currentRoom.appendChild(allTiles[b]);
+            }
+        }
+
+        for(let c=0; c<directoriesCount; c++) {
+            let directory = document.createElement('div');
+            directory.classList.add(`directory`, `directory-${c + 1}`);
+        }
+
+        let addedRooms = 0;
+        let addedDirectories = 0;
+
+        let qnovaGrid = document.querySelector('.main-grid');
+
+        for(let i=0; i<9; i++) {
+            if((i === 0) || (i === 2) || (i === 6) || (i === 8)) {
+                let room = document.querySelector(`.room-${addedRooms + 1}`)
+                qnovaGrid.appendChild(room);
+            } else {
+                let directory = document.querySelector(`.directory-${addedDirectories + 1}`)
+                qnovaGrid.appendChild(directory);
+            }
+        }
 
     },
 
