@@ -518,15 +518,16 @@ const levels = {
         rows: 8,
         columns: 8,
         tile_size: 41,
-        tiles: 4,
+        tiles: 64, // in fact, it's 4 times 16 
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 42, 
+            turns: 46, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
-        },
+            flags.createSeparateRooms_20(cardsOpened, tiles, foundTiles, iter);
+            flags.addVisualPseudoElements_20(cardsOpened, tiles, foundTiles, iter);
+        },  
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
         },

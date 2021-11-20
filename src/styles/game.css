@@ -2774,9 +2774,11 @@
 }
 
 .board-20 {
-    /* border: .1rem solid hsla(29, 80%, 60%, 80%); */
-    border-radius: 0%;
+    align-items: center;
+    justify-content: center;
     padding: 1rem 5rem;
+    width: 80%;
+    
 /*     box-shadow: 0px 0px 15px 15px hsla(0, 0%, 0%, 0.75) inset;
     -webkit-box-shadow: 0px 0px 15px 15px hsla(0, 0%, 0%, 0.75) inset;
     -moz-box-shadow: 0px 0px 15px 15px hsla(0, 0%, 0%, 0.75) inset; */
@@ -2784,12 +2786,8 @@
 }
 
 .fa-icon-20 {
-    color: hsla(0, 0%, 0%, .65);
-   /*  background: -webkit-linear-gradient(135deg, hsl(299, 70%, 70%), hsla(299, 30%, 30%, 0.68)); */
-    filter: saturate(80%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-   font-size: 1.6rem;
+    color: hsla(0, 0%, 0%, .4);
+   font-size: 1.8rem;
 
 }
 
@@ -2797,26 +2795,73 @@
     content: '';
 }
 
+.star-effect {
+    display: flow-root;
+    z-index: -100;
+    pointer-events: none;
+    position: absolute;
+    top: -20%; left: -20%;
+    width: 140%; 
+    height: 140%; 
+    border-radius: 50%;
+    filter: blur(1px);
+}
+
+.star-red {
+    background-image: url('../addons/star-red.svg');
+}
+
+.star-lightblue {
+    background-image: url('../addons/star-lightblue.svg');
+}
+
+.star-yellow {
+    background-image: url('../addons/star-yellow.svg');
+}
+
+.star-purple {
+    background-image: url('../addons/star-purple.svg');
+}
+
+.star-green {
+    background-image: url('../addons/star-green.svg');
+}
+
+.star-orange {
+    background-image: url('../addons/star-orange.svg');
+}
+
+.star-pink {
+    background-image: url('../addons/star-pink.svg');
+}
+
+.star-darkblue {
+    background-image: url('../addons/star-darkblue.svg');
+}
+
  .t-20::after {
-    content: '';
+    /* content: '';
     display: block;
     position: relative;
     top: 0%; left: 0%;
     width: 130%; height: 130%;
     border-radius: 0% 0% 50% 50%;
     background: radial-gradient(hsla(315, 55%, 40%, 0.8), hsla(0, 0%, 0%, .8) 48%, hsla(194, 50%, 50%, .8) 94% );
+ */
 } 
 
  
 .t-20 {  /* Front size of card */ 
-    border: .1rem solid inherit;/*hsl(62, 40%, 70%);*/
-    border-radius: 0% 0% 50% 50%;
-  /*   background-image: radial-gradient(hsla(177, 30%, 30%, .7) 5%, hsla(0, 0%, 0%, .8)); */
-    visibility: visible;
-    border: .4rem solid hsla(0, 0%, 0%, .85);
-    box-shadow: -2px -2px 2px 2px rgba(0,0,0,0.75);
+    border-radius: 50%;
+    background-image: radial-gradient(hsl(0, 96%, 96%) 20%, #999b, hsla(0, 0%, 0%, .8));
+    border: 0rem solid hsla(0, 0%, 0%, .3);
+    width: 2.7rem; 
+    height: 2.7rem;
+/*     background-image: url('../addons/star-red.svg'); 
+    background-repeat: round;
+/*   box-shadow: -2px -2px 2px 2px rgba(0,0,0,0.75);
     -webkit-box-shadow: -2px -2px 2px 2px rgba(0,0,0,0.75);
-    -moz-box-shadow: -2px -2px 2px 2px rgba(0,0,0,0.75);
+    -moz-box-shadow: -2px -2px 2px 2px rgba(0,0,0,0.75); */
     
 }
 
@@ -2833,14 +2878,14 @@
 
 
 .tb-20 {  /* Back side of card */
-
+/* 
     border-radius: 0% 0% 50% 50%;
 
-    background-image: radial-gradient(hsla(276, 40%, 40%, .65), hsla(202, 40%, 40%, .65));
+    background-image: radial-gradient(hsla(276, 40%, 40%, .65), hsla(202, 40%, 40%, .65)); */
 }
 
 .t-20 .tb-20 {
-    border: .15rem solid hsla(202, 40%, 70%, .65);
+    /* border: .15rem solid hsla(202, 40%, 70%, .65); */
 
 }
 

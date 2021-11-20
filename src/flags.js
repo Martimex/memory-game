@@ -4312,7 +4312,29 @@ const flags = {
 
     // LVL 20 - Final level !
 
-    
+    createSeparateRooms_20: function(cardsOpened, tiles, foundTiles, iter) {
+
+    },
+
+    addVisualPseudoElements_20: function(cardsOpened, tiles, foundTiles, iter) {
+        const allTiles = document.querySelectorAll('.tile');
+
+        allTiles.forEach((tile, index) => {
+            let starEffectDiv = document.createElement('div');
+            tile.appendChild(starEffectDiv);
+
+            // Keep it like this, then focus on two colors room behaviour
+
+            if(index%8 === 0) { starEffectDiv.classList.add('star-effect', 'star-red');}
+            else if(index%7 === 0) {starEffectDiv.classList.add('star-effect', 'star-orange');}
+            else if(index % 6 === 0) {starEffectDiv.classList.add('star-effect', 'star-yellow');}
+            else if(index % 5 === 0) {starEffectDiv.classList.add('star-effect', 'star-green');}
+            else if(index % 4 === 0) {starEffectDiv.classList.add('star-effect', 'star-lightblue');}
+            else if(index % 3 === 0) {starEffectDiv.classList.add('star-effect', 'star-darkblue');}
+            else if(index % 2 === 0) {starEffectDiv.classList.add('star-effect', 'star-purple');}
+            else {starEffectDiv.classList.add('star-effect', 'star-pink');}
+        })
+    },
 
 }
 
