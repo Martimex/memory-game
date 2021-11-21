@@ -522,9 +522,10 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 46, 
+            turns: 88, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.prepareTilesToPairs_20(cardsOpened, tiles, foundTiles, iter);
             flags.createSeparateRooms_20(cardsOpened, tiles, foundTiles, iter);
             flags.addVisualPseudoElements_20(cardsOpened, tiles, foundTiles, iter);
         },  

@@ -4312,7 +4312,46 @@ const flags = {
 
     // LVL 20 - Final level !
 
+    prepareTilesToPairs_20: function(cardsOpened, tiles, foundTiles, iter) {
+
+        const allTiles = document.querySelectorAll('.tile');
+        let iconsArray = [];
+
+        allTiles.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            iconsArray.push(back.childNodes[0]);
+        })
+
+        function sortSvgs(array) {
+            let compareArr = [];
+            for(let x=0; x<array.length; x++) {
+                compare(array[x], compareArr);
+            }
+            return compareArr;
+        }
+
+        function compare(item, compareArr) {
+            compareArr.unshift(item);
+            if(compare.length > 1) {
+                for(let y=1; y<compareArr.length; y++) {
+                    if(item.classList[1] > compareArr[y].classList[1]) {
+                        let z = compareArr[y];
+                        compareArr[y] = compareArr[y-1];
+                        compareArr[y-1] = z;
+                    }
+                }
+            } else {
+                return compareArr;
+            }
+        }
+
+        iter.array = sortSvgs(iconsArray);
+    },
+
     createSeparateRooms_20: function(cardsOpened, tiles, foundTiles, iter) {
+
+        console.log(iter.array)
+
         const board = document.querySelector('.board');
         const novaGrid = document.createElement('div');
         novaGrid.classList.add('main-grid');
@@ -4323,21 +4362,38 @@ const flags = {
         for(let a=0; a<roomsCount; a++) {
             let room = document.createElement('div');
             room.classList.add('room', `room-${a + 1}`);
+            board.appendChild(room);
+
+            let substractionCount = 0;
 
             for(let b=(a * (allTiles.length / roomsCount)); b<((a + 1) * (allTiles.length / roomsCount)); b++) {
-                let currentRoom = document.querySelector(`.room-${a + 1}`);
-                console.log(currentRoom);
-                currentRoom.appendChild(allTiles[b]);
+                //let currentRoom = document.querySelector(`.room-${a + 1}`);
+                let rand = Math.floor(Math.random() * ((allTiles.length / roomsCount) - substractionCount));
+                //console.log(currentRoom);
+                console.log(iter.array[rand].parentNode.parentNode, b);
+                console.log(iter.array);
+                room.appendChild(iter.array[rand].parentNode.parentNode);
+                iter.array.splice(rand, 1);
+                substractionCount++;
             }
         }
 
         for(let c=0; c<directoriesCount; c++) {
             let directory = document.createElement('div');
             directory.classList.add(`directory`, `directory-${c + 1}`);
+            board.appendChild(directory);
         }
 
         let addedRooms = 0;
         let addedDirectories = 0;
+
+        let initialDirections = {
+            dir1: 'right',
+            dir3: 'up',
+            dir4: 'up',
+            dir5: 'down',
+            dir7: 'left',
+        }
 
         let qnovaGrid = document.querySelector('.main-grid');
 
@@ -4345,13 +4401,25 @@ const flags = {
             if((i === 0) || (i === 2) || (i === 6) || (i === 8)) {
                 let room = document.querySelector(`.room-${addedRooms + 1}`)
                 qnovaGrid.appendChild(room);
+                addedRooms++;
             } else {
                 let directory = document.querySelector(`.directory-${addedDirectories + 1}`)
+                let arrow = document.createElement('img');
+                arrow.classList.add('directory-arrow');
+                arrow.alt = `arrow-${initialDirections[`dir${i}`]}`;
+                arrow.src = `arrow-${initialDirections[`dir${i}`]}.svg`;
+                //let wholeArrow = arrow.querySelector('svg > g > g > g > rect');
+                //console.log(wholeArrow)
+                //wholeArrow.fill = 'blue';
+                directory.appendChild(arrow);
                 qnovaGrid.appendChild(directory);
+                addedDirectories++;
             }
         }
 
     },
+
+    // Inside this function change mechanism to add proper color adjustment
 
     addVisualPseudoElements_20: function(cardsOpened, tiles, foundTiles, iter) {
         const allTiles = document.querySelectorAll('.tile');
@@ -4362,13 +4430,13 @@ const flags = {
 
             // Keep it like this, then focus on two colors room behaviour
 
-            if(index%8 === 0) { starEffectDiv.classList.add('star-effect', 'star-red');}
-            else if(index%7 === 0) {starEffectDiv.classList.add('star-effect', 'star-orange');}
-            else if(index % 6 === 0) {starEffectDiv.classList.add('star-effect', 'star-yellow');}
-            else if(index % 5 === 0) {starEffectDiv.classList.add('star-effect', 'star-green');}
-            else if(index % 4 === 0) {starEffectDiv.classList.add('star-effect', 'star-lightblue');}
-            else if(index % 3 === 0) {starEffectDiv.classList.add('star-effect', 'star-darkblue');}
-            else if(index % 2 === 0) {starEffectDiv.classList.add('star-effect', 'star-purple');}
+            if(index %8 === 0) { starEffectDiv.classList.add('star-effect', 'star-red');}
+            else if(index %8 === 1) {starEffectDiv.classList.add('star-effect', 'star-orange');}
+            else if(index %8 === 2) {starEffectDiv.classList.add('star-effect', 'star-yellow');}
+            else if(index %8 === 3) {starEffectDiv.classList.add('star-effect', 'star-green');}
+            else if(index %8 === 4) {starEffectDiv.classList.add('star-effect', 'star-lightblue');}
+            else if(index %8 === 5) {starEffectDiv.classList.add('star-effect', 'star-darkblue');}
+            else if(index %8 === 6) {starEffectDiv.classList.add('star-effect', 'star-purple');}
             else {starEffectDiv.classList.add('star-effect', 'star-pink');}
         })
     },
