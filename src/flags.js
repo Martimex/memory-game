@@ -4384,16 +4384,27 @@ const flags = {
                 let tileSibling = iter.array[z+1].parentNode.parentNode;
                 let rand = Math.floor( Math.random() * colorOptions);
 
-                if(rand === 0) {
+                /* if(rand === 0) {
                     if(colorFirstAmount === ((allTiles.length / roomsCount) / colorOptions)) {
-                        rand = 1;
+                        rand++;
                     } else { colorFirstAmount+= 2;}
-                } else {
+                } else if(rand === 1) {
                     colorSecondAmount+= 2;
                     if(colorSecondAmount === ((allTiles.length / roomsCount) / colorOptions)) {
-                        rand = 0;
+                        rand--;
                     } else { colorSecondAmount+= 2; }
+                } */
+
+                if((rand === 0) && ((colorFirstAmount >= (allTiles.length / roomsCount) / colorOptions))) {
+                    rand = 1;
+                } else if ((rand === 1) && ((colorSecondAmount >= (allTiles.length / roomsCount) / colorOptions))) {
+                    rand = 0;
                 }
+
+                if(rand === 0) {colorFirstAmount = colorFirstAmount + 2;}
+                else if(rand === 1) {colorSecondAmount = colorSecondAmount + 2;}
+
+                console.log(rand, a);
 
                 let starEffectDiv = document.createElement('div');
                 tile.appendChild(starEffectDiv);
@@ -4409,8 +4420,8 @@ const flags = {
                 //let currentRoom = document.querySelector(`.room-${a + 1}`);
                 let rand = Math.floor(Math.random() * ((allTiles.length / roomsCount) - substractionCount));
                 //console.log(currentRoom);
-                console.log(iter.array[rand].parentNode.parentNode, b);
-                console.log(iter.array);
+                //console.log(iter.array[rand].parentNode.parentNode, b);
+                //console.log(iter.array);
                 room.appendChild(iter.array[rand].parentNode.parentNode);
                 iter.array.splice(rand, 1);
                 substractionCount++;
