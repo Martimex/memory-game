@@ -1,5 +1,5 @@
 import { icon } from '@fortawesome/fontawesome-svg-core';
-import { get, set } from 'animejs';
+import { get, random, set } from 'animejs';
 import anime from 'animejs/lib/anime.es.js';
 import { useRef } from 'react/cjs/react.development';
 import Game from './components/game.js';
@@ -4404,7 +4404,7 @@ const flags = {
                 if(rand === 0) {colorFirstAmount = colorFirstAmount + 2;}
                 else if(rand === 1) {colorSecondAmount = colorSecondAmount + 2;}
 
-                console.log(rand, a);
+                //console.log(rand, a);
 
                 let starEffectDiv = document.createElement('div');
                 tile.appendChild(starEffectDiv);
@@ -4455,7 +4455,7 @@ const flags = {
             } else {
                 let directory = document.querySelector(`.directory-${addedDirectories + 1}`)
                 let arrow = document.createElement('img');
-                arrow.classList.add('directory-arrow');
+                arrow.classList.add('directory-arrow', `directory-arrow-${addedDirectories + 1}`);
                 arrow.alt = `arrow-${initialDirections[`dir${i}`]}`;
                 arrow.src = `arrow-${initialDirections[`dir${i}`]}.svg`;
                 //let wholeArrow = arrow.querySelector('svg > g > g > g > rect');
@@ -4469,26 +4469,75 @@ const flags = {
 
     },
 
-    // Inside this function change mechanism to add proper color adjustment
+    blockThreeRoomsAndActivateDirectories_20: function(cardsOpened, tiles, foundTiles, iter) {
+        
+        // 1. At very beginning pick one starting room and block pointer events on the others
 
-    addVisualPseudoElements_20: function(cardsOpened, tiles, foundTiles, iter) {
-        const allTiles = document.querySelectorAll('.tile');
+        const roomsCount = 4;
+        const colorOptions = 2;
+        let animationArray = [];
 
-        allTiles.forEach((tile, index) => {
-            let starEffectDiv = document.createElement('div');
-            tile.appendChild(starEffectDiv);
+        for(let i=1; i<=4; i++) {
+            let room = document.querySelector(`.room-${i}`);
+            room.style = 'pointer-events: none;';
+            animationArray.push(room);
+        }
 
-            // Keep it like this, then focus on two colors room behaviour
+        let randomStart = Math.floor( Math.random() * roomsCount) + 1;
 
-            if(index %8 === 0) { starEffectDiv.classList.add('star-effect', 'star-red');}
-            else if(index %8 === 1) {starEffectDiv.classList.add('star-effect', 'star-orange');}
-            else if(index %8 === 2) {starEffectDiv.classList.add('star-effect', 'star-yellow');}
-            else if(index %8 === 3) {starEffectDiv.classList.add('star-effect', 'star-green');}
-            else if(index %8 === 4) {starEffectDiv.classList.add('star-effect', 'star-lightblue');}
-            else if(index %8 === 5) {starEffectDiv.classList.add('star-effect', 'star-darkblue');}
-            else if(index %8 === 6) {starEffectDiv.classList.add('star-effect', 'star-purple');}
-            else {starEffectDiv.classList.add('star-effect', 'star-pink');}
+        let startRoom = document.querySelector(`.room-${randomStart}`);
+        startRoom.style = 'pointer-events: auto;';
+        animationArray.splice(randomStart - 1, 1);
+
+        iter.value = startRoom;
+
+        anime({
+            targets: animationArray,
+            duration: 2400,
+            delay: anime.stagger(2400),
+            //opacity: [1, 0],
+            filter: 'grayscale(100%)',
+            easing: 'easeOutExpo',
         })
+
+        // 2. Now activate two directoires, based on which room has been chosen
+
+        console.log(iter.value)
+
+        const directoriesToActivate = {
+            r1: ['arrow-1', 'arrow-2'],
+            r2: ['arrow-1', 'arrow-4'],
+            r3: ['arrow-2', 'arrow-5'],
+            r4: ['arrow-4', 'arrow-5'],
+        }
+
+        const startRoomClassName = iter.value.classList[1];
+
+        const firstLetter = startRoomClassName[0];
+        const lastLetter = startRoomClassName[startRoomClassName.length - 1];
+
+        //console.log(firstLetter + lastLetter);
+
+        let arrowsToColor = directoriesToActivate[firstLetter + lastLetter];
+        let thisRoomColors = [];
+        console.log(arrowsToColor);
+
+        // Get the colors from board elems
+        let thisRoom = document.querySelector(`.${startRoomClassName}`);
+        let thisRoomTiles = thisRoom.querySelectorAll('.tile');
+        thisRoomTiles.forEach((tile, index) => {
+            let starEffect = tile.querySelector('.star-effect');
+            let color = starEffect.classList[1];
+
+            if(thisRoomColors.length >= colorOptions) {}
+            else if(index === 0) {thisRoomColors.push(color);}
+            else if(color !== thisRoomColors[0]) {thisRoomColors.push(color);}
+        })
+
+        console.log(thisRoomColors);
+
+        // We ve got proper colors, so now paint out arrows randomly
+        // ...
     },
 
 }

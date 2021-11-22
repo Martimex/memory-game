@@ -527,7 +527,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.prepareTilesToPairs_20(cardsOpened, tiles, foundTiles, iter);
             flags.createSeparateRooms_20(cardsOpened, tiles, foundTiles, iter);
-            //flags.addVisualPseudoElements_20(cardsOpened, tiles, foundTiles, iter);
+            flags.blockThreeRoomsAndActivateDirectories_20(cardsOpened, tiles, foundTiles, iter);
         },  
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
 

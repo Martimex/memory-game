@@ -2961,24 +2961,40 @@
 }
 
 .directory-1 {
-
+    
 }
+
+    .directory-arrow-1 {
+        background-image: radial-gradient(hsl(10, 65%, 45%), hsl(10, 65%, 35%), hsl(10, 65%, 25%), hsl(10, 65%, 15%));
+    }
 
 .directory-2 {
 
 }
+    .directory-arrow-2 {
+
+    }
 
 .directory-3 {
 
 }
+    .directory-arrow-3 {
+
+    }
 
 .directory-4 {
 
 }
+    .directory-arrow-4 {
+
+    }
 
 .directory-5 {
     
 }
+    .directory-arrow-5 {
+
+    }
 
 .level-20, .counter-20, .score-20 {
   font-size: 200;
