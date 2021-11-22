@@ -4359,12 +4359,51 @@ const flags = {
         let allTiles = document.querySelectorAll('.tile');
         let roomsCount = 4;
         let directoriesCount = 5;
+        const colorOptions = 2;
+
+        const colorObj = {
+            // red, orange, yellow, green, lightblue, darkblue, purple, pink
+            a0: ['red', 'green'],
+            a1: ['yellow', 'darkblue'],
+            a2: ['lightblue', 'purple'],
+            a3: ['orange', 'pink'],
+        }
+
         for(let a=0; a<roomsCount; a++) {
             let room = document.createElement('div');
             room.classList.add('room', `room-${a + 1}`);
             board.appendChild(room);
 
             let substractionCount = 0;
+            let colorFirstAmount = 0;
+            let colorSecondAmount = 0;
+            
+            // Color tiles
+            for(let z=0; z<(allTiles.length / roomsCount); z = z + 2) {
+                let tile = iter.array[z].parentNode.parentNode;
+                let tileSibling = iter.array[z+1].parentNode.parentNode;
+                let rand = Math.floor( Math.random() * colorOptions);
+
+                if(rand === 0) {
+                    if(colorFirstAmount === ((allTiles.length / roomsCount) / colorOptions)) {
+                        rand = 1;
+                    } else { colorFirstAmount+= 2;}
+                } else {
+                    colorSecondAmount+= 2;
+                    if(colorSecondAmount === ((allTiles.length / roomsCount) / colorOptions)) {
+                        rand = 0;
+                    } else { colorSecondAmount+= 2; }
+                }
+
+                let starEffectDiv = document.createElement('div');
+                tile.appendChild(starEffectDiv);
+                starEffectDiv.classList.add('star-effect', `star-${colorObj[`a${a}`][rand]}`);
+
+                let starEffectDivSibling = document.createElement('div');
+                tileSibling.appendChild(starEffectDivSibling);
+                starEffectDivSibling.classList.add('star-effect', `star-${colorObj[`a${a}`][rand]}`);
+
+            }
 
             for(let b=(a * (allTiles.length / roomsCount)); b<((a + 1) * (allTiles.length / roomsCount)); b++) {
                 //let currentRoom = document.querySelector(`.room-${a + 1}`);
