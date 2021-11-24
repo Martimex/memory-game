@@ -528,12 +528,13 @@ const levels = {
             flags.prepareTilesToPairs_20(cardsOpened, tiles, foundTiles, iter);
             flags.createSeparateRooms_20(cardsOpened, tiles, foundTiles, iter);
             flags.blockThreeRoomsAndActivateDirectories_20(cardsOpened, tiles, foundTiles, iter);
+            //flags.lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter)
         },  
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter);
         },  
     },
 }

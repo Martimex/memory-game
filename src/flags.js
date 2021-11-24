@@ -4534,12 +4534,170 @@ const flags = {
             else if(color !== thisRoomColors[0]) {thisRoomColors.push(color);}
         })
 
-        console.log(thisRoomColors);
+        console.log(thisRoomColors); // star-orange, star-pink
 
         // We ve got proper colors, so now paint out arrows randomly
         // ...
+
+        for(let n=0; n<colorOptions; n++) {
+            let rand = Math.floor(Math.random() * thisRoomColors.length);
+            let thisArrow = document.querySelector(`.directory-${arrowsToColor[n]}`);
+            console.log(thisArrow);
+            thisArrow.classList.add(thisRoomColors[rand], `arrow-type`);
+            thisRoomColors.splice(rand, 1);
+        } 
     },
 
+    lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter) {
+
+        // First check initial conditions
+        //if(!cardsOpened[0]) { this.pickRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter); }
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            this.pickRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter);
+        }
+    },
+
+    pickRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter) {
+        console.log('i Love console.log');
+        // Initial object - quite complicated tbh
+
+        const conflict = 'conflict';
+        const peaceful = 'peaceful';
+        const selfPointing = 'self-pointing';
+        const magic = 'magic';
+
+        const behaviourControlObj = {
+            // Consider removing those line which result in CONFLICT scenario. It may be determined also
+            // by whether arrow obj has this prop or not (for example: arrow_1 don't need arrow_up option)           
+            
+            room_1: {
+                arrow_1: {
+                    // Clockwise order
+                    arrow_up: conflict,
+                    arrow_right: peaceful,
+                    arrow_down: conflict,
+                    arrow_left: selfPointing,
+                },
+                arrow_2: {
+                    arrow_up: selfPointing,
+                    arrow_right: conflict,
+                    arrow_down: peaceful,
+                    arrow_left: conflict,
+                },
+                arrow_3: {
+                    // It's gonna be rotated based on room number 
+                    arrow_top: magic,
+                },
+            },
+            room_2: {
+                arrow_1: {
+                    arrow_up: conflict,
+                    arrow_right: selfPointing,
+                    arrow_down: conflict,
+                    arrow_left: peaceful,
+                },
+                arrow_3: {
+                    arrow_top: magic,
+                },
+                arrow_4: {                    
+                    arrow_up: selfPointing,
+                    arrow_right: conflict,
+                    arrow_down: peaceful,
+                    arrow_left: conflict,
+                },
+            },
+            room_3: {
+                arrow_2: {
+                    arrow_up: peaceful,
+                    arrow_right: conflict,
+                    arrow_down: selfPointing,
+                    arrow_left: conflict,
+                },
+                arrow_3: {
+                    arrow_top: magic,
+                },
+                arrow_5: {
+                    arrow_up: conflict,
+                    arrow_right: peaceful,
+                    arrow_down: conflict,
+                    arrow_left: selfPointing,
+                },
+            },
+            room_4: {
+                arrow_3: {
+                    arrow_top: magic,
+                },
+                arrow_4: {
+                    arrow_up: peaceful,
+                    arrow_right: conflict,
+                    arrow_down: selfPointing,
+                    arrow_left: conflict,
+                },
+                arrow_5: {
+                    arrow_up: conflict,
+                    arrow_right: selfPointing,
+                    arrow_down: conflict,
+                    arrow_left: peaceful,
+                },
+            },
+        }
+
+        // WE ARE ALWAYS CERTAIN THAT cardsOpened[0].parentNode's color equals cardsOpened[1].parentNode
+        let tile = cardsOpened[0].parentNode;
+
+        // Let's get the room number first
+        const room = tile.parentNode;
+        let roomNoUnformatted = room.classList[1];
+        let roomNoFormatted;
+        if(roomNoUnformatted.includes('-')) {
+            roomNoFormatted = roomNoUnformatted.replace('-', '_');
+        } else {
+            roomNoFormatted = roomNoUnformatted;
+        }
+
+        // Now let's go for arrow identifier
+
+        let starEffect = tile.querySelector('.star-effect');
+
+        let chosenColorPath = starEffect.classList[1];
+
+        console.log(chosenColorPath); // star-pink  as an example - so the player chose pink path
+
+        // Now look for that arrow that contains
+        let arrowToFollow;
+        const allArrows = document.querySelectorAll('.directory-arrow');
+        allArrows.forEach((arrow) => {
+            if(arrow.classList.contains(chosenColorPath)) arrowToFollow = arrow;
+        })
+
+        console.log(arrowToFollow); // We have now a proper arrow to follow further instructions on !!
+        
+        let arrowAltUnformatted = arrowToFollow.alt;
+        let arrowAltFormatted;
+        if(arrowAltUnformatted.includes('-')) {
+            arrowAltFormatted = arrowAltUnformatted.replace('-', '_');
+        } else {
+            arrowAltFormatted = arrowAltUnformatted;
+        }
+
+        let arrowToFollowNo = arrowToFollow.classList[1];
+
+        let initialIndex = arrowToFollowNo.indexOf('arrow');
+        let arrowIdentifierUnformatted = arrowToFollowNo.substring(initialIndex);
+
+        let arrowIdentifierFormatted;
+        if(arrowIdentifierUnformatted.includes('-')) {
+            arrowIdentifierFormatted = arrowIdentifierUnformatted.replace('-', '_');
+            //arrowIdentifierFormatted = arrowIdentifierUnformatted.
+        } else {
+            arrowIdentifierFormatted = arrowIdentifierUnformatted;
+        }
+
+        console.log(roomNoFormatted); // Room number compatible with behaviourControlObj
+        console.log(arrowIdentifierFormatted); // Finally compatible with behaviourControlObj ^^
+        console.log(arrowAltFormatted); // Direction where the arrow points to
+
+    },
 }
 
 export default flags;
