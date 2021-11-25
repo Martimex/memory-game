@@ -4765,32 +4765,82 @@ const flags = {
         if(scenario === undefined) {
             console.log('conflict scenario fired');
             this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj);
         } else if(scenario === peaceful) {
             console.log('peaceful scenario fired');
             this.firePeacefulScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);     
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj);     
         } else if(scenario === selfPointing) {
             console.log('self-pointing scenario fired');
             this.fireSelfPointingScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj);
         } else if(scenario === magic) {
             console.log('magic scenario fired');
             this.fireMagicScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj);
         }
     },
 
-    setTwoScenariosOptions_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted) {
+    setTwoScenariosOptions_20: function(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj) {
+        // Make use of behaviourControlObj a LOT !!
+        let finalIndex = roomNoFormatted.indexOf('_');
+        let formattedFirstPart = roomNoFormatted.substring(0, finalIndex + 1);
         
+        const currentRoom = formattedFirstPart + roomToGo; // This is the first indent in behaviourControlObj - we know what the current room is
+
+        console.log(currentRoom);
+        // First, by roomToGo you can find a room_${roomToGo} - this is the new chosen room we will change its' arrows for !
+        let arrowPositions = ['up', 'down', 'left', 'right'];
+        let possibleArrows = behaviourControlObj[currentRoom];
+
+        // Now let's set FIRST scenario based on RNG - but it has to consider which rooms are still active
+        // Prepare a check code
+        let allRooms = document.querySelectorAll('.room');
+        let activeRooms = [];
+
+        allRooms.forEach((room) => {
+            let count = 0;
+            for(let i=0; i<room.childNodes.length; i++) {
+                if((room.childNodes[0].style.visibility !== 'hidden') && (cardsOpened[0].parentNode !== room.childNodes[i]) && (cardsOpened[1].parentNode !== room.childNodes[i])) {
+                    count++;
+                }
+            }
+            console.log(count);
+            if(count !== 0) { activeRooms.push(room); } 
+        })
+
+        if(activeRooms.length === 0) { return; }
+
+        console.log(possibleArrows);
+
+        // So now we have info which rooms are still available
     },
 
     fireConflictScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted) {
         const allRooms = document.querySelectorAll('.room');
-        const pickNewRoom = [];
+       // const pickNewRoom = [];
+
+        let activeRooms = [];
+        let pickNewRoom = [];
+        // Block rooms which do not have any available pairs to find !!!
+
         allRooms.forEach((room) => {
+            let count = 0;
+            for(let i=0; i<room.childNodes.length; i++) {
+                if((room.childNodes[0].style.visibility !== 'hidden') && (cardsOpened[0].parentNode !== room.childNodes[i]) && (cardsOpened[1].parentNode !== room.childNodes[i])) {
+                    count++;
+                }
+            }
+            console.log(count);
+            if(count !== 0) { activeRooms.push(room); } 
+        })
+
+        if(activeRooms.length === 0) { return; }
+        activeRooms.forEach((room) => {
             if(room.classList[1] !== roomNoUnformatted) pickNewRoom.push(room);
         })
+
+        if(pickNewRoom.length === 0) {  /*it means it's only one free room for now*/ pickNewRoom.push(activeRooms[0]);}
 
         let rand = Math.floor( Math.random() * pickNewRoom.length);
 
