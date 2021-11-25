@@ -4573,71 +4573,132 @@ const flags = {
             room_1: {
                 arrow_1: {
                     // Clockwise order
-                    arrow_up: conflict,
-                    arrow_right: peaceful,
-                    arrow_down: conflict,
-                    arrow_left: selfPointing,
+                    //arrow_up: conflict,
+                    arrow_right: {
+                        scenario: peaceful,
+                        roomToGo: 2,
+                    },
+                    //arrow_down: conflict,
+                    arrow_left:  {
+                        scenario: selfPointing,
+                        roomToGo: 1,
+                    },
                 },
                 arrow_2: {
-                    arrow_up: selfPointing,
-                    arrow_right: conflict,
-                    arrow_down: peaceful,
-                    arrow_left: conflict,
+                    arrow_up: {
+                        scenario: selfPointing,
+                        roomToGo: 1,
+                    },
+                    //arrow_right: conflict,
+                    arrow_down: {
+                        scenario: peaceful,
+                        roomToGo: 3,
+                    //arrow_left: conflict,
+                    },
                 },
                 arrow_3: {
                     // It's gonna be rotated based on room number 
-                    arrow_top: magic,
+                    arrow_top: {
+                        scenario: magic,
+                        roomToGo: 4,
+                    },
+
                 },
             },
             room_2: {
                 arrow_1: {
-                    arrow_up: conflict,
-                    arrow_right: selfPointing,
-                    arrow_down: conflict,
-                    arrow_left: peaceful,
+                    //arrow_up: conflict,
+                    arrow_right: {
+                        scenario: selfPointing,
+                        roomToGo: 2,
+                    },
+                    //arrow_down: conflict,
+                    arrow_left: {
+                        scenario: peaceful,
+                        roomToGo: 1,
+                    },
                 },
                 arrow_3: {
-                    arrow_top: magic,
+                    arrow_top:  {
+                        scenario: magic,
+                        roomToGo: 3,
+                    },
                 },
                 arrow_4: {                    
-                    arrow_up: selfPointing,
-                    arrow_right: conflict,
-                    arrow_down: peaceful,
-                    arrow_left: conflict,
+                    arrow_up: {
+                        scenario: selfPointing,
+                        roomToGo: 2,
+                    },
+                    //arrow_right: conflict,
+                    arrow_down: {
+                        scenario: peaceful,
+                        roomToGo: 4,
+                    },
+                    //arrow_left: conflict,
                 },
             },
             room_3: {
                 arrow_2: {
-                    arrow_up: peaceful,
-                    arrow_right: conflict,
-                    arrow_down: selfPointing,
-                    arrow_left: conflict,
+                    arrow_up: {
+                        scenario: peaceful,
+                        roomToGo: 1,
+                    },
+                    //arrow_right: conflict,
+                    arrow_down: {
+                        scenario: selfPointing,
+                        roomToGo: 3,
+                    },
+                    //arrow_left: conflict,
                 },
                 arrow_3: {
-                    arrow_top: magic,
+                    arrow_top: {
+                        scenario: magic,
+                        roomToGo: 2,
+                    },
                 },
                 arrow_5: {
-                    arrow_up: conflict,
-                    arrow_right: peaceful,
-                    arrow_down: conflict,
-                    arrow_left: selfPointing,
+                    //arrow_up: conflict,
+                    arrow_right: {
+                        scenario: peaceful,
+                        roomToGo: 4,
+                    },
+                    //arrow_down: conflict,
+                    arrow_left: {
+                        scenario: selfPointing,
+                        roomToGo: 3,
+                    },
                 },
             },
             room_4: {
                 arrow_3: {
-                    arrow_top: magic,
+                    arrow_top: {
+                        scenario: magic,
+                        roomToGo: 1,
+                    },
                 },
                 arrow_4: {
-                    arrow_up: peaceful,
-                    arrow_right: conflict,
-                    arrow_down: selfPointing,
-                    arrow_left: conflict,
+                    arrow_up: {
+                        scenario: peaceful,
+                        roomToGo: 2,
+                    },
+                    //arrow_right: conflict,
+                    arrow_down: {
+                        scenario: selfPointing,
+                        roomToGo: 4,
+                    },
+                    //arrow_left: conflict,
                 },
                 arrow_5: {
-                    arrow_up: conflict,
-                    arrow_right: selfPointing,
-                    arrow_down: conflict,
-                    arrow_left: peaceful,
+                    //arrow_up: conflict,
+                    arrow_right: {
+                        scenario: selfPointing,
+                        roomToGo: 4,
+                    },
+                    //arrow_down: conflict,
+                    arrow_left: {
+                        scenario: peaceful,
+                        roomToGo: 3,
+                    },
                 },
             },
         }
@@ -4697,6 +4758,227 @@ const flags = {
         console.log(arrowIdentifierFormatted); // Finally compatible with behaviourControlObj ^^
         console.log(arrowAltFormatted); // Direction where the arrow points to
 
+        const endChainProps = behaviourControlObj[roomNoFormatted][arrowIdentifierFormatted][arrowAltFormatted];
+        const scenario = endChainProps.scenario;
+        const roomToGo = endChainProps.roomToGo;
+
+        if(scenario === undefined) {
+            console.log('conflict scenario fired');
+            this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
+        } else if(scenario === peaceful) {
+            console.log('peaceful scenario fired');
+            this.firePeacefulScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);     
+        } else if(scenario === selfPointing) {
+            console.log('self-pointing scenario fired');
+            this.fireSelfPointingScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
+        } else if(scenario === magic) {
+            console.log('magic scenario fired');
+            this.fireMagicScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
+        }
+    },
+
+    setTwoScenariosOptions_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted) {
+        
+    },
+
+    fireConflictScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted) {
+        const allRooms = document.querySelectorAll('.room');
+        const pickNewRoom = [];
+        allRooms.forEach((room) => {
+            if(room.classList[1] !== roomNoUnformatted) pickNewRoom.push(room);
+        })
+
+        let rand = Math.floor( Math.random() * pickNewRoom.length);
+
+        let roomsToBlock = [];
+        let roomToVisit = pickNewRoom[rand];
+
+        allRooms.forEach((room) => {
+            if(room.classList[1] !== roomToVisit.classList[1]) roomsToBlock.push(room);
+        })
+
+
+        async function blockRooms() {
+            const a1 = anime({
+                targets: roomsToBlock,
+                duration: 1200,
+                delay: anime.stagger(500),
+                filter: 'grayscale(100%)',
+                easing: 'easeOutExpo',
+            }).finished;
+
+            await Promise.all([a1]);
+        }
+
+        async function unblockVisitRoom() {
+            const a2 = anime({
+                targets: roomToVisit,
+                duration: 1200,
+                filter: 'grayscale(0%)',
+                easing: 'easeInExpo',
+            }).finished;
+
+            await Promise.all([a2]);
+        }
+
+        async function init() {
+            await blockRooms()
+            await unblockVisitRoom()
+            .then(() => {
+                roomToVisit.style = 'pointer-events: auto;';
+            })
+        }
+
+        // Fire
+        init();
+    },
+
+    firePeacefulScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo) {
+        const allRooms = document.querySelectorAll('.room');  
+        let roomsToBlock = [];
+        let roomToVisit;
+        allRooms.forEach((room) => {
+            if(room.classList[1] === `room-${roomToGo}`) {
+                roomToVisit = room;
+            } else {
+                room.style = 'pointer-events: none;';
+                roomsToBlock.push(room);
+            }
+        })
+
+        async function blockRooms() {
+            const a1 = anime({
+                targets: roomsToBlock,
+                duration: 1200,
+                delay: anime.stagger(500),
+                filter: 'grayscale(100%)',
+                easing: 'easeOutExpo',
+            }).finished;
+
+            await Promise.all([a1]);
+        }
+
+        async function unblockVisitRoom() {
+            const a2 = anime({
+                targets: roomToVisit,
+                duration: 1200,
+                filter: 'grayscale(0%)',
+                easing: 'easeInExpo',
+            }).finished;
+
+            await Promise.all([a2]);
+        }
+
+        async function init() {
+            await blockRooms()
+            await unblockVisitRoom()
+            .then(() => {
+                roomToVisit.style = 'pointer-events: auto;';
+            })
+        }
+
+        // Fire
+        init();
+    },
+
+    fireSelfPointingScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo) {
+        const allRooms = document.querySelectorAll('.room');  
+        let roomsToBlock = [];
+        let roomToVisit;
+        allRooms.forEach((room) => {
+            if(room.classList[1] === `room-${roomToGo}`) {
+                roomToVisit = room;
+            } else {
+                room.style = 'pointer-events: none;';
+                roomsToBlock.push(room);
+            }
+        })
+
+        async function blockRooms() {
+            const a1 = anime({
+                targets: roomsToBlock,
+                duration: 1200,
+                delay: anime.stagger(500),
+                filter: 'grayscale(100%)',
+                easing: 'easeOutExpo',
+            }).finished;
+
+            await Promise.all([a1]);
+        }
+
+        async function unblockVisitRoom() {
+            const a2 = anime({
+                targets: roomToVisit,
+                duration: 1200,
+                filter: 'grayscale(0%)',
+                easing: 'easeInExpo',
+            }).finished;
+
+            await Promise.all([a2]);
+        }
+
+        async function init() {
+            await blockRooms()
+            await unblockVisitRoom()
+            .then(() => {
+                roomToVisit.style = 'pointer-events: auto;';
+            })
+        }
+
+        // Fire
+        init();
+    },
+
+    fireMagicScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo) {
+        const allRooms = document.querySelectorAll('.room');  
+        let roomsToBlock = [];
+        let roomToVisit;
+        allRooms.forEach((room) => {
+            if(room.classList[1] === `room-${roomToGo}`) {
+                roomToVisit = room;
+            } else {
+                room.style = 'pointer-events: none;';
+                roomsToBlock.push(room);
+            }
+        })
+
+        async function blockRooms() {
+            const a1 = anime({
+                targets: roomsToBlock,
+                duration: 1200,
+                delay: anime.stagger(500),
+                filter: 'grayscale(100%)',
+                easing: 'easeOutExpo',
+            }).finished;
+
+            await Promise.all([a1]);
+        }
+
+        async function unblockVisitRoom() {
+            const a2 = anime({
+                targets: roomToVisit,
+                duration: 1200,
+                filter: 'grayscale(0%)',
+                easing: 'easeInExpo',
+            }).finished;
+
+            await Promise.all([a2]);
+        }
+
+        async function init() {
+            await blockRooms()
+            await unblockVisitRoom()
+            .then(() => {
+                roomToVisit.style = 'pointer-events: auto;';
+            })
+        }
+
+        // Fire
+        init();
     },
 }
 
