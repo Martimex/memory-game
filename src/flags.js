@@ -4764,7 +4764,7 @@ const flags = {
 
         if(scenario === undefined) {
             console.log('conflict scenario fired');
-            this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
+            this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
             this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj);
         } else if(scenario === peaceful) {
             console.log('peaceful scenario fired');
@@ -4772,7 +4772,7 @@ const flags = {
             this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj);     
         } else if(scenario === selfPointing) {
             console.log('self-pointing scenario fired');
-            this.fireSelfPointingScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
+            this.fireSelfPointingScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
             this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj);
         } else if(scenario === magic) {
             console.log('magic scenario fired');
@@ -4821,7 +4821,7 @@ const flags = {
         // czy scenariusz będzie magic (i uprzednio upewnij się że kombinacja jest wgl możliwa). Jeśli nie będzie magic, to wtedy ustawiasz najpierw
         // pierwszą strzałkę - losowy z możliwych scenariuszy (wraz z conflict); na tej podstawie ustawiasz drugą, pozbywając się już zarezerwowanych
         //  / zamkniętych możliwości;  Jeśli jednak 1szy scenariusz będzie magic, to wylosuj drugą strzałkę (która z pozostałych to będzie) i analogicznie
-        // ustawiasz jej losowy, jeden z dostępnych już scenariuszy
+        // ustawiasz jej losowy, jeden z dostępnych już scenariuszy + na końcu daj im kolorki !
 
         // OF COURSE IF THE LENGTH OF ACTIVE ROOMS IS 4 (WHICH MEANS ALL ROOMS) WE CAN OMMIT THIS FOR IN NESTED LOOP -- yeah, but dont do it for now
 
@@ -4862,12 +4862,45 @@ const flags = {
 
 
         // Randomized first arrow in compare to iter.nextArr possibilities, and second arrow randomize for remain possible cases
+
         let firstArrowNumber = Math.floor(Math.random() * iter.nextArr.length);
         let firstArrowProps = iter.nextArr[firstArrowNumber];
 
+        let arrowId = iter.nextArr[firstArrowNumber].arrow;  // This one would be useful for our second arrow
+        let scenarioName = iter.nextArr[firstArrowNumber].scenario; // This one would be useful for our second arrow
+
         console.log(firstArrowProps);
         // Now adjust chosen arrow with custom properties !
-        //let firstArrow = document.querySelector(`.directory-${iter.array[firstArrowNumber][]}`)
+        let firstArrow = document.querySelector(`.directory-${iter.nextArr[firstArrowNumber].arrow}`);
+        firstArrow.src = `${iter.nextArr[firstArrowNumber].direction}.svg`;
+        firstArrow.alt = iter.nextArr[firstArrowNumber].direction;
+        console.log(firstArrow);
+
+
+        // Randomized second arrow based on (results of arrow 1) what arrows are just available and remain possible scenarios
+
+        let secondArrowProps;
+
+        
+        for(let h=0; h<iter.nextArr.length; h++) {
+            // Jeśli druga strzałka = pierwsza  LUB jeśli scenariusz 1.strz = scenariusz 2. strz ORAZ nie jest to peacful LUB scenario to magic
+            if((arrowId === iter.nextArr[h].arrow) || ((scenarioName === iter.nextArr[h].scenario) && (scenarioName !== 'peaceful')) || (iter.nextArr[h].scenario === 'magic')) {
+                // Thanks to that second arrow will not be the same as first !
+                iter.nextArr.splice(h, 1);
+                h = h-1;
+            }
+        }
+
+        console.log(iter.nextArr);
+
+
+        // NOW CREATE CUSTOM CONFLICT SCENARIO, APPEND IT TO THE NEXT ARR AND THEN PICK ONE OF THOSE SCENARIOS, ADD TO SECOND ARROW
+        // AND FINALLY JUST GIVE THAT ARROWS ITS' ROOM COLORS (PLEASE USE CODE ABOVE FOR THAT IN ONSTARTFUNCTION () )
+
+
+        // at the very end:  iter.nextArr = [];  IMPORTANT NOTE !
+        // .. and at very last empty iter.nextArr;
+        iter.nextArr = []; 
     },
 
     fireConflictScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted) {
@@ -4989,10 +5022,25 @@ const flags = {
         init();
     },
 
-    fireSelfPointingScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo) {
+    fireSelfPointingScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted) {
         const allRooms = document.querySelectorAll('.room');  
         let roomsToBlock = [];
         let roomToVisit;
+
+        const thisRoom = document.querySelector('.room');
+
+        let count = 0;
+        for(let i=0; i<thisRoom.childNodes.length; i++) {
+            if((thisRoom.childNodes[0].style.visibility !== 'hidden') && (cardsOpened[0].parentNode !== thisRoom.childNodes[i]) && (cardsOpened[1].parentNode !== thisRoom.childNodes[i])) {
+                count++;
+            }
+        }
+
+        console.log(count);
+        // If you re about to stuck at the room that has no tiles left influenced by selfPointing scenario - transfer to random existing room
+        if(count === 0) { this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted); } 
+
+
         allRooms.forEach((room) => {
             if(room.classList[1] === `room-${roomToGo}`) {
                 roomToVisit = room;
