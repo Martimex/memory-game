@@ -4440,7 +4440,7 @@ const flags = {
         let initialDirections = {
             dir1: 'right',
             dir3: 'up',
-            dir4: 'up',
+            dir4: 'magic',
             dir5: 'down',
             dir7: 'left',
         }
@@ -4598,7 +4598,7 @@ const flags = {
                 },
                 arrow_3: {
                     // It's gonna be rotated based on room number 
-                    arrow_top: {
+                    arrow_magic: {
                         scenario: magic,
                         roomToGo: 4,
                     },
@@ -4619,7 +4619,7 @@ const flags = {
                     },
                 },
                 arrow_3: {
-                    arrow_top:  {
+                    arrow_magic:  {
                         scenario: magic,
                         roomToGo: 3,
                     },
@@ -4651,7 +4651,7 @@ const flags = {
                     //arrow_left: conflict,
                 },
                 arrow_3: {
-                    arrow_top: {
+                    arrow_magic: {
                         scenario: magic,
                         roomToGo: 2,
                     },
@@ -4671,7 +4671,7 @@ const flags = {
             },
             room_4: {
                 arrow_3: {
-                    arrow_top: {
+                    arrow_magic: {
                         scenario: magic,
                         roomToGo: 1,
                     },
@@ -4812,8 +4812,62 @@ const flags = {
         if(activeRooms.length === 0) { return; }
 
         console.log(possibleArrows);
-
+        console.log(activeRooms);
         // So now we have info which rooms are still available
+        let scenarios = ['peaceful', 'self-pointing', 'magic'];
+
+        // Bierzesz każdą strzałkę i dla każdego możliwej jej kombinacji (up, down, left, right...) sprawdzasz, czy jest ona możliwa
+        // Te które są możliwe trzeba jakoś zapisać. Potem dla każdej strzałki losujesz scenariusz (ale na samym początku zrób losowanie RNG
+        // czy scenariusz będzie magic (i uprzednio upewnij się że kombinacja jest wgl możliwa). Jeśli nie będzie magic, to wtedy ustawiasz najpierw
+        // pierwszą strzałkę - losowy z możliwych scenariuszy (wraz z conflict); na tej podstawie ustawiasz drugą, pozbywając się już zarezerwowanych
+        //  / zamkniętych możliwości;  Jeśli jednak 1szy scenariusz będzie magic, to wylosuj drugą strzałkę (która z pozostałych to będzie) i analogicznie
+        // ustawiasz jej losowy, jeden z dostępnych już scenariuszy
+
+        // OF COURSE IF THE LENGTH OF ACTIVE ROOMS IS 4 (WHICH MEANS ALL ROOMS) WE CAN OMMIT THIS FOR IN NESTED LOOP -- yeah, but dont do it for now
+
+        // Check valid option and push them into nextArr
+        for(let arrow in possibleArrows) {
+            console.log(arrow);
+            for(let direction in possibleArrows[arrow]) { // arrow is not an object, but just a string !
+                let directionChecked = possibleArrows[arrow][direction];
+                console.log(directionChecked.roomToGo);
+                for(let i=0; i<activeRooms.length; i++) {
+                    let classToSearch = `room-${directionChecked.roomToGo}`;
+                    if(activeRooms[i].classList[1] === classToSearch) {
+                        iter.nextArr.push(
+                        {
+                            arrow: `${arrow}`,
+                            direction: `${direction}`, 
+                            scenario: `${directionChecked.scenario}`, 
+                            roomToGo: `${directionChecked.roomToGo}`, 
+                            
+                        }); 
+                    }
+                }
+            }
+        }
+
+        for(let m=0; m<iter.nextArr.length; m++) {
+            let arrowFormatted = iter.nextArr[m].arrow;
+            if(arrowFormatted.includes('_')) {
+                iter.nextArr[m].arrow = iter.nextArr[m].arrow.replace('_', '-');
+            } 
+            let directionFormatted = iter.nextArr[m].direction;
+            if(directionFormatted.includes('_')) {
+                iter.nextArr[m].direction = iter.nextArr[m].direction.replace('_', '-');
+            } 
+        }
+
+        console.log(iter.nextArr);  // This array holds everyhing that is valid to use for randomizing stuff
+
+
+        // Randomized first arrow in compare to iter.nextArr possibilities, and second arrow randomize for remain possible cases
+        let firstArrowNumber = Math.floor(Math.random() * iter.nextArr.length);
+        let firstArrowProps = iter.nextArr[firstArrowNumber];
+
+        console.log(firstArrowProps);
+        // Now adjust chosen arrow with custom properties !
+        //let firstArrow = document.querySelector(`.directory-${iter.array[firstArrowNumber][]}`)
     },
 
     fireConflictScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted) {
