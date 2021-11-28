@@ -4851,26 +4851,67 @@ const flags = {
         let scenario = endChainProps.scenario; // initially, if it's not then it would be changed at the right time (right below)  
         let roomToGo = endChainProps.roomToGo;  // those have to be set because it causes errors then
 
+        // Here check if selfPointing does not keep player at empty room
+        if(scenario === selfPointing) {
+            let thisRoom = document.querySelector(`.${roomNoUnformatted}`);
+        let allRoomTiles =  thisRoom.querySelectorAll('.tile');
+        let activeCount = 0;
+        allRoomTiles.forEach((tile) => {
+            if((tile.style.visibility !== 'hidden') && (tile !== cardsOpened[0].parentNode) && (tile !== cardsOpened[1].parentNode)) {
+                activeCount++;
+            }
+        })
+        if(activeCount === 0) {
+            // This room is no longer viable option. Search for any room that matches the conditions
+            let activeRooms = [];
+            let pickNewRoom = [];
+            // Block rooms which do not have any available pairs to find !!!
+
+            allRooms.forEach((room) => {
+                let count = 0;
+                for(let i=0; i<room.childNodes.length; i++) {
+                    if((room.childNodes[i].style.visibility !== 'hidden') && (cardsOpened[0].parentNode !== room.childNodes[i]) && (cardsOpened[1].parentNode !== room.childNodes[i])) {
+                        count++;
+                    }
+                }
+                console.log(count);
+                if(count !== 0) { activeRooms.push(room); } 
+            })
+
+            if(activeRooms.length === 0) { return; }
+
+            if(pickNewRoom.length === 0) {  /*it means it's only one free room for now*/ pickNewRoom.push(activeRooms[0]);}
+
+            console.log(pickNewRoom);
+            let rand = Math.floor( Math.random() * pickNewRoom.length);
+            let roomId = pickNewRoom[rand].classList[1];
+            let roomIndex = roomId.indexOf('-');
+            let random = roomId.substring(roomIndex + 1);
+            
+            roomToGo = random;
+        }
+     }    
+
         if(scenario === conflict) {
             console.log('conflict scenario fired');
             this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted, random);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj, random);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random);
         } else if(scenario === peaceful) {
             console.log('peaceful scenario fired');
             this.firePeacefulScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj, random);     
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random);     
         } else if(scenario === selfPointing) {
             console.log('self-pointing scenario fired');
             this.fireSelfPointingScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj, random);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random);
         } else if(scenario === magic) {
             console.log('magic scenario fired');
             this.fireMagicScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj, random);
+            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random);
         }
     },
 
-    setTwoScenariosOptions_20: function(cardsOpened, tiles, foundTiles, iter, roomToGo, roomNoFormatted, behaviourControlObj, random) {
+    setTwoScenariosOptions_20: function(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random) {
         // Remove all star colorful classes
         let allArrows = document.querySelectorAll(`.directory-arrow`);
         allArrows.forEach((arrow) => {
@@ -4902,7 +4943,7 @@ const flags = {
                 }
             }
             console.log(count);
-            if(count !== 0) { activeRooms.push(room); } 
+            if(count > 0) { activeRooms.push(room); } 
         })
 
         if(activeRooms.length === 0) { return; }
@@ -4922,14 +4963,16 @@ const flags = {
         // OF COURSE IF THE LENGTH OF ACTIVE ROOMS IS 4 (WHICH MEANS ALL ROOMS) WE CAN OMMIT THIS FOR IN NESTED LOOP -- yeah, but dont do it for now
 
         // Check valid option and push them into nextArr
-        for(let arrow in possibleArrows) {
+        // IT MIGHT ALSO BE BUGGED - TRY TO REPAIR THAT
+        for(let arrow in possibleArrows) { // konkretny numer strzałki w danym pokoju (arrow_1, arrow_2, arrow_3); // Zawsze są to 3 strzałki
             console.log(arrow);
-            for(let direction in possibleArrows[arrow]) { // arrow is not an object, but just a string !
+            for(let direction in possibleArrows[arrow]) { // konkretny kierunek w powyższych strzałkach (up, right, down, left || magic - przy arrow_3)
                 let directionChecked = possibleArrows[arrow][direction];
-                console.log(directionChecked.roomToGo);
-                for(let i=0; i<activeRooms.length; i++) {
-                    let classToSearch = `room-${directionChecked.roomToGo}`;
-                    if(activeRooms[i].classList[1] === classToSearch) {
+                //console.log(directionChecked.roomToGo);
+               // for(let i=0; i<activeRooms.length; i++) {
+               //     let classToSearch = `room-${roomToGo}`; // Sprawdzamy tylko te strzałki, które mogą być aktywne w obrębie nowego pokoju, dla którego generujemy właśnie 2 nowe opcje wyboru
+               //     if(activeRooms[i].classList[1] === classToSearch) {
+                        // Szukamy wszystkich możliwych opcji w obrębie jednego pokoju
                         iter.nextArr.push(
                         {
                             arrow: `${arrow}`,
@@ -4938,8 +4981,8 @@ const flags = {
                             roomToGo: `${directionChecked.roomToGo}`, 
                             
                         }); 
-                    }
-                }
+                  //  }
+               // }
             }
         }
 
@@ -4977,8 +5020,10 @@ const flags = {
 
         let secondArrowProps;
 
-        
+
+        // TEST THIS ~!!!! - it s probably bugged
         for(let h=0; h<iter.nextArr.length; h++) {
+            console.log(h);
             // Jeśli druga strzałka = pierwsza  LUB jeśli scenariusz 1.strz = scenariusz 2. strz ORAZ nie jest to peacful LUB scenario to magic
             if((arrowId === iter.nextArr[h].arrow) /* || ((scenarioName === iter.nextArr[h].scenario) && (scenarioName !== 'peaceful')) */ || (iter.nextArr[h].scenario === 'magic')) {
                 // Thanks to that, second arrow will not be the same as first !
