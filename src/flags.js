@@ -4371,7 +4371,7 @@ const flags = {
 
         for(let a=0; a<roomsCount; a++) {
             let room = document.createElement('div');
-            room.classList.add('room', `room-${a + 1}`);
+            room.classList.add('room', `room_${a + 1}`);
             board.appendChild(room);
 
             let substractionCount = 0;
@@ -4384,17 +4384,6 @@ const flags = {
                 let tileSibling = iter.array[z+1].parentNode.parentNode;
                 let rand = Math.floor( Math.random() * colorOptions);
 
-                /* if(rand === 0) {
-                    if(colorFirstAmount === ((allTiles.length / roomsCount) / colorOptions)) {
-                        rand++;
-                    } else { colorFirstAmount+= 2;}
-                } else if(rand === 1) {
-                    colorSecondAmount+= 2;
-                    if(colorSecondAmount === ((allTiles.length / roomsCount) / colorOptions)) {
-                        rand--;
-                    } else { colorSecondAmount+= 2; }
-                } */
-
                 if((rand === 0) && ((colorFirstAmount >= (allTiles.length / roomsCount) / colorOptions))) {
                     rand = 1;
                 } else if ((rand === 1) && ((colorSecondAmount >= (allTiles.length / roomsCount) / colorOptions))) {
@@ -4404,24 +4393,19 @@ const flags = {
                 if(rand === 0) {colorFirstAmount = colorFirstAmount + 2;}
                 else if(rand === 1) {colorSecondAmount = colorSecondAmount + 2;}
 
-                //console.log(rand, a);
 
                 let starEffectDiv = document.createElement('div');
                 tile.appendChild(starEffectDiv);
-                starEffectDiv.classList.add('star-effect', `star-${colorObj[`a${a}`][rand]}`);
+                starEffectDiv.classList.add('star-effect', `star_${colorObj[`a${a}`][rand]}`);
 
                 let starEffectDivSibling = document.createElement('div');
                 tileSibling.appendChild(starEffectDivSibling);
-                starEffectDivSibling.classList.add('star-effect', `star-${colorObj[`a${a}`][rand]}`);
+                starEffectDivSibling.classList.add('star-effect', `star_${colorObj[`a${a}`][rand]}`);
 
             }
 
             for(let b=(a * (allTiles.length / roomsCount)); b<((a + 1) * (allTiles.length / roomsCount)); b++) {
-                //let currentRoom = document.querySelector(`.room-${a + 1}`);
                 let rand = Math.floor(Math.random() * ((allTiles.length / roomsCount) - substractionCount));
-                //console.log(currentRoom);
-                //console.log(iter.array[rand].parentNode.parentNode, b);
-                //console.log(iter.array);
                 room.appendChild(iter.array[rand].parentNode.parentNode);
                 iter.array.splice(rand, 1);
                 substractionCount++;
@@ -4449,18 +4433,15 @@ const flags = {
 
         for(let i=0; i<9; i++) {
             if((i === 0) || (i === 2) || (i === 6) || (i === 8)) {
-                let room = document.querySelector(`.room-${addedRooms + 1}`)
+                let room = document.querySelector(`.room_${addedRooms + 1}`)
                 qnovaGrid.appendChild(room);
                 addedRooms++;
             } else {
                 let directory = document.querySelector(`.directory-${addedDirectories + 1}`)
                 let arrow = document.createElement('img');
-                arrow.classList.add('directory-arrow', `directory-arrow-${addedDirectories + 1}`);
-                arrow.alt = `arrow-${initialDirections[`dir${i}`]}`;
-                arrow.src = `arrow-${initialDirections[`dir${i}`]}.svg`;
-                //let wholeArrow = arrow.querySelector('svg > g > g > g > rect');
-                //console.log(wholeArrow)
-                //wholeArrow.fill = 'blue';
+                arrow.classList.add('directory-arrow', `directory-arrow_${addedDirectories + 1}`);
+                arrow.alt = `arrow_${initialDirections[`dir${i}`]}`;
+                arrow.src = `arrow_${initialDirections[`dir${i}`]}.svg`;
                 directory.appendChild(arrow);
                 qnovaGrid.appendChild(directory);
                 addedDirectories++;
@@ -4478,14 +4459,14 @@ const flags = {
         let animationArray = [];
 
         for(let i=1; i<=4; i++) {
-            let room = document.querySelector(`.room-${i}`);
+            let room = document.querySelector(`.room_${i}`);
             room.style = 'pointer-events: none;';
             animationArray.push(room);
         }
 
         let randomStart = Math.floor( Math.random() * roomsCount) + 1;
 
-        let startRoom = document.querySelector(`.room-${randomStart}`);
+        let startRoom = document.querySelector(`.room_${randomStart}`);
         startRoom.style = 'pointer-events: auto;';
         animationArray.splice(randomStart - 1, 1);
 
@@ -4505,10 +4486,10 @@ const flags = {
         console.log(iter.value)
 
         const directoriesToActivate = {
-            r1: ['arrow-1', 'arrow-2'],
-            r2: ['arrow-1', 'arrow-4'],
-            r3: ['arrow-2', 'arrow-5'],
-            r4: ['arrow-4', 'arrow-5'],
+            r1: ['arrow_1', 'arrow_2'],
+            r2: ['arrow_1', 'arrow_4'],
+            r3: ['arrow_2', 'arrow_5'],
+            r4: ['arrow_4', 'arrow_5'],
         }
 
         const startRoomClassName = iter.value.classList[1];
@@ -4517,6 +4498,12 @@ const flags = {
         const lastLetter = startRoomClassName[startRoomClassName.length - 1];
 
         //console.log(firstLetter + lastLetter);
+
+        // PUSH INITIAL ROOMS TO THE ARRAY THEN IN SECONDCLICK FUNCTIONS EXAMINE IF THE ROOMS ARENT EMPTY
+        iter.amount = [];
+
+        const allRooms = document.querySelectorAll('.room');
+        allRooms.forEach(room => iter.amount.push(room));
 
         let arrowsToColor = directoriesToActivate[firstLetter + lastLetter];
         let thisRoomColors = [];
@@ -4559,7 +4546,11 @@ const flags = {
 
         // First check initial conditions
         //if(!cardsOpened[0]) { this.pickRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter); }
-        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+        if(foundTiles+2 === tiles) {
+            return;
+        }
+
+        else if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
             this.pickRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter);
         }
     },
@@ -4573,42 +4564,30 @@ const flags = {
         const selfPointing = 'self-pointing';
         const magic = 'magic';
 
-            const allRooms = document.querySelectorAll('.room');
-
-            let activeRooms = [];
-            let pickNewRoom = [];
-            // Block rooms which do not have any available pairs to find !!!
-
-            allRooms.forEach((room) => {
-                let count = 0;
-                for(let i=0; i<room.childNodes.length; i++) {
-                    if((room.childNodes[i].style.visibility !== 'hidden') && (cardsOpened[0].parentNode !== room.childNodes[i]) && (cardsOpened[1].parentNode !== room.childNodes[i])) {
-                        count++;
-                    }
+        const allRooms = document.querySelectorAll('.room');
+        // Sprawdź tu, czy któryś z pokoi nie jest już pusty, i jeśli jest, to usuń go
+        for(let j=0; j<iter.amount.length; j++) {
+            let count = 0;
+            for(let m=0; m<iter.amount[j].childNodes.length; m++) {
+                let tile = iter.amount[j].childNodes[m];
+                let back = tile.querySelector('.tile-back');
+                if((tile.style.visibility !== 'hidden') && (cardsOpened[0] !== back) && (cardsOpened[1] !== back)) {
+                    count++;
                 }
-                console.log(count);
-                if(count !== 0) { activeRooms.push(room); } 
-            })
+            }
 
-            if(activeRooms.length === 0) { return; }
-            activeRooms.forEach((room) => {
-                if(room.classList[1] !== cardsOpened[0].parentNode.parentNode.classList[1]) pickNewRoom.push(room);
-            })
+            if(count <= 0) { iter.amount.splice(j, 1); j = j - 1;}
+        }
+        // Usuwanie pustych pokoi zakończone...
 
-            if(pickNewRoom.length === 0) {  /*it means it's only one free room for now*/ pickNewRoom.push(activeRooms[0]);}
+        // We have a random number that leads us to the right, random destination - for CONFLICT SCENARIO
+        let rand = Math.floor( Math.random() * iter.amount.length);
+        let roomIdNo = iter.amount[rand].classList[1];
+        let roomIndex = roomIdNo.indexOf('-');
+        let random = roomIdNo.substring(roomIndex + 1);
+        console.log(' RANDOM IS:  ' + random)  // 1 / 2 / 3 / 4 - but it is always an existing room
 
-            console.log(pickNewRoom);
-            let rand = Math.floor( Math.random() * pickNewRoom.length);
-            let roomId = pickNewRoom[rand].classList[1];
-            let roomIndex = roomId.indexOf('-');
-            let random = roomId.substring(roomIndex + 1);
-            console.log(' RANDOM IS:  ' + random)
-            //let random = 2;
-
-        const behaviourControlObj = {
-            // Consider removing those line which result in CONFLICT scenario. It may be determined also
-            // by whether arrow obj has this prop or not (for example: arrow_1 don't need arrow_up option)           
-            
+        const behaviourControlObj = {          
             room_1: {
                 arrow_1: {
                     // Clockwise order
@@ -4796,164 +4775,122 @@ const flags = {
 
         // Let's get the room number first
         const room = tile.parentNode;
-        let roomNoUnformatted = room.classList[1];
-        console.log(roomNoUnformatted);
-        let roomNoFormatted;
-        if(roomNoUnformatted.includes('-')) {
-            roomNoFormatted = roomNoUnformatted.replace('-', '_');
-        } else {
-            roomNoFormatted = roomNoUnformatted;
-        }
+        let roomId = room.classList[1]; // roomNoFormatted, roomNoUnformatted to teraz roomId
+        console.log(roomId);
+
 
         // Now let's go for arrow identifier
 
         let starEffect = tile.querySelector('.star-effect');
 
-        let chosenColorPath = starEffect.classList[1];
+        let chosenColorPath = starEffect.classList[1];  // star_darkblue as an example
 
         console.log(chosenColorPath); // star-pink  as an example - so the player chose pink path
 
-        // Now look for that arrow that contains
+        // Now look for that arrow that contains that class - HENCE ITS SO IMPORTANT THAT BOTH ARROWS HAS TO BE COLORED EVERY TIME
+        // ONLY ONCE, BECAUSE IT'S PLAYER COLOR CHOICE AND IT CAN BE ONLY 1 OF COURSE
         let arrowToFollow;
         const allArrows = document.querySelectorAll('.directory-arrow');
         allArrows.forEach((arrow) => {
-            console.log(arrow.classList);
+            //console.log(arrow.classList);
             if(arrow.classList.contains(chosenColorPath)) arrowToFollow = arrow;
         })
 
         console.log(arrowToFollow); // We have now a proper arrow to follow further instructions on !!
         
-        let arrowAltUnformatted = arrowToFollow.alt;  // CAUSES ERRORS FOR SOME REASON
-        let arrowAltFormatted;
-        if(arrowAltUnformatted.includes('-')) {
-            arrowAltFormatted = arrowAltUnformatted.replace('-', '_');
-        } else {
-            arrowAltFormatted = arrowAltUnformatted;
-        }
+        let arrowAlt = arrowToFollow.alt;  // CAUSES ERRORS FOR SOME REASON
+        // (replacement for arrowAltFomratted);
 
         let arrowToFollowNo = arrowToFollow.classList[1];
 
         let initialIndex = arrowToFollowNo.indexOf('arrow');
-        let arrowIdentifierUnformatted = arrowToFollowNo.substring(initialIndex);
+        let arrowIdentifier = arrowToFollowNo.substring(initialIndex);
+        // (replacement for arrowIdentifierFormatted)
 
-        let arrowIdentifierFormatted;
-        if(arrowIdentifierUnformatted.includes('-')) {
-            arrowIdentifierFormatted = arrowIdentifierUnformatted.replace('-', '_');
-            //arrowIdentifierFormatted = arrowIdentifierUnformatted.
-        } else {
-            arrowIdentifierFormatted = arrowIdentifierUnformatted;
-        }
+        console.log(roomId); // Room number compatible with behaviourControlObj
+        console.log(arrowIdentifier); // Finally compatible with behaviourControlObj ^^
+        console.log(arrowAlt); // Direction where the arrow points to
 
-        console.log(roomNoFormatted); // Room number compatible with behaviourControlObj
-        console.log(arrowIdentifierFormatted); // Finally compatible with behaviourControlObj ^^
-        console.log(arrowAltFormatted); // Direction where the arrow points to
-
-        const endChainProps = behaviourControlObj[roomNoFormatted][arrowIdentifierFormatted][arrowAltFormatted];
+        const endChainProps = behaviourControlObj[roomId][arrowIdentifier][arrowAlt];
         console.log(endChainProps);
         let scenario = endChainProps.scenario; // initially, if it's not then it would be changed at the right time (right below)  
         let roomToGo = endChainProps.roomToGo;  // those have to be set because it causes errors then
+        // Czyli: jak nazywa się scenariusz i do którego pokoju zostaniesz teraz przeniesiony
 
-        // Here check if selfPointing does not keep player at empty room
-        if(scenario === selfPointing) {
-            let thisRoom = document.querySelector(`.${roomNoUnformatted}`);
-        let allRoomTiles =  thisRoom.querySelectorAll('.tile');
-        let activeCount = 0;
-        allRoomTiles.forEach((tile) => {
-            if((tile.style.visibility !== 'hidden') && (tile !== cardsOpened[0].parentNode) && (tile !== cardsOpened[1].parentNode)) {
-                activeCount++;
+        // Przypilnuj, czy scenariusz nie zostawi lub przeniesie Cię do pustego pokoju
+        // OD TEJ LINIJKI ZACZNIJ DZIAŁAĆ
+
+        // Najpierw test, czy taka sytuacja ma miejsce
+        let isNewRoomSafe = false;
+        for(let v=0; v<iter.amount.length; v++) {
+            let className = iter.amount[v].classList[1];
+            //console.log(className);
+            let index = className.indexOf('_');
+            let roomNo = className.substring(index + 1);
+
+            console.log(roomNo);
+            console.log(roomToGo);
+
+            if(roomNo === roomToGo) {
+                isNewRoomSafe = true;
             }
-        })
-        if(activeCount === 0) {
-            // This room is no longer viable option. Search for any room that matches the conditions
-            let activeRooms = [];
-            let pickNewRoom = [];
-            // Block rooms which do not have any available pairs to find !!!
-
-            allRooms.forEach((room) => {
-                let count = 0;
-                for(let i=0; i<room.childNodes.length; i++) {
-                    if((room.childNodes[i].style.visibility !== 'hidden') && (cardsOpened[0].parentNode !== room.childNodes[i]) && (cardsOpened[1].parentNode !== room.childNodes[i])) {
-                        count++;
-                    }
-                }
-                console.log(count);
-                if(count !== 0) { activeRooms.push(room); } 
-            })
-
-            if(activeRooms.length === 0) { return; }
-
-            if(pickNewRoom.length === 0) {  /*it means it's only one free room for now*/ pickNewRoom.push(activeRooms[0]);}
-
-            console.log(pickNewRoom);
-            let rand = Math.floor( Math.random() * pickNewRoom.length);
-            let roomId = pickNewRoom[rand].classList[1];
-            let roomIndex = roomId.indexOf('-');
-            let random = roomId.substring(roomIndex + 1);
-            
-            roomToGo = random;
         }
-     }    
+        console.log(isNewRoomSafe);
+        if(isNewRoomSafe === false) {
+            // Losuj jeden z istniejących pokoi jako nowe miejsce przekierowania (już niezależnie czy konflikt, magic, peaceful czy selfPointing)
+            let rand = Math.floor(Math.random() * iter.amount.length);
+            let className = iter.amount[rand].classList[1];
+            let index = className.indexOf('_');
+            let roomNumber = className.substring(index + 1);
+
+            roomToGo = roomNumber;
+            random = roomToGo;  // BUT REALLY NOT QUITE SURE IF THAT STATEMENT IS CORRECT
+        }
 
         if(scenario === conflict) {
             console.log('conflict scenario fired');
-            this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted, random);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random);
+            this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, random);
         } else if(scenario === peaceful) {
             console.log('peaceful scenario fired');
-            this.firePeacefulScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random);     
+            this.firePeacefulScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);     
         } else if(scenario === selfPointing) {
             console.log('self-pointing scenario fired');
-            this.fireSelfPointingScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random);
+            this.fireSelfPointingScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
         } else if(scenario === magic) {
             console.log('magic scenario fired');
             this.fireMagicScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
-            this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random);
         }
+
+        // At last set two random arrows nearby to a new room location and prepare game for player's new move
+        this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomId, behaviourControlObj, random);
     },
 
-    setTwoScenariosOptions_20: function(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomNoFormatted, behaviourControlObj, random) {
+    setTwoScenariosOptions_20: function(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomId, behaviourControlObj, random) {
         // Remove all star colorful classes
         let allArrows = document.querySelectorAll(`.directory-arrow`);
         allArrows.forEach((arrow) => {
             arrow.classList.remove(arrow.classList[arrow.classList.length - 1]);
-            arrow.classList.add('no-star');
+            arrow.classList.add('no-stars');
         })
         // Make use of behaviourControlObj a LOT !!
         console.log(roomToGo);
-        let finalIndex = roomNoFormatted.indexOf('_');
-        let formattedFirstPart = roomNoFormatted.substring(0, finalIndex + 1);
+        let finalIndex = roomId.indexOf('_');
+        let formattedFirstPart = roomId.substring(0, finalIndex + 1);
         
         const currentRoom = formattedFirstPart + roomToGo; // This is the first indent in behaviourControlObj - we know what the current room is
 
         console.log(currentRoom);
         // First, by roomToGo you can find a room_${roomToGo} - this is the new chosen room we will change its' arrows for !
-        let arrowPositions = ['up', 'down', 'left', 'right'];
+        //let arrowPositions = ['up', 'down', 'left', 'right'];
         let possibleArrows = behaviourControlObj[currentRoom];
 
         // Now let's set FIRST scenario based on RNG - but it has to consider which rooms are still active
         // Prepare a check code
-        let allRooms = document.querySelectorAll('.room');
-        let activeRooms = [];
-
-        allRooms.forEach((room) => {
-            let count = 0;
-            for(let i=0; i<room.childNodes.length; i++) {
-                if((room.childNodes[0].style.visibility !== 'hidden') && (cardsOpened[0].parentNode !== room.childNodes[i]) && (cardsOpened[1].parentNode !== room.childNodes[i])) {
-                    count++;
-                }
-            }
-            console.log(count);
-            if(count > 0) { activeRooms.push(room); } 
-        })
-
-        if(activeRooms.length === 0) { return; }
 
         console.log(possibleArrows);
-        console.log(activeRooms);
+        //console.log(activeRooms);
         // So now we have info which rooms are still available
-        let scenarios = ['peaceful', 'self-pointing', 'magic'];
+        //let scenarios = ['peaceful', 'self-pointing', 'magic'];
 
         // Bierzesz każdą strzałkę i dla każdego możliwej jej kombinacji (up, down, left, right...) sprawdzasz, czy jest ona możliwa
         // Te które są możliwe trzeba jakoś zapisać. Potem dla każdej strzałki losujesz scenariusz (ale na samym początku zrób losowanie RNG
@@ -5000,9 +4937,10 @@ const flags = {
         }
 
         // In endgame it's crucial to remove cases when arrows (f.e. magic / peaceful leads to empty rooms)
-        console.log(activeRooms);
+        // - not now, because we have something like automatic tracker, which in case of errors redirects to correct room :)
+        //console.log(activeRooms);
 
-        for(let m=0; m<iter.nextArr.length; m++) {
+       /*  for(let m=0; m<iter.nextArr.length; m++) {
             //console.log(possibleoption);
             let roomToCheck = iter.nextArr[m].roomToGo; // 1 / 2 / 3 or 4
             let isSafe = false;
@@ -5021,7 +4959,7 @@ const flags = {
                 iter.nextArr.splice(m, 1);
                 m--;
             }
-        }
+        } */
 
 
         console.log(iter.nextArr);  // This array holds everyhing that is valid to use for randomizing stuff
@@ -5033,11 +4971,13 @@ const flags = {
         let firstArrowProps = iter.nextArr[firstArrowNumber];
 
         let arrowId = iter.nextArr[firstArrowNumber].arrow;  // This one would be useful for our second arrow
+        console.log(arrowId)
         let scenarioName = iter.nextArr[firstArrowNumber].scenario; // This one would be useful for our second arrow
 
         console.log(firstArrowProps);
         // Now adjust chosen arrow with custom properties !
-        let firstArrow = document.querySelector(`.directory-${iter.nextArr[firstArrowNumber].arrow}`);
+        let firstArrow = document.querySelector(`.directory-${arrowId}`);
+        console.log(firstArrow)
         firstArrow.src = `${iter.nextArr[firstArrowNumber].direction}.svg`;
         firstArrow.alt = iter.nextArr[firstArrowNumber].direction;
         console.log(firstArrow);
@@ -5096,35 +5036,35 @@ const flags = {
 
         //let secondArrow = null;
 
-        let secondArrow = null;
+        //let secondArrow = null;
 
-       if(secondArrowProps !== undefined) {  // ONLY FOR ENDGAME
-            secondArrow = document.querySelector(`.directory-${iter.nextArr[secondArrowNumber].arrow}`);
+       //if(secondArrowProps !== undefined) {  // ONLY FOR ENDGAME - no, second Arrow always has to be set to some value !!!
+            let secondArrow = document.querySelector(`.directory_${iter.nextArr[secondArrowNumber].arrow}`);
             secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
             secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
-       }
+      // }
 
         // Color new arrows :
         const colorOptions = 2;
         let thisRoomColors = [];
-        let arrowsToColor = [firstArrowProps];
+        let arrowsToColor = [firstArrowProps, secondArrowProps];
 
-        if(secondArrow) { arrowsToColor.push(secondArrowProps); }
+       // if(secondArrow) { arrowsToColor.push(secondArrowProps); }
 
         // Get the colors from board elems
         // And of course, make unformatted version of currenRoom
 
-        let currentRoomUnformatted = currentRoom;
+        /* let currentRoomUnformatted = currentRoom;
 
         if(currentRoom.includes('_')) {
             currentRoomUnformatted = currentRoom.replace('_', '-');
         }
 
-        console.log(currentRoomUnformatted);  //  should be f.e. room-3
+        console.log(currentRoomUnformatted);  //  should be f.e. room-3 */
 
 
         // Only count visible ones !
-        let thisRoom = document.querySelector(`.${currentRoomUnformatted}`);
+        let thisRoom = document.querySelector(`.${currentRoom}`);
         let visibleTiles = [];
         let thisRoomTiles = thisRoom.querySelectorAll('.tile');
         thisRoomTiles.forEach((tile) => {
@@ -5257,25 +5197,10 @@ const flags = {
         init();
     },
 
-    fireSelfPointingScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted) {
+    fireSelfPointingScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo) {
         const allRooms = document.querySelectorAll('.room');  
         let roomsToBlock = [];
         let roomToVisit;
-
-        const thisRoom = document.querySelector('.room');
-
-        let count = 0;
-        for(let i=0; i<thisRoom.childNodes.length; i++) {
-            if((thisRoom.childNodes[i].style.visibility !== 'hidden') && (cardsOpened[0].parentNode !== thisRoom.childNodes[i]) && (cardsOpened[1].parentNode !== thisRoom.childNodes[i])) {
-                count++;
-            }
-        }
-
-        console.log(count);
-        // If you re about to stuck at the room that has no tiles left influenced by selfPointing scenario - transfer to random existing room
-        //if(count === 0) { this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted); } 
-
-
         allRooms.forEach((room) => {
             if(room.classList[1] === `room-${roomToGo}`) {
                 roomToVisit = room;

@@ -2807,36 +2807,36 @@
     filter: blur(1px);
 }
 
-.star-red {
-    background-image: url('../addons/star-red.svg');
+.star_red {
+    background-image: url('../addons/star_red.svg');
 }
 
-.star-lightblue {
-    background-image: url('../addons/star-lightblue.svg');
+.star_lightblue {
+    background-image: url('../addons/star_lightblue.svg');
 }
 
-.star-yellow {
-    background-image: url('../addons/star-yellow.svg');
+.star_yellow {
+    background-image: url('../addons/star_yellow.svg');
 }
 
-.star-purple {
-    background-image: url('../addons/star-purple.svg');
+.star_purple {
+    background-image: url('../addons/star_purple.svg');
 }
 
-.star-green {
-    background-image: url('../addons/star-green.svg');
+.star_green {
+    background-image: url('../addons/star_green.svg');
 }
 
-.star-orange {
-    background-image: url('../addons/star-orange.svg');
+.star_orange {
+    background-image: url('../addons/star_orange.svg');
 }
 
-.star-pink {
-    background-image: url('../addons/star-pink.svg');
+.star_pink {
+    background-image: url('../addons/star_pink.svg');
 }
 
-.star-darkblue {
-    background-image: url('../addons/star-darkblue.svg');
+.star_darkblue {
+    background-image: url('../addons/star_darkblue.svg');
 }
 
 .arrow-type{
