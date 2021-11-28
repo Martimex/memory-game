@@ -4797,6 +4797,7 @@ const flags = {
         // Let's get the room number first
         const room = tile.parentNode;
         let roomNoUnformatted = room.classList[1];
+        console.log(roomNoUnformatted);
         let roomNoFormatted;
         if(roomNoUnformatted.includes('-')) {
             roomNoFormatted = roomNoUnformatted.replace('-', '_');
@@ -4816,12 +4817,13 @@ const flags = {
         let arrowToFollow;
         const allArrows = document.querySelectorAll('.directory-arrow');
         allArrows.forEach((arrow) => {
+            console.log(arrow.classList);
             if(arrow.classList.contains(chosenColorPath)) arrowToFollow = arrow;
         })
 
         console.log(arrowToFollow); // We have now a proper arrow to follow further instructions on !!
         
-        let arrowAltUnformatted = arrowToFollow.alt;
+        let arrowAltUnformatted = arrowToFollow.alt;  // CAUSES ERRORS FOR SOME REASON
         let arrowAltFormatted;
         if(arrowAltUnformatted.includes('-')) {
             arrowAltFormatted = arrowAltUnformatted.replace('-', '_');
@@ -4997,6 +4999,31 @@ const flags = {
             } 
         }
 
+        // In endgame it's crucial to remove cases when arrows (f.e. magic / peaceful leads to empty rooms)
+        console.log(activeRooms);
+
+        for(let m=0; m<iter.nextArr.length; m++) {
+            //console.log(possibleoption);
+            let roomToCheck = iter.nextArr[m].roomToGo; // 1 / 2 / 3 or 4
+            let isSafe = false;
+            for(let j=0; j<activeRooms.length; j++) {
+                let index = activeRooms[j].classList[1].indexOf('-');
+                let roomId = activeRooms[j].classList[1].substring(index + 1);
+                console.log(roomId); // 1 / 2 / 3 or 4
+
+                if(roomToCheck === roomId) {
+                    isSafe = true;
+                }
+
+            }
+
+            if(isSafe === false) {
+                iter.nextArr.splice(m, 1);
+                m--;
+            }
+        }
+
+
         console.log(iter.nextArr);  // This array holds everyhing that is valid to use for randomizing stuff
 
 
@@ -5069,18 +5096,20 @@ const flags = {
 
         //let secondArrow = null;
 
-       //if(secondArrowProps !== undefined) {
-            let secondArrow = document.querySelector(`.directory-${iter.nextArr[secondArrowNumber].arrow}`);
+        let secondArrow = null;
+
+       if(secondArrowProps !== undefined) {  // ONLY FOR ENDGAME
+            secondArrow = document.querySelector(`.directory-${iter.nextArr[secondArrowNumber].arrow}`);
             secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
             secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
-       // }
+       }
 
         // Color new arrows :
         const colorOptions = 2;
         let thisRoomColors = [];
-        let arrowsToColor = [firstArrowProps, secondArrowProps];
+        let arrowsToColor = [firstArrowProps];
 
-        //if(secondArrow) { arrowsToColor.push(secondArrowProps); }
+        if(secondArrow) { arrowsToColor.push(secondArrowProps); }
 
         // Get the colors from board elems
         // And of course, make unformatted version of currenRoom
