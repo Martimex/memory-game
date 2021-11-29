@@ -4980,26 +4980,68 @@ const flags = {
         // Now adjust chosen arrow with custom properties !
         let firstArrow = document.querySelector(`.directory-${arrowId}`);
         console.log(firstArrow)
-        firstArrow.src = `${iter.nextArr[firstArrowNumber].direction}.svg`;
-        firstArrow.alt = iter.nextArr[firstArrowNumber].direction;
+        //firstArrow.src = `${iter.nextArr[firstArrowNumber].direction}.svg`;
+        //firstArrow.alt = iter.nextArr[firstArrowNumber].direction;
         console.log(firstArrow);
 
 
-        // Randomized second arrow based on (results of arrow 1) what arrows are just available and remain possible scenarios
+        async function darkenEffect() {
+            const a1 = anime({
+                targets: [firstArrow],
+                duration: 1800,
+                backgroundImage: 'linear-gradient(135deg, hsl(0, 0%, 0%), hsl(0, 10%, 10%), hsl(0, 0%, 0%))',
+                easing: 'easeInExpo',
+            }).finished;
+            await Promise.all([a1]);
+        }
 
-        let secondArrowProps;
+        async function removeDarkenEffect() {
+            const a2 = anime({
+                targets: [firstArrow],
+                duration: 1800,
+                backgroundImage: 'none',
+                easing: 'easeOutExpo',
+            }).finished;
+            await Promise.all([a2]);
+        }
+ 
+        async function initFirstArrow() {
+            await darkenEffect()
+            .then(() => {
+                /* 
+                console.log(iter);
+                console.log(iter.nextArr);
+                console.log(firstArrowNumber);
+                console.log(iter.nextArr[firstArrowNumber]);
+                console.log(iter.nextArr[firstArrowNumber].direction); */
 
-
-        // TEST THIS ~!!!! - it s probably bugged
-        for(let h=0; h<iter.nextArr.length; h++) {
-            console.log(h);
-            // Jeśli druga strzałka = pierwsza  LUB jeśli scenariusz 1.strz = scenariusz 2. strz ORAZ nie jest to peacful LUB scenario to magic
+                firstArrow.src = `${iter.nextArr[firstArrowNumber].direction}.svg`;
+                firstArrow.alt = iter.nextArr[firstArrowNumber].direction;
+            })
+            await removeDarkenEffect()
+            .then(() => {
+                // TEST THIS ~!!!! - it s probably bugged
+                for(let h=0; h<iter.nextArr.length; h++) {
+                    console.log(h);
+                    
+                    // Jeśli druga strzałka = pierwsza  LUB jeśli scenariusz 1.strz = scenariusz 2. strz ORAZ nie jest to peacful LUB scenario to magic
             if((arrowId === iter.nextArr[h].arrow) /* || ((scenarioName === iter.nextArr[h].scenario) && (scenarioName !== 'peaceful')) */ || (iter.nextArr[h].scenario === 'magic')) {
                 // Thanks to that, second arrow will not be the same as first !
                 iter.nextArr.splice(h, 1);
                 h = h-1;
             }
         }
+
+            })
+        }
+
+        initFirstArrow();
+
+        // Randomized second arrow based on (results of arrow 1) what arrows are just available and remain possible scenarios
+
+        let secondArrowProps;
+
+
 
         console.log(iter.nextArr);
 
@@ -5042,10 +5084,54 @@ const flags = {
         console.log(iter.nextArr[secondArrowNumber]);
         console.log(iter.nextArr[secondArrowNumber].direction);
        //if(secondArrowProps !== undefined) {  // ONLY FOR ENDGAME - no, second Arrow always has to be set to some value !!!
-            let secondArrow = document.querySelector(`.directory-${iter.nextArr[secondArrowNumber].arrow}`);
-            secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
-            secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
+            //let secondArrow = document.querySelector(`.directory-${iter.nextArr[secondArrowNumber].arrow}`);
+            //secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
+            //secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
       // }
+
+        let secondArrow = document.querySelector(`.directory-${iter.nextArr[secondArrowNumber].arrow}`);
+        //let firstArrow = document.querySelector(`.directory-${arrowId}`);
+
+        async function darkenEffectTwo() {
+            const a1 = anime({
+                targets: [secondArrow],
+                duration: 1800,
+                backgroundImage: 'linear-gradient(135deg, hsl(0, 0%, 0%), hsl(0, 10%, 10%), hsl(0, 0%, 0%))',
+                easing: 'easeInExpo',
+            }).finished;
+            await Promise.all([a1]);
+        }
+
+        async function removeDarkenEffectTwo() {
+            const a2 = anime({
+                targets: [secondArrow],
+                duration: 1800,
+                backgroundImage: 'none',
+                easing: 'easeOutExpo',
+            }).finished;
+            await Promise.all([a2]);
+        }
+ 
+        async function initSecondArrow() {
+            await darkenEffectTwo()
+            .then(() => {
+                 
+                console.log(iter);
+                console.log(iter.nextArr);
+                console.log(secondArrowNumber);
+                console.log(iter.nextArr[secondArrowNumber]);
+                console.log(iter.nextArr[secondArrowNumber].direction); 
+
+                secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
+                secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
+            })
+            await removeDarkenEffectTwo()
+            .then(() => {
+                iter.nextArr = [];
+            })
+        }
+
+        initSecondArrow();
 
         // Color new arrows :
         const colorOptions = 2;
@@ -5100,8 +5186,9 @@ const flags = {
         } 
 
         // at the very end:  iter.nextArr = [];  IMPORTANT NOTE !
-        // .. and at very last empty iter.nextArr;
-        iter.nextArr = []; 
+        // .. and at very last empty iter.nextArr; -> IT ACTUALLY HAPPENS AT VERY END OF ASYNC FUNCTION
+        //iter.nextArr = [];
+
     },
 
     fireConflictScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted, random) {
@@ -5117,6 +5204,10 @@ const flags = {
         const allRooms = document.querySelectorAll('.room');  
         let roomsToBlock = [];
         let roomToVisit;
+
+        let conflictQuotes = ['That leads to nowhere !', `Really want to go here ?`, `#404 Room Not Found`];
+        const myQuote = this.pickrandomQuote_20(conflictQuotes);
+
         console.log(roomToGo);
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
@@ -5164,9 +5255,13 @@ const flags = {
     },
 
     firePeacefulScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo) {
-        const allRooms = document.querySelectorAll('.room');  
+        const allRooms = document.querySelectorAll('.room');
         let roomsToBlock = [];
         let roomToVisit;
+
+        let peacefulQuotes = ['Perfect room, perfect choice', `We missed you at room ${roomToGo}`, `Make yourself at home`];
+        const myQuote = this.pickrandomQuote_20(peacefulQuotes);
+
         console.log(roomToGo);
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
@@ -5189,20 +5284,46 @@ const flags = {
             await Promise.all([a1]);
         }
 
-        async function unblockVisitRoom() {
+        async function minifyGame() {
             const a2 = anime({
+                targets:'.game',
+                duration: 2400,
+                scale: ['100%', '0%'],
+                rotate: '360deg',
+                easing: 'easeOutSine',
+            }).finished;
+
+            await Promise.all([a2]);
+        }
+
+        async function unblockVisitRoom() {
+            const a3 = anime({
                 targets: roomToVisit,
                 duration: 1200,
                 filter: 'grayscale(0%)',
                 easing: 'easeInExpo',
             }).finished;
 
-            await Promise.all([a2]);
+            await Promise.all([a3]);
+        }
+
+        async function maxifyGame() {
+            const a4 = anime({
+                targets: '.game',
+                duration: 1700,
+                scale: '100%',
+                easing: 'easeInSine',
+            }).finished;
+
+            await Promise.all([a4]);
         }
 
         async function init() {
             await blockRooms()
+            // Some cool stuff in here
+            await minifyGame()
             await unblockVisitRoom()
+            await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
             })
@@ -5216,6 +5337,10 @@ const flags = {
         const allRooms = document.querySelectorAll('.room');  
         let roomsToBlock = [];
         let roomToVisit;
+
+        let selfPointingQuotes = ['Got stuck, right ?', `There's no escape from this room !`, `Scared to leave room ${roomToGo} ?`];
+        const myQuote = this.pickrandomQuote_20(selfPointingQuotes);
+
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
@@ -5264,6 +5389,10 @@ const flags = {
         const allRooms = document.querySelectorAll('.room');  
         let roomsToBlock = [];
         let roomToVisit;
+
+        let magicQuotes = [`When the magic comes in`, `Room ${roomToGo} is now your destiny`, `Feel tricked a bit ?`];
+        const myQuote = this.pickrandomQuote_20(magicQuotes);
+
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
@@ -5307,6 +5436,11 @@ const flags = {
         // Fire
         init();
     },
+
+    pickrandomQuote_20: function(quoteArr) {
+        const randomQuote = quoteArr[Math.floor(Math.random() * quoteArr.length)];
+        return randomQuote;
+    }
 }
 
 export default flags;
