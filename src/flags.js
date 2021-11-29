@@ -4831,8 +4831,9 @@ const flags = {
             console.log(roomNo);
             console.log(roomToGo);
 
-            if(roomNo === roomToGo) {
+            if(parseInt(roomNo) === parseInt(roomToGo)) {
                 isNewRoomSafe = true;
+                
             }
         }
         console.log(isNewRoomSafe);
@@ -4842,6 +4843,7 @@ const flags = {
             let className = iter.amount[rand].classList[1];
             let index = className.indexOf('_');
             let roomNumber = className.substring(index + 1);
+            console.log(roomNumber);
 
             roomToGo = roomNumber;
             random = roomToGo;  // BUT REALLY NOT QUITE SURE IF THAT STATEMENT IS CORRECT
@@ -4925,7 +4927,7 @@ const flags = {
             }
         }
 
-        for(let m=0; m<iter.nextArr.length; m++) {
+/*         for(let m=0; m<iter.nextArr.length; m++) {
             let arrowFormatted = iter.nextArr[m].arrow;
             if(arrowFormatted.includes('_')) {
                 iter.nextArr[m].arrow = iter.nextArr[m].arrow.replace('_', '-');
@@ -4934,7 +4936,7 @@ const flags = {
             if(directionFormatted.includes('_')) {
                 iter.nextArr[m].direction = iter.nextArr[m].direction.replace('_', '-');
             } 
-        }
+        } */
 
         // In endgame it's crucial to remove cases when arrows (f.e. magic / peaceful leads to empty rooms)
         // - not now, because we have something like automatic tracker, which in case of errors redirects to correct room :)
@@ -5037,9 +5039,10 @@ const flags = {
         //let secondArrow = null;
 
         //let secondArrow = null;
-
+        console.log(iter.nextArr[secondArrowNumber]);
+        console.log(iter.nextArr[secondArrowNumber].direction);
        //if(secondArrowProps !== undefined) {  // ONLY FOR ENDGAME - no, second Arrow always has to be set to some value !!!
-            let secondArrow = document.querySelector(`.directory_${iter.nextArr[secondArrowNumber].arrow}`);
+            let secondArrow = document.querySelector(`.directory-${iter.nextArr[secondArrowNumber].arrow}`);
             secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
             secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
       // }
@@ -5102,14 +5105,26 @@ const flags = {
     },
 
     fireConflictScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted, random) {
-        const allRooms = document.querySelectorAll('.room');
-        const roomToVisit = document.querySelector(`.room-${random}`);
+/*         const allRooms = document.querySelectorAll('.room');
+        const roomToVisit = document.querySelector(`.room_${random}`);
 
         let roomsToBlock = [];
 
         allRooms.forEach((room) => {
             if(room.classList[1] !== roomToVisit.classList[1]){roomsToBlock.push(room); } 
             room.style = 'pointer-events: none;'
+        }) */
+        const allRooms = document.querySelectorAll('.room');  
+        let roomsToBlock = [];
+        let roomToVisit;
+        console.log(roomToGo);
+        allRooms.forEach((room) => {
+            if(room.classList[1] === `room_${roomToGo}`) {
+                roomToVisit = room;
+            } else {
+                room.style = 'pointer-events: none;';
+                roomsToBlock.push(room);
+            }
         })
 
 
@@ -5140,7 +5155,6 @@ const flags = {
             await blockRooms()
             await unblockVisitRoom()
             .then(() => {
-                const roomToVisit = document.querySelector(`.room-${random}`);
                 roomToVisit.style = 'pointer-events: auto;';
             })
         }
@@ -5153,8 +5167,9 @@ const flags = {
         const allRooms = document.querySelectorAll('.room');  
         let roomsToBlock = [];
         let roomToVisit;
+        console.log(roomToGo);
         allRooms.forEach((room) => {
-            if(room.classList[1] === `room-${roomToGo}`) {
+            if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
             } else {
                 room.style = 'pointer-events: none;';
@@ -5202,7 +5217,7 @@ const flags = {
         let roomsToBlock = [];
         let roomToVisit;
         allRooms.forEach((room) => {
-            if(room.classList[1] === `room-${roomToGo}`) {
+            if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
             } else {
                 room.style = 'pointer-events: none;';
@@ -5250,7 +5265,7 @@ const flags = {
         let roomsToBlock = [];
         let roomToVisit;
         allRooms.forEach((room) => {
-            if(room.classList[1] === `room-${roomToGo}`) {
+            if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
             } else {
                 room.style = 'pointer-events: none;';
