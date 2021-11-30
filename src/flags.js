@@ -4845,6 +4845,8 @@ const flags = {
             let roomNumber = className.substring(index + 1);
             console.log(roomNumber);
 
+            scenario = conflict; // We have to transform player to the separate room, so yeah its conflict
+            
             roomToGo = roomNumber;
             random = roomToGo;  // BUT REALLY NOT QUITE SURE IF THAT STATEMENT IS CORRECT
         }
@@ -4870,6 +4872,14 @@ const flags = {
     setTwoScenariosOptions_20: function(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomId, behaviourControlObj, random) {
         // Remove all star colorful classes
         let allArrows = document.querySelectorAll(`.directory-arrow`);
+
+        anime({
+            targets: allArrows,
+            duration: 100,
+            opacity: 0,
+            easing: 'linear',
+        })
+
         allArrows.forEach((arrow) => {
             arrow.classList.remove(arrow.classList[arrow.classList.length - 1]);
             arrow.classList.add('no-stars');
@@ -4985,57 +4995,20 @@ const flags = {
         console.log(firstArrow);
 
 
-        async function darkenEffect() {
-            const a1 = anime({
-                targets: [firstArrow],
-                duration: 1800,
-                backgroundImage: 'linear-gradient(135deg, hsl(0, 0%, 0%), hsl(0, 10%, 10%), hsl(0, 0%, 0%))',
-                easing: 'easeInExpo',
-            }).finished;
-            await Promise.all([a1]);
-        }
+        firstArrow.src = `${iter.nextArr[firstArrowNumber].direction}.svg`;
+        firstArrow.alt = iter.nextArr[firstArrowNumber].direction;
 
-        async function removeDarkenEffect() {
-            const a2 = anime({
-                targets: [firstArrow],
-                duration: 1800,
-                backgroundImage: 'none',
-                easing: 'easeOutExpo',
-            }).finished;
-            await Promise.all([a2]);
-        }
- 
-        async function initFirstArrow() {
-            await darkenEffect()
-            .then(() => {
-                /* 
-                console.log(iter);
-                console.log(iter.nextArr);
-                console.log(firstArrowNumber);
-                console.log(iter.nextArr[firstArrowNumber]);
-                console.log(iter.nextArr[firstArrowNumber].direction); */
 
-                firstArrow.src = `${iter.nextArr[firstArrowNumber].direction}.svg`;
-                firstArrow.alt = iter.nextArr[firstArrowNumber].direction;
-            })
-            await removeDarkenEffect()
-            .then(() => {
-                // TEST THIS ~!!!! - it s probably bugged
-                for(let h=0; h<iter.nextArr.length; h++) {
-                    console.log(h);
-                    
-                    // Jeśli druga strzałka = pierwsza  LUB jeśli scenariusz 1.strz = scenariusz 2. strz ORAZ nie jest to peacful LUB scenario to magic
+        // TEST THIS ~!!!! - it s probably bugged
+        for(let h=0; h<iter.nextArr.length; h++) {
+            console.log(h);
+            // Jeśli druga strzałka = pierwsza  LUB jeśli scenariusz 1.strz = scenariusz 2. strz ORAZ nie jest to peacful LUB scenario to magic
             if((arrowId === iter.nextArr[h].arrow) /* || ((scenarioName === iter.nextArr[h].scenario) && (scenarioName !== 'peaceful')) */ || (iter.nextArr[h].scenario === 'magic')) {
                 // Thanks to that, second arrow will not be the same as first !
                 iter.nextArr.splice(h, 1);
                 h = h-1;
             }
         }
-
-            })
-        }
-
-        initFirstArrow();
 
         // Randomized second arrow based on (results of arrow 1) what arrows are just available and remain possible scenarios
 
@@ -5094,9 +5067,9 @@ const flags = {
 
         async function darkenEffectTwo() {
             const a1 = anime({
-                targets: [secondArrow],
-                duration: 1800,
-                backgroundImage: 'linear-gradient(135deg, hsl(0, 0%, 0%), hsl(0, 10%, 10%), hsl(0, 0%, 0%))',
+                targets: [firstArrow, secondArrow],
+                duration: 2800,
+                opacity: 0,
                 easing: 'easeInExpo',
             }).finished;
             await Promise.all([a1]);
@@ -5104,9 +5077,9 @@ const flags = {
 
         async function removeDarkenEffectTwo() {
             const a2 = anime({
-                targets: [secondArrow],
-                duration: 1800,
-                backgroundImage: 'none',
+                targets: [firstArrow, secondArrow],
+                duration: 2800,
+                opacity: 1,
                 easing: 'easeOutExpo',
             }).finished;
             await Promise.all([a2]);
@@ -5272,6 +5245,7 @@ const flags = {
             }
         })
 
+        // Keep it for other room 
         async function blockRooms() {
             const a1 = anime({
                 targets: roomsToBlock,
@@ -5282,18 +5256,6 @@ const flags = {
             }).finished;
 
             await Promise.all([a1]);
-        }
-
-        async function minifyGame() {
-            const a2 = anime({
-                targets:'.game',
-                duration: 2400,
-                scale: ['100%', '0%'],
-                rotate: '360deg',
-                easing: 'easeOutSine',
-            }).finished;
-
-            await Promise.all([a2]);
         }
 
         async function unblockVisitRoom() {
@@ -5307,23 +5269,77 @@ const flags = {
             await Promise.all([a3]);
         }
 
-        async function maxifyGame() {
+        async function showCite() {
             const a4 = anime({
-                targets: '.game',
-                duration: 1700,
-                scale: '100%',
-                easing: 'easeInSine',
+                targets:'.citeDiv',
+                duration: 1500,
+                opacity: [0, 1],
+                easing: 'easeInCubic',
             }).finished;
 
             await Promise.all([a4]);
         }
 
+        async function hideCite() {
+            const a5 = anime({
+                targets:'.citeDiv',
+                duration: 1500,
+                opacity: [1, 0],
+                easing: 'easeOutCubic',
+            }).finished;
+
+            await Promise.all([a5]);
+        }
+
+       /*  async function minifyGame() {
+            const a2 = anime({
+                targets:'.game',
+                duration: 2400,
+                opacity: ['100%', '0%'],
+                //rotate: '360deg',
+                easing: 'easeOutSine',
+            }).finished;
+
+            await Promise.all([a2]);
+        }
+
+        async function maxifyGame() {
+            const a4 = anime({
+                targets: '.game',
+                duration: 1700,
+                opacity: '100%',
+                easing: 'easeInSine',
+            }).finished;
+
+            await Promise.all([a4]);
+        } */
+
         async function init() {
             await blockRooms()
+            .then(() => {
+                const animationContainer = document.querySelector('.animationContainer');
+                let citeDiv = document.createElement('div');
+                citeDiv.classList.add('citeDiv');
+                let cite = document.createElement('div');
+                cite.classList.add('cite');
+
+                cite.textContent = myQuote;
+
+                cite.style.visibility = 'visible';
+
+                citeDiv.appendChild(cite);
+                animationContainer.appendChild(citeDiv);
+            })
+            await showCite()
+            await hideCite()
+            .then(() => {
+                const citeDiv = document.querySelector('.citeDiv');
+                citeDiv.remove();
+            })
             // Some cool stuff in here
-            await minifyGame()
+            //await minifyGame()
             await unblockVisitRoom()
-            await maxifyGame()
+            //await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
             })
