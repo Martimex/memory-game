@@ -5215,9 +5215,55 @@ const flags = {
             await Promise.all([a2]);
         }
 
+        async function showCite() {
+            const a4 = anime({
+                targets:'.citeDiv',
+                duration: 1100,
+                opacity: [0, 1],
+                easing: 'easeInExpo',
+            }).finished;
+
+            await Promise.all([a4]);
+        }
+
+        async function hideCite() {
+            const a5 = anime({
+                targets:'.citeDiv',
+                delay: 3200,
+                duration: 1100,
+                opacity: 0,
+                easing: 'easeOutExpo',
+            }).finished;
+
+            await Promise.all([a5]);
+        }
+
         async function init() {
             await blockRooms()
+            .then(() => {
+                const animationContainer = document.querySelector('.animationContainer');
+                let citeDiv = document.createElement('div');
+                citeDiv.classList.add('citeDiv', 'citeDiv-conflict');
+                let cite = document.createElement('div');
+                cite.classList.add('cite');
+
+                cite.textContent = myQuote;
+
+                cite.style.visibility = 'visible';
+
+                citeDiv.appendChild(cite);
+                animationContainer.appendChild(citeDiv);
+            })
+            await showCite()
+            await hideCite()
+            .then(() => {
+                const citeDiv = document.querySelector('.citeDiv');
+                citeDiv.remove();
+            })
+            // Some cool stuff in here
+            //await minifyGame()
             await unblockVisitRoom()
+            //await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
             })
@@ -5272,8 +5318,9 @@ const flags = {
         async function showCite() {
             const a4 = anime({
                 targets:'.citeDiv',
-                duration: 1500,
-                opacity: [0, 1],
+                duration: 1100,
+                //opacity: [0, 1],
+                scaleX: '100%',
                 easing: 'easeInCubic',
             }).finished;
 
@@ -5283,8 +5330,10 @@ const flags = {
         async function hideCite() {
             const a5 = anime({
                 targets:'.citeDiv',
-                duration: 1500,
-                opacity: [1, 0],
+                delay: 1500,
+                duration: 1100,
+                //opacity: [1, 0],
+                scaleX: 0,
                 easing: 'easeOutCubic',
             }).finished;
 
@@ -5319,7 +5368,7 @@ const flags = {
             .then(() => {
                 const animationContainer = document.querySelector('.animationContainer');
                 let citeDiv = document.createElement('div');
-                citeDiv.classList.add('citeDiv');
+                citeDiv.classList.add('citeDiv', 'citeDiv-peaceful');
                 let cite = document.createElement('div');
                 cite.classList.add('cite');
 
@@ -5389,9 +5438,55 @@ const flags = {
             await Promise.all([a2]);
         }
 
+        async function showCite() {
+            const a4 = anime({
+                targets:'.citeDiv',
+                duration: 1100,
+                scaleY: '100%',
+                easing: 'easeInExpo',
+            }).finished;
+
+            await Promise.all([a4]);
+        }
+
+        async function hideCite() {
+            const a5 = anime({
+                targets:'.citeDiv',
+                delay: 1500,
+                duration: 1100,
+                scaleY: 0,
+                easing: 'easeOutExpo',
+            }).finished;
+
+            await Promise.all([a5]);
+        }
+
         async function init() {
             await blockRooms()
+            .then(() => {
+                const animationContainer = document.querySelector('.animationContainer');
+                let citeDiv = document.createElement('div');
+                citeDiv.classList.add('citeDiv', 'citeDiv-selfPointing');
+                let cite = document.createElement('div');
+                cite.classList.add('cite');
+
+                cite.textContent = myQuote;
+
+                cite.style.visibility = 'visible';
+
+                citeDiv.appendChild(cite);
+                animationContainer.appendChild(citeDiv);
+            })
+            await showCite()
+            await hideCite()
+            .then(() => {
+                const citeDiv = document.querySelector('.citeDiv');
+                citeDiv.remove();
+            })
+            // Some cool stuff in here
+            //await minifyGame()
             await unblockVisitRoom()
+            //await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
             })
