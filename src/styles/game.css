@@ -3042,8 +3042,8 @@
     background: -webkit-linear-gradient(55deg, hsl(0, 0%, 12%), hsl(0, 0%, 0%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 18px 18px 18px hsla(204, 46%, 36%, 0.5);
-    padding: .35rem;
+    text-shadow: 22px 22px 22px hsla(204, 6%, 6%, 0.8);
+    padding: 2.75rem;
 }
 
 .citeDiv-peaceful {
@@ -3052,6 +3052,21 @@
 
 .citeDiv-selfPointing {
     
+}
+
+.citeDiv-magic {
+
+}
+
+.letter-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .1rem;
+}
+
+.cite-letter {
+    margin: .2rem;
 }
 
 .level-20, .counter-20, .score-20 {

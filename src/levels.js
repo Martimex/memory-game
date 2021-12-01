@@ -531,9 +531,10 @@ const levels = {
             //flags.lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter)
         },  
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.createStarBinding_20(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.tryToRemoveStarBinding_20(cardsOpened, tiles, foundTiles, iter);
             flags.lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter);
         },  
     },

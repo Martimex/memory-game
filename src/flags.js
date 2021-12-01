@@ -4350,6 +4350,7 @@ const flags = {
 
     createSeparateRooms_20: function(cardsOpened, tiles, foundTiles, iter) {
 
+        iter.streak = null;
         console.log(iter.array)
 
         const board = document.querySelector('.board');
@@ -5278,8 +5279,8 @@ const flags = {
         let roomsToBlock = [];
         let roomToVisit;
 
-        let peacefulQuotes = ['Perfect room, perfect choice', `We missed you at room ${roomToGo}`, `Make yourself at home`];
-        const myQuote = this.pickrandomQuote_20(peacefulQuotes);
+/*         let peacefulQuotes = ['Perfect room, perfect choice', `We missed you at room ${roomToGo}`, `Make yourself at home`];
+        const myQuote = this.pickrandomQuote_20(peacefulQuotes); */
 
         console.log(roomToGo);
         allRooms.forEach((room) => {
@@ -5315,31 +5316,6 @@ const flags = {
             await Promise.all([a3]);
         }
 
-        async function showCite() {
-            const a4 = anime({
-                targets:'.citeDiv',
-                duration: 1100,
-                //opacity: [0, 1],
-                scaleX: '100%',
-                easing: 'easeInCubic',
-            }).finished;
-
-            await Promise.all([a4]);
-        }
-
-        async function hideCite() {
-            const a5 = anime({
-                targets:'.citeDiv',
-                delay: 1500,
-                duration: 1100,
-                //opacity: [1, 0],
-                scaleX: 0,
-                easing: 'easeOutCubic',
-            }).finished;
-
-            await Promise.all([a5]);
-        }
-
        /*  async function minifyGame() {
             const a2 = anime({
                 targets:'.game',
@@ -5365,28 +5341,6 @@ const flags = {
 
         async function init() {
             await blockRooms()
-            .then(() => {
-                const animationContainer = document.querySelector('.animationContainer');
-                let citeDiv = document.createElement('div');
-                citeDiv.classList.add('citeDiv', 'citeDiv-peaceful');
-                let cite = document.createElement('div');
-                cite.classList.add('cite');
-
-                cite.textContent = myQuote;
-
-                cite.style.visibility = 'visible';
-
-                citeDiv.appendChild(cite);
-                animationContainer.appendChild(citeDiv);
-            })
-            await showCite()
-            await hideCite()
-            .then(() => {
-                const citeDiv = document.querySelector('.citeDiv');
-                citeDiv.remove();
-            })
-            // Some cool stuff in here
-            //await minifyGame()
             await unblockVisitRoom()
             //await maxifyGame()
             .then(() => {
@@ -5454,7 +5408,7 @@ const flags = {
                 targets:'.citeDiv',
                 delay: 1500,
                 duration: 1100,
-                scaleY: 0,
+                opacity: 0,
                 easing: 'easeOutExpo',
             }).finished;
 
@@ -5501,6 +5455,8 @@ const flags = {
         let roomsToBlock = [];
         let roomToVisit;
 
+        let animateLetters = [];
+
         let magicQuotes = [`When the magic comes in`, `Room ${roomToGo} is now your destiny`, `Feel tricked a bit ?`];
         const myQuote = this.pickrandomQuote_20(magicQuotes);
 
@@ -5528,6 +5484,7 @@ const flags = {
         async function unblockVisitRoom() {
             const a2 = anime({
                 targets: roomToVisit,
+                delay: 1300,
                 duration: 1200,
                 filter: 'grayscale(0%)',
                 easing: 'easeInExpo',
@@ -5536,8 +5493,70 @@ const flags = {
             await Promise.all([a2]);
         }
 
+        async function showCite() {
+            const a4 = anime({
+                targets: animateLetters,
+                duration: 1800,
+                delay: anime.stagger(160, {from: 'first'}),
+                opacity: [0, 1],
+                easing: 'linear',
+            }).finished;
+
+            await Promise.all([a4]);
+        }
+
+        async function wait() {
+            const w1 = anime({
+                targets: animateLetters,
+                duration: 1200,
+            }).finished;
+
+            await Promise.all([w1]);
+        }
+
+        async function hideCite() {
+            const a5 = anime({
+                targets: animateLetters,
+                duration: 1000,
+                delay: anime.stagger(50, {from: 'last'}),
+                opacity: 0,
+                easing: 'linear',
+            }).finished;
+
+            await Promise.all([a5]);
+        }
+
         async function init() {
             await blockRooms()
+            .then(() => {
+                const animationContainer = document.querySelector('.animationContainer');
+                let citeDiv = document.createElement('div');
+                citeDiv.classList.add('citeDiv', 'citeDiv-magic');
+                let cite = document.createElement('div');
+                cite.classList.add('cite', 'letter-container');
+
+                for(let o=0; o<myQuote.length; o++) {
+                    let letter = document.createElement('div');
+                    letter.textContent = myQuote[o];
+                    letter.classList.add('cite-letter');
+
+                    cite.appendChild(letter);
+                    animateLetters.push(letter);
+                }
+
+                cite.style.visibility = 'visible';
+
+                citeDiv.appendChild(cite);
+                animationContainer.appendChild(citeDiv);
+            })
+            await showCite()
+            await wait()
+            await hideCite()
+            .then(() => {
+                const citeDiv = document.querySelector('.citeDiv');
+                citeDiv.remove();
+            })
+
             await unblockVisitRoom()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
@@ -5551,7 +5570,68 @@ const flags = {
     pickrandomQuote_20: function(quoteArr) {
         const randomQuote = quoteArr[Math.floor(Math.random() * quoteArr.length)];
         return randomQuote;
-    }
+    },
+
+    createStarBinding_20: function(cardsOpened, tiles, foundTiles, iter) {
+
+        let uselessStars = [];
+
+        if(iter.streak === null) {
+            iter.streak = cardsOpened[0];
+            let starTile = cardsOpened[0].parentNode;
+            let starEffect = starTile.querySelector('.star-effect').classList[1];
+            let room = starTile.parentNode;
+            let allRoomTiles = room.querySelectorAll('.tile');
+            allRoomTiles.forEach(tile => {
+                let effect = tile.querySelector('.star-effect').classList[1];
+                if(starEffect !== effect) {
+                    uselessStars.push(tile);
+                    tile.style = 'pointer-events: none;';
+                }
+            })
+
+            console.log(uselessStars)
+
+            anime({
+                targets: uselessStars,
+                duration: 500,
+                easing: 'easeInSine',
+                opacity: [1, 0],
+            })
+
+        }
+    },
+
+    tryToRemoveStarBinding_20: function(cardsOpened, tiles, foundTiles, iter) {
+        
+        let usefulStars = [];
+
+        // WORK ON THIS FUNCTION 
+
+        if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            iter.streak = cardsOpened[0];
+            let starTile = cardsOpened[0].parentNode;
+            let starEffect = starTile.querySelector('.star-effect').classList[1];
+            let room = starTile.parentNode;
+            let allRoomTiles = room.querySelectorAll('.tile');
+            allRoomTiles.forEach(tile => {
+                let effect = tile.querySelector('.star-effect').classList[1];
+                if((starEffect !== effect) && (tile.style.visibility !== 'hidden')) {
+                    usefulStars.push(tile);
+                    tile.style = 'pointer-events: auto;';
+                }
+            })
+
+            anime({
+                targets: usefulStars,
+                duration: 800,
+                easing: 'linear',
+                opacity: [0, 1],
+            })
+
+            iter.streak = null;
+        }
+    },
 }
 
 export default flags;
