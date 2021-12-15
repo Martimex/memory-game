@@ -4312,6 +4312,193 @@ const flags = {
 
     // LVL 20 - Final level !
 
+    levelStartAnimation_20: function(cardsOpened, tiles, foundTiles, iter) {
+        const animationContainer = document.querySelector('.animationContainer');
+        const background = document.querySelector('.background');
+
+        animationContainer.style = 'background-color: #000';
+        document.querySelector('.board').dataset.animation = 'on';
+        document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+        let shadowTextBox = document.createElement('div');
+        let shadowTextBox2 = document.createElement('div');
+        animationContainer.appendChild(shadowTextBox);
+        animationContainer.appendChild(shadowTextBox2);
+        shadowTextBox.classList.add('shadow-textbox');
+        shadowTextBox2.classList.add('shadow-textbox-2');
+
+        // Those are for animation chain
+
+        let letterAnimationArr = [];
+        let letterAnimationArr2 = [];
+        let panelsArr = [];
+
+        // 1
+
+        //let shadowMessage = 'THIS ONE WILL BE CONFUSING';
+        let shadowMessage = 'THIS ONE IS THE FINAL LEVEL';
+
+        for(let k=0; k<shadowMessage.length; k++) {
+            let shadowLetter = document.createElement('div');
+            shadowLetter.classList.add('shadow-letter');
+            shadowLetter.textContent = shadowMessage[k];
+            letterAnimationArr.push(shadowLetter);
+            shadowTextBox.appendChild(shadowLetter);
+        }
+
+        // 2
+
+        let shadowMessage2 = 'ARE YOU READY ?';
+
+        for(let k=0; k<shadowMessage.length; k++) {
+            let shadowLetter = document.createElement('div');
+            shadowLetter.classList.add('shadow-letter-2');
+            shadowLetter.textContent = shadowMessage2[k];
+            letterAnimationArr2.push(shadowLetter);
+            shadowTextBox2.appendChild(shadowLetter);
+        }
+
+        async function darken() {
+            const a1 = anime({
+                targets: animationContainer,
+                duration: 3500,
+                backgroundColor: ['hsla(0, 0%, 0%, 1)', 'hsla(0, 0%, 0%, 1)'],
+                easing: 'linear',
+            }).finished;
+
+           await Promise.all([a1]);
+        }
+
+        async function showMessage() {
+            const a2 = anime({
+                targets: letterAnimationArr,
+                duration: 1100,
+                delay: anime.stagger(350),
+                opacity: [0, 1],
+                color: ['hsla(0, 0%, 20%, 1)'],
+                easing: 'easeInSine',
+            }).finished;
+
+            await Promise.all([a2]);
+        }
+  
+        async function showMessage2() {
+            const a3 = anime({
+                targets: letterAnimationArr2,
+                duration: 900,
+                delay: anime.stagger(260),
+                opacity: [0, 1],
+                color: ['hsla(0, 0%, 20%, 1)'],
+                transform: ['translateY(3rem) translateX(0rem)', 'translateY(0rem) translateX(6.5rem)'],
+                rotate: '60deg',
+                easing: 'easeInSine',
+            }).finished;
+
+            await Promise.all([a3]);
+        }
+
+        async function invisiblePanels() {
+            const a4 = anime({
+                targets: panelsArr,
+                duration: 2800,
+                translateY: '20%',
+                opacity: [0, 1],
+                delay: anime.stagger(280),
+            }).finished;
+
+            await Promise.all([a4]);
+        }
+
+        async function changeSomeBg() {
+            const a5 = anime({
+                targets: animationContainer,
+                duration: 1400,
+                backgroundColor: ['hsla(0, 0%, 0%, 1)', 'hsla(0, 0%, 0%, 0)'],
+                easing: 'easeOutQuad',
+            }).finished;
+
+            const a6 = anime({
+                targets: [shadowTextBox, shadowTextBox2],
+                duration: 2400,
+                opacity: [1, 0],
+                easing: 'easeOutExpo',
+            }).finished;
+
+            const a7 = anime({
+                targets: panelsArr,
+                duration: 1300,
+                delay: anime.stagger(300),
+                translateY: ['20%','100%'],
+                backgroundColor: ['hsla(0, 0%, 0%, 1)', 'hsla(0, 0%, 0%, .3)'],
+                borderColor: ['hsla(60, 100%, 50%, 1)', 'hsla(60, 100%, 50%, .3)'],
+                easing: 'easeOutQuad',
+            }).finished;
+
+            await Promise.all([a5, a6, a7]);
+        }
+
+        async function showAllTiles() {
+            const a8 = anime({
+                targets: '.tile',
+                transitionProperty: 'all',
+                rotateY: '180deg',
+                loop: false,
+                easing: 'easeInExpo',
+            }).finished;
+
+            await Promise.all([a8]);
+        }
+
+        async function hideAllTiles() {
+            const a9 = anime({
+                targets: '.tile',
+                delay: 2200,
+                transitionProperty: 'all',
+                rotateY: '0deg',
+                loop: false,
+                easing: 'easeOutExpo',
+            }).finished;
+
+            await Promise.all([a9]);
+        }
+
+        async function init() {
+            await darken()
+            await showMessage()
+            await showMessage2()
+            .then(() => {
+                let panelsCount = 10;
+                for(let t=0; t<panelsCount; t++) {
+                    let panel = document.createElement('div');
+                    animationContainer.appendChild(panel);
+                    let widthV = 100 / panelsCount;
+                    let leftV =  widthV * t;
+                    panel.classList.add('panel');
+                    panel.style = `left: ${leftV}%; width: ${widthV}%;`;
+                    panelsArr.push(panel);
+                }
+            })
+            await invisiblePanels()
+            await changeSomeBg()
+                .then(() => {
+                    shadowTextBox.remove();
+                    shadowTextBox2.remove();
+                    let allPanels =  document.querySelectorAll('.panel');
+                    allPanels.forEach(panel => panel.remove());
+                })
+            await showAllTiles()
+            await hideAllTiles()
+                .then(() => {
+                    // At last unlock game
+                    document.querySelector('.board').dataset.animation = 'off';
+                    document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                })
+
+        }
+
+        init();
+    },
+
     prepareTilesToPairs_20: function(cardsOpened, tiles, foundTiles, iter) {
 
         const allTiles = document.querySelectorAll('.tile');

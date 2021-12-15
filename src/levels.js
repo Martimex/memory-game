@@ -521,10 +521,11 @@ const levels = {
         tiles: 64, // in fact, it's 4 times 16 
         iconSet: 'fas',
         counter: {
-            time: null,
-            turns: 88, 
+            time: 272, // ADD 32 SECOND EXTRA BECAUSE OF START ANIMATION - added
+            turns: null, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.levelStartAnimation_20(cardsOpened, tiles, foundTiles, iter);
             flags.prepareTilesToPairs_20(cardsOpened, tiles, foundTiles, iter);
             flags.createSeparateRooms_20(cardsOpened, tiles, foundTiles, iter);
             flags.blockThreeRoomsAndActivateDirectories_20(cardsOpened, tiles, foundTiles, iter);
