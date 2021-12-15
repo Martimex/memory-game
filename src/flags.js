@@ -5186,6 +5186,13 @@ const flags = {
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
+                room.style = 'pointer-events: none;';
+                const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
+                allVisitRoomTiles.forEach(tile => {
+                    if(tile.style.visibility !== 'hidden') {
+                        tile.style = 'pointer-events: none';
+                    }
+                })
             } else {
                 room.style = 'pointer-events: none;';
                 roomsToBlock.push(room);
@@ -5267,6 +5274,12 @@ const flags = {
             //await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
+                const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
+                allVisitRoomTiles.forEach(tile => {
+                    if(tile.style.visibility !== 'hidden') {
+                        tile.style = 'pointer-events: auto';
+                    }
+                })
             })
         }
 
@@ -5286,6 +5299,13 @@ const flags = {
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
+                room.style = 'pointer-events: none;';
+                const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
+                allVisitRoomTiles.forEach(tile => {
+                    if(tile.style.visibility !== 'hidden') {
+                        tile.style = 'pointer-events: none';
+                    }
+                })
             } else {
                 room.style = 'pointer-events: none;';
                 roomsToBlock.push(room);
@@ -5345,6 +5365,12 @@ const flags = {
             //await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
+                const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
+                allVisitRoomTiles.forEach(tile => {
+                    if(tile.style.visibility !== 'hidden') {
+                        tile.style = 'pointer-events: auto';
+                    }
+                })
             })
         }
 
@@ -5363,6 +5389,13 @@ const flags = {
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
+                roomToVisit.style = 'pointer-events: none;';
+                const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
+                allVisitRoomTiles.forEach(tile => {
+                    if(tile.style.visibility !== 'hidden') {
+                        tile.style = 'pointer-events: none';
+                    }
+                })
             } else {
                 room.style = 'pointer-events: none;';
                 roomsToBlock.push(room);
@@ -5443,6 +5476,12 @@ const flags = {
             //await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
+                const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
+                allVisitRoomTiles.forEach(tile => {
+                    if(tile.style.visibility !== 'hidden') {
+                        tile.style = 'pointer-events: auto';
+                    }
+                })
             })
         }
 
@@ -5463,6 +5502,13 @@ const flags = {
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
+                room.style = 'pointer-events: none;';
+                const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
+                allVisitRoomTiles.forEach(tile => {
+                    if(tile.style.visibility !== 'hidden') {
+                        tile.style = 'pointer-events: none';
+                    }
+                })
             } else {
                 room.style = 'pointer-events: none;';
                 roomsToBlock.push(room);
@@ -5560,6 +5606,12 @@ const flags = {
             await unblockVisitRoom()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
+                const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
+                allVisitRoomTiles.forEach(tile => {
+                    if(tile.style.visibility !== 'hidden') {
+                        tile.style = 'pointer-events: auto';
+                    }
+                })
             })
         }
 
@@ -5584,7 +5636,7 @@ const flags = {
             let allRoomTiles = room.querySelectorAll('.tile');
             allRoomTiles.forEach(tile => {
                 let effect = tile.querySelector('.star-effect').classList[1];
-                if(starEffect !== effect) {
+                if((starEffect !== effect) && (tile.style.visibility !== 'hidden')) {
                     uselessStars.push(tile);
                     tile.style = 'pointer-events: none;';
                 }
@@ -5599,6 +5651,41 @@ const flags = {
                 opacity: [1, 0],
             })
 
+        } else {
+            let starsToUnlock = [];
+            let boundStar = iter.streak.parentNode;
+            let starEffectColor = boundStar.querySelector('.star-effect').classList[1];
+            let room = boundStar.parentNode;
+            let allRoomTiles = room.querySelectorAll('.tile');
+            allRoomTiles.forEach(star => {
+                let thisStarEffectColor = star.querySelector('.star-effect').classList[1];
+                let back = star.querySelector('.tile-back');
+
+                if((thisStarEffectColor === starEffectColor) && (iter.streak !== back) && (star.style.visibility !== 'hidden')) {
+                    starsToUnlock.push(star);
+                }
+            })
+
+            async function unlock() {
+                const a1 = anime({
+                    targets: starsToUnlock,
+                    duration: 400,
+                    easing: 'linear',
+                    filter: 'sepia(0%)',
+                })
+                await Promise.all([a1]);
+            }
+
+            async function init() {
+                await unlock()
+                    .then(() => {
+                        for(let u=0; u<starsToUnlock.length; u++) {
+                            starsToUnlock[u].style = 'pointer-events: auto;';
+                        }
+                    })
+            }
+
+            init();
         }
     },
 
@@ -5618,7 +5705,10 @@ const flags = {
                 let effect = tile.querySelector('.star-effect').classList[1];
                 if((starEffect !== effect) && (tile.style.visibility !== 'hidden')) {
                     usefulStars.push(tile);
-                    tile.style = 'pointer-events: auto;';
+                    tile.style = 'pointer-events: none;';
+                    
+                } else if(tile.style.visibility !== 'hidden') {
+                    tile.style = 'pointer-events: none;';
                 }
             })
 
@@ -5630,6 +5720,42 @@ const flags = {
             })
 
             iter.streak = null;
+        } else {
+            let starsToLock = [];
+            let boundStar = iter.streak.parentNode;
+            let starEffectColor = boundStar.querySelector('.star-effect').classList[1];
+            let room = boundStar.parentNode;
+            let allRoomTiles = room.querySelectorAll('.tile');
+            allRoomTiles.forEach(star => {
+                let thisStarEffectColor = star.querySelector('.star-effect').classList[1];
+                let back = star.querySelector('.tile-back');
+
+                if((thisStarEffectColor === starEffectColor) && (iter.streak !== back) && (star.style.visibility !== 'hidden')) {
+                    starsToLock.push(star);
+                    star.style = 'pointer-events: none;';
+                }
+            })
+
+            async function unlock() {
+                const a1 = anime({
+                    targets: starsToLock,
+                    duration: 250,
+                    easing: 'linear',
+                    filter: 'sepia(80%)',
+                })
+                await Promise.all([a1]);
+            }
+
+            async function init() {
+                await unlock()
+                    .then(() => {
+                        for(let u=0; u<starsToLock.length; u++) {
+                           // starsToLock[u].style = 'pointer-events: none;';
+                        }
+                    })
+            }
+
+            init();
         }
     },
 }
