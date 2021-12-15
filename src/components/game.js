@@ -31,6 +31,7 @@ let iter = {
     /*value in series*/ streak: 0,
     /*turn addon/penalty*/ extraTurns: 0,
     /*used ONLY for lvl 18 and prob 19 - it modifies your find tiles*/ fTilesModifier: 0, // if lower than 0, it lowers foundTiles count
+    /*used ONLY for lvl 20 time multiplying */ timeAddon: 0,
     /*used for more advanced animation stuff*/ array: [],
     /*additional array for lvl 17 purposes*/ nextArr: [],
     /*determines whether you passed level specific conditions - if not, value = false and u lose the level*/ passCondition: true,
@@ -165,7 +166,8 @@ function Game(props) {
         iter.amount = 0;
         iter.streak = 0;
         iter.extraTurns = 0;
-        iter.fTilesModifier = 0;    
+        iter.fTilesModifier = 0;
+        iter.timeAddon = 0;
         iter.array = [];
         iter.nextArr = [];
         iter.passCondition = true;
@@ -326,7 +328,7 @@ function Game(props) {
 
         if(levels[`lvl${level-1}`].counter.time !== null) {
             const stopwatch = setInterval(() => {
-                setTime(time + 1);
+                setTime((time + 1) - iter.timeAddon);
             }, 1000);
     
             //if(renderCount < 1) {return () => clearInterval(stopwatch);};  // Prevents from causing error on very first render - line below causes it
@@ -556,7 +558,7 @@ function Game(props) {
             else if((handleCheck < 1) && (cardsOpened[1]))  {
                 cardsOpened[1].parentNode.classList.add('target', 'target-2');
                 if(cardsOpened.length > 1) {
-                    levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles, iter);
+                    levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles, iter, time);
                     console.log('final length: '+cardsOpened.length);
                     handleCheck++;
                     handleCount = 0;

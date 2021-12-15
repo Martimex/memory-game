@@ -5424,7 +5424,7 @@ const flags = {
         async function hideCite() {
             const a5 = anime({
                 targets:'.citeDiv',
-                delay: 3200,
+                delay: 2700,
                 duration: 1100,
                 opacity: 0,
                 easing: 'easeOutExpo',
@@ -5626,7 +5626,7 @@ const flags = {
         async function hideCite() {
             const a5 = anime({
                 targets:'.citeDiv',
-                delay: 1500,
+                delay: 1400,
                 duration: 1100,
                 opacity: 0,
                 easing: 'easeOutExpo',
@@ -5945,6 +5945,29 @@ const flags = {
             init();
         }
     },
+
+    checkTimeAddCondition_20: function(cardsOpened, tiles, foundTiles, iter, time) {
+        // Gives extra time whenever you complete a room (but not the last one)
+        if(!time) return;
+        if((cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) && (foundTiles+2 !== tiles)) {
+            let thisRoom = cardsOpened[0].parentNode.parentNode;
+            let activeRoomTilesCount = 0;
+            const allRoomTiles = thisRoom.querySelectorAll('.tile');
+            allRoomTiles.forEach(tile => {
+                let back = tile.querySelector('.tile-back');
+                if((tile.style.visibility !== 'hidden') && (back !== cardsOpened[0]) && (back !== cardsOpened[1])) {
+                    activeRoomTilesCount++;
+                }
+            })
+
+            if(activeRoomTilesCount <= 0) {
+                iter.timeAddon = (levels[`lvl20`].counter.time - time);
+                setTimeout(() => {
+                    iter.timeAddon = 0;
+                }, 1000);
+            }
+        }
+    }
 }
 
 export default flags;
