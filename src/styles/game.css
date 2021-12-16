@@ -2,6 +2,10 @@
     color: pink;
 }
 
+button:hover {
+    cursor: pointer;
+}
+
 .background {
     position: absolute;
     /*position: relative;*/

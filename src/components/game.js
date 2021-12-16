@@ -389,6 +389,9 @@ function Game(props) {
        checkParentOrigin(cardsOpened, target); // Prevents from tile + outer tile border click bug
         console.log(card)
        
+        // Lets do it in advance
+        resolveAnimationBugs();
+
       if(cardsOpened.length > 1) {
             //levels[`lvl${level-1}`].onSecondClickFlag();
             doCardsMatch(cardsOpened);
@@ -429,18 +432,18 @@ function Game(props) {
                         opacity: [1, 0],
                     })
 
-                    Promise.all([a1]);
+                   await Promise.all([a1]);
                 }
 
                 fade().then(() => {
-                    setTimeout(() => {
-                        cardsOpened[0].parentNode.style = 'visibility: hidden';
-                        cardsOpened[1].parentNode.style = 'visibility: hidden';
+                    cardsOpened[0].parentNode.style = 'visibility: hidden';
+                    cardsOpened[1].parentNode.style = 'visibility: hidden';
                 
-                        for(let i=0; i<=1; i++) {
-                            cardsOpened.pop();
-                        }
-                    })
+                    resolveAnimationBugs(); // Tab switching issue
+
+                    for(let i=0; i<=1; i++) {
+                        cardsOpened.pop();
+                    }
                 })
 
                 // Testy z VANTA.JS
@@ -458,12 +461,16 @@ function Game(props) {
                 }
                 
                 flipBack().then(() => {
+
+                    resolveAnimationBugs(); // Tab switching issue
+
                     for(let i=0; i<=1; i++) {
                         cardsOpened.pop();
                     }
                 })
                 
-                console.log({moves});
+
+               // console.log({moves});
             }
             console.log('time out');
     
@@ -473,9 +480,39 @@ function Game(props) {
                 gameboard.current.addEventListener('click', clickable); // game.childNodes[0]
             }, 300); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
     
-        }, 1400); // this time allows to see two opend tiles for user - he can check whether they match or not
+        }, 1400); // this time allows to see two opened tiles for user - he can check whether they match or not
     }
         
+    function resolveAnimationBugs() {
+        let tilesToCheck = [...gameboard.current.childNodes];
+        let buggedTiles = [];
+        tilesToCheck.forEach((ttc, index) => {
+            let transform = ttc.style.transform;
+            let query = 'rotateY';
+            let pos = transform.indexOf(query);
+            let transformValue = transform.substring(pos + query.length);
+
+            if(cardsOpened[1]) { // Resolve after second click
+                if((ttc.style.visibility !== 'hidden')  && (transformValue !== '(0deg)') && (cardsOpened[0].parentNode !== ttc) && (cardsOpened[1].parentNode !== ttc))  {
+                    buggedTiles.push(ttc);
+                }
+            } else {  // Resolve after first click
+                if((ttc.style.visibility !== 'hidden')  && (transformValue !== '(0deg)') && (cardsOpened[0].parentNode !== ttc))  {
+                    buggedTiles.push(ttc);
+                }
+            }
+        })
+
+        if(buggedTiles.length > 0) {
+            anime({
+                targets: buggedTiles,
+                duration: 500,
+                rotateY: '0deg',
+                easing: 'easeOutSine',
+            })
+        }
+    }
+
     function confirmSuccess() {
      
         scoreAddon = (scorePerPair * scoreMultiplier);
