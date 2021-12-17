@@ -9,7 +9,7 @@ button:hover {
 .background {
     position: absolute;
     /*position: relative;*/
-    background-image: linear-gradient(135deg, hsl(0, 0%, 20%), hsl(0, 63%, 48%), hsl(0, 66%, 32%), hsl(0, 63%, 48%), hsl(0, 0%, 20%));
+    background-image: linear-gradient(40deg, #000 #000);
     width: 100%;
     height: 100%;
 }
@@ -194,6 +194,11 @@ button:hover {
     letter-spacing: .1rem;
 }
 
+.svg-inline, path {
+    pointer-events: none;
+    overflow: hidden;
+}
+
 /* .details-item::after {
     content: '';
     display: block;
@@ -205,7 +210,7 @@ button:hover {
 /* LEVEL 1 */
 
 .bg-1 {
-    /*background-image: linear-gradient(40deg, #54e, #4c5);*/
+    background-image: linear-gradient(135deg, hsl(0, 0%, 20%), hsl(0, 63%, 48%), hsl(0, 66%, 32%), hsl(0, 63%, 48%), hsl(0, 0%, 20%));
 }
 
 .game-1 {

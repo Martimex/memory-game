@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import Preview from './preview.js';
 import GameInfo from './game_info.js';
 import Confirm from './confirm.js';
 
@@ -120,7 +121,7 @@ function Game(props) {
     const [renderCount, setRenderCount] = useState(0);
     const [animationLoad, setAnimationLoad] = useState(false);
     const [tiles, setTiles] = useState(null);  // Ta wartość odpowiada za poprawne malowanie ekranu - NIE WOLNO JEJ MODYFIKOWAĆ W TRAKCIE GRY !
-    const [level, setLevel] = useState(1);
+    const [level, setLevel] = useState(props.level);
     const [score, setScore] = useState(0);
     const [scoreMultiplier, setScoreMultiplier] = useState(1);
     const [highscore, setHighscore] = useState(0);
@@ -131,13 +132,15 @@ function Game(props) {
     //const []
     //const [cardsOpen, setCardsOpen] = useState([]);
 
-    //  Render Count pomaga pozbyć się mylących błędów z konsoli - zmienna pilnuje, czy render wykonał się 1 raz. Jeśli ma się on wykonać po raz
-    //  kolejny, to nie tworzymy na nowo tabeli z ikonkami (unikamy podmiany ikon na planszy podczas gry)
-    if(renderCount < 1) {
-        setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles);
-        setRenderCount(renderCount + 1);
-    }
+    const all = useRef(null);
+    const bg = useRef(null);
+    const gameboard = useRef(null);
+    const game = useRef(null);
+    const animationBox = useRef(null);
+    const inverseReverse = useRef(null); // Starting animation
 
+    console.log(props);
+    console.log(level)
 
     //If you lose, the Icon Array has to be cleared out completely - neglecting can cause pushing not paired icons to array
     
@@ -157,6 +160,7 @@ function Game(props) {
         setTime(0); //setTime(0);
         setTiles(levels[`lvl${level}`].tiles);
         setConfirmValue(null);
+        setRenderCount(0);
 
         scoreAddon = 0;
         handleCount = 0;
@@ -184,7 +188,11 @@ function Game(props) {
         // Hide win confirmation table
         //setConfirmValue(null);
         
-        console.log(animationBox.current.childNodes.length);
+        //console.log(animationBox.current.childNodes.length);
+
+        console.log(animationBox.current);
+
+        if(level <= 1) {return;} 
 
         if(animationBox.current.childNodes.length > 0) {
             for(let nodeCount = 0; nodeCount !== animationBox.current.childNodes.length; nodeCount = nodeCount) {
@@ -207,15 +215,20 @@ function Game(props) {
             gameboard.current.childNodes[x].style = `visibility: visible`;
         }
 
-        setRenderCount(0);
     }
 
-    const all = useRef(null);
-    const bg = useRef(null);
-    const gameboard = useRef(null);
-    const game = useRef(null);
-    const animationBox = useRef(null);
-    const inverseReverse = useRef(null); // Starting animation
+
+    if((level <= 1) && (renderCount < 1)) {
+        setConfirmValue('play');
+        //changeTileNumber();
+    } 
+
+    //  Render Count pomaga pozbyć się mylących błędów z konsoli - zmienna pilnuje, czy render wykonał się 1 raz. Jeśli ma się on wykonać po raz
+    //  kolejny, to nie tworzymy na nowo tabeli z ikonkami (unikamy podmiany ikon na planszy podczas gry)
+    if(renderCount < 1) {
+        setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles);
+        setRenderCount(renderCount + 1);
+    }
 
     useEffect(() => {
         gameboard.current.removeEventListener('click', clickable);
@@ -685,7 +698,7 @@ function Game(props) {
                     <GameInfo level={level}  moves={moves} time={time} score={score}  />
                 </div>
 
-                <div onClick={() => {setLevel(level + 15); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
+                <div onClick={() => {setLevel(level + 13); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className={`game game-${level-1}`} ref={game}>
                
                     <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`}}>
@@ -694,8 +707,17 @@ function Game(props) {
                 </div>
                 <div className={`animationContainer aContainer-${level-1}`} ref={animationBox}></div>
 
-                {level === 1 && (
-                    <button className='summary' onClick={changeTileNumber} > Submit</button>
+                {
+                //    {level === 1 && ( <div className='preview'>
+                //        <Preview  level={level} next={changeTileNumber} />
+                //        {/* <button className='summary' onClick={changeTileNumber} > Submit</button> */}
+                //    </div>
+                //)} 
+                }
+                {confirmValue === 'play' && (
+                    <div className='confirmation-p'>
+                        {/* <ConfirmPlay /> */}
+                    </div>
                 )}
                 {confirmValue === true && (
                     <div className='confirmation-s'>
