@@ -14,6 +14,7 @@ function ConfirmPlay(props) {
         animationRefFlash.current = anime({
             targets: '.anywhere-dialog',
             duration: 3200,
+            delay: 1000,
             keyframes: [
                 {opacity: 0, duration: 1200},
                 {opacity: .1, delay: 600},
@@ -25,7 +26,7 @@ function ConfirmPlay(props) {
                 {opacity: .7},
                 {opacity: .8},
                 {opacity: .9},
-                {opacity: 1, delay: 3500},
+                {opacity: 1, delay: 2500},
             ],
             direction: 'alternate',
             easing: 'easeInOutSine',

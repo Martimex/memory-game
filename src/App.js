@@ -25,8 +25,16 @@ function App() {
   const [state, setState] = useState('start');
   const [level, setLevel] = useState(1);
 
+  const timing = 1000;
+
   const triggerChangeComponent = () => {
     setState('game');
+  }
+
+  const triggerChangeComponentDelayed = () => {
+    setTimeout(() => {
+      setState('game');
+    }, timing);
   }
 
   const triggerChangeComponentToPreview = () => {
@@ -39,18 +47,20 @@ function App() {
     }, 1700);  // zamiast tego zrób animację dla przegranej gry, po której można kliknąć przycisk :)
   }
 
-  const triggerStartQuick = () => {
-    setState('start');
+  const triggerStartDelayed = () => {
+    setTimeout(() => {
+      setState('start');
+    }, timing);
   }
 
   return (
     <div className="App">
       {state === 'start' && (
-        <Landing changeComponent={triggerChangeComponentToPreview} tileCodes={tileCodes} />
+        <Landing changeComponent={triggerChangeComponentToPreview} tileCodes={tileCodes} state={state} />
       )}
 
       {state === 'preview' && (
-        <Preview changeComponent={triggerChangeComponent} start={triggerStart} startQuick={triggerStartQuick} level={level} nextLV={() => {setLevel(level + 1)}} />
+        <Preview changeComponent={triggerChangeComponentDelayed} backToHome={triggerStartDelayed} timing={timing} start={triggerStart} level={level} nextLV={() => {setLevel(level + 1)}} />
       )}
 
       {state === 'game' && (

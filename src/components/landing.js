@@ -241,6 +241,18 @@ function Landing(props) {
         <div className={`card ${code}`} key={index.toString()}><div className='card-front'></div> <div className='card-back'><FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon ${code}`}/></div></div>
     );
 
+    const changeScreen = React.useRef(null);
+
+    function fadeAnimation() {
+        changeScreen.current = anime({
+            targets: 'body',
+            duration: 1000,
+            opacity: [0, 1],
+            //direction: 'alternate',
+            easing: 'linear',
+        })
+    }
+
     return( 
         <div>
             <div className='layer'>
@@ -251,7 +263,7 @@ function Landing(props) {
 
             <div className='content'>
                 <span className="game-title">MEMO</span>
-                <button className='start' onClick={props.changeComponent}> Play </button>
+                <button className='start' onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button>
             </div>       
         </div>
     )
