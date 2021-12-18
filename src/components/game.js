@@ -13,6 +13,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import Preview from './preview.js';
 import GameInfo from './game_info.js';
 import Confirm from './confirm.js';
+import ConfirmPlay from './confirm_play';
 
 import { setIcon, fasArray, fabArray } from './landing.js';
 import { set } from 'animejs';
@@ -716,7 +717,7 @@ function Game(props) {
                 }
                 {confirmValue === 'play' && (
                     <div className='confirmation-p'>
-                        {/* <ConfirmPlay /> */}
+                        {<ConfirmPlay value={'play'} level={level} next={changeTileNumber} /> }
                     </div>
                 )}
                 {confirmValue === true && (
@@ -726,7 +727,7 @@ function Game(props) {
                 )}
                 {confirmValue === false && (
                     <div className='confirmation-f'>
-                        <Confirm value={false} level={level} score={score} highscore={highscore} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} start={props.start}/>,
+                        <Confirm value={false} level={level} score={score} highscore={highscore} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} start={props.preview}/>,
                     </div>
                 )}
 

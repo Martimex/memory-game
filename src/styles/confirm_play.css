@@ -1,0 +1,53 @@
+.anywhere-box, .anywhere-dialog {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0%; left: 0%;
+    height: 100%; width: 100%;
+    cursor: pointer;
+}
+
+.anywhere-dialog {
+    top: 30%; left: 30%;
+    height: 40%; width: 40%;
+    border: .2rem double hsl(0, 100%, 100%, .8);
+    border-radius: 30%;
+    z-index: 80;
+}
+
+.anywhere-dialog::before {
+    content: '';
+    display: block;
+    position:absolute;
+    width: 120%;
+    height: 120%;
+    background-color: hsla(110, 5%, 5%, 0.3);
+    filter: blur(5px);
+    border-radius: 30%;
+    z-index: -40;
+}
+
+.anywhere-text {
+    user-select: none;
+    color: hsla(0, 100%, 100%, .8);
+    padding: 1rem;
+    font-size: 3rem;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    z-index: 80;
+    background: -webkit-linear-gradient(90deg, hsla(110, 67%, 45%, 0.95), hsla(0, 0%, 0%, .85), hsla(133, 59%, 34%, 0.85));
+    filter:  saturate(170%); 
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 4px 2px 2px hsla(122, 60%, 60%, 0.5);
+}
+
+.anywhere-text::after {
+    content: '';
+    display: block;
+    height: .3rem;
+    width: 100%;
+    border-radius: .3rem double hsla(110, 67%, 45%, 0.95);
+    background: linear-gradient(135deg, hsla(110, 67%, 45%, 0.95), hsla(0, 0%, 0%, .85), hsla(133, 59%, 34%, 0.85));
+}

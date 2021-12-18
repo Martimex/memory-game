@@ -6,10 +6,10 @@ button:hover {
     cursor: pointer;
 }
 
-.background {
+.background, .bg-0 {
     position: absolute;
     /*position: relative;*/
-    background-image: linear-gradient(40deg, #000 #000);
+    background-image: linear-gradient(40deg, #000, #000);
     width: 100%;
     height: 100%;
 }
@@ -64,6 +64,7 @@ button:hover {
     align-items: center;
     justify-content: center;
     backface-visibility: hidden;
+    overflow: hidden;
     transform: rotateY(180deg);
     color: hsl(210, 50%, 80%);
 }
@@ -190,14 +191,17 @@ button:hover {
 }
 
 .details-item {
-    color: hsl(2, 50%, 60%);
+    /* color: hsl(2, 50%, 60%); */
+    color: hsl(0, 0%, 0%);
     letter-spacing: .1rem;
+    user-select: none;
 }
 
-.svg-inline, path {
+.svg-inline, path, svg {
     pointer-events: none;
     overflow: hidden;
 }
+
 
 /* .details-item::after {
     content: '';
