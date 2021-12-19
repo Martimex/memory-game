@@ -177,7 +177,35 @@ function Game(props) {
         iter.nextArr = [];
         iter.passCondition = true;
 
+        async function finish() {
+           await winLvAnimation()
+        }
+
         cleanup();
+        finish();
+    }
+
+    const winLvAnimation = async () => {
+/*         const elementsArray = [];
+        const elLimit = 10; */
+/*         for(let g=1; g<=elLimit; g++) {
+            let el = document.createElement('div');
+            el.classList.add('win-el');
+            el.style = `left: ${(100 / elLimit) * (g - 1)}%; width: ${100 / elLimit}%`;
+            elementsArray.push(el);
+            animationBox.current.appendChild(el);
+        } */
+
+        const a1 = anime({
+            targets: bg.current,
+            duration: 2000,
+            //delay: anime.stagger(100),
+            opacity: [0, 1],
+            easing: 'linear',
+        }).finished;
+
+        await Promise.all([a1]);
+    
     }
 
     const cleanup = () => {
@@ -193,7 +221,7 @@ function Game(props) {
 
         console.log(animationBox.current);
 
-        if(level <= 1) {return;} 
+       /*  if(level <= 1) {return;}  */
 
         if(animationBox.current.childNodes.length > 0) {
             for(let nodeCount = 0; nodeCount !== animationBox.current.childNodes.length; nodeCount = nodeCount) {
@@ -699,7 +727,7 @@ function Game(props) {
                     <GameInfo level={level}  moves={moves} time={time} score={score}  />
                 </div>
 
-                <div onClick={() => {setLevel(level + 13); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
+                <div onClick={() => {setLevel(level + 5); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className={`game game-${level-1}`} ref={game}>
                
                     <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`}}>

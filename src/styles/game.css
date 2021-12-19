@@ -80,6 +80,15 @@ button:hover {
     background: hsl(125, 50%, 50%)
 }
 
+/* Win level animation elems */
+
+.win-el {
+    position: absolute;
+    height: 100%;
+    top: 0%;
+    background:hsl(2, 0%, 0%);
+}
+
 /* Styling for confirmation tables */
 
 
@@ -96,6 +105,7 @@ button:hover {
     position: absolute; top: 30%; left: 30%;
     width: 40%; height: 40%;
     border-radius: 28%;
+    z-index: 100;
 }
 
 .confirmation-table-s {
@@ -280,18 +290,20 @@ button:hover {
     background-image: linear-gradient(40deg, #54e, #4c5);
 }
 
-.aContainer-2 {
+/*  .aContainer-2 {
     overflow: hidden;
     position: relative; bottom: 0; left: 0;
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-}
-
+} 
+ */
 .flood-elem {
-    z-index: -54;
+    z-index: 33;
     width:100%;
-    height: .5%;  
+    height: .5%;
+    left: 0%;
+    position: absolute;
     background: #001;
 }
 
@@ -354,7 +366,8 @@ button:hover {
    position: absolute; top: 0; left: 0;
    width: 100vw;
    height: 100vh; 
-   background: hsla(118, 70%, 60%, 35%);
+   background: hsl(118, 35%, 70%);
+   z-index: -50;
 }
 
 .aContainer-3 {

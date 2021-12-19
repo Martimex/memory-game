@@ -165,7 +165,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 40, // 31
+            turns: 58, // 31, 40, 58
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.resetBgImg_6(cardsOpened, tiles, foundTiles, iter);

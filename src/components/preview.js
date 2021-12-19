@@ -36,7 +36,7 @@ function Preview(props) {
             opacity: 0,
             duration: 1400,
             filter: 'saturate(40%) invert(40%)',
-            rotate: '20deg',
+            translateX: '3rem',
             easing: 'linear',
         })
     }
@@ -47,7 +47,7 @@ function Preview(props) {
             opacity: 1,
             duration: 1400,
             filter: 'saturate(100%) invert(0%)',
-            rotate: '0deg',
+            translateX: '0rem',
             easing: 'linear',
         })
     }

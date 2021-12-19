@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import '../styles/confirm_play.css';
+import '../styles/game.css';
 
 import Game from './game.js';
 import levels from '../levels.js';

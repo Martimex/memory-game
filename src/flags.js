@@ -59,8 +59,11 @@ const flags = {
 
         //f.appendChild(animationContainer);
 
+        console.log(levels[`lvl2`].counter.time);
+
         for(let i=75; i>0; i--) {
             let d = document.createElement('div');
+            d.style = `bottom: ${i /2}%`;
             d.classList.add('flood-elem');
             animationContainer.appendChild(d);
         }
@@ -150,13 +153,14 @@ const flags = {
     // LVL 4
 
     blockInverseAnimation_4: function() {
-        /* anime({
+        anime({
             targets: '.tile',
             duration: 3200,
-            delay: anime.stagger(85),
+            delay: anime.stagger(85, {from: 'center'}),
             keyframes: [
-                {translateX: '10rem'},
-                {translateX: '0rem'},
+                {translateX: '10rem', opacity: 0},
+                {translateX: '0rem', opacity: 0},
+                {opacity: 1, duration: 200}
             ],
             loop: false,
             easing: 'linear',
@@ -167,7 +171,7 @@ const flags = {
             duration: 3200,
             skewY: '10deg',
             loop: false,
-        })  DISABLED ONLY FOR DEVELOPMENT PURPOSES*/ 
+        })  //DISABLED ONLY FOR DEVELOPMENT PURPOSES*/ 
     },
 
     colorFirstTargetShadow_4: function() {
@@ -211,9 +215,9 @@ const flags = {
             waitFinish().then(() => {
                 anime({
                     targets:'.background',
-                    duration: 4200,
+                    duration: 1200,
                     easing: 'linear',
-                    backgroundImage: ['repeating-linear-gradient(190deg, hsl(41, 70%, 50%), hsl(50, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)', 'repeating-linear-gradient(30deg, hsl(70, 70%, 50%), hsl(110, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)'],
+                    backgroundImage: ['repeating-linear-gradient(80deg, hsl(41, 70%, 50%), hsl(50, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)', 'repeating-linear-gradient(30deg, hsl(70, 70%, 50%), hsl(110, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)'],
                     direction: 'alternate',
                 })
             })
@@ -1584,7 +1588,7 @@ const flags = {
                     rotate: `${rotation}`,
                     easing: 'linear',
                 })
-                Promise.all([a1]);
+               await Promise.all([a1]);
             }
             else  { 
                 rotation = '270';
@@ -1594,7 +1598,7 @@ const flags = {
                     rotate: `${rotation}`,
                     easing: 'linear',
                 })
-                Promise.all([a1]);
+               await Promise.all([a1]);
             }
         }
 
