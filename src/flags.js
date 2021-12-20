@@ -1228,7 +1228,7 @@ const flags = {
         let allTiles = document.querySelectorAll('.tile');
         let activeIcons = [];
         let notFocusedTiles = [];
-        let focusedTiles = [];
+        //let focusedTiles = []; will be iter.array from now on
 
         iter.value++;
 
@@ -1264,67 +1264,71 @@ const flags = {
                         else if(iter.amount%2 === 0) {activeIcons[rand].style = 'color: hsla(266, 91%, 52%, .6);';}
                         else if(iter.amount%1 === 0) {activeIcons[rand].style = 'color: hsla(229, 91%, 52%, .6);';}
                        
-                        if(!(tile.classList.contains('focused'))) {notFocusedTiles.push(tile);} else {focusedTiles.push(tile);}
+                        notFocusedTiles.push(tile);
+
                         back.appendChild(activeIcons[rand]);
                         activeIcons.splice(rand, 1);
+                    } else {
+                        iter.array.push(tile);
                     }
                 })
 
+                console.log(iter.array);
+                let newBg = {color: 'n'};
+                let newBor = {color: 'n'};
+                let oldBg = {color: 'o'};
+                let oldBor = {color: 'o'};
+                let gameBg = {color: '?'}
+
+                if(iter.amount%6 === 0) {
+                    newBg.color =  `hsla(8, 0%, 0%, .4)`;
+                    newBor.color =  `hsla(8, 0%, 0%, .5)`;
+                    gameBg.color = `hsla(8, 0%, 0%, .8)`;
+                    oldBg.color =  `hsla(8, 50%, 40%, .4)`;
+                    oldBor.color =  `hsla(8, 60%, 50%, .5)`;
+                }
+
+                else if(iter.amount%5 === 0) {
+                    newBg.color =  `hsla(8, 50%, 40%, .4)`;
+                    newBor.color =  `hsla(8, 60%, 50%, .5)`;
+                    gameBg.color = `hsla(8, 90%, 30%, .8)`;
+                    oldBg.color = `hsla(55, 50%, 40%, .4)`;
+                    oldBor.color = `hsla(55, 60%, 50%, .5)`;
+                }
+                else if(iter.amount%4 === 0) {
+                    newBg.color =  `hsla(55, 50%, 40%, .4)`;
+                    newBor.color =  `hsla(55, 60%, 50%, .5)`;
+                    gameBg.color = `hsla(55, 90%, 30%, .8)`;
+                    oldBg.color = `hsla(317, 50%, 40%, .4)`;
+                    oldBor.color = `hsla(317, 60%, 50%, .5)`;
+                }
+                else if(iter.amount%3 === 0) {
+                    newBg.color =  `hsla(317, 50%, 40%, .4)`;
+                    newBor.color =  `hsla(317, 60%, 50%, .5)`;
+                    gameBg.color = `hsla(317, 90%, 30%, .8)`;
+                    oldBg.color = `hsla(266, 50%, 40%, .4)`;
+                    oldBor.color = `hsla(266, 60%, 50%, .5)`;
+                }
+                else if(iter.amount%2 === 0) {
+                    newBg.color =  `hsla(266, 50%, 40%, .4)`;
+                    newBor.color =  `hsla(266, 60%, 50%, .5)`;
+                    gameBg.color = `hsla(266, 90%, 30%, .8)`;
+                    oldBg.color = `hsla(229, 50%, 40%, .4)`;
+                    oldBor.color = `hsla(229, 60%, 50%, .5)`;
+                }
+                else if(iter.amount%1 === 0) {
+                    newBg.color =  `hsla(229, 50%, 40%, .4)`;
+                    newBor.color =  `hsla(229, 60%, 50%, .5)`;
+                    gameBg.color = `hsla(229, 90%, 30%, .8)`;
+                    oldBg.color = `hsla(110, 50%, 40%, .4)`;
+                    oldBor.color = `hsla(110, 60%, 50%, .5)`;
+                }
+                else {
+                    newBg.color =  `hsla(177, 50%, 40%, .4)`;
+                    newBor.color =  `hsla(177, 60%, 50%, .5)`;
+                }
+
                 async function wait() {
-                    let newBg = {color: 'n'};
-                    let newBor = {color: 'n'};
-                    let oldBg = {color: 'o'};
-                    let oldBor = {color: 'o'};
-                    let gameBg = {color: '?'}
-
-                        if(iter.amount%6 === 0) {
-                            newBg.color =  `hsla(8, 0%, 0%, .4)`;
-                            newBor.color =  `hsla(8, 0%, 0%, .5)`;
-                            gameBg.color = `hsla(8, 0%, 0%, .8)`;
-                            oldBg.color =  `hsla(8, 50%, 40%, .4)`;
-                            oldBor.color =  `hsla(8, 60%, 50%, .5)`;
-                        }
-
-                        else if(iter.amount%5 === 0) {
-                            newBg.color =  `hsla(8, 50%, 40%, .4)`;
-                            newBor.color =  `hsla(8, 60%, 50%, .5)`;
-                            gameBg.color = `hsla(8, 90%, 30%, .8)`;
-                            oldBg.color = `hsla(55, 50%, 40%, .4)`;
-                            oldBor.color = `hsla(55, 60%, 50%, .5)`;
-                        }
-                        else if(iter.amount%4 === 0) {
-                            newBg.color =  `hsla(55, 50%, 40%, .4)`;
-                            newBor.color =  `hsla(55, 60%, 50%, .5)`;
-                            gameBg.color = `hsla(55, 90%, 30%, .8)`;
-                            oldBg.color = `hsla(317, 50%, 40%, .4)`;
-                            oldBor.color = `hsla(317, 60%, 50%, .5)`;
-                        }
-                        else if(iter.amount%3 === 0) {
-                            newBg.color =  `hsla(317, 50%, 40%, .4)`;
-                            newBor.color =  `hsla(317, 60%, 50%, .5)`;
-                            gameBg.color = `hsla(317, 90%, 30%, .8)`;
-                            oldBg.color = `hsla(266, 50%, 40%, .4)`;
-                            oldBor.color = `hsla(266, 60%, 50%, .5)`;
-                        }
-                        else if(iter.amount%2 === 0) {
-                            newBg.color =  `hsla(266, 50%, 40%, .4)`;
-                            newBor.color =  `hsla(266, 60%, 50%, .5)`;
-                            gameBg.color = `hsla(266, 90%, 30%, .8)`;
-                            oldBg.color = `hsla(229, 50%, 40%, .4)`;
-                            oldBor.color = `hsla(229, 60%, 50%, .5)`;
-                        }
-                        else if(iter.amount%1 === 0) {
-                            newBg.color =  `hsla(229, 50%, 40%, .4)`;
-                            newBor.color =  `hsla(229, 60%, 50%, .5)`;
-                            gameBg.color = `hsla(229, 90%, 30%, .8)`;
-                            oldBg.color = `hsla(110, 50%, 40%, .4)`;
-                            oldBor.color = `hsla(110, 60%, 50%, .5)`;
-                        }
-                        else {
-                            newBg.color =  `hsla(177, 50%, 40%, .4)`;
-                            newBor.color =  `hsla(177, 60%, 50%, .5)`;
-                        }
-
                         let newGameBackground = document.querySelector('.bg-10');
                         //console.log(newGameBackground)
 
@@ -1341,10 +1345,10 @@ const flags = {
 
                         
                         const a2 = anime({
-                            targets:focusedTiles,
-                            duration: 200,
-                            borderColor: `${newBor.color}`, //'hsla(229, 60%, 50%, .5)',
-                            backgroundColor: `${newBg.color}`, //'hsla(229, 50%, 40%, .4)',
+                            targets: iter.array,
+                            duration: 1200,
+                            borderColor: [`${oldBor.color}`, `${oldBor.color}`], //'hsla(229, 60%, 50%, .5)',
+                            backgroundColor: [`${oldBg.color}`, `${oldBg.color}`], //'hsla(229, 50%, 40%, .4)',
                             easing: 'easeOutExpo',
                         })
 
@@ -1355,9 +1359,9 @@ const flags = {
                             easing: 'linear',
                         })
 
-                        Promise.all([a1, a2, a3]);
-                    //} else {
-/*                         const a1 = anime({
+                        await Promise.all([a1, a2, a3]);
+                            //} else {
+                            /*                         const a1 = anime({
                             targets: notFocusedTiles,
                             duration: 2500,
                             borderColor: ['hsla(229, 60%, 50%, .5)', 'hsla(110, 60%, 50%, .5)'],
@@ -1381,6 +1385,9 @@ const flags = {
                 .then(() => {
                     setTimeout(() => {
                         //console.log('all resolved')
+                        while(iter.array.length > 0) {
+                            iter.array.pop();
+                        }
                         document.querySelector('.board').dataset.animation = 'off';
                     },3000)
                 })
@@ -1433,7 +1440,15 @@ const flags = {
         }
     },
 
-
+    styleIconsBack_10: function(cardsOpened, tiles, foundTiles, iter) {
+        if(foundTiles+2 === tiles) {
+            const allTiles = document.querySelectorAll('.tile');
+            allTiles.forEach(tile => {
+                let back = tile.querySelector('.tile-back');
+                back.childNodes[0].style = '';
+            })
+        }
+    },
 
 
 

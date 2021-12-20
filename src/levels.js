@@ -195,7 +195,7 @@ const levels = {
             turns: null, // 31
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            flags.resetRotatingBoard_7();  //PLEASE MOVE IT BACK TO THE GAME SOONER
+            //flags.resetRotatingBoard_7();  //PLEASE MOVE IT BACK TO THE GAME SOONER
             flags.addAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -266,7 +266,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,  // 
-            turns: 44, // 22, 34, 40, 44
+            turns: 50, // 22, 34, 40, 44
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
@@ -277,6 +277,7 @@ const levels = {
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateBorders_10(cardsOpened, tiles, foundTiles, iter);
             flags.randomizeIcons_10(cardsOpened, tiles, foundTiles, iter);
+            flags.styleIconsBack_10(cardsOpened, tiles, foundTiles, iter);
         },
     },
 

@@ -1013,7 +1013,7 @@ button:hover {
    border: .1rem solid hsl(11, 75%, 60%);
    /* color: hsla(110, 75%, 60%, 0.8);
    border: .1rem solid hsl(110, 75%, 60%); */
-   background:#000;
+   background:hsla(0, 0%, 0%, .6);
    border-radius: 20%;
    padding: 1.3rem; /* 4rem xd */
    z-index: 20;
@@ -1327,9 +1327,9 @@ button:hover {
 .fa-icon-10 {
    color: inherit;
    border: .1rem solid inherit;
-   color: hsla(229, 91%, 52%, .6); /*hsla(229, 91%, 28%, .6);*/
-   background: inherit;
-   z-index: 20;
+   color: hsl(229, 91%, 52%, .6); /*hsla(229, 91%, 28%, .6);*/
+ /*   background: inherit; */
+   z-index: 60;
    font-size: 1.8rem;
    /*color: hsl(105, 70%, 60%);*/
 }
@@ -1340,7 +1340,8 @@ button:hover {
     border: .4rem solid hsla(110, 60%, 50%, 50%);
     background-color: inherit;
     background: hsla(110, 50%, 40%, 40%);
-    padding: 3.4rem;
+    padding: .3rem;
+    margin: -1rem;
 }
 
 .t-10::before, .t-10::after {
@@ -1722,7 +1723,8 @@ button:hover {
 
 .t-13 {  /* Front size of card */ 
     border: .3rem solid hsla(166, 40%, 50%, .5);/*hsl(62, 40%, 70%);*/
-    padding: 1.6rem;
+    /* padding: 1.6rem; */
+    margin: -.1rem;
     border-radius: 15% 10% 15% 10%;
     outline: 0px solid transparent;
     border-style: ridge;
