@@ -2110,7 +2110,7 @@ const flags = {
                 bgcolor = 'background-color: hsl(62, 50%, 60%)';
                 strip.classList.add('s-gold');
             }
-            strip.setAttribute('style', `top:${10}%;left:${i * (100/(levels[`lvl13`].columns))}%; ${bgcolor}; `); //visibility: hidden;
+            strip.setAttribute('style', `top:${10}%;left:${i * (100/(levels[`lvl13`].columns))}%; width: ${(100/(levels[`lvl13`].columns))}%; ${bgcolor}; `); //visibility: hidden;
 
             boardbox.appendChild(strip);
         }
@@ -2412,7 +2412,7 @@ const flags = {
                         targets: typeArr,
                         keyframes: [
                             {rotateY: '+=180deg', duration: 500, easing: 'easeInSine'},
-                            {rotateY: '-=180deg', duration: 500, delay: 950, easing: 'easeOutSine'},
+                            {rotateY: '-=180deg', duration: 500, delay: 1100, easing: 'easeOutSine'},
                         ],
                         easing: 'easeInExpo',
                     }).finished;
@@ -2591,13 +2591,15 @@ const flags = {
             let allTiles = document.querySelectorAll('.tile');
             let allFakeTiles = [];
             allTiles.forEach(tile => {
-                if(tile.style.visibility !== 'hidden') {allFakeTiles.push(tile);}
+                let back = tile.querySelector('.tile-back');
+                // If we have img in fact, not svg - so its bomb elem
+                if((tile.style.visibility !== 'hidden') && (back.childNodes[0].hasOwnProperty('src'))) {allFakeTiles.push(tile);}
             })
 
             async function animateWin() {
                 const a1 = anime({
                     targets: allFakeTiles,
-                    duration: 2400,
+                    duration: 200, //2400,
                     scale: '0%',
                     easing: 'easeInBounce',
                 })
@@ -2632,6 +2634,22 @@ const flags = {
                 bombsArr.shift();
             }
         }
+    },
+
+    upgradeBuggedTiles_16: function(cardsOpened, tiles, foundTiles, iter) {
+        const allTiles = document.querySelectorAll('.tile');
+        const wrong = 15;
+        const correct = 16;
+        allTiles.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            if(tile.classList[1] === `t-${wrong}`) {
+                tile.classList.remove(`t-${wrong}`);
+                back.classList.remove(`tb-${wrong}`);
+                tile.classList.add(`t-${correct}`);
+                back.classList.add(`tb-${correct}`);
+            }
+            back.childNodes[0].style = '';
+        })
     },
 
     startingAnimation_16: function(cardsOpened, tiles, foundTiles, iter) {

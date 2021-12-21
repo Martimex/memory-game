@@ -367,8 +367,8 @@ const levels = {
         tiles: 48, 
         iconSet: 'fas',
         counter: {
-            time: null,
-            turns: 50, // very fun level, not gonna lie :p 
+            time: 212, // This time need to be tested soon - time level seems more fun for this
+            turns: null //50, // very fun level, not gonna lie :p 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.temporaryRemovalFunction_14(cardsOpened, tiles, foundTiles, iter); /* TEMPORARY */
@@ -388,7 +388,7 @@ const levels = {
         rows: 5,
         columns: 10,
         tile_size: 48,
-        tiles: 40, 
+        tiles: 6, 
         iconSet: 'fas',
         counter: {
             time: null,
@@ -422,7 +422,8 @@ const levels = {
             turns: 81, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            //flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
+            flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
+            flags.upgradeBuggedTiles_16(cardsOpened, tiles, foundTiles, iter); // Hope it resolves lvl 15 bomb bug
             flags.startingAnimation_16(cardsOpened, tiles, foundTiles, iter); 
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -436,9 +437,9 @@ const levels = {
 
     lvl17: {
         lv: 17,
-        rows: 8,
-        columns: 6,
-        tile_size: 48,
+        rows: 6,
+        columns: 8,
+        tile_size: 52,
         tiles: 90, // it's actually 48 + 24 + 12 + 6 + 2 = 92, but level is divided into phases (steps) + at the start 2 tiles are omitted
         iconSet: 'fas',
         counter: {

@@ -346,7 +346,7 @@ function Game(props) {
     useEffect(() => {
 
         if(levels[`lvl${level-1}`].counter.turns !== null) {
-            if((foundTiles+2) === tiles) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
+            if(((foundTiles+2) === tiles) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[0].childNodes[0].classList[1])) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
                 console.log('moves win');
                 confirmSuccess();
             }
@@ -727,7 +727,7 @@ function Game(props) {
                     <GameInfo level={level}  moves={moves} time={time} score={score}  />
                 </div>
 
-                <div onClick={() => {setLevel(level + 11); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
+                <div onClick={() => {setLevel(level + 15); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className={`game game-${level-1}`} ref={game}>
                
                     <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`}}>
