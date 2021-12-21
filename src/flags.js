@@ -2802,7 +2802,7 @@ const flags = {
         else if(iter.streak === 1) iter.value = 24;
         else if(iter.streak === 2) iter.value = 12;
         else if(iter.streak === 3) iter.value = 6;
-        else if(iter.streak === 4) iter.value = 2;
+        else if(iter.streak === 4) iter.value = 4;
 
         iter.streak++;
 
@@ -2827,8 +2827,11 @@ const flags = {
         let iconsArray = [];
 
         if(iter.streak > 1) {  // if it's second and further step
-            // REMOVE ALL TILES, AND CREATE NEW ONES
-            allTiles.forEach(tile => tile.remove());
+            // REMOVE ALL TILES, AND CREATE NEW ONES -> Update: remove half, unnecessary ones + replace icons
+
+            // Old Approach
+
+           /*  allTiles.forEach(tile => tile.remove());
 
 
             let iconArr = [];
@@ -2868,6 +2871,52 @@ const flags = {
                 if(index >= iter.value) {
                     tile.remove();
                 }
+            }) */
+
+
+
+            // New approach
+
+            // 1st: grab all icons from existing tiles
+
+            let iconArr = [];
+
+            cardsOpened[0].parentNode.remove();
+            cardsOpened[1].parentNode.remove();
+            
+            const newAllTiles = document.querySelectorAll('.tile');
+
+            // retrieve icons from basic arr
+
+            for(let x=0; x<iter.value; x++) {
+                iconArr.push(iter.array[x]);
+            }
+
+            // removes tiles that exceed current step limit
+
+            for(let g=0; g<newAllTiles.length; g++) {
+                if(g >= iter.value) {
+                    newAllTiles[g].remove();
+                    //g = g - 1;
+                }
+            }
+
+            let currAllTiles = document.querySelectorAll('.tile');
+
+            currAllTiles.forEach(tile => {
+                tile.style = 'visibility: visible';
+                let back = tile.querySelector('.tile-back');
+                if(back.hasChildNodes()) {
+                    back.childNodes[0].remove();
+                }
+
+            })
+
+            currAllTiles.forEach(tile => {
+                let back = tile.querySelector('.tile-back');
+                let rand = Math.floor( Math.random() * iconArr.length);
+                back.appendChild(iconArr[rand]);
+                iconArr.splice(rand, 1);
             })
         }
 
@@ -3070,7 +3119,42 @@ const flags = {
         }
     },
 
+    recreateBoard_17: function(cardsOpened, tiles, foundTiles, iter) {
 
+        if(foundTiles+2 === tiles) {
+
+            cardsOpened[0].parentNode.remove();
+            cardsOpened[1].parentNode.remove();
+
+            const board = document.querySelector('.board');
+
+            for(let i=0; i<((levels[`lvl17`].rows) * (levels[`lvl17`].columns)); i++) {
+                // Front
+                let front = document.createElement('div');
+                front.classList.add('tile-front', 'tf-17');
+                // Back
+                let back = document.createElement('div');
+                back.classList.add('tile-back', 'tb-17');
+    
+                let newTile = document.createElement('div');
+                newTile.classList.add('tile', 't-17');
+    
+                newTile.style = 'visibility: hidden';
+
+                //let rand = Math.floor( Math.random() * iconArr.length);
+
+                newTile.appendChild(front);
+                newTile.appendChild(back);
+
+                //back.appendChild(iconArr[rand]);
+
+                //iconArr.splice(rand, 1);
+    
+                board.appendChild(newTile);
+                console.log('created');
+            }
+        }
+    },
 
 
 

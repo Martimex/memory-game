@@ -388,7 +388,7 @@ const levels = {
         rows: 5,
         columns: 10,
         tile_size: 48,
-        tiles: 6, 
+        tiles: 40, 
         iconSet: 'fas',
         counter: {
             time: null,
@@ -412,14 +412,14 @@ const levels = {
 
     lvl16: {
         lv: 16,
-        rows: 7,
-        columns: 8,
+        rows: 6,
+        columns: 7,
         tile_size: 48,
-        tiles: 56, 
+        tiles: 42, 
         iconSet: 'fas',
         counter: {
-            time: null,
-            turns: 81, 
+            time: 224,
+            turns: null, //81, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
@@ -437,18 +437,18 @@ const levels = {
 
     lvl17: {
         lv: 17,
-        rows: 6,
-        columns: 8,
+        rows: 6, // 6
+        columns: 8, // 8
         tile_size: 52,
-        tiles: 90, // it's actually 48 + 24 + 12 + 6 + 2 = 92, but level is divided into phases (steps) + at the start 2 tiles are omitted
+        tiles: 92, // 92 // it's actually 48 + 24 + 12 + 6 + 4 = 94, but level is divided into phases (steps) + at the start 2 tiles are omitted
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 91, 
+            turns: 104, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.fadeInBoard_17(cardsOpened, tiles, foundTiles, iter); 
-            flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter); 
+            flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter); // that function might cause a bug...
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
@@ -456,9 +456,10 @@ const levels = {
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
             flags.animatePairMatch_17(cardsOpened, tiles, foundTiles, iter);
-            flags.lookForNextPhase_17(cardsOpened, tiles, foundTiles, iter);
+            flags.lookForNextPhase_17(cardsOpened, tiles, foundTiles, iter);  // or this one might cause a bug !
+            //flags.recreateBoard_17(cardsOpened, tiles, foundTiles, iter); // RESOLVES BUG WHEN YOU WIN LEVEL 17 AND UNABLE TO PLAY NEXT ONE
         },  
-    },
+    }, 
 
     lvl18: {
         lv: 18,
