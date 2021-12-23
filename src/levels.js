@@ -440,7 +440,7 @@ const levels = {
         rows: 6, // 6
         columns: 8, // 8
         tile_size: 52,
-        tiles: 92, // 92 // it's actually 48 + 24 + 12 + 6 + 4 = 94, but level is divided into phases (steps) + at the start 2 tiles are omitted
+        tiles: 96, // 92 // it's actually 48 + 24 + 12 + 8 + 4 = 96, but level is divided into phases (steps) + at the start 2 tiles are omitted
         iconSet: 'fas',
         counter: {
             time: null,
@@ -448,16 +448,19 @@ const levels = {
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.fadeInBoard_17(cardsOpened, tiles, foundTiles, iter); 
-            flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter); // that function might cause a bug...
+            flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter); 
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
+            flags.setCardsOpenedOpacityBack_17(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            flags.finallyAddMissingChildNodes_17(cardsOpened, tiles, foundTiles, iter);
             flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
             flags.animatePairMatch_17(cardsOpened, tiles, foundTiles, iter);
-            flags.lookForNextPhase_17(cardsOpened, tiles, foundTiles, iter);  // or this one might cause a bug !
-            //flags.recreateBoard_17(cardsOpened, tiles, foundTiles, iter); // RESOLVES BUG WHEN YOU WIN LEVEL 17 AND UNABLE TO PLAY NEXT ONE
+            flags.lookForNextPhase_17(cardsOpened, tiles, foundTiles, iter); 
+            //flags.recreateBoard_17(cardsOpened, tiles, foundTiles, iter); // to remove
+            
         },  
     }, 
 
@@ -502,7 +505,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
            flags.quickFadeInOut_19(cardsOpened, tiles, foundTiles, iter);
            flags.addPseudoClasses_19(cardsOpened, tiles, foundTiles, iter);
-           //flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter); //PLEASE UNCOMMENT AFTER LV 20 DEV
+           flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter); //PLEASE UNCOMMENT AFTER LV 20 DEV
            flags.createProgressBar_19(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
