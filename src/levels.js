@@ -478,7 +478,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createCombinations_18(cardsOpened, tiles, foundTiles, iter);
             flags.createChallengeCountdown_18(cardsOpened, tiles, foundTiles, iter);
-            flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter); 
+            //flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter); UNCOMMENT AFTER LVL 19 DEV
             flags.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -510,6 +510,7 @@ const levels = {
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateGem_19(cardsOpened, tiles, foundTiles, iter);
+            flags.setCardsOpenedOpacityBack_19(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateGem_19(cardsOpened, tiles, foundTiles, iter);

@@ -3909,15 +3909,14 @@ const flags = {
 
     createDummyIcons_19: function(cardsOpened, tiles, foundTiles, iter) {
         let allTiles = document.querySelectorAll('.tile');
+        const animationContainer = document.querySelector('.animationContainer');
+        const board = document.querySelector('.board');
         allTiles.forEach((tile, index) => {
             let back = tile.querySelector('.tile-back');
             iter.array.push(back.childNodes[0]);
-            if(index >= ((levels[`lvl19`].rows) * (levels[`lvl19`].columns))) {
-                tile.remove();
-            } else {
-                tile.style = 'visibility: visible;';
-            }
         })
+
+        let order = [];
 
         function sortSvgs(array) {
             let compareArr = [];
@@ -3944,14 +3943,50 @@ const flags = {
 
         let sortediconsArr = sortSvgs(iter.array);
 
+        for(let u=0; u<sortediconsArr.length; u++) {
+            order.push(sortediconsArr[u].parentNode.parentNode);
+        }
+
+        for(let y=0; y<order.length; y++) {
+            animationContainer.appendChild(order[y]);
+        }
+
+        let tempArr = [];
+
+        let limit = (levels[`lvl19`].rows) * (levels[`lvl19`].columns);
+
+        for(let q=0; q<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); q++) {
+            let rand = Math.floor(Math.random() * limit);
+            tempArr.push(order[rand]);
+            order.splice(rand, 1);
+            limit = limit - 1;
+        }
+
+        tempArr.forEach(tile => {
+            tile.style.visibility = 'visible';
+        })
+
+        order.forEach(tile => {
+            tile.style.display = 'none';
+            tile.style.visibility = 'visible'; // ?
+        })
+
+        for(let c=0; c<tempArr.length; c++) {
+            order.unshift(tempArr[c]);
+        }
+
+        for(let z=0; z<order.length; z++) {
+            board.appendChild(order[z]);
+        }
+
        // console.log(iter.array);  // UNTOUCHED
        // console.log(sortediconsArr);  // SORTED
         
-        let actualIcons = [];
+        /*         let actualIcons = [];
 
         for(let i=0; i<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); i++) {
-            actualIcons.push(sortediconsArr[0]);
-            sortediconsArr.shift();
+            actualIcons.push(sortediconsArr[i]);
+            //sortediconsArr.shift();
         }
 
         // Before allTiles.length === 126
@@ -3966,7 +4001,7 @@ const flags = {
             }
             back.appendChild(actualIcons[rand]);
             actualIcons.splice(rand, 1);
-        }
+        } */
 
         /*for(let x=0; x<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); x++) {
             let back = allTiles[x].querySelector('.tile-back');
@@ -3979,13 +4014,14 @@ const flags = {
         iter.array = [];
         // ... and fill once again
 
-        for(let a=0; a<sortediconsArr.length; a=a+2) {
+        for(let a=((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); a<sortediconsArr.length; a=a+2) {
             iter.array.push(sortediconsArr[a]);
         }
 
         // After all we have 1 times every dummy icon (total: 42);
 
-        console.log(iter.array);
+        console.log('iter.array: ', iter.array);
+        console.log('sortediconsArr:  ', sortediconsArr);
 
     },
 
@@ -4018,6 +4054,16 @@ const flags = {
         })
     },
 
+    setCardsOpenedOpacityBack_19: function(cardsOpened, tiles, foundTiles, iter) {
+        const allTiles = document.querySelectorAll('.tile');
+        allTiles.forEach(tile => {
+            if((tile.style.visibility === 'hidden') && (tile.style.opacity === '0') && (tile.style.display === 'none')) {
+                tile.style.opacity = '1';
+                tile.style.visibility = 'visible';
+            }
+        })
+    },
+
     appendDummyIcons_19: function(cardsOpened, tiles, foundTiles, iter) {
 
         // WHAT IS THE MAIN CONDITION TO FIRE THAT FUNCTION ?  ->  TURNS USED, OR TILES FOUND ? let it be tiles, turns used is impossible !!
@@ -4026,9 +4072,10 @@ const flags = {
 
         if((foundTiles+2 > (((levels[`lvl19`].rows) * (levels[`lvl19`].columns)) / 1.25)) && (iter.streak === 3) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
             // if  ftiles > 42 / 1.5 -> if ftiles > 33
-            let newDummiesCount = 12;          
+            let newDummiesCount = 12; 
             iter.streak++;
-            this.modifyGrid_19(iter, newDummiesCount);
+            this.modifyGrid_19(iter, newDummiesCount, cardsOpened);
+            iter.value += newDummiesCount; // INDICATES FROM WHICH INDEX SHOULD WE GET NEW ICONS ?
 
             // SOME ASYNC ANIMATIONS HERE
             this.asyncDummyChapter(iter, newDummiesCount);
@@ -4037,7 +4084,8 @@ const flags = {
             // if  ftiles > 42 / 2 -> if ftiles > 21
             let newDummiesCount = 6;
             iter.streak++;
-            this.modifyGrid_19(iter, newDummiesCount);
+            this.modifyGrid_19(iter, newDummiesCount, cardsOpened);
+            iter.value += newDummiesCount; // INDICATES FROM WHICH INDEX SHOULD WE GET NEW ICONS ?
 
             // SOME ASYNC ANIMATIONS HERE
             this.asyncDummyChapter(iter, newDummiesCount);
@@ -4046,7 +4094,8 @@ const flags = {
             // if  ftiles > 42 / 3 -> if ftiles > 14
             let newDummiesCount = 8;
             iter.streak++;
-            this.modifyGrid_19(iter, newDummiesCount);
+            this.modifyGrid_19(iter, newDummiesCount, cardsOpened);
+            iter.value += newDummiesCount; // INDICATES FROM WHICH INDEX SHOULD WE GET NEW ICONS ?
 
             // SOME ASYNC ANIMATIONS HERE
             this.asyncDummyChapter(iter, newDummiesCount);
@@ -4055,7 +4104,8 @@ const flags = {
             // if  ftiles > 42 / 6 -> if ftiles > 7
             let newDummiesCount = 8;  // it has to be lower or equal yet found tiles in order to place new dummies in grid
             iter.streak++;
-            this.modifyGrid_19(iter, newDummiesCount);
+            this.modifyGrid_19(iter, newDummiesCount, cardsOpened);
+            iter.value += newDummiesCount; // INDICATES FROM WHICH INDEX SHOULD WE GET NEW ICONS ?
 
             // SOME ASYNC ANIMATIONS HERE
             this.asyncDummyChapter(iter, newDummiesCount);
@@ -4102,11 +4152,101 @@ const flags = {
     
     */
 
-    modifyGrid_19(iter, newDummiesCount) {
+    modifyGrid_19: function(iter, newDummiesCount, cardsOpened) {
 
         const board = document.querySelector('.board');
-
+        const animationContainer = document.querySelector('.animationContainer');
         let allTiles = document.querySelectorAll('.tile');
+
+        // 1. Weź znalezione ikony w tym kroku
+
+        let alreadyFound = []; // zawiera znalezione w tym kroku kafelki
+        let notFoundYet = []; // zawiera dotąd nieznalezione kafelki
+        let notExisting = []; // wszystkie pozostałe które nie są nadal na mapie (lub te, które nigdy nie będą)
+
+        let replacementFakeTiles = []; // wybrane przez iter.array kafelki pochodzące z kategorii notExisting
+        for(let h=iter.value; h<(iter.value + newDummiesCount); h++) {
+            replacementFakeTiles.push(iter.array[h].parentNode.parentNode);
+        }
+
+        allTiles.forEach(tile => {
+
+            if(((tile.style.visibility === 'hidden') && (tile.style.display !== 'none')) || (tile === cardsOpened[0].parentNode) || (tile === cardsOpened[1].parentNode)) {
+                alreadyFound.push(tile);
+            } 
+            else if((tile.style.visibility === 'visible') && (tile.style.display !== 'none')) {
+                notFoundYet.push(tile);
+            }
+            else {
+                let isIterArrayInstance;
+                for(let l=0; l<replacementFakeTiles.length; l++) {
+                    if(tile === replacementFakeTiles[l]) {
+                        isIterArrayInstance = true;
+                    }
+                }
+
+                if(isIterArrayInstance !== true) {
+                    notExisting.push(tile);
+                    //animationContainer.appendChild(tile);
+                }
+            }
+        })
+
+        // 2. Spushuj zgodnie z kolejnością w hierarchii wszystkie kafelki do animationContainer
+
+        let order = [];
+        // 2.1 Not Found Yet
+        for(let a=0; a<notFoundYet.length; a++) {
+            order.push(notFoundYet[a]);
+        }
+        // 2.2 Replacement Fake Tiles
+        for(let b=0; b<replacementFakeTiles.length; b++) {
+            order.push(replacementFakeTiles[b]);
+            iter.nextArr.push(replacementFakeTiles[b]);
+        }
+        // 2.3 Not Existing Tiles (excluding replacement fake tiles)
+        for(let c=0; c<notExisting.length; c++) {
+            order.push(notExisting[c]);
+        }
+        // 2.4 Already found + zmień ich display na none
+        for(let d=0; d<alreadyFound.length; d++) {
+            alreadyFound[d].style.display = 'none';
+            order.push(alreadyFound[d]);
+        }
+
+        // 2.5 Teraz spushuj cały order do animationContainer
+        for(let z=0; z<order.length; z++) {
+            animationContainer.appendChild(order[z]);
+        }
+
+
+        // 3. Stwórz tempArr i rozlosuj ikonki na mapie
+        let tempArr = [];
+        let limit = (levels[`lvl19`].rows) * (levels[`lvl19`].columns);
+        // 3.1 Do tempArr spushuj całą mapę, która wkrótce się pojawi odnowiona
+        for(let v=0; v<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); v++) {
+            let rand = Math.floor(Math.random() * limit);
+            tempArr.push(order[rand]);
+            tempArr[v].style.display = 'block';
+            order.splice(rand, 1);
+            limit = limit - 1;
+        }
+        // 3.2 Dla pewności - wszystkie pozostałe kafle w orderze mają display: none ->
+        order.forEach(tile => {
+            tile.style.display = 'none';
+        })
+        // 3.3 Teraz przenieś rozlosowane elementy z tempArr do order
+        for(let w=0; w<tempArr.length; w++) {
+            order.unshift(tempArr[w]);
+        }
+        // 3.4 Na koniec przywróć odnowioną planszę z powrotem do board
+        for(let p=0; p<order.length; p++) {
+            board.appendChild(order[p]);
+        }
+
+
+        /* 
+
         allTiles.forEach(tile => {
             if((tile.style.visibility === 'hidden') || (tile.classList.contains('target'))) {
                 tile.remove();
@@ -4161,7 +4301,7 @@ const flags = {
             allIcons.splice(rand, 1);
         })
 
-        console.log(allIcons);
+        console.log(allIcons); */
     },
 
     asyncDummyChapter: function(iter, newDummiesCount) {
@@ -4385,7 +4525,7 @@ const flags = {
 
         for(let i=0; i<iter.nextArr.length; i++) {
             let tile = iter.nextArr[i].parentNode.parentNode;
-            tilesToDestroy.push(tile);
+            //tilesToDestroy.push(tile);
         }
 
         async function destroy() {
@@ -4474,7 +4614,7 @@ const flags = {
             await fadeMsg()
             .then(() => {
                 for(let i=0; i<tilesToDestroy.length; i++) {
-                    tilesToDestroy[i].remove();
+                    //tilesToDestroy[i].remove();
                 }
             })
             await showBoard()
@@ -4499,6 +4639,13 @@ const flags = {
     // LVL 20 - Final level !
 
     levelStartAnimation_20: function(cardsOpened, tiles, foundTiles, iter) {
+        // At very beginning - remove default lvl 19 styling from .tile-back elems
+        const allTiles = document.querySelectorAll('.tile');
+        allTiles.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            back.style = '';
+        })
+
         const animationContainer = document.querySelector('.animationContainer');
         const background = document.querySelector('.background');
 
