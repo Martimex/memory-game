@@ -4694,7 +4694,7 @@ const flags = {
         async function darken() {
             const a1 = anime({
                 targets: animationContainer,
-                duration: 3500,
+                duration: 1700,
                 backgroundColor: ['hsla(0, 0%, 0%, 1)', 'hsla(0, 0%, 0%, 1)'],
                 easing: 'linear',
             }).finished;
@@ -4762,8 +4762,8 @@ const flags = {
                 duration: 1300,
                 delay: anime.stagger(300),
                 translateY: ['20%','100%'],
-                backgroundColor: ['hsla(0, 0%, 0%, 1)', 'hsla(0, 0%, 0%, .3)'],
-                borderColor: ['hsla(60, 100%, 50%, 1)', 'hsla(60, 100%, 50%, .3)'],
+                backgroundColor: ['hsla(0, 0%, 0%, 1)', 'hsla(0, 0%, 0%, .2)'],
+                borderColor: ['hsla(0, 0%, 20%, .8)', 'hsla(60, 100%, 50%, .2)'],
                 easing: 'easeOutQuad',
             }).finished;
 

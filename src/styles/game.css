@@ -3150,7 +3150,7 @@ button:hover {
     border-radius: 30% 20% 20% 30%;
     visibility: visible;
     background:hsla(0, 0%, 0%, 1);
-    border: .2rem double hsla(60, 100%, 50%, 1);
+    border: .2rem double hsla(0, 0%, 20%, 0.8);
 }
 
 .level-20, .counter-20, .score-20 {

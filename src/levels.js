@@ -505,7 +505,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
            flags.quickFadeInOut_19(cardsOpened, tiles, foundTiles, iter);
            flags.addPseudoClasses_19(cardsOpened, tiles, foundTiles, iter);
-           flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter); //PLEASE UNCOMMENT AFTER LV 20 DEV
+           //flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter); //PLEASE UNCOMMENT AFTER LV 20 DEV
            flags.createProgressBar_19(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -536,7 +536,7 @@ const levels = {
             flags.prepareTilesToPairs_20(cardsOpened, tiles, foundTiles, iter);
             flags.createSeparateRooms_20(cardsOpened, tiles, foundTiles, iter);
             flags.blockThreeRoomsAndActivateDirectories_20(cardsOpened, tiles, foundTiles, iter);
-            //flags.lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter)
+            //flags.lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter); // You can remove it basically
         },  
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createStarBinding_20(cardsOpened, tiles, foundTiles, iter);
