@@ -4479,12 +4479,14 @@ const flags = {
             .then(() => {
                 if(iter.streak === 1) {
                     for(let i=0; i<iter.nextArr.length; i++) {
-                        iter.nextArr[i].style = 'color: hsla(7, 70%, 40%, .75);';
+                        let back = iter.nextArr[i].querySelector('.tile-back');
+                        back.childNodes[0].style.color = 'hsla(7, 70%, 40%, .75)';
                     }
                 }
                 else if((iter.streak === 2) || (iter.streak === 3)) {
                     for(let i=0; i<iter.nextArr.length; i++) {
-                        iter.nextArr[i].style = 'color: hsla(0, 0%, 0%, .65);';
+                        let back = iter.nextArr[i].querySelector('.tile-back');
+                        back.childNodes[0].style.color = 'hsla(0, 0%, 00%, .65)';
                     }
                     document.querySelector('.board').dataset.animation = 'on';
                     document.querySelector('.board').setAttribute('pointerEvents', 'none');
@@ -4521,16 +4523,15 @@ const flags = {
         document.querySelector('.board').dataset.animation = 'on';
         document.querySelector('.board').setAttribute('pointerEvents', 'none');
 
-        let tilesToDestroy = [];
+        let tilesToHide = [];
 
-        for(let i=0; i<iter.nextArr.length; i++) {
-            let tile = iter.nextArr[i].parentNode.parentNode;
-            //tilesToDestroy.push(tile);
+        for(let n=0; n<iter.nextArr.length; n++) {
+            tilesToHide.push(iter.nextArr[n]);
         }
 
         async function destroy() {
             const a1 = anime({
-                targets: tilesToDestroy,
+                targets: tilesToHide,
                 duration: 2400,
                 rotate: 360,
                 scale: [1, 0],
@@ -4585,8 +4586,7 @@ const flags = {
                 targets: '.board',
                 duration: 1600,
                 opacity: [0, 1],
-                rotate: '180deg',
-                easing: 'easeInBounce',
+                easing: 'easeInSine',
             }).finished;
 
             await Promise.all([a5]);
@@ -4613,8 +4613,8 @@ const flags = {
             await showMsg()
             await fadeMsg()
             .then(() => {
-                for(let i=0; i<tilesToDestroy.length; i++) {
-                    //tilesToDestroy[i].remove();
+                for(let f=0; f<tilesToHide.length; f++) {
+                    tilesToHide[f].style.visibility = 'hidden';
                 }
             })
             await showBoard()
@@ -5609,15 +5609,16 @@ const flags = {
         async function initSecondArrow() {
             await darkenEffectTwo()
             .then(() => {
-                 
-                console.log(iter);
-                console.log(iter.nextArr);
-                console.log(secondArrowNumber);
-                console.log(iter.nextArr[secondArrowNumber]);
-                console.log(iter.nextArr[secondArrowNumber].direction); 
-
-                secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
-                secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
+                if(secondArrow) {
+                    console.log(iter);
+                    console.log(iter.nextArr);
+                    console.log(secondArrowNumber);
+                    console.log(iter.nextArr[secondArrowNumber]);
+                    console.log(iter.nextArr[secondArrowNumber].direction); 
+    
+                    secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
+                    secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
+                }
             })
             await removeDarkenEffectTwo()
             .then(() => {
@@ -5757,7 +5758,7 @@ const flags = {
         async function hideCite() {
             const a5 = anime({
                 targets:'.citeDiv',
-                delay: 2700,
+                delay: 2200,
                 duration: 1100,
                 opacity: 0,
                 easing: 'easeOutExpo',
@@ -6050,8 +6051,8 @@ const flags = {
         async function unblockVisitRoom() {
             const a2 = anime({
                 targets: roomToVisit,
-                delay: 1300,
-                duration: 1200,
+                delay: 1000,
+                duration: 1100,
                 filter: 'grayscale(0%)',
                 easing: 'easeInExpo',
             }).finished;

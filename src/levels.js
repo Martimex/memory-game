@@ -528,7 +528,7 @@ const levels = {
         tiles: 64, // in fact, it's 4 times 16 
         iconSet: 'fas',
         counter: {
-            time: 250, // ADD 32 SECOND EXTRA BECAUSE OF START ANIMATION - added
+            time: 260, // ADD 32 SECOND EXTRA BECAUSE OF START ANIMATION - added
             turns: null, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
