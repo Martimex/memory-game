@@ -3279,7 +3279,9 @@ const flags = {
 
         let allChallengeTiles = document.querySelectorAll('.tile-challenge');
         allChallengeTiles.forEach(ctile => {
-            if(ctile.style.visibility === 'hidden') {
+            if(ctile.style.visibility !== 'hidden') {
+                
+            } else {
                 ctile.classList.remove(`tile-challenge`);
             }
         })
@@ -3294,12 +3296,14 @@ const flags = {
     matchChallengeClassRemoval_18: function(cardsOpened, tiles, foundTiles, iter) {
 
         // Decrease available turns by one
-
         iter.value = iter.value - 1;
 
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])
-        {
-
+        {   
+            /*if(!(cardsOpened[0].parentNode.classList.contains('tile-challenge')) && (!(cardsOpened[1].parentNode.classList.contains('tile-challenge')))) {
+                console.log('trapped;');
+                return;
+            } */
             let isChallengePassed = checkPassCondition(cardsOpened);
             console.log(isChallengePassed);
 
@@ -3321,16 +3325,19 @@ const flags = {
             else if((cardsOpened[0].parentNode.classList.contains('tile-challenge') || (cardsOpened[1].parentNode.classList.contains('tile-challenge')))) {
 
                 // Next array keeps all the tiles found during the current challenge
+                // Every first time let tiles modifier be applied, the second time reset it to 0
                 iter.nextArr.push(cardsOpened[0], cardsOpened[1]);
 
-                setTimeout(() => {
+                if(iter.count > 0) {
                     iter.fTilesModifier = 0;
-                    console.log('FOUND TILES : = '+ foundTiles);
-                }, 2000);
+                }
+
+                iter.count++;
 
                 cardsOpened[0].parentNode.classList.remove('tile-challenge');
                 cardsOpened[1].parentNode.classList.remove('tile-challenge');  // DONT REMOVE THIS DECLARATIONS PLEASE
             } else {
+                // When you found a pair that's not associated with tile challenge by any means
                 const comparableClass = cardsOpened[0].childNodes[0].classList[1];
                 console.log(comparableClass);
                 cardsOpened[0].childNodes[0].classList.replace(comparableClass, 'fake-class');
@@ -3806,14 +3813,22 @@ const flags = {
 
     resetIcons_18: function(iter, foundTiles) {
         //const allTiles = document.querySelectorAll('.tile');
-
+        // ABY OBLICZENIA DZIAŁAŁY POPARAWNIE, ITER.NEXTARR MUSI BARDZO PRECYZYJNIE OKREŚLAĆ RZECZYWISTĄ LICZBĘ ZNALEZIONYCH KAFLI :
+        // WAŻNA KWESTIA: CZY GRACZ ZNALAZŁ PARĘ W OSTATNEJ TURZE W PRZEGRANYM CHALLENGU ?
         console.log(iter.nextArr.length);
-        iter.fTilesModifier=  0 - (iter.nextArr.length); 
-        foundTiles -= iter.fTilesModifier;
+        iter.fTilesModifier =  (iter.fTilesModifier - iter.nextArr.length);
+        if(iter.count === 0) {iter.fTilesModifier = 0;}
+        else if(iter.count === 1) {iter.fTilesModifier = 2;}
+        iter.count = 0;
+        //foundTiles -= iter.fTilesModifier;
+        console.log(`That's current found tiles count:  `, foundTiles);
+        console.log(`Icons count to lower:  ` + iter.fTilesModifier);
 
 
         for(let p=0; p<iter.nextArr.length; p++) {
-            iter.nextArr[p].parentNode.style  = 'visibility: visible';
+            iter.nextArr[p].parentNode.style.visibility  = 'visible';
+            iter.nextArr[p].parentNode.style.opacity  = '1';
+            iter.nextArr[p].parentNode.style.transform = 'rotateY(0deg)';
         }
 
         /* UNCOMMENT FOR RANDOM ICON EFFECT

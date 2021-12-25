@@ -30,6 +30,7 @@ let iter = {
     // Add more keys if necessary
     /* basic value*/ value: 0, 
     /* value v2*/ amount: 0,
+    /* value v3*/ count: 0,
     /*value in series*/ streak: 0,
     /*turn addon/penalty*/ extraTurns: 0,
     /*used ONLY for lvl 18 and prob 19 - it modifies your find tiles*/ fTilesModifier: 0, // if lower than 0, it lowers foundTiles count
@@ -169,6 +170,7 @@ function Game(props) {
 
         iter.value = 0;
         iter.amount = 0;
+        iter.count = 0;
         iter.streak = 0;
         iter.extraTurns = 0;
         iter.fTilesModifier = 0;
@@ -727,7 +729,7 @@ function Game(props) {
                     <GameInfo level={level}  moves={moves} time={time} score={score}  />
                 </div>
 
-                <div onClick={() => {setLevel(level + 18); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
+                <div onClick={() => {setLevel(level + 16); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
                 <div className={`game game-${level-1}`} ref={game}>
                
                     <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`}}>

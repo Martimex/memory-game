@@ -448,7 +448,7 @@ const levels = {
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.fadeInBoard_17(cardsOpened, tiles, foundTiles, iter); 
-            flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter); 
+            //flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);  UNCOMMENT AFTER LVL 18 DEV
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
@@ -468,7 +468,7 @@ const levels = {
         lv: 18,
         rows: 6,
         columns: 6,
-        tile_size: 58,
+        tile_size: 54,
         tiles: 36, // 36
         iconSet: 'fas',
         counter: {
@@ -478,13 +478,14 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createCombinations_18(cardsOpened, tiles, foundTiles, iter);
             flags.createChallengeCountdown_18(cardsOpened, tiles, foundTiles, iter);
-            //flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter); UNCOMMENT AFTER LVL 19 DEV
+            flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter); // UNCOMMENT AFTER LVL 19 DEV
             flags.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
 
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
+            console.log(`%c currently found tiles: ${foundTiles}`, 'color: yellow; background: black;');
             flags.matchChallengeClassRemoval_18(cardsOpened, tiles, foundTiles, iter);
             flags.checkChallengeProgress_18(cardsOpened, tiles, foundTiles, iter);
             flags.updateCountdown_18(cardsOpened, tiles, foundTiles, iter);
@@ -505,7 +506,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
            flags.quickFadeInOut_19(cardsOpened, tiles, foundTiles, iter);
            flags.addPseudoClasses_19(cardsOpened, tiles, foundTiles, iter);
-           //flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter); //PLEASE UNCOMMENT AFTER LV 20 DEV
+           flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter); 
            flags.createProgressBar_19(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
