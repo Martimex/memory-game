@@ -315,7 +315,7 @@ const levels = {
         tiles: 50,  // 42, 52, 44
         iconSet: 'fas',
         counter: {
-            time: 248,  // 264
+            time: 256,  // 264
             turns: null, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -485,10 +485,10 @@ const levels = {
 
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            console.log(`%c currently found tiles: ${foundTiles}`, 'color: yellow; background: black;');
             flags.matchChallengeClassRemoval_18(cardsOpened, tiles, foundTiles, iter);
             flags.checkChallengeProgress_18(cardsOpened, tiles, foundTiles, iter);
             flags.updateCountdown_18(cardsOpened, tiles, foundTiles, iter);
+            console.log(`%c currently found tiles: ${foundTiles}`, 'color: yellow; background: black;');
         },  
     },
 

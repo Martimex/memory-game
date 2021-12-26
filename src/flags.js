@@ -2618,6 +2618,59 @@ const flags = {
 
             init();
         }
+
+        else if((foundTiles + 4 === tiles) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])){
+            const allTiles = document.querySelectorAll('.tile');
+            document.querySelector('.board').dataset.animation = 'on';
+            document.querySelector('.board').setAttribute('pointerEvents', 'none');
+            let bombs = [];
+
+            allTiles.forEach(tile => {
+                if(tile.style.visibility !== 'hidden') {
+                    let back = tile.querySelector('.tile-back');
+                    if(back.childNodes[0].classList.contains('scaledImg')) {
+                        bombs.push(tile);
+                    }
+                }
+            })
+
+            async function hideBombs() {
+                const a1 = anime({
+                    targets: bombs,
+                    duration: 1800,
+                    scale: [1, 0],
+                    easing: 'linear',
+                }).finished;
+
+                await Promise.all([a1]);
+            }
+
+            async function showInvisibleBombs() {
+                const a2 = anime({
+                    targets: bombs,
+                    duration: 200,
+                    scale: [0, 1],
+                    easing: 'linear',
+                }).finished;
+
+                await Promise.all([a2]);
+            }
+
+            async function init() {
+                await hideBombs()
+                    .then(() => {
+                        bombs.forEach(tile => {
+                            tile.style.visibility = 'hidden';
+                        })
+
+                        document.querySelector('.board').dataset.animation = 'off';
+                        document.querySelector('.board').setAttribute('pointerEvents', 'auto');
+                    })
+                await showInvisibleBombs()
+            }
+            
+            init();
+        }
     },
 
 
@@ -3381,6 +3434,7 @@ const flags = {
             iter.array.splice(iter.amount, 1);
             iter.streak++;  // INDICATES CURRENT CHALLENGE No (starting from index 0);
 
+            iter.fTilesModifier = 0;
             const timer = 2200;
 
             // Anyway, check which iter array combinations are outdated
@@ -3815,10 +3869,14 @@ const flags = {
         //const allTiles = document.querySelectorAll('.tile');
         // ABY OBLICZENIA DZIAŁAŁY POPARAWNIE, ITER.NEXTARR MUSI BARDZO PRECYZYJNIE OKREŚLAĆ RZECZYWISTĄ LICZBĘ ZNALEZIONYCH KAFLI :
         // WAŻNA KWESTIA: CZY GRACZ ZNALAZŁ PARĘ W OSTATNEJ TURZE W PRZEGRANYM CHALLENGU ?
+        if(iter.nextArr.length > 0) {
+            iter.previousStep = iter.nextArr.length;
+        }
+
         console.log(iter.nextArr.length);
         iter.fTilesModifier =  (iter.fTilesModifier - iter.nextArr.length);
-        if(iter.count === 0) {iter.fTilesModifier = 0;}
-        else if(iter.count === 1) {iter.fTilesModifier = 2;}
+        if(iter.count === 0) {iter.fTilesModifier = (iter.previousStep * -1);}
+        else if(iter.count === 1) {iter.fTilesModifier = -2;}
         iter.count = 0;
         //foundTiles -= iter.fTilesModifier;
         console.log(`That's current found tiles count:  `, foundTiles);
