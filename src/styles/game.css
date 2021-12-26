@@ -56,6 +56,10 @@ button:hover {
     /*transition: all 0.7s ease; */
 }
 
+.tile:hover {
+    cursor: pointer;
+}
+
 .tile-front {
     /* background: hsl(0, 0%, 0%); */
     backface-visibility: hidden;

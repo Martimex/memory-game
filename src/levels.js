@@ -327,7 +327,7 @@ const levels = {
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateTileClick_12(cardsOpened, tiles, foundTiles, iter);
-            flags.moveDots_12(cardsOpened, tiles, foundTiles, iter);  // REMOVE ONLY FOR DEVELOPMENT PURPOSES
+            flags.moveDots_12(cardsOpened, tiles, foundTiles, iter); 
             flags.checkDotRemoval_12(cardsOpened, tiles, foundTiles, iter);
         },
     },
@@ -423,7 +423,7 @@ const levels = {
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
-            flags.upgradeBuggedTiles_16(cardsOpened, tiles, foundTiles, iter); // Hope it resolves lvl 15 bomb bug
+            flags.upgradeBuggedTiles_16(cardsOpened, tiles, foundTiles, iter); 
             flags.startingAnimation_16(cardsOpened, tiles, foundTiles, iter); 
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -448,7 +448,7 @@ const levels = {
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.fadeInBoard_17(cardsOpened, tiles, foundTiles, iter); 
-            //flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);  UNCOMMENT AFTER LVL 18 DEV
+            flags.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
@@ -478,7 +478,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createCombinations_18(cardsOpened, tiles, foundTiles, iter);
             flags.createChallengeCountdown_18(cardsOpened, tiles, foundTiles, iter);
-            flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter); // UNCOMMENT AFTER LVL 19 DEV
+            flags.setChallenge_18(cardsOpened, tiles, foundTiles, iter); 
             flags.winChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
