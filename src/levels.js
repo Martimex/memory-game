@@ -28,10 +28,10 @@ const levels = {
 
     lvl1: {
         lv: 1,
-        rows: 2,
+        rows: 4,
         columns: 4,
         tile_size: 80, // 80 x 0.1vw
-        tiles: 8,   // 16 , 6
+        tiles: 16,   // 16 , 6
         iconSet: 'fas',
         counter: {
             time: null, // 16
@@ -506,7 +506,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
            flags.quickFadeInOut_19(cardsOpened, tiles, foundTiles, iter);
            flags.addPseudoClasses_19(cardsOpened, tiles, foundTiles, iter);
-           flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter); 
+           //flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter);  // UNCOMMENT AFTER LVL 20 DEV
            flags.createProgressBar_19(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -529,7 +529,7 @@ const levels = {
         tiles: 64, // in fact, it's 4 times 16 
         iconSet: 'fas',
         counter: {
-            time: 260, // ADD 32 SECOND EXTRA BECAUSE OF START ANIMATION - added
+            time: 290, // ADD 32 SECOND EXTRA BECAUSE OF START ANIMATION - added
             turns: null, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -546,8 +546,30 @@ const levels = {
             flags.checkTimeAddCondition_20(cardsOpened, tiles, foundTiles, iter, time);
             flags.tryToRemoveStarBinding_20(cardsOpened, tiles, foundTiles, iter);
             flags.lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter);
+            flags.redistributeAtLastFoundTiles_20(cardsOpened, tiles, foundTiles, iter);
         },  
     },
+
+    lvl21: {
+        lv: 'gg',
+        rows: 0,
+        columns: 0,
+        tiles: 2,
+        iconSet: 'fas',
+        counter: {
+            time: null,
+            turns: null, 
+        },
+        onStartFlag: function() {
+            return;
+        },
+        onFirstClickFlag: function() {
+            return;
+        },
+        onSecondClickFlag: function() {
+            return;
+        },
+    }
 }
 
 

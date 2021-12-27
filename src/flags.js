@@ -4887,10 +4887,10 @@ const flags = {
             await invisiblePanels()
             await changeSomeBg()
                 .then(() => {
-                    shadowTextBox.remove();
-                    shadowTextBox2.remove();
+                    shadowTextBox.style.display = 'none';
+                    shadowTextBox2.style.display = 'none';
                     let allPanels =  document.querySelectorAll('.panel');
-                    allPanels.forEach(panel => panel.remove());
+                    allPanels.forEach(panel => panel.style.display = 'none');
                 })
             await showAllTiles()
             await hideAllTiles()
@@ -5682,12 +5682,12 @@ const flags = {
         async function initSecondArrow() {
             await darkenEffectTwo()
             .then(() => {
-                if(secondArrow) {
-                    console.log(iter);
+                if((iter.nextArr.length - 1) >= (secondArrowNumber)) {
+                    /* console.log(iter);
                     console.log(iter.nextArr);
                     console.log(secondArrowNumber);
                     console.log(iter.nextArr[secondArrowNumber]);
-                    console.log(iter.nextArr[secondArrowNumber].direction); 
+                    console.log(iter.nextArr[secondArrowNumber].direction);  */
     
                     secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
                     secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
@@ -6373,6 +6373,29 @@ const flags = {
                     iter.timeAddon = 0;
                 }, 1000);
             }
+        }
+    },
+
+    redistributeAtLastFoundTiles_20(cardsOpened, tiles, foundTiles, iter) {
+        let finalTiles = [];
+        if(foundTiles + 2 === tiles) {
+            const board = document.querySelector('.board');
+            const animationContainer = document.querySelector('.animationContainer');
+            const mainGrid = document.querySelector('.main-grid');
+            const allRooms = mainGrid.querySelectorAll('.room');
+            allRooms.forEach(room => {
+                const allRoomTiles = room.querySelectorAll('.tile');
+                allRoomTiles.forEach(tile => {
+                    finalTiles.push(tile);
+                })
+            })
+
+            for(let x=0; x<finalTiles.length; x++) {
+                board.appendChild(finalTiles[x]);
+            }
+
+            animationContainer.appendChild(mainGrid);
+
         }
     }
 }
