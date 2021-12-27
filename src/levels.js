@@ -28,10 +28,10 @@ const levels = {
 
     lvl1: {
         lv: 1,
-        rows: 4,
+        rows: 2,
         columns: 4,
         tile_size: 80, // 80 x 0.1vw
-        tiles: 16,   // 16 , 6
+        tiles: 8,   // 16 , 6
         iconSet: 'fas',
         counter: {
             time: null, // 16

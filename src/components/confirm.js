@@ -6,6 +6,7 @@ import anime from 'animejs/lib/anime.es.js';
 function Confirm(props) {
 
     console.log(props.value);
+    console.log(props.msv);
 
     const table = useRef(null);
     const levelVis = useRef(null);
@@ -14,7 +15,7 @@ function Confirm(props) {
     const scoreVis = useRef(null);
     const highscoreVis = useRef(null);
 
-
+    const confBtn = useRef(null);
     /*highscoreVis.current= anime({
         targets: '.total-score',
         duration: 2400,
@@ -22,51 +23,136 @@ function Confirm(props) {
         easing: 'linear',
     }) */
 
+    let confirmParams = ['.info-level-val', '.info-counter-moves-val', '.info-counter-time-val', '.info-score-val'];
+    let highscoreParam = '.total-score';
+    const showParamsDuration = 1000;
+    const delayStagger = 500;
+    const calcParamsDuration = 1600;
+    const showButtonDuration = 1200;
+
+    let sub;
+    if(props.turns !== null) {
+        sub = (props.score + (props.turns * props.msv));
+    } else if(props.time !== null) {
+        sub = (props.score + (props.time * props.tsv));
+    }
 
     React.useEffect(() => {
 
-        async function showParams() {
-            const a1 = table.current;
+        async function hideButton() {
+            const a0 = anime({
+                targets: ['.confirmation-btn'],
+                duration: 0,
+                opacity: [0, 0],
+                easing: 'linear',
+            }).finished;
+            
+            const a00 = anime({
+                targets: [confirmParams, highscoreParam],
+                duration: 0,
+                opacity: [0, 0],
+                easing: 'linear',
+            }).finished;
 
-            table.current = anime({
-                targets: ['.info-level-val', '.info-counter-moves-val', '.info-counter-time-val', '.info-score-val', '.total-score'],
-                duration: 1200,
-                delay: anime.stagger(800),
-                easing: 'easeInSine',
-                opacity: [0, 1],
-            })
-            await Promise.all([a1]);
+            await Promise.all([a0, a00]);
         }
 
-        async function hideParams() {
-            const a2 = highscoreVis.current;
+        async function showParams() {
+            const a1 = anime({
+                targets: confirmParams,
+                duration: showParamsDuration,
+                delay: anime.stagger(delayStagger),
+                easing: 'easeInSine',
+                opacity: [0, 1],
+            }).finished;
 
-            highscoreVis.current = anime({
-                targets: ['.total-score'],
-                duration: 2000,
-                delay: 2000,
-                easing: 'linear',
+            const a01 = anime({
+                targets: highscoreParam,
+                //delay:  (delayStagger * confirmParams.length),
+                duration: showParamsDuration,
+                opacity: [0, 1],
                 round: 1,
-                textContent: [(props.highscore - props.score), props.highscore],
+                keyframes: [
+                    {textContent: (props.highscore), duration: 100, opacity: 0 },
+                    {textContent: (props.highscore - sub), duration: 100, opacity: 0.1},
+                    {opacity: 1, duration: (showParamsDuration - 200)},
+                ],
             })
 
-            const a3 = scoreVis.current; 
+            await Promise.all([a1, a01]);
+        }
+
+
+        async function calcParams() {
+
+            const a2 = anime({
+                targets: ['.total-score'],
+                duration: calcParamsDuration,
+                //delay: totalshowParamsDuration,
+                easing: 'linear',
+                round: 1,
+                textContent: [(props.highscore - sub), props.highscore],
+            }).finished;
             
-            scoreVis.current = anime({
+            const a3 = anime({
                 targets: ['.info-score-val'],
-                duration: 2000,
-                delay: 2000,
+                duration: calcParamsDuration,
+               // delay: totalshowParamsDuration,
                 easing: 'linear',
                 round: 1,
                 textContent: [props.score, 0],
-            })
+            }).finished;
 
-            await Promise.all([a2, a3]);
+            let a4;
+
+            if(props.turns !== null) {
+                a4 = anime({
+                    targets: ['.info-counter-moves-val'],
+                    duration: calcParamsDuration,
+                    //delay: totalshowParamsDuration,
+                    easing: 'linear',
+                    round: 1,
+                    textContent: [props.turns, 0],
+                }).finished;
+
+            } else if(props.time !== null) {
+                a4 = anime({
+                    targets: ['.info-counter-time-val'],
+                    duration: calcParamsDuration,
+                    //delay: totalshowParamsDuration,
+                    easing: 'linear',
+                    round: 1,
+                    textContent: [props.time, 0],
+                }).finished;
+            }
+
+            await Promise.all([a2, a3, a4]);
+        }
+
+        async function showButton() {
+            //const a5 = confBtn.current;
+
+            const a5 = anime({
+                targets: ['.confirmation-btn'],
+                duration: showButtonDuration,
+                //delay: totalshowcalcParamsDuration,
+                opacity: [0, 1],
+                easing: 'linear',
+            }).finished;
+
+            await Promise.all([a5]);
         }
 
         async function init() {
+            confBtn.current.style.pointerEvents = 'none';
+            await hideButton()
             await showParams()
-            await hideParams()
+            await calcParams()
+            await showButton()
+                .then(() => {
+                    console.log(confBtn.current);
+                    confBtn.current.style.pointerEvents = 'auto';
+                })
         }
 
         init();
@@ -96,9 +182,9 @@ function Confirm(props) {
                     <div className='total-score' ref={highscoreVis}> {props.highscore} </div>
                 </div>
                 {(props.value) ?
-                <button className='btn-s' onClick={props.next} > Next level </button>
+                <button className='btn-s confirmation-btn' onClick={props.next} ref={confBtn} > Next level </button>
                 :
-                <button className='btn-f' onClick={props.start} > Try again !</button>}
+                <button className='btn-f confirmation-btn' onClick={props.start} ref={confBtn} > Try again !</button>}
             </div>
         </div>
     )

@@ -754,12 +754,12 @@ function Game(props) {
                 )}
                 {confirmValue === true && (
                     <div className='confirmation-s'>
-                        <Confirm value={true} level={level} score={score} highscore={highscore} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} next={changeTileNumber}/>
+                        <Confirm value={true} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} next={changeTileNumber}/>
                     </div>
                 )}
                 {confirmValue === false && (
                     <div className='confirmation-f'>
-                        <Confirm value={false} level={level} score={score} highscore={highscore} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} start={props.preview}/>,
+                        <Confirm value={false} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} start={props.preview}/>,
                     </div>
                 )}
                 {confirmValue === 'win' && (
