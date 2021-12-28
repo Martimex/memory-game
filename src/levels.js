@@ -103,11 +103,11 @@ const levels = {
     },
 
     lvl4: {
-        lv: 4,
-        rows: 6,
-        columns: 6,
+        lv: 'gg', // 4
+        rows: 0, // 6
+        columns: 0, // 6
         tile_size: 50,
-        tiles: 36,  // 36
+        tiles: 0,  // 36
         iconSet: 'fas',
         counter: {
             time: null,
@@ -551,7 +551,7 @@ const levels = {
     },
 
     lvl21: {
-        lv: 'gg',
+        lv: 21,
         rows: 0,
         columns: 0,
         tiles: 2,
