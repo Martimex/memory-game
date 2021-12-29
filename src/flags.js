@@ -2412,9 +2412,8 @@ const flags = {
                         targets: typeArr,
                         keyframes: [
                             {rotateY: '+=180deg', duration: 500, easing: 'easeInSine'},
-                            {rotateY: '-=180deg', duration: 500, delay: 1100, easing: 'easeOutSine'},
+                            {rotateY: '-=180deg', duration: 500, delay: 1250, easing: 'easeOutSine'},
                         ],
-                        easing: 'easeInExpo',
                     }).finished;
 
                    await Promise.all([typeAppear]);

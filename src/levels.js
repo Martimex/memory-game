@@ -103,11 +103,11 @@ const levels = {
     },
 
     lvl4: {
-        lv: 'gg', // 4
-        rows: 0, // 6
-        columns: 0, // 6
+        lv: 4, // 4
+        rows: 6, // 6
+        columns: 6, // 6
         tile_size: 50,
-        tiles: 0,  // 36
+        tiles: 36,  // 36
         iconSet: 'fas',
         counter: {
             time: null,
@@ -367,7 +367,7 @@ const levels = {
         tiles: 48, 
         iconSet: 'fas',
         counter: {
-            time: 212, // This time need to be tested soon - time level seems more fun for this
+            time: 260, // This time need to be tested soon - time level seems more fun for this, 260 seems OK
             turns: null //50, // very fun level, not gonna lie :p 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -551,7 +551,7 @@ const levels = {
     },
 
     lvl21: {
-        lv: 21,
+        lv: 'gg',
         rows: 0,
         columns: 0,
         tiles: 2,
