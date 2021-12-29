@@ -5,9 +5,6 @@ import anime from 'animejs/lib/anime.es.js';
 
 function Confirm(props) {
 
-    console.log(props.value);
-    console.log(props.msv);
-
     const table = useRef(null);
     const levelVis = useRef(null);
     const counterVis = useRef(null);
@@ -16,12 +13,6 @@ function Confirm(props) {
     const highscoreVis = useRef(null);
 
     const confBtn = useRef(null);
-    /*highscoreVis.current= anime({
-        targets: '.total-score',
-        duration: 2400,
-        opacity: [0, 1],
-        easing: 'linear',
-    }) */
 
     let confirmParams = ['.info-level-val', '.info-counter-moves-val', '.info-counter-time-val', '.info-score-val'];
     let highscoreParam = '.total-score';
@@ -68,7 +59,6 @@ function Confirm(props) {
 
             const a01 = anime({
                 targets: highscoreParam,
-                //delay:  (delayStagger * confirmParams.length),
                 duration: showParamsDuration,
                 opacity: [0, 1],
                 round: 1,
@@ -88,7 +78,6 @@ function Confirm(props) {
             const a2 = anime({
                 targets: ['.total-score'],
                 duration: calcParamsDuration,
-                //delay: totalshowParamsDuration,
                 easing: 'linear',
                 round: 1,
                 textContent: [(props.highscore - sub), props.highscore],
@@ -97,7 +86,6 @@ function Confirm(props) {
             const a3 = anime({
                 targets: ['.info-score-val'],
                 duration: calcParamsDuration,
-               // delay: totalshowParamsDuration,
                 easing: 'linear',
                 round: 1,
                 textContent: [props.score, 0],
@@ -109,7 +97,6 @@ function Confirm(props) {
                 a4 = anime({
                     targets: ['.info-counter-moves-val'],
                     duration: calcParamsDuration,
-                    //delay: totalshowParamsDuration,
                     easing: 'linear',
                     round: 1,
                     textContent: [props.turns, 0],
@@ -119,7 +106,6 @@ function Confirm(props) {
                 a4 = anime({
                     targets: ['.info-counter-time-val'],
                     duration: calcParamsDuration,
-                    //delay: totalshowParamsDuration,
                     easing: 'linear',
                     round: 1,
                     textContent: [props.time, 0],
@@ -130,12 +116,10 @@ function Confirm(props) {
         }
 
         async function showButton() {
-            //const a5 = confBtn.current;
 
             const a5 = anime({
                 targets: ['.confirmation-btn'],
                 duration: showButtonDuration,
-                //delay: totalshowcalcParamsDuration,
                 opacity: [0, 1],
                 easing: 'linear',
             }).finished;
@@ -150,7 +134,6 @@ function Confirm(props) {
             await calcParams()
             await showButton()
                 .then(() => {
-                    console.log(confBtn.current);
                     confBtn.current.style.pointerEvents = 'auto';
                 })
         }

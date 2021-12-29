@@ -2,6 +2,8 @@ import flags from './flags.js';
 import Game from './components/game';
 
 // PLEASE DO NOT TEST LEVELS WITH 2 TILES !!!
+// Look for functions containing word 'temporary' and verify if they are needed or not
+
 const levels = {
 
     // FALLBACK, SINCE FOR SOME REASON VERY FIRST RENDER DOESN'T APPEAR TO DISPLAY CARDS
@@ -38,15 +40,12 @@ const levels = {
             turns: 15, // 12  , 15, 14,  4
         },
         onStartFlag: function() {
-            console.log('%c start function flag runs', 'background: #222; color: #bada55');
             flags.loadBorders_1();
         },
         onFirstClickFlag: function() {        // It means every first push to the pair array
-            console.log('%c first click', 'background: #721; color: #174bb9');
             flags.markBorders_1();
         },
         onSecondClickFlag: function() {       // It means every second push to the pair array
-            console.log('%c second click', 'background: #ab3; color: #a4713e');
             flags.markBorders_1();
             flags.removeBordersMark_1();
         },
@@ -61,19 +60,16 @@ const levels = {
         tiles: 24,  // 24
         iconSet: 'fas',
         counter: {
-            time: 75,  // 75        // TIME LEVELS CAN CAUSE BUGS WHEN USER CLICKS SECOND TILE AT VERY LAST SECOND
+            time: 75,  // 75       
             turns: null,  // 26
         },
         onStartFlag: function() {
-            console.log('%c Love ya', 'background: #471; color: #af43d8');
             flags.setBackgroundFlood_2();
         },
         onFirstClickFlag: function() {
-            console.log('%c got you', 'background: #721; color: #174bb9');
             flags.colorBackground_2();
         },
         onSecondClickFlag: function() {
-            console.log('%c lol it works', 'background: #ab3; color: #a4713e');
             flags.colorBackground_2();
             flags.removeColorBackground_2();
         },
@@ -95,7 +91,6 @@ const levels = {
         },
         onFirstClickFlag: function() {
             flags.fadeTile_3();
-            
         },
         onSecondClickFlag: function() {
             flags.fadeTile_3();
@@ -118,7 +113,6 @@ const levels = {
         },
         onFirstClickFlag: function() {
             flags.colorFirstTargetShadow_4();
-            
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles) {
             flags.colorSecondTargetShadow_4();
@@ -139,11 +133,10 @@ const levels = {
             turns: 34, // 31
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles) {
-            flags.skewTo0Deg_5(); // temporary function, remove it before deploying to production
+            flags.skewTo0Deg_5();
             flags.addTilesIdentifer_5(cardsOpened, tiles, foundTiles);
             flags.resetIcons_5(cardsOpened, tiles, foundTiles); 
             flags.createAnimatedDots_5();
-            //flags.animateLevelInfo_5(); // Nope, it causes some bugs
             flags.hideSecondType_5();
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles) {
@@ -195,7 +188,7 @@ const levels = {
             turns: null, // 31
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            //flags.resetRotatingBoard_7();  //PLEASE MOVE IT BACK TO THE GAME SOONER
+            flags.resetRotatingBoard_7();
             flags.addAnimationBoxes_7(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -295,7 +288,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createWantedQuestBoxes_11(cardsOpened, tiles, foundTiles, iter);
             flags.setBountyQuest_11(cardsOpened, tiles, foundTiles, iter);
-            flags.markBountyQuestAnswer_11(cardsOpened, tiles, foundTiles, iter); //TEMPORARY REMOVE FOR LVL 12
+            flags.markBountyQuestAnswer_11(cardsOpened, tiles, foundTiles, iter); 
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.resetBountyReward_11(cardsOpened, tiles, foundTiles, iter);
@@ -367,11 +360,11 @@ const levels = {
         tiles: 48, 
         iconSet: 'fas',
         counter: {
-            time: 260, // This time need to be tested soon - time level seems more fun for this, 260 seems OK
-            turns: null //50, // very fun level, not gonna lie :p 
+            time: 260, 
+            turns: null //50, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            flags.temporaryRemovalFunction_14(cardsOpened, tiles, foundTiles, iter); /* TEMPORARY */
+            flags.temporaryRemovalFunction_14(cardsOpened, tiles, foundTiles, iter); 
             flags.iconsAppear_14(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -398,7 +391,7 @@ const levels = {
             flags.darkenBeginningAnimation_15(cardsOpened, tiles, foundTiles, iter);
             flags.createSubstractionVisuals_15(cardsOpened, tiles, foundTiles, iter);
             flags.createAdditionalTiles_15(cardsOpened, tiles, foundTiles, iter);
-            flags.redistributeIcons_15(cardsOpened,tiles,foundTiles, iter); // plus add some bomb icons
+            flags.redistributeIcons_15(cardsOpened,tiles,foundTiles, iter); 
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateChosenTile_15(cardsOpened, tiles, foundTiles, iter);
@@ -422,7 +415,7 @@ const levels = {
             turns: null, //81, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter); // Temporary function, for dev only
+            flags.temporaryBombsRemoval_16(cardsOpened, tiles, foundTiles, iter);
             flags.upgradeBuggedTiles_16(cardsOpened, tiles, foundTiles, iter); 
             flags.startingAnimation_16(cardsOpened, tiles, foundTiles, iter); 
         },
@@ -455,12 +448,9 @@ const levels = {
             flags.setCardsOpenedOpacityBack_17(cardsOpened, tiles, foundTiles, iter);
         },
         onSecondClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
-            flags.finallyAddMissingChildNodes_17(cardsOpened, tiles, foundTiles, iter);
             flags.tileClickAnimation_17(cardsOpened, tiles, foundTiles, iter);
             flags.animatePairMatch_17(cardsOpened, tiles, foundTiles, iter);
             flags.lookForNextPhase_17(cardsOpened, tiles, foundTiles, iter); 
-            //flags.recreateBoard_17(cardsOpened, tiles, foundTiles, iter); // to remove
-            
         },  
     }, 
 
@@ -488,7 +478,6 @@ const levels = {
             flags.matchChallengeClassRemoval_18(cardsOpened, tiles, foundTiles, iter);
             flags.checkChallengeProgress_18(cardsOpened, tiles, foundTiles, iter);
             flags.updateCountdown_18(cardsOpened, tiles, foundTiles, iter);
-            console.log(`%c currently found tiles: ${foundTiles}`, 'color: yellow; background: black;');
         },  
     },
 
@@ -506,7 +495,7 @@ const levels = {
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
            flags.quickFadeInOut_19(cardsOpened, tiles, foundTiles, iter);
            flags.addPseudoClasses_19(cardsOpened, tiles, foundTiles, iter);
-           //flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter);  // UNCOMMENT AFTER LVL 20 DEV
+           flags.createDummyIcons_19(cardsOpened, tiles, foundTiles, iter); 
            flags.createProgressBar_19(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -529,7 +518,7 @@ const levels = {
         tiles: 64, // in fact, it's 4 times 16 
         iconSet: 'fas',
         counter: {
-            time: 290, // ADD 32 SECOND EXTRA BECAUSE OF START ANIMATION - added
+            time: 290, // 32 sec extra bcs of starting animation
             turns: null, 
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -537,7 +526,6 @@ const levels = {
             flags.prepareTilesToPairs_20(cardsOpened, tiles, foundTiles, iter);
             flags.createSeparateRooms_20(cardsOpened, tiles, foundTiles, iter);
             flags.blockThreeRoomsAndActivateDirectories_20(cardsOpened, tiles, foundTiles, iter);
-            //flags.lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter); // You can remove it basically
         },  
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.createStarBinding_20(cardsOpened, tiles, foundTiles, iter);
@@ -571,6 +559,5 @@ const levels = {
         },
     }
 }
-
 
 export default levels;

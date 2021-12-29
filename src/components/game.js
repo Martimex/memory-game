@@ -25,8 +25,6 @@ library.add(fab, fas);
 let usedIcons = [];
 let randomizedIcons = [];
 
-//let highscore = 0; // Your total score count
-
 let iter = {
     // Add more keys if necessary
     /* basic value*/ value: 0, 
@@ -54,26 +52,11 @@ const scorePerPair = 100;  // Don't modify this varible; let it be with this val
 const moveScoreValue = 150; // Don't momdify aswell - it calculates score for every remaining move after you've succeded
 const timeScoreValue = 50; // Don't momdify aswell - it calculates score for every remaining second after you've succeded, it's calculated twice, so add '/2' value
 
-function clearArrayElems(usedIcons, randomizedIcons, /*fasArrayCopy, fabArrayCopy*/) {
-    //for() // Clear all arrays, because every render pushes next elems, making arrays with unlimited elems !!!!!!!!!
-    console.log((usedIcons.length === randomizedIcons.length));
-    for(let i=0; i<usedIcons.length; i++) {
-        usedIcons.pop();
-        randomizedIcons.pop();
-    }
-    return { usedIcons, randomizedIcons };
-}
-
 function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
-
-    //if(randomizedIcons.length > 0) {
-        //clearArrayElems(usedIcons, randomizedIcons, /*fasArrayCopy, fabArrayCopy*/);
-    //}
 
     let fasArrayCopy = [...fasArray]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
     let fabArrayCopy = [...fabArray]; // Same here ...
-    //console.log(fasArrayCopy);
-    //console.log(fabArrayCopy);
+
     for(let i=0; i<(tiles/2); i++) { // Math.ceil(tileCodes.length/2) => it should be actually state value !!!
         let random = Math.floor(Math.random() * fasArrayCopy.length);
         usedIcons.push(fasArrayCopy[random]);
@@ -82,13 +65,7 @@ function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
     let duplicate = usedIcons;
     usedIcons.push(...duplicate);
 
-    //console.log('USED ICONS ARRAY:::::::::')
-    //console.log(usedIcons);
-
     const usedIconsCopy = [...usedIcons]; // Same here - creating a copy; do not assign values directly(it works for original ref only) !!
-
-    //console.log('randomized icon length:  ', randomizedIcons.length)
-    //console.log('usedIconsCopy length:  ', usedIconsCopy.length ) // JEST 0, A POWINNO BYĆ 24
 
     if(randomizedIcons.length > 0) {
         while(randomizedIcons.length > 0) {
@@ -100,27 +77,10 @@ function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
         randomizedIcons.push(setIcon(usedIcons));
     }
 
-    //console.log(usedIcons);
-    //console.log(usedIconsCopy);
-    //console.log(randomizedIcons);
-    //console.log('ICONS ARRAY::');
-    //console.log(randomizedIcons);
 }
 
-
-
-
-//function generateGrid(props) {
-//    console.log(props.tiles);
-//}
-
 //INIT
-
-//generateGrid(props);
-
 function Game(props) {
-
-    // SET MOVES ODEJMUJE SIĘ TYLKO 1 RAZ (Z JAKIEGOŚ POWODU...) => MOŻE DLATEGO, ŻE REACT NIE WIDZI ŻADNYCH ZMIAN, PRZEZ CO NIE MALUJE EKRANU NA NOWO
 
     const [renderCount, setRenderCount] = useState(0);
     const [animationLoad, setAnimationLoad] = useState(false);
@@ -133,8 +93,6 @@ function Game(props) {
     const [time, setTime] = useState(null);
     const [foundTiles, setFoundTiles] = useState(0);
     const [confirmValue, setConfirmValue] = useState(null); // przyjmuje wartości true / false  -> wygrałeś / przegrałeś ten poziom ?
-    //const []
-    //const [cardsOpen, setCardsOpen] = useState([]);
 
     const all = useRef(null);
     const bg = useRef(null);
@@ -142,9 +100,6 @@ function Game(props) {
     const game = useRef(null);
     const animationBox = useRef(null);
     const inverseReverse = useRef(null); // Starting animation
-
-    console.log(props);
-    console.log(level)
 
     //If you lose, the Icon Array has to be cleared out completely - neglecting can cause pushing not paired icons to array
     
@@ -154,14 +109,12 @@ function Game(props) {
         // Clean-up function whenever you finish a level
         // First, clean up all State variables
 
-        console.log('level value: '+ level);
-        //setAnimationLoad(false);
         setLevel(level + 1);
         setFoundTiles(0);
         setScore(0);
         setScoreMultiplier(1);
         setMoves(0);
-        setTime(0); //setTime(0);
+        setTime(0);
         setTiles(levels[`lvl${level}`].tiles);
         setConfirmValue(null);
         setRenderCount(0);
@@ -191,20 +144,10 @@ function Game(props) {
     }
 
     const winLvAnimation = async () => {
-/*         const elementsArray = [];
-        const elLimit = 10; */
-/*         for(let g=1; g<=elLimit; g++) {
-            let el = document.createElement('div');
-            el.classList.add('win-el');
-            el.style = `left: ${(100 / elLimit) * (g - 1)}%; width: ${100 / elLimit}%`;
-            elementsArray.push(el);
-            animationBox.current.appendChild(el);
-        } */
 
         const a1 = anime({
             targets: bg.current,
             duration: 2000,
-            //delay: anime.stagger(100),
             opacity: [0, 1],
             easing: 'linear',
         }).finished;
@@ -215,18 +158,7 @@ function Game(props) {
 
     const cleanup = () => {
         // Tu będzie rotate wszystkich ikon; w skrócie: przywracamy poziom do stanu pierwotnego i potem tworzymy kolejny poziom
-        // Spróbuj jeszcze pomyśleć nad prerobieniem mechanizmu dla arr (L: 124 - 134); być może to wystarczy i ta funkcja okaże się bez sensu
-
         // Then proceed with new tiles, grid, icons...
-
-        // Hide win confirmation table
-        //setConfirmValue(null);
-        
-        //console.log(animationBox.current.childNodes.length);
-
-        console.log(animationBox.current);
-
-       /*  if(level <= 1) {return;}  */
 
         if(animationBox.current.childNodes.length > 0) {
             for(let nodeCount = 0; nodeCount !== animationBox.current.childNodes.length; nodeCount = nodeCount) {
@@ -234,16 +166,6 @@ function Game(props) {
             }
     
         }
-
-        console.log(animationBox.current.childNodes);
-
-        // Create new grid based on level values
-       // gameboard.current.style = `gridTemplateColumns: repeat(${levels[`lvl${level}`].columns}, ${levels[`lvl${level}`].tile_size}vw )`;
-       // gameboard.current.style = `gridTempleteRows: repeat(${levels[`lvl${level}`].rows}, 3vw )`;
-        //gameboard.current.style = `background: green`;
-
-        console.log('child Nodes: ')
-        console.log(gameboard.current.childNodes);
 
         for(let x=0; x<gameboard.current.childNodes.length; x++) {
             gameboard.current.childNodes[x].style = `visibility: visible`;
@@ -254,7 +176,6 @@ function Game(props) {
 
     if((level <= 1) && (renderCount < 1)) {
         setConfirmValue('play');
-        //changeTileNumber();
     } 
 
     //  Render Count pomaga pozbyć się mylących błędów z konsoli - zmienna pilnuje, czy render wykonał się 1 raz. Jeśli ma się on wykonać po raz
@@ -268,85 +189,57 @@ function Game(props) {
         gameboard.current.removeEventListener('click', clickable);
         gameboard.current.addEventListener('click', clickable);
         handleCount = 0;
-            // Starting animation in the first place -> 800 animation time + 1400 delay - 4000 ms is a safe delay - at worse user can waste 1 - 2 turns
-    }, [setAnimationLoad]); // leave this dependency array as it is -> [] */
+            // Starting animation in the first place -> 800 animation time + 1400 delay - 4000 ms is a safe delay
+    }, [setAnimationLoad]);
 
     useEffect(() => {
 
         // ADD STARTING FLAG
-            levels[`lvl${level-1}`].onStartFlag(cardsOpened, tiles, foundTiles, iter); // it works !!
+        levels[`lvl${level-1}`].onStartFlag(cardsOpened, tiles, foundTiles, iter);
 
-            // MAYBE DURING ANIMATION TIME ADD SOME INVINCIBLE LAYER, WHICH PREVENTS FROM CLICKING DURING THE ANIMATION PROCESS ???
-            //gameboard.current.removeEventListener('click', clickable);
-         // Below add some Inverse / Reverse starting animation
+        // Below add some Inverse / Reverse starting animation
+        inverseReverse.current = anime.timeline({
+            duration: 1400,
+            easing: 'easeInOutQuart',
+        });
 
-            inverseReverse.current = anime.timeline({
-                duration: 1400,
-                easing: 'easeInOutQuart',
-            });
-    
-            inverseReverse.current
-            .add ({
-                targets: '.tile',
-                //transformStyle: 'preserve-3d',
-                //transitionTimingFunction: 'linear',
-                transitionProperty: 'all',
-                //backgroundColor: '#4ba',
-                rotateY: '180deg',
-                loop: false,
-            })
-    
-            .add ({
-                //delay: 1400, // it prevents these two animations from running at the same time - they should work separately
-                targets: '.tile',
-                //transformStyle: 'preserve-3d',
-                //transitionTimingFunction: 'linear',
-                transitionProperty: 'all',
-                //backgroundColor: '#4ba',
-                rotateY: '0deg',
-                loop: false,
-            }, '+=600')
+        inverseReverse.current
+        .add ({
+            targets: '.tile',
+            transitionProperty: 'all',
+            rotateY: '180deg',
+            loop: false,
+        })
 
-            inverseReverse.current.finished.then(() => { console.log('timeline accpeted')});
-
-        /* setTimeout(() => {
-            setAnimationLoad(true);
-        }, 5000); */
-            
+        .add ({
+            targets: '.tile',
+            transitionProperty: 'all',
+            rotateY: '0deg',
+            loop: false,
+        }, '+=600')
+     
     }, [level]);
 
     function clickable(e)  {
-        console.log(gameboard.current.dataset.animation);
         if(gameboard.current.dataset.animation !== 'off') {return;}
-        console.log(e.target);
         if(e.target.classList.contains('tile')) {
-            //e.target.style = 'transform: rotateY(180deg);'; // border: .3rem solid hsl(51, 88%, 38%);
             anime({
                 targets: e.target,
                 duration: 3200,
-                //transformStyle: 'preserve-3d',
-                //transitionTimingFunction: 'linear',
                 transitionProperty: 'all',
                 rotateY: 180,
             })
-            //console.log(e.target.childNodes);
             let trgt = e.target;
             let node = e.target.childNodes;
             for( let i = 0; i < node.length; i++) {
                 if((node[i].classList !== undefined) && (node[i].classList.contains('tile-back'))) {
-                    console.log('indeed')
-                    //styleNode(node[i]);
                     keepCardOpen(node, node[i], e, trgt);
-
                 }
             }
-            //setMoves(moves + 1);
         } else {
-            console.log('nope');
+            //  **Nothing happens**
         }
     }
-
-    //console.log(tiles);
 
     useEffect(() => {
 
@@ -366,22 +259,12 @@ function Game(props) {
 
     useEffect(() => {
 
-        // ISSUE #1 : COUNTER IS BEING INVOKED DURING THE ANIMATION, CAUSING TIME TO RUN WHILE USER CAN'T CLICK ANYTHING (3 SECONDS)
-        //            IT'S MINOR ISSUE THO, BUT STILL SOMETHING THAT CAN BE MADE BETTER
-
-        // ISSUE #2 : BUG -> IF U CLICK AT VERY LAST SECOND AT LAST TWO TILES, THEN FAILURE SCREEN SHOWS UP, IMMADIETALY INTERRUPTED
-        //  (RESOLVED)       BY WINNING SCREEN. ONE OF THEM SHOULD SHOW, NOT ONE AFTER ANOTHER. RESOLVING THIS MIGHT BE CRUCIAL SINCE
-        //                   LOSING AND WINNING ANIMATIONS MIGHT BE INVOKED AT THE SAME TIME, CAUSING VISUAL BUGS...
-
         if(levels[`lvl${level-1}`].counter.time !== null) {
             const stopwatch = setInterval(() => {
                 setTime((time + 1) - iter.timeAddon);
             }, 1000);
     
-            //if(renderCount < 1) {return () => clearInterval(stopwatch);};  // Prevents from causing error on very first render - line below causes it
-    
             if((foundTiles === tiles) && (levels[`lvl${level-1}`].counter.time - time > 0)) {
-                console.log('Time game won')
                 confirmSuccess();
                 clearInterval(stopwatch);
     
@@ -410,39 +293,22 @@ function Game(props) {
         arr.push('');
     };
 
-    //console.log('length: ', arr.length)
-
     let allTiles =  arr.map((tile, index) =>  
         <div className={`tile t-${level-1}`} key={index.toString()}><div className={`tile-front tf-${level-1}`}></div> <div className={`tile-back tb-${level-1}`}>{<FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon-${level-1}`}/>}</div></div>
     ); 
-
-    /* function createAllTiles(randomizedIcons) {
-        let allTiles = arr.map((tile, index) => 
-            <div className={`tile`} key={index.toString()}><div className='tile-front'></div> <div className='tile-back'>{<FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon`}/>}</div></div>
-        );
-
-        return allTiles;
-    } */  
     
     function keepCardOpen(allCardNodes, card_back, card, target) {
       
-        console.log(cardsOpened.length);
         cardsOpened.push(card_back);
 
-      console.log(cardsOpened.length);
-      //target.classList.add('target');
-      // Czy user wybrał już 2 karty ?
-
-       checkParentOrigin(cardsOpened, target); // Prevents from tile + outer tile border click bug
-        console.log(card)
+        checkParentOrigin(cardsOpened, target); // Prevents from tile + outer tile border click bug
        
         // Lets do it in advance
         resolveAnimationBugs();
 
-      if(cardsOpened.length > 1) {
-            //levels[`lvl${level-1}`].onSecondClickFlag();
+        if(cardsOpened.length > 1) {
             doCardsMatch(cardsOpened);
-       }
+        }
     }
     
     function checkParentOrigin(cardsOpened, target) {
@@ -452,24 +318,18 @@ function Game(props) {
             cardsOpened.pop();
         }
     }
-    
-    //console.log(gameboard);
 
     function doCardsMatch(cardsOpened) {
         // Block the click listener for a brief checkout duration
-        gameboard.current.removeEventListener('click', clickable);  //game.childNodes[0]
-        //console.log(cardsOpened.length);
-        //console.log(cardsOpened[0]);
-        //console.log(cardsOpened[1]);
+        gameboard.current.removeEventListener('click', clickable);
+
         setTimeout(() => {
             isChecking = true;
         }, 200)
-        console.log('checking...');
 
         setTimeout(() => {
 
-            if(cardsOpened[1] === undefined) { cardsOpened.pop(); return;} // prevents from time bug
-            //isChecking = false;
+            if(cardsOpened[1] === undefined) { cardsOpened.pop(); return;}
             if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) { // czy pary się zgadzają? TAK -> usuń je z planszy;  NIE -> odwróć z powrotem
 
                 async function fade() {
@@ -492,8 +352,6 @@ function Game(props) {
                         cardsOpened.pop();
                     }
                 })
-
-                // Testy z VANTA.JS
                 
             } else {
                 const temp = 0;
@@ -515,16 +373,13 @@ function Game(props) {
                         cardsOpened.pop();
                     }
                 })
-                
 
-               // console.log({moves});
             }
-            console.log('time out');
     
             isChecking = false;
     
             setTimeout(() => {
-                gameboard.current.addEventListener('click', clickable); // game.childNodes[0]
+                gameboard.current.addEventListener('click', clickable); 
             }, 300); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
     
         }, 1400); // this time allows to see two opened tiles for user - he can check whether they match or not
@@ -539,8 +394,6 @@ function Game(props) {
             let pos = transform.indexOf(query);
             let end = transform.indexOf(')', pos);
             let transformValue = transform.substring(pos + query.length, end + 1);
-
-            console.log(transformValue);
 
             if(cardsOpened[1]) { // Resolve after second click
                 if((ttc.style.visibility !== 'hidden')  && (transformValue !== '(0deg)') && (cardsOpened[0].parentNode !== ttc) && (cardsOpened[1].parentNode !== ttc))  {
@@ -575,9 +428,6 @@ function Game(props) {
         } 
 
         setConfirmValue(true);
-        
-        
-        console.log('SUCCESS');
     }
 
     function confirmFailure() {
@@ -594,43 +444,16 @@ function Game(props) {
 
         setConfirmValue(false);
 
-        console.log('lost confirmed');
-        
-
-        // IT IS NOT WORKING
-
+        // IT IS NOT WORKING (?)
         gameboard.current.removeEventListener('click', clickable);
-
-        // IT CAUSES NEW BUGS
-
-       /* gameboard.current = anime({
-            targets: ['.tile'],
-            duration: 500,
-            display: 'none',
-            opacity: [1, 0],
-            loop: false,
-        }); */
-
-        // IT IS NOT REMOVING ALL TILES - 2 LASTLY CHOSEN REMAINS STILL ON THE BOARD
-      /*   setTi2meout(() => {
-            for(let x=0; x<gameboard.current.childNodes.length; x++) {
-                gameboard.current.childNodes[x].style = `display: none`;
-            }
-        }, 800); // WORKS WITH A PROPER TIMEOUT VALUE */
-
     }
 
     function handleState() {
 
         // PREVENT FIRSTCLICK AND SECONDCLICK MULTIPLE TIMES INVOKING WHEN USER KEEPS PRESSING THE SAME TILE / SOME TILES MULTIPLE TIMES !!!!
-        console.log('isChecking: ' +isChecking)
-        console.log(`%c handleCount is  ${handleCount}`, 'background: #d49; color: #70eb4a');
         if(isChecking) {return;}
 
         if(gameboard.current.dataset.animation === 'off') {
-
-            console.log('%c handleState invoked...', 'background: #46b; color: #882')
-            console.log(cardsOpened.length);
 
             if((handleCount < 1) && (cardsOpened[0])) {
                 cardsOpened[0].parentNode.classList.add('target', 'target-1');
@@ -638,7 +461,6 @@ function Game(props) {
                     handleCheck = 0;
                     handleCount++;
                     levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, tiles, foundTiles, iter);
-                    console.log('final length: '+cardsOpened.length);
                 }
             }
 
@@ -646,7 +468,6 @@ function Game(props) {
                 cardsOpened[1].parentNode.classList.add('target', 'target-2');
                 if(cardsOpened.length > 1) {
                     levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, tiles, foundTiles, iter, time);
-                    console.log('final length: '+cardsOpened.length);
                     handleCheck++;
                     handleCount = 0;
                 }       
@@ -665,12 +486,9 @@ function Game(props) {
 
             setTimeout(() => {
 
-                console.log(cardsOpened);
-                //isChecking = false;
                 if(cardsOpened.length <= 1) {return;} 
 
                 if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
-                    console.log('conditions passed')
                     return;
                 } 
 
@@ -691,63 +509,25 @@ function Game(props) {
 
             }, 1200) 
             // Block the scope and prevents from fast-clicking turn decreasing behaviour
-            // Please do find a better solution than this....
-            // useEffect for below lines of code
             handleCount = 0;
         } 
-            //handleCount = 0;
-        // block the scope and prevents from fast-clicking turn decreasing behaviour, please keep 1200 ms, value OK, 
-               //please check this since it causes bugs - when u delay second click, state does not update
-        //handleCount = 0;
     }
-    /* useLayoutEffect(() => {
-
-        console.log('useLayoutEffect');
-
-        //setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles);
-        //createAllTiles(randomizedIcons);
-
-       allTiles = arr.map((tile, index) => 
-            <div className={`tile`} key={index.toString()}><div className='tile-front'></div> <div className='tile-back'>{<FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon`}/>}</div></div>
-        );
-
-       const board = gameboard.current;
-       //let div = <p> Hi there </p>
-       //board.appendChild(div);
-    }, [level]) */
-
-    //console.log(allTiles);
-
-   /* if(allTiles.length <= 0) {
-        console.log('null 123');
-        return null;
-    }
-    */
 
     return(
         <div className='all' ref={all}>
             <div className={`background bg-${level-1}`} ref={bg}>
-                {/*<GameInfo />*/}
                 <div className='game-info'>
                     <GameInfo level={level}  moves={moves} time={time} score={score}  />
                 </div>
 
-                <div onClick={() => {setLevel(level + 18); confirmSuccess();}}> {levels[`lvl${level-1}`].lv} poziom zawiera {levels[`lvl${level-1}`].tiles} kafelków - Kolumny: {levels[`lvl${level-1}`].columns}; </div>
+                {/*  ONLY FOR DEV LEVEL TESTING ->  <div onClick={() => {setLevel(level + 2); confirmSuccess();}}> XMM; </div>*/}
                 <div className={`game game-${level-1}`} ref={game}>
-               
                     <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}vw)`}}>
                         {allTiles}
                     </div>
                 </div>
                 <div className={`animationContainer aContainer-${level-1}`} ref={animationBox}></div>
 
-                {
-                //    {level === 1 && ( <div className='preview'>
-                //        <Preview  level={level} next={changeTileNumber} />
-                //        {/* <button className='summary' onClick={changeTileNumber} > Submit</button> */}
-                //    </div>
-                //)} 
-                }
                 {confirmValue === 'play' && (
                     <div className='confirmation-p'>
                         {<ConfirmPlay value={'play'} level={level} next={changeTileNumber} /> }
@@ -774,5 +554,3 @@ function Game(props) {
 } 
 
 export default Game;
-//export { tiles };
-//export gameboard;

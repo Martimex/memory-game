@@ -6,14 +6,9 @@ import Game from './game.js';
 import levels from '../levels.js';
 import anime from 'animejs/lib/anime.es.js';
 
-
-
 function ConfirmWin(props) {
 
-    console.log('%c Win confirmed', 'color: #fff; background: #000');
     let winMessage = ['C', 'O', 'N', 'G', 'R', 'A', 'T', 'U', 'L', 'A', 'T', 'I', 'O', 'N', 'S'];
-    //let winQuote = 'You have successfully completed the Adventure mode! It has been tough and long journey, but you have made it here! GGWP';
-    //let winQuoteArr = [];
 
     const finalBtn = React.useRef(null);
 
@@ -126,8 +121,6 @@ function ConfirmWin(props) {
             targets: '.gg-btn',
             color: 'hsla(276, 40%, 50%, .9)',
             border: '.2rem double',
-
-            /* backgroundImage: 'linear-gradient(70deg,hsla(0, 0%, 0%, 0.95), hsla(276, 50%, 60%, .85), hsla(0, 0%, 0%, 0.85))', */
             duration: 1100,
             easing: 'easeInSine',
         })
@@ -138,8 +131,6 @@ function ConfirmWin(props) {
             targets: '.gg-btn',
             color: 'hsla(0, 0%, 0%, 0.95)',
             border: '.3rem solid',
-/*             backgroundImage: ['linear-gradient(70deg,hsla(0, 0%, 0%, 0.95), hsla(199, 50%, 60%, .85), hsla(0, 0%, 0%, 0.85))', 
-            'linear-gradient(70deg,hsla(126, 0%, 0%, 0.95), hsla(115, 50%, 60%, .85), hsla(126, 0%, 0%, 0.85))'], */
             duration: 1100,
             easing: 'easeOutSine',
         })
@@ -154,14 +145,6 @@ function ConfirmWin(props) {
         })
     }
 
-    //ggBtn.style.background = `linear-gradient(70deg,hsla(0, 0%, 0%, 0.95), hsla(${finalColorArr[randColor]}, 50%, 60%, .85), hsla(0, 0%, 0%, 0.85))`;
-
-    /*for(let i=0; i<winQuote.length; i++) {
-        winQuoteArr.push(winQuote[i]);
-    }
-
-    console.log(winQuoteArr); */
-
     let cubes =  winMessage.map((message, index) =>  
         <div className='heading-cube' key={index.toString()}> 
             <div className='cube-content'>
@@ -171,12 +154,6 @@ function ConfirmWin(props) {
             </div>
         </div>
     );
-
-    /* let quote = winQuoteArr.map((letter, index) => {
-        <div className='q-letter' key={index.toString()}>
-            {letter}
-        </div>
-    }) */
 
     return (
         <div className='background-win'>

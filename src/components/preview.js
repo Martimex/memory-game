@@ -9,8 +9,6 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 
 function Preview(props) {
 
-    console.log(props);
-
     const animationTextOpacity = React.useRef(null);
 
     React.useEffect(() => {
@@ -69,23 +67,8 @@ function Preview(props) {
         await Promise.all([a1]);
     }
 
-    async function displayAnimation() {
-
-        const a2 = changeScreen.current;
-
-        changeScreen.current = anime({
-            targets: 'body',
-            duration: 900,
-            opacity: [0, 1],
-            easing: 'linear',
-        })
-
-        await Promise.all([a2]);
-    }
-
     async function proceed() {
         await fadeAnimation()
-        //await displayAnimation()
     }
 
     return (

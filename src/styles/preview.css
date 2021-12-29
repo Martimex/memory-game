@@ -1,5 +1,4 @@
 .bg-main {
-
     background: #000;
     position: absolute; top:0%; left: 0%;
     width: 100vw;
@@ -21,23 +20,10 @@
     align-items: center;
 }
 
-/* .mode-main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    margin: 4rem;
-    background-color: #222;
-    transform: rotateY(30deg);
-    border-radius: 40% 20% 40% 20%;
-} */
-
 .mode-block {
     display: flex;
     align-items: center;
     justify-content: center;
-/*     position: absolute;
-    width: 60%; left:20%; */
     background: radial-gradient( hsl(0, 0%, 0%) 50%, hsl(128, 81%, 20%), hsla(0, 0%, 0%, 0) 70%);
     margin: 2.2rem;
     padding: 1rem;
@@ -47,10 +33,6 @@
 
 .mode-block:nth-of-type(2n) {
     border-radius: 20%;
-/*     background: repeating-linear-gradient(165deg, hsl(0, 0%, 0%) 50%, hsl(128, 71%, 20%), hsl(0, 0%, 0%) 70%);
-    background-blend-mode: soft-light;
-    background-clip: content-box;
-    background-attachment: fixed; */
     background: none;
     border: .2rem double hsla(128, 81%, 20%, .6);
 }
@@ -60,6 +42,7 @@
     filter:  saturate(75%);
     
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 3px 3px 3px hsla(122, 80%, 30%, 0.5);
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -82,8 +65,8 @@
 .mode-about {
     background: -webkit-linear-gradient(120deg, hsla(0, 0%, 0%, .35) 25%,  hsla(128, 40%, 30%, .75), hsl(128, 63%, 39%));
     filter:  saturate(120%); 
-    
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 1px 1px 1px hsla(122, 60%, 60%, 0.2);
     font-size: 1.3rem;
@@ -96,15 +79,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-/*     position: absolute;
-    width: 60%; left:20%; */
     background:repeating-linear-gradient(130deg, hsl(128, 81%, 20%), hsl(0, 0%, 0%), hsl(128, 81%, 20%));
     border-radius: 20%;
     height: 4rem;
     width: 9rem;
     margin: 2rem;
-    
-
 }
 
 .proceed-play {
@@ -123,21 +102,10 @@
     background-origin: content-box;
 }
 
-/* .proceed-play::before {
-    content: '';
-    display:  block;
-    position: absolute;
-    width: 3%; height: 3%;
-    border-radius: 50%;
-    background: radial-gradient( hsla(0, 0%, 0%, 1) 70%, hsl(128, 81%, 20%));
-    filter: blur(2px);
-} */
-
 .return-home {
     position: absolute;
     top: 2rem;
     left: 2rem;
-
 }
 
 .back {

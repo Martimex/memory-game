@@ -14,12 +14,6 @@ import { tileCodes } from './vars.js';
 library.add(fab, fas);
 
 
-
-
-//let fasArray = Object.keys(library.definitions.fas)
-
-//console.log(fasArray)
-
 function App() {
 
   const [state, setState] = useState('start');
@@ -41,12 +35,6 @@ function App() {
     setState('preview');
   }
 
-  const triggerStart = () => {
-    setTimeout(() => {
-      setState('start');
-    }, 1700);  // zamiast tego zrób animację dla przegranej gry, po której można kliknąć przycisk :)
-  }
-
   const triggerStartDelayed = () => {
     setTimeout(() => {
       setState('start');
@@ -60,11 +48,11 @@ function App() {
       )}
 
       {state === 'preview' && (
-        <Preview changeComponent={triggerChangeComponentDelayed} backToHome={triggerStartDelayed} timing={timing} start={triggerStart} level={level} nextLV={() => {setLevel(level + 1)}} />
+        <Preview changeComponent={triggerChangeComponentDelayed} backToHome={triggerStartDelayed} timing={timing} level={level} nextLV={() => {setLevel(level + 1)}} />
       )}
 
       {state === 'game' && (
-        <Game changeComponent={triggerChangeComponent} start={triggerStart} preview={triggerChangeComponentToPreview} tileCodes={tileCodes} level={level}  />
+        <Game changeComponent={triggerChangeComponent} preview={triggerChangeComponentToPreview} tileCodes={tileCodes} level={level}  />
       )}
 
     </div>

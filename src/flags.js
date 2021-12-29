@@ -4,8 +4,6 @@ import anime from 'animejs/lib/anime.es.js';
 import { useRef } from 'react/cjs/react.development';
 import Game from './components/game.js';
 import levels from './levels.js';
-//import { tiles, foundTiles } from './components/game.js';
-//let gameboard = useRef(null);
 
 // #1 WINNING CONDITION :  if(foundTiles+2 === tiles) equals true
 // #2 IF TWO CARDS MATCH:  if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])
@@ -19,15 +17,12 @@ const flags = {
     
     // LVL 1
     loadBorders_1: function() {
-        //document.querySelector('.board').dataset.animation = 'off'
         anime({
             targets: '.tile',
             duration: 1600,
             borderColor: ['hsl(4, 87%, 62%)', 'hsl(45, 50%, 80%)'],
-            //loop: true,
             direction: 'alternate',
         })
-        //console.log('eigjiepg')
     },
 
     markBorders_1: function() {
@@ -35,8 +30,6 @@ const flags = {
             targets: '.target',
             duration: 400,
             borderColor: 'hsl(45, 50%, 80%)',
-            //loop: true,
-            //direction: 'alternate',
         })
     },
 
@@ -53,13 +46,7 @@ const flags = {
 
     setBackgroundFlood_2: function() {
         let waterMaxheight = window.innerWidth;
-        //let f = document.querySelector('.background');
-        let animationContainer = document.querySelector('.animationContainer');//document.createElement('div');
-        //animationContainer.classList.add('animationContainer');
-
-        //f.appendChild(animationContainer);
-
-        console.log(levels[`lvl2`].counter.time);
+        let animationContainer = document.querySelector('.animationContainer');
 
         for(let i=75; i>0; i--) {
             let d = document.createElement('div');
@@ -67,7 +54,7 @@ const flags = {
             d.classList.add('flood-elem');
             animationContainer.appendChild(d);
         }
-        console.log(waterMaxheight); 
+
         anime({
             targets: '.flood-elem',
             duration: 300,
@@ -98,7 +85,7 @@ const flags = {
     // LVL 3
 
     animate_3: function() {
-        let animationContainer = document.querySelector('.animationContainer');//document.createElement('div');
+        let animationContainer = document.querySelector('.animationContainer');
 
         for(let i=2; i>0; i--) {
             let d = document.createElement('div');
@@ -140,9 +127,7 @@ const flags = {
         waitInverse().then(() => {
             anime({
                 targets: '.target',
-                //delay: 8000,
                 duration: 1000,
-                // autoplay: false,
                 easing: 'linear',
                 opacity: '0.1',
             })
@@ -171,7 +156,7 @@ const flags = {
             duration: 3200,
             skewY: '10deg',
             loop: false,
-        })  //DISABLED ONLY FOR DEVELOPMENT PURPOSES*/ 
+        })
     },
 
     colorFirstTargetShadow_4: function() {
@@ -200,8 +185,6 @@ const flags = {
     },
 
     changeRepeatedBg_4: function(cardsOpened, tiles, foundTiles) {
-        console.log(tiles);
-        console.log(foundTiles);
         if(foundTiles+2 === tiles) {  // it's async, so append value right away
             async function waitFinish() {
                 const wait = anime ({
@@ -256,7 +239,6 @@ const flags = {
     },
 
     addTilesIdentifer_5: function(cardsOpened, tiles, foundTiles) {
-        console.log(tiles);
         let allTiles = document.querySelectorAll('.tile');
         for(let i=0; i<tiles/2; i++) {
             allTiles[i].classList.add('tileType1');
@@ -273,11 +255,9 @@ const flags = {
         let tileTypeArr2 = [];
         let randomizedElems1 = [];
         let randomizedElems2 = [];
-        //console.log(allTiles[0].childNodes[2].childNodes[0].classList[1]);
         for(let a=0; a<tiles; a++) {
             iconsArr.push(allTiles[a].childNodes[2].childNodes[0]);
         }
-        //console.log(iconsArr);
         function sortSvgs(array) {
             let compareArr = [];
             for(let x=0; x<array.length; x++) {
@@ -303,23 +283,16 @@ const flags = {
 
         let sortediconsArr = sortSvgs(iconsArr);
 
-        //console.log('112345');
-        //console.log(comp);
-        //console.log(iconsArr);
-        //console.log(allTiles);
         for(let b=0; b<tiles; b++) {
             if(b%2) {
                 tileTypeArr1.push(sortediconsArr[b]);
-                /*tileTypeArr1[Math.floor(b/2)].classList.add('tileType1');*/
-            } else { tileTypeArr2.push(sortediconsArr[b]);  /*tileTypeArr2[Math.floor(b/2)].classList.add('tileType2');*/ }
+            } else { tileTypeArr2.push(sortediconsArr[b]); }
         }
         const tileType1 = document.querySelectorAll('.tileType1');
         const tileType2 = document.querySelectorAll('.tileType2');
-        //console.log(tileType1)
+
         for(let c=0; c<(tiles/2); c++) {
             let rand = Math.floor(Math.random() * tileTypeArr1.length);
-            //console.log(tileType1[c].childNodes[2].childNodes[0]);
-            //console.log(tileTypeArr1[rand]);
             randomizedElems1.push(tileTypeArr1[rand]);
             tileTypeArr1.splice(rand, 1);
         }
@@ -334,7 +307,6 @@ const flags = {
         }
 
         tileType1.forEach((tile, index) => {
-            //console.log(tile);
             tile.childNodes[2].appendChild(randomizedElems1[index])
         })
 
@@ -350,16 +322,11 @@ const flags = {
             let dot = document.createElement('div');
             let topv = Math.floor(Math.random()*90)+1;
             let leftv = Math.floor(Math.random()*90)+1;
-           // console.log(topv)
             dot.classList.add('dot-g');
             animationContainer.appendChild(dot);
             let thisdot = document.querySelector(`.dot-g:nth-child(${i+1})`);
             dots.push(thisdot);
-            console.log(thisdot);
-           // dot.style = `absolute;`;
-            dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`); // = ` ${topv};`;//topv; //style.top = `19%`;
-           // dot.left = `${leftv};`; // = `41%`;
-            //thisdot.style += `left: ${Math.floor(Math.random() * 90)+1}%`;
+            dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`);
         }
 
         anime({
@@ -376,23 +343,9 @@ const flags = {
         })
     },
 
-    /* animateLevelInfo_5: function() {
-        anime({
-            targets: ['.level-5', '.score-5', '.counter-5'],
-            duration: 3000,
-            opacity: [0, 1],
-            direction: 'alternate',
-            loop: true,
-        })
-    },  REMOVED BECAUSE IT INVOLVES BUGS */
-
     hideFirstType_5: function(cardsOpened, tiles, foundTiles) {
         const firstType = document.querySelectorAll('.tileType1');
         const secondType = document.querySelectorAll('.tileType2');
-
-/*         secondType.forEach(type => {
-            type.style += 'pointer-events: auto;';
-        }) */
 
         document.querySelector('.board').dataset.animation = 'on';
 
@@ -403,8 +356,6 @@ const flags = {
                 duration: 1000,
                 borderColor: ['hsl(122, 86%, 32%)', 'hsl(0, 0%, 0%)'],
                 opacity: 0,
-                //pointerEvents: ['none', 'none'],
-                //visibility: 'hidden',
                 easing: 'linear',
             })
     
@@ -414,8 +365,6 @@ const flags = {
                 duration: 1000,
                 borderColor: ['hsl(0, 0%, 0%)', 'hsl(122, 86%, 32%)'],
                 opacity: 1,
-                //pointerEvents: ['auto', 'auto'],
-                //visibility: 'visible',
                 easing: 'linear',
             })
 
@@ -424,9 +373,6 @@ const flags = {
 
         wait().then(() => {
             setTimeout(() => {
-/*                 firstType.forEach(type => {
-                    type.style += 'pointer-events: none;';
-                }) */
                 document.querySelector('.board').dataset.animation = 'off';
             }, 2000);
         })
@@ -437,10 +383,6 @@ const flags = {
         const secondType = document.querySelectorAll('.tileType2');
         const firstType = document.querySelectorAll('.tileType1');
 
-/*         firstType.forEach(type => {
-            type.style += 'pointer-events: auto;';
-        })
- */
         document.querySelector('.board').dataset.animation = 'on';
 
         async function wait() {
@@ -450,8 +392,6 @@ const flags = {
                 duration: 1000,
                 borderColor: ['hsl(122, 86%, 32%)', 'hsl(0, 0%, 0%)'],
                 opacity: 0,
-                //pointerEvents: ['none', 'none'],
-                //visibility: 'hidden',
                 easing: 'linear',
             })
     
@@ -462,8 +402,6 @@ const flags = {
                 duration: 1000,
                 borderColor: ['hsl(0, 0%, 0%)', 'hsl(122, 86%, 32%)'],
                 opacity: 1,
-                //pointerEvents: ['auto', 'auto'],
-                //visibility: 'visible',
                 easing: 'linear',
             });
 
@@ -472,29 +410,23 @@ const flags = {
 
         wait().then(() => {
             setTimeout(() => {
-/*                 secondType.forEach(type => {
-                    type.style += 'pointer-events: none;';
-                }) */
                 document.querySelector('.board').dataset.animation = 'off';
             }, 2000);
         })
     },
 
     generateNewDots_5: function(cardsOpened, tiles, foundTiles, iter) {
-        //console.log('IVALUE: '+iter.value);
-        //console.log('TILES: '+tiles);
-        //console.log('FOUND: '+foundTiles);
+
         let animationContainer = document.querySelector('.animationContainer');
         if((parseInt(tiles/4) <= parseInt(foundTiles)) && (iter.value < 1)) {
             iter.value = 1;
-            //console.log('ITER:::: '+iter);
             for(let i=0; i<20; i++) {
                 let dot = document.createElement('div');
                 let topv = Math.floor(Math.random()*90)+1;
                 let leftv = Math.floor(Math.random()*90)+1;
                 dot.classList.add('dot-g-4');
                 animationContainer.appendChild(dot);
-                dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`); // = ` ${topv};`;//topv; //style.top = `19%`;
+                dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`);
             }
             anime({
                 targets: '.dot-g-4',
@@ -511,14 +443,13 @@ const flags = {
         }
         else if((parseInt(tiles/2) <= parseInt(foundTiles)) && (iter.value < 2)) {
             iter.value = 2;
-            //console.log('ITER:::: '+iter);
             for(let i=0; i<20; i++) {
                 let dot = document.createElement('div');
                 let topv = Math.floor(Math.random()*90)+1;
                 let leftv = Math.floor(Math.random()*90)+1;
                 dot.classList.add('dot-g-2');
                 animationContainer.appendChild(dot);
-                dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`); // = ` ${topv};`;//topv; //style.top = `19%`;
+                dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`);
             }
             anime({
                 targets: '.dot-g-2',
@@ -550,7 +481,6 @@ const flags = {
         let board = document.querySelector('.board-6');
         let spinningBox = document.createElement('div');
         spinningBox.classList.add('spinning');
-        //spinningBox.style = //'position: absolute; width: 100%; height: 100%;';
         game.appendChild(spinningBox);
         spinningBox.appendChild(board);
         const rotation = anime({
@@ -566,14 +496,11 @@ const flags = {
             direction: 'alternate',
             loop: true,
         });
-        //flags.check_6(rotation, tiles, foundTiles);
-        //iter.value++;
 
     },
 
     check_6: function(rotation, tiles, foundTiles) {
         if(foundTiles+2 === tiles) {
-            console.log('Would it pause then ?')
             rotation.pause();
             document.querySelector('.board-6').onclick = rotation.pause();
         }  
@@ -643,15 +570,12 @@ const flags = {
     },
 
     animateMatch_6: function(cardsOpened, tiles, foundTiles, iter) {
-        console.log('ITER NEW VALUE::: '+iter.value)
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
             anime({
                 targets: [cardsOpened[0], cardsOpened[1]],
                 duration: 1800,
                 backgroundImage: 'radial-gradient(hsl(67, 80%, 60%) 20%, hsl(44, 80%, 60%) 45%, hsl(297, 80%, 60%))',
             })
-
-            //let b7 = document.querySelector('.board-6');
         }
     },
 
@@ -678,13 +602,14 @@ const flags = {
     // LVL 7
 
     resetRotatingBoard_7: function() {
-        // TEMPORARY. PLEASE TEMOVE IT DURING PRODUCTION
         let randomDiv = document.createElement('div');
         let game = document.querySelector('.game');
         let board = document.querySelector('.board');
         game.appendChild(board);
         let spinningBox = document.querySelector('.spinning');
-        randomDiv.appendChild(spinningBox);
+        if(spinningBox !== null) {
+            randomDiv.appendChild(spinningBox);
+        }
         randomDiv.remove(); 
     },
 
@@ -692,7 +617,6 @@ const flags = {
         iter.value++;
         if(iter.value%4 === 0) {
             let svgs = document.querySelectorAll('svg');
-            console.log(svgs);
             svgs.forEach(svg => {
                 let hue = Math.floor(Math.random() * 360)+1;
                 let saturate  = Math.floor(Math.random() * 80)+11;
@@ -833,10 +757,8 @@ const flags = {
     // LVL 8 
 
     blockRedTilesClick_8: function(cardsOpened, tiles, foundTiles, iter) {
-        // CARDS OPENED IS PASSED BY VALUE, NOT BY REFERENCE SO MODYFING IT HERE HAS NO EFFECT FOR GAME COMPONENT. FIND ALTERNATIVE APPROACH FOR THISFUNC
  
         let allTiles = document.querySelectorAll('.tile');
-        let redTiles = [];
         allTiles.forEach(tile => {
             let svg = tile.querySelector('svg');
             let svgColor = svg.style.color;
@@ -845,70 +767,21 @@ const flags = {
             }
         })
 
-        /* let target;
-        iter.value++;
-        console.log(cardsOpened.length)
-        if(cardsOpened.length <= 1) { // first card
-            //target = cardsOpened[0].parentNode;
-            target = document.querySelector('.target-1');
-        } else { // second card border checking
-            //target = cardsOpened[1].parentNode;
-            target = document.querySelector('.target-2');
-        }
-
-        let svg = target.querySelector('svg');
-
-        console.log(svg.style.borderColor);
-        console.log(target)
-        if(svg.style.borderColor === 'rgb(230, 105, 76)') {  // if the color is red
-            //document.querySelector('.board').dataset.animation = 'on';
-            async function revertRed() {
-                const a1 = anime({
-                    targets: target,
-                    duration: 500,
-                    rotateY: '0deg',
-                    scale: '200%',
-                    easing: 'linear',
-                }) 
-                console.log('cardsOpened elem removed');
-               // Promise.all([a1]);
-            } 
-            revertRed().then(() => {
-                while(cardsOpened.length > 0) {
-                    cardsOpened.pop(); 
-                } 
-                console.log('successfull');
-                //document.querySelector('.board').dataset.animation = 'off';
-                target.classList.remove('target-1');
-                target.classList.remove('target-2');
-                console.log('flag length:  '+cardsOpened.length)
-                return cardsOpened;
-            })
-        }
-
-        else{
-            console.log('cardsOpened remain untouched');
-            return cardsOpened;
-        } */
     },
 
     setColorfulBorders_8: function(cardsOpened, tiles, foundTiles, iter) {
         let allTiles = document.querySelectorAll('.tile');
-        //let activeTiles = 0;  // this variable indicates the number of visible tiles
         // Remember that all found tiles exists; they are just not visible
         let existingTiles = [];
         allTiles.forEach(tile => {
             if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target')))) {
                 existingTiles.push(tile);
-                //activeTiles++;
             }
         })
-        //console.log(existingTiles);
 
         // Now spread out existingTiles array between green and red borders (half and half)
         let greenTiles = [];
         let activeTiles = existingTiles.length;
-        //console.log(activeTiles);
         
         for(let x=0; x<(activeTiles/2); x++) {
             let rand = Math.floor(Math.random() * existingTiles.length);
@@ -917,7 +790,6 @@ const flags = {
         }
 
         let redTiles = [...existingTiles];
-        //console.log(existingTiles);
 
         for(let y=0; y<greenTiles.length; y++) {
             let svg = greenTiles[y].querySelector('svg');
@@ -936,7 +808,6 @@ const flags = {
             duration: 1600,
             easing: 'easeInOutCirc',
             backgroundImage: ['radial-gradient(hsla(110, 80%, 60%, 30%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 20%))', 'radial-gradient(hsla(110, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%))'],
-            /*rotate: 180, That seems quite fun*/
         })
 
         if((cardsOpened.length < 2) || ((cardsOpened[0].childNodes[0].classList[1] !== cardsOpened[1].childNodes[0].classList[1]))) {
@@ -946,7 +817,6 @@ const flags = {
                 easing: 'easeInOutCirc',
                 rotate: -90,
                 filter: 'sepia(30%)',
-                /*rotateX: 180,*/
             })
         }
 
@@ -957,7 +827,6 @@ const flags = {
                 easing: 'easeInOutCirc',
                 rotate: 270,
                 filter: 'sepia(30%)',
-                /*rotateX: 180,*/
             })
         }
 
@@ -1015,13 +884,10 @@ const flags = {
         let allIcons = document.querySelectorAll('.fa-icon-9');
         allIcons.forEach(icon => iconsArr.push(icon));
 
-        console.log(iconsArr);
-
         anime({
             targets: iconsArr,
             duration: 2100,
             scale: ['10%', '100%'],
-            //fontSize: ['0.8rem', '2.5rem'],
             delay: anime.stagger(50, {from: 'center'}),  // Don't do that at home
             easing: 'easeInOutExpo',
         })
@@ -1066,8 +932,6 @@ const flags = {
         else {
             // Minify icons
 
-            console.log(iter.value);
-
             if(iter.value <= 0.3) {return;}
 
             iter.value-=.2;
@@ -1110,7 +974,6 @@ const flags = {
             let board = document.querySelector('.board');
             let mutatingBox = document.querySelector('.mutatingBox');
             let mbFinalColor = mutatingBox.style.backgroundColor;
-            console.log(mbFinalColor);
         
             anime({
                 targets: board,
@@ -1133,8 +996,6 @@ const flags = {
 
 
 
-
-
     // LVL 10
 
     animateBorders_10: function(cardsOpened, tiles, foundTiles, iter) {
@@ -1147,7 +1008,6 @@ const flags = {
         });
 
         let currTarget = document.querySelector('.target-2') || document.querySelector('.target-1');
-        console.log(currTarget);
         let back = currTarget.querySelector('.tile-back');
         let svg = back.childNodes[0];
 
@@ -1190,51 +1050,24 @@ const flags = {
             newBor.color =  `hsla(177, 60%, 50%, .5)`;
         }
 
-        //if(iter.amount%2 === 0) {
-            anime({
-                targets: target,
-                duration: 1800,
-                borderColor: `${newBor.color}`,
-                backgroundColor: `${newBg.color}`,
-                easing: 'easeInQuad',
-            })
+        anime({
+            targets: target,
+            duration: 1800,
+            borderColor: `${newBor.color}`,
+            backgroundColor: `${newBg.color}`,
+            easing: 'easeInQuad',
+        })
 
-            /* anime({
-                targets: svg,
-                duration: 1200,
-                color: 'hsla(229, 91%, 52%, .6)',
-                easing: 'easeInQuad',
-            }) */
-
-       /*  } else {
-            anime({
-                targets: target,
-                duration: 1800,
-                borderColor: 'hsla(110, 60%, 50%, .5)',
-                backgroundColor: 'hsla(110, 50%, 40%, .4)',
-                easing: 'easeInQuad',
-            })
-
-            /* anime({
-                targets: svg,
-                duration: 1200,
-                color: 'hsla(110, 91%, 52%, .6)',
-                easing: 'easeInQuad',
-            }) */
-        //} */
     },
 
     randomizeIcons_10: function(cardsOpened, tiles, foundTiles, iter) {
         let allTiles = document.querySelectorAll('.tile');
         let activeIcons = [];
         let notFocusedTiles = [];
-        //let focusedTiles = []; will be iter.array from now on
 
         iter.value++;
 
-        console.log(iter);
-
-        if(iter.value%7 === 0) { /* 6 */
+        if(iter.value%7 === 0) { 
 
             document.querySelector('.board').dataset.animation = 'on';
             iter.amount++;
@@ -1242,21 +1075,16 @@ const flags = {
             setTimeout(() => {
 
                 allTiles.forEach(tile => {
-                    //let back = tile.querySelector('.tile-back');
                     if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('focused')))) {
-                        //tile.style += 'border: .4rem solid hsla(110, 60%, 50%, 50%);';
                         activeIcons.push(tile.childNodes[2].childNodes[0]);
                         tile.childNodes[2].childNodes[0].remove();
                     }
                 })
     
-                //console.log(activeIcons);
-        
                 allTiles.forEach(tile => {
                     if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('focused')))) {
                         let rand = Math.floor(Math.random() * activeIcons.length);
                         let back = tile.querySelector('.tile-back');
-                        //(iter.amount%2)? activeIcons[rand].style = 'color: hsla(229, 91%, 52%, .6);' : activeIcons[rand].style = 'color: hsla(110, 91%, 52%, .6);';
                         if(iter.amount%6 === 0) {activeIcons[rand].style = 'color: hsla(8, 0%, 0%, .6);';}
                         else if(iter.amount%5 === 0) {activeIcons[rand].style = 'color: hsla(8, 91%, 52%, .6);';}
                         else if(iter.amount%4 === 0) {activeIcons[rand].style = 'color: hsla(55, 91%, 52%, .6);';}
@@ -1273,7 +1101,6 @@ const flags = {
                     }
                 })
 
-                console.log(iter.array);
                 let newBg = {color: 'n'};
                 let newBor = {color: 'n'};
                 let oldBg = {color: 'o'};
@@ -1329,62 +1156,39 @@ const flags = {
                 }
 
                 async function wait() {
-                        let newGameBackground = document.querySelector('.bg-10');
-                        //console.log(newGameBackground)
+                    let newGameBackground = document.querySelector('.bg-10');
 
-                    //console.log(newBg.color);
-                    //console.log(newBor.color);
-                    //if(iter.amount%2 === 0) {
-                        const a1 = anime({
-                            targets: notFocusedTiles,
-                            duration: 2500,
-                            borderColor:  [`${oldBor.color}`, `${newBor.color}`],//['hsla(110, 60%, 50%, .5)', 'hsla(229, 60%, 50%, .5)'],
-                            backgroundColor: [`${oldBg.color}`, `${newBg.color}`], //['hsla(110, 50%, 40%, .4)', 'hsla(229, 50%, 40%, .4)'],
-                            easing: 'easeOutExpo',       
-                        })
+                    const a1 = anime({
+                        targets: notFocusedTiles,
+                        duration: 2500,
+                        borderColor:  [`${oldBor.color}`, `${newBor.color}`],
+                        backgroundColor: [`${oldBg.color}`, `${newBg.color}`], 
+                        easing: 'easeOutExpo',       
+                    })
 
-                        
-                        const a2 = anime({
-                            targets: iter.array,
-                            duration: 1200,
-                            borderColor: [`${oldBor.color}`, `${oldBor.color}`], //'hsla(229, 60%, 50%, .5)',
-                            backgroundColor: [`${oldBg.color}`, `${oldBg.color}`], //'hsla(229, 50%, 40%, .4)',
-                            easing: 'easeOutExpo',
-                        })
+                    
+                    const a2 = anime({
+                        targets: iter.array,
+                        duration: 1200,
+                        borderColor: [`${oldBor.color}`, `${oldBor.color}`], 
+                        backgroundColor: [`${oldBg.color}`, `${oldBg.color}`], 
+                        easing: 'easeOutExpo',
+                    })
 
-                        const a3 = anime({
-                            targets: newGameBackground,
-                            duration: 2200,
-                            backgroundColor: `${gameBg.color}`,
-                            easing: 'linear',
-                        })
+                    const a3 = anime({
+                        targets: newGameBackground,
+                        duration: 2200,
+                        backgroundColor: `${gameBg.color}`,
+                        easing: 'linear',
+                    })
 
-                        await Promise.all([a1, a2, a3]);
-                            //} else {
-                            /*                         const a1 = anime({
-                            targets: notFocusedTiles,
-                            duration: 2500,
-                            borderColor: ['hsla(229, 60%, 50%, .5)', 'hsla(110, 60%, 50%, .5)'],
-                            backgroundColor: ['hsla(229, 50%, 40%, .4)', 'hsla(110, 50%, 40%, .4)'],
-                            easing: 'easeOutExpo',       
-                        })
+                    await Promise.all([a1, a2, a3]);
 
-                        const a2 = anime({
-                            targets:focusedTiles,
-                            duration: 200,
-                            borderColor: 'hsla(110, 60%, 50%, .5)',
-                            backgroundColor: 'hsla(110, 50%, 40%, .4)',
-                            easing: 'easeOutExpo',
-                        })
-
-                        Promise.all([a1, a2]);
-                    }    */  
                 }
 
                 wait().then(animate())
                 .then(() => {
                     setTimeout(() => {
-                        //console.log('all resolved')
                         while(iter.array.length > 0) {
                             iter.array.pop();
                         }
@@ -1397,12 +1201,10 @@ const flags = {
                     focusedElems.forEach(el => el.classList.remove('focused'));
                     let activeTiles = [];
                     let tilesToAnimate = [];
-                    //iter.amount++;
                     allTiles.forEach(tile => {
                         if(tile.style.visibility !== 'hidden') activeTiles.push(tile);
                     })
                     // Tu zrób animację odsłonięcia pewnej części kart (% z obecnej liczby  kart)
-                    console.log(levels[`lvl10`].tiles); // It's level 10 !
                     for(let i=0; i<(levels[`lvl10`].tiles - foundTiles)/2; i++) {  // show only half of all tiles
                         let rand = Math.floor(Math.random() * activeTiles.length);
                         tilesToAnimate.push(activeTiles[rand]);
@@ -1493,14 +1295,7 @@ const flags = {
         });
 
         let rand = Math.floor(Math.random() * activeTiles.length);
-/*         let textDiv = document.createElement('div');
-        let theText = document.createElement('div');
-        textDiv.classList.add('textDiv');
-        theText.classList.add('theText');
-        theText.textContent = 'Find me!'; */
  
-        console.log(activeTiles[rand]);
-        //activeTiles[rand].style = 'border-color: hsla(138, 30%, 40%, .7); border-width: .55rem;';
         anime({
             targets: activeTiles[rand],
             duration: 800,
@@ -1508,52 +1303,9 @@ const flags = {
             borderWidth: '.55rem',
             easing: 'linear',
         })
-        const front = activeTiles[rand].querySelector('.tile-front');
-/*         textDiv.appendChild(theText);
-        front.appendChild(textDiv); */
-
-        console.log(activeTiles[rand])
 
         activeTiles[rand].classList.add('bounty-q');
-        //let textD = allTiles[rand].querySelector('.textDiv');
-        //let theT = allTiles[rand].querySelector('.theText');
-
-        // 
-
-       /*  //Calculate current  bounty quest position on the screen
-        let topPos = allTiles[rand].offsetTop;
-        console.log(topPos);
-        let leftPos = allTiles[rand].offsetLeft;
-        console.log(leftPos);
-
-        // Create dialog items
-        let cr1 = document.createElement('div');
-        let cr2 = document.createElement('div');
-        let dialogBox = document.createElement('div');
-
-        //append to animation Container
-        animationContainer.appendChild(cr1);
-        animationContainer.appendChild(cr2);
-        animationContainer.appendChild(dialogBox);
-
-
-        cr1.classList.add('cr');
-        cr1.style = `top: ${topPos + 140}px; left: ${leftPos + 140}px;`;
-        //cr1.setAttribute(`top`, `${topPos+20}px`); //left:calc(${leftPos}+20)px;`;
-        //cr1.setAttribute(`left`, `${leftPos+20}px`);
-
-        cr2.classList.add('cr');
-        cr2.style = `top: ${topPos + 120}px; left: ${leftPos + 120}px;`;
-        //cr2.setAttribute(`top`, `${topPos+40}px`);
-       // cr2.setAttribute(`left`, `${leftPos+40}px`)
-       // cr2.style = `top: calc(${topPos}+40)px; left:calc(${leftPos}+40)px;`;
-
-        dialogBox.classList.add('dialogBox');
-        /* dialogBox.style = `top: ${topPos - 80}px; left: ${leftPos - 80}px;`; */
-
-
-       // animationContainer.appendChild(dialogBox); */
-
+    
     },
 
     markBountyQuestAnswer_11: function(cardsOpened, tiles, foundTiles, iter) {
@@ -1582,7 +1334,6 @@ const flags = {
     },
 
     rotateChosenTile_11: function(cardsOpened, tiles, foundTiles, iter) {
-        //const bountyQuest = document.querySelector('.bounty-q');
         let currTarget;
         if(cardsOpened.length <= 1) {
             currTarget = document.querySelector('.target-1');
@@ -1632,9 +1383,6 @@ const flags = {
         let targetBackSecond = document.querySelector('.target-2 .tile-back');
         let allSvgConts = document.querySelectorAll('.svgContainer');
 
-        //console.log(targetFirst);
-        //console.log(targetSecond);
-
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) { // if pairs match
             // lets check if player found bountyQuest
 
@@ -1643,7 +1391,7 @@ const flags = {
             this.removeWantedQuest_11(cardsOpened, tiles, foundTiles, iter); // Please do not remove it even it's not showin up in levels main obj
 
             if((cardsOpened[0].parentNode.classList.contains('bounty-q') || (cardsOpened[1].parentNode.classList.contains('bounty-q')))) {
-                iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn
 
                 if(cardsOpened[0].parentNode.classList.contains('bounty-q')) {
                     this.setWantedQuest_11(cardsOpened, tiles, foundTiles, iter); // Please do not remove it even it's not showin up in levels main obj
@@ -1656,7 +1404,7 @@ const flags = {
                 this.setBountyQuest_11(cardsOpened, tiles, foundTiles, iter);
             } 
             else if(allSvgConts[1].hasChildNodes()) {
-                if(/* (targetBackFirst.childNodes[0].classList[1] !== allSvgConts[0].childNodes[0].classList[1]) &&  */(targetBackSecond.childNodes[0].classList[1] !== allSvgConts[1].childNodes[0].classList[1])) {  // else if its not wanted quest 
+                if((targetBackSecond.childNodes[0].classList[1] !== allSvgConts[1].childNodes[0].classList[1])) {  // else if its not wanted quest 
                     anime({
                         targets: '.target',
                         duration: 1500,
@@ -1683,12 +1431,10 @@ const flags = {
     removeWantedQuest_11: function(cardsOpened, tiles, foundTiles, iter) {
         // Remove found WANTED icons - if pair match
         let allSvgConts = document.querySelectorAll('.svgContainer');
-        console.log(allSvgConts[0].childNodes.length);
-
 
         if(allSvgConts[1].childNodes.length > 0) {
             if(cardsOpened[0].childNodes[0].classList[1] === allSvgConts[1].childNodes[0].classList[1]) {
-                iter.extraTurns = -3; // 1 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                iter.extraTurns = -3; // 1 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn
                 async function animation() {
                     const a1 =  anime({
                         targets: allSvgConts[1].childNodes[0],
@@ -1703,17 +1449,16 @@ const flags = {
                 animation().then(() => allSvgConts[1].childNodes[0].remove());
             }
             else if(cardsOpened[0].childNodes[0].classList[1] === allSvgConts[0].childNodes[0].classList[1]) {
-                iter.extraTurns = -3; // 1 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                iter.extraTurns = -3; // 1 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn
                 let svgSecond = allSvgConts[1].childNodes[0];
                 allSvgConts[0].childNodes[0].remove();
                 allSvgConts[0].appendChild(svgSecond);
-                //allSvgConts[1].childNodes[0].remove();
             }
         }
 
         else if(allSvgConts[0].childNodes.length > 0) {
             if(cardsOpened[0].childNodes[0].classList[1] === allSvgConts[0].childNodes[0].classList[1]) {
-                iter.extraTurns = -3; // 1 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn :)
+                iter.extraTurns = -3; // 1 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn
                 async function animation() {
                     const a1 =  anime({
                         targets: allSvgConts[0].childNodes[0],
@@ -1731,7 +1476,7 @@ const flags = {
     },
 
     setWantedQuest_11: function(cardsOpened, tiles, foundTiles, iter) {
-        console.log('WANTED QUEST CREATION');
+
         let allTiles = document.querySelectorAll('.tile');
         let allSvgConts = document.querySelectorAll('.svgContainer');
         let alreadyWantedIcon_1;
@@ -1756,11 +1501,7 @@ const flags = {
         let wantedSvg = activeTiles[rand].querySelector('svg');
         let newSvg = wantedSvg.cloneNode(true);
 
-        console.log(newSvg);
-
-
         // Push new WANTED quests to container 
-
 
         if(allSvgConts[0].childNodes.length <= 0) {
             allSvgConts[0].appendChild(newSvg);
@@ -1775,9 +1516,6 @@ const flags = {
 
             allSvgConts[1].appendChild(newSvg);
         }
-        //svgCont.appendChild(newSvg);
-
-        console.log(wantedSvg);
 
         /* 
           Rozważ, czy bounty quest może być tym samym co WANTED quest. Jeśli nie, zrób odpowiedni mechanizm blokujący taką sytuację
@@ -1808,55 +1546,6 @@ const flags = {
 
             dot.setAttribute('style', `top:${topv}%;left:${leftv}%;`);
         }
-
-        let duration = 2400;
-        let delay = 200;
-        let transY = 12;
-        let transX = 12;
-
-       /*  anime({
-            targets: '.glowing-0',
-            duration: duration,
-            delay: anime.stagger(delay),
-            translateY: [0, `${transY}`],
-            translateX: [0, `${transX}`],
-            direction: 'alternate',
-            loop: true,
-
-        })
-
-        anime({
-            targets: '.glowing-1',
-            duration: duration,
-            delay: anime.stagger(delay),
-            translateY: [0, `-${transY}`],
-            translateX: [0, `-${transX}`],
-            direction: 'alternate',
-            loop: true,
-
-        })
-
-        anime({
-            targets: '.glowing-2',
-            duration: duration,
-            delay: anime.stagger(delay),
-            translateY: [0, `${transY}`],
-            translateX: [0, `-${transX}`],
-            direction: 'alternate',
-            loop: true,
-
-        })
-
-        anime({
-            targets: '.glowing-3',
-            duration: duration,
-            delay: anime.stagger(delay),
-            translateY: [0, `-${transY}`],
-            translateX: [0, `${transX}`],
-            direction: 'alternate',
-            loop: true,
-
-        }) */
 
     },
 
@@ -1901,63 +1590,61 @@ const flags = {
 
 
     moveDots_12: function(cardsOpened, tiles, foundTiles, iter) {
-        //if(cardsOpened[0].childNodes[0].classList[1] !== cardsOpened[1].childNodes[0].classList[1]) {  // if pair does NOT match 
-            const animationContainer = document.querySelector('.animationContainer');
+        const animationContainer = document.querySelector('.animationContainer');
 
-            let rand = Math.floor(Math.random() * 4);
+        let rand = Math.floor(Math.random() * 4);
 
-            let randDotType = animationContainer.querySelectorAll(`.glowing-${rand}`);
+        let randDotType = animationContainer.querySelectorAll(`.glowing-${rand}`);
 
-            if(randDotType.length !== 0) {
-                    if(iter.array[rand] % 4 === 0) {
-                        anime({
-                            targets: randDotType,
-                            duration: 1400,
-                            translateX: '-=3rem',
-                            translateY: '-=3rem',
-                            easing: 'easeOutExpo',
-        
-                        })
-                        iter.array[rand]++;
-                    }
-                    else if(iter.array[rand] % 4 === 1) {
-                        anime({
-                            targets: randDotType,
-                            duration: 1400,
-                            translateX: '+=3rem',
-                            translateY: '-=3rem',
-                            rotate: '90deg',
-                            easing: 'easeOutExpo',
-        
-                        })
-                        iter.array[rand]++;
-                    }
-                    else if(iter.array[rand] % 4 === 2) {
-                        anime({
-                            targets: randDotType,
-                            duration: 1400,
-                            translateX: '+=3rem',
-                            translateY: '+=3rem',
-                            rotate: '90deg',
-                            easing: 'easeOutExpo',
-        
-                        })
-                        iter.array[rand]++;
-                    }
-                    else if(iter.array[rand] % 4 === 3) {
-                        anime({
-                            targets: randDotType,
-                            duration: 1400,
-                            translateX: '-=3rem',
-                            translateY: '+=3rem',
-                            rotate: '90deg',
-                            easing: 'easeOutExpo',
-        
-                        })
-                        iter.array[rand]++;
-                    }
+        if(randDotType.length !== 0) {
+            if(iter.array[rand] % 4 === 0) {
+                anime({
+                    targets: randDotType,
+                    duration: 1400,
+                    translateX: '-=3rem',
+                    translateY: '-=3rem',
+                    easing: 'easeOutExpo',
+
+                })
+                iter.array[rand]++;
             }
-        //}
+            else if(iter.array[rand] % 4 === 1) {
+                anime({
+                    targets: randDotType,
+                    duration: 1400,
+                    translateX: '+=3rem',
+                    translateY: '-=3rem',
+                    rotate: '90deg',
+                    easing: 'easeOutExpo',
+
+                })
+                iter.array[rand]++;
+            }
+            else if(iter.array[rand] % 4 === 2) {
+                anime({
+                    targets: randDotType,
+                    duration: 1400,
+                    translateX: '+=3rem',
+                    translateY: '+=3rem',
+                    rotate: '90deg',
+                    easing: 'easeOutExpo',
+
+                })
+                iter.array[rand]++;
+            }
+            else if(iter.array[rand] % 4 === 3) {
+                anime({
+                    targets: randDotType,
+                    duration: 1400,
+                    translateX: '-=3rem',
+                    translateY: '+=3rem',
+                    rotate: '90deg',
+                    easing: 'easeOutExpo',
+
+                })
+                iter.array[rand]++;
+            }
+        }
     },
 
 
@@ -1995,9 +1682,6 @@ const flags = {
                 let helpTile = helpArr[rand];
                 let helpTile2 = helpArr[rand2];
 
-                console.log(helpArr);
-                console.log(helpTile);
-
                 anime({
                     targets: [helpTile, helpTile2],
                     duration: 1800,
@@ -2007,7 +1691,6 @@ const flags = {
                 })
             }
             
-
             // Remove 1 dot from the map
 
             const animationContainer = document.querySelector('.animationContainer');
@@ -2024,20 +1707,7 @@ const flags = {
                 await Promise.all([a1]);
             }
 
-            fade().then(() => {animationContainer.querySelector('.glowing-dot:nth-of-type(1)').remove();}) // this lineo nly for development
-
-            /* fade().then(() => {
-                animationContainer.querySelector('.glowing-dot:nth-of-type(1)').remove();
-                const allDots = document.querySelectorAll('.glowing-dot');
-                anime({
-                    targets: allDots,
-                    duration: 1000,
-                    opacity: [1, 0],
-                    easing: 'linear',
-                    direction: 'alternate',
-                })
-                this.moveDots_12(cardsOpened, tiles, foundTiles, iter);
-            }) */
+            fade().then(() => {animationContainer.querySelector('.glowing-dot:nth-of-type(1)').remove();})
             
         }
     },
@@ -2049,7 +1719,6 @@ const flags = {
     // LVL 13
 
     styleElements_13: function(cardsOpened, tiles, foundTiles, iter) {
-        console.log(levels[`lvl13`].tiles);
         let divideNum = levels[`lvl13`].columns;
         const allTiles = document.querySelectorAll('.tile');
 
@@ -2117,7 +1786,6 @@ const flags = {
     },
 
     visibleStrips_13: function(cardsOpened, tiles, foundTiles, iter) {
-        console.log(cardsOpened[1].childNodes[0].style.color)//.getAttribute('color'))
 
         if(cardsOpened[1].childNodes[0].style.color === 'rgb(102, 204, 180)') {  // silver
             async function aSerires() {
@@ -2138,7 +1806,6 @@ const flags = {
                     targets: '.s-silver',
                     duration: 700,
                     delay: anime.stagger(600, {from: 'center'}),
-                    /* visibility: 'visible', */
                     opacity: [1, 0],
                     easing: 'easeInExpo',
                 }).finished;
@@ -2259,12 +1926,10 @@ const flags = {
         }
 
         async function second() { 
-            console.log(cardsOpened)
             if(cardsOpened.length > 1) {
                 anime({
                     targets: '.target',
                     duration: 800,
-                    /* backgroundImage: [`${elemBg.newColor}`, `${elemBg.color}`], */
                     opacity: .1,
                 })
             }
@@ -2317,11 +1982,6 @@ const flags = {
             iter.streak++;
         }
     },
-
-
-
-
-
 
 
 
@@ -2381,9 +2041,6 @@ const flags = {
             let firstBg = cardsOpened[0].classList[cardsOpened[0].classList.length-1];
             let secBg =  cardsOpened[1].classList[cardsOpened[1].classList.length-1];
 
-           /* console.log('first tile: '+ firstBg);
-           console.log('second tile: '+secBg); */
-
            if(firstBg === secBg) {
                 document.querySelector('.board').dataset.animation = 'on';
                 document.querySelector('.board').setAttribute('pointerEvents', 'none');
@@ -2400,7 +2057,6 @@ const flags = {
 
                 else if(firstBg === 'gold') {
                     // Reveal only SILVER tiles
-                    //console.log(' OK ::::::::::: REVEAL SILVERS')
                     allTiles.forEach(tile => {
                         let back = tile.querySelector('.tile-back');
                         if(back.classList.contains('silver')) typeArr.push(back.parentNode);
@@ -2422,7 +2078,6 @@ const flags = {
                 async function init() {
                     await reveal()
                         .then(() => {
-                            console.log('unblokced'); 
                             document.querySelector('.board').dataset.animation = 'off';
                             document.querySelector('.board').setAttribute('pointerEvents', 'auto');
                         })
@@ -2441,10 +2096,6 @@ const flags = {
 
 
 
-
-
-
-
     // LVL 15
     darkenBeginningAnimation_15: function(cardsOpened, tiles, foundTiles, iter) {
         const aContainer = document.querySelector('.animationContainer');
@@ -2452,7 +2103,7 @@ const flags = {
             targets: aContainer,
             duration: 2700,
             keyframes: [
-                {backgroundColor: 'hsla(1, 0%, 0%, 1)'}, //hsla(144, 50%, 55%, .85)
+                {backgroundColor: 'hsla(1, 0%, 0%, 1)'}, 
                 {backgroundColor: 'hsla(1, 0%, 0%, .8)', duration: 900},
                 {backgroundColor: 'hsla(1, 0%, 0%, .4)', duration: 900},
                 {backgroundColor: 'hsla(1, 0%, 0%, .0)', duration: 900},
@@ -2479,9 +2130,8 @@ const flags = {
             back.classList.add('tile-back', 'tb-15');
 
             // Img (svg)
-            //let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             let svg = document.createElement('img');
-            //svg.alt = '';
+            svg.alt = 'icon';
             svg.src = `bombicon-${(i%3)+1}.svg`;
             svg.classList.add('fa-icon-15', `fake-${i}`, `scaledImg`); // fake-${i} is NOT styling based class
 
@@ -2494,7 +2144,6 @@ const flags = {
             newTile.appendChild(back);
 
             board.appendChild(newTile);
-            console.log('created');
         }
     },
 
@@ -2502,7 +2151,7 @@ const flags = {
         const iconsArray = [];
         const colors = {1: 'hsla(25, 50%, 44%, .35)', 2: 'hsla(144, 50%, 44%, .35)', 3: 'hsla(299, 50%, 44%, .35'};
         const allTiles = document.querySelectorAll('.tile');
-        console.log(allTiles.length); // 77
+
         // push elems to array & remove it from DOM 
         allTiles.forEach((tile, index) => {
             let back = tile.querySelector('.tile-back');
@@ -2518,8 +2167,7 @@ const flags = {
             back.appendChild(iconsArray[rand]);
             iconsArray.splice(rand, 1);
         })
-        console.log('after');
-        console.log(iconsArray);
+
     },
 
     animateChosenTile_15: function(cardsOpened,tiles,foundTiles, iter) {
@@ -2544,7 +2192,6 @@ const flags = {
         iter.extraTurns = 0;
         for(let i=0; i<cardsOpened.length; i++) {
             if(cardsOpened[i].childNodes[0].classList.contains('scaledImg')) {
-                //console.log(':(((');
                 iter.extraTurns+=3;
                 iter.amount++;
 
@@ -2598,7 +2245,7 @@ const flags = {
             async function animateWin() {
                 const a1 = anime({
                     targets: allFakeTiles,
-                    duration: 200, //2400,
+                    duration: 200, 
                     scale: '0%',
                     easing: 'easeInBounce',
                 })
@@ -2671,9 +2318,6 @@ const flags = {
             init();
         }
     },
-
-
-
 
 
     // LVL 16
@@ -2750,7 +2394,6 @@ const flags = {
             await showBg()
             await reveal()
                 .then(() => {
-                    console.log('unblokced'); 
                     document.querySelector('.board').dataset.animation = 'off';
                     document.querySelector('.board').setAttribute('pointerEvents', 'auto');
                 })
@@ -2809,7 +2452,6 @@ const flags = {
                 anime({
                     targets: unfreezedElems,
                     duration: 1900,
-                    //scale: '130%',
                     backgroundImage: 'radial-gradient(hsla(0, 0%, 0%, 0) 45%, hsla(0, 100%, 100%, .8)',
                     borderWidth: ['.6rem', '.3rem'],
                 }) 
@@ -2819,7 +2461,6 @@ const flags = {
             anime({
                 targets: '.target',
                 duration: 1900,
-                //rotateX: 55,
                 backgroundImage: ['radial-gradient(hsla(0, 0%, 0%, 0) 5%, hsl(0, 100%, 100%)', 'radial-gradient(hsla(0, 0%, 0%, 0) 5%, hsl(0, 100%, 100%)'],
                 borderWidth: '.6rem',
             })
@@ -2860,19 +2501,6 @@ const flags = {
 
         iter.amount += iter.value;
 
-       /* GDY PIERWSZY RAZ RENDER
-            - pobierz ze wszystkich kafelków ich ikonki
-            - posortuj ikonki i spushuj je do tablicy (nie jako referencje, tylko KOPIE) -> tu możesz po sortowaniu usunąć nadstepową liczbę ikonek
-            - USUŃ NADLICZBOWE KAFLE, CZYLI TAKIE KTÓRE WYKRACZAJĄ POZA WARTOŚĆ STEP
-            - teraz rozlosuj ikonki i przydziel każdą z nich do przefiltrowanych kafelków 
-       */
-        /* GDY RENDER DRUGI I KAŻDY KOLEJNY
-            - pobierz ze wszystkich kafelków ich ikonki
-            - posortuj ikonki i spushuj je do tablicy (nie jako referencje, tylko KOPIE) -> tu możesz po sortowaniu usunąć nadstepową liczbę ikonek
-            - USUŃ NADLICZBOWE KAFLE, CZYLI TAKIE KTÓRE WYKRACZAJĄ POZA WARTOŚĆ STEP
-            - teraz rozlosuj ikonki i przydziel każdą z nich do przefiltrowanych kafelków
-       */
-
         const allTiles = document.querySelectorAll('.tile');
         const board = document.querySelector('.board');
         const animationContainer = document.querySelector('.animationContainer');
@@ -2890,171 +2518,90 @@ const flags = {
             
         }
 
-        //else {
-            let order = [];
+        let order = [];
 
-            allTiles.forEach(tile => {
-                let back = tile.querySelector('.tile-back');
-                console.log(back.childNodes[0])
-                iconsArray.push(back.childNodes[0]);
-            })
+        allTiles.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            iconsArray.push(back.childNodes[0]);
+        })
 
-            //console.log(iconsArray);
+        iconsArray.sort();
+        iconsArray.reverse();
+            if(iconsArray[0] === undefined) {
+                while(iconsArray[0] === undefined) {
+                    iconsArray.shift();
+                }
+            }
+        iconsArray.reverse();
 
-            iconsArray.sort();
-            iconsArray.reverse();
-                if(iconsArray[0] === undefined) {
-                    while(iconsArray[0] === undefined) {
-                        iconsArray.shift();
+        function sortSvgs(array) {
+            let compareArr = [];
+            for(let x=0; x<array.length; x++) {
+                compare(array[x], compareArr);
+            }
+            return compareArr;
+        }
+
+        function compare(item, compareArr) {
+            compareArr.unshift(item);
+            if(compare.length > 1) {
+                for(let y=1; y<compareArr.length; y++) {
+                    if(item.classList[1] > compareArr[y].classList[1]) {
+                        let z = compareArr[y];
+                        compareArr[y] = compareArr[y-1];
+                        compareArr[y-1] = z;
                     }
                 }
-            iconsArray.reverse();
-            //console.log(iconsArray);
-
-            function sortSvgs(array) {
-                let compareArr = [];
-                for(let x=0; x<array.length; x++) {
-                    compare(array[x], compareArr);
-                }
+            } else {
                 return compareArr;
             }
+        }
 
-            function compare(item, compareArr) {
-                compareArr.unshift(item);
-                if(compare.length > 1) {
-                    for(let y=1; y<compareArr.length; y++) {
-                        if(item.classList[1] > compareArr[y].classList[1]) {
-                            let z = compareArr[y];
-                            compareArr[y] = compareArr[y-1];
-                            compareArr[y-1] = z;
-                        }
-                    }
-                } else {
-                    return compareArr;
-                }
-            }
+        let sortediconsArr = sortSvgs(iconsArray);
 
-            let sortediconsArr = sortSvgs(iconsArray);
-            console.log(sortediconsArr); // ICONS ARRAY
+        for(let b=0; b<sortediconsArr.length; b++) {
+            order.push(sortediconsArr[b].parentNode.parentNode);
+        }
 
-            for(let b=0; b<sortediconsArr.length; b++) {
-                order.push(sortediconsArr[b].parentNode.parentNode);
-            }
+        for(let n=0; n<order.length; n++) {
+            animationContainer.appendChild(order[n]);
+        }
 
-            for(let n=0; n<order.length; n++) {
-                animationContainer.appendChild(order[n]);
-            }
+        let tempArr = [];
 
-            let tempArr = [];
+        let limit = iter.value;
 
-            let limit = iter.value;
+        // 1
 
-            // 1
+        for(let q=0; q<iter.value; q++) {
+            let rand = Math.floor(Math.random() * limit);
+            tempArr.push(order[rand]);
+            order.splice(rand, 1);
+            limit = limit - 1;
+        }
 
-            for(let q=0; q<iter.value; q++) {
-                let rand = Math.floor(Math.random() * limit);
-                tempArr.push(order[rand]);
-                order.splice(rand, 1);
-                limit = limit - 1;
-            }
+        // 2
 
-            // 2
+        order.forEach(tile => {
+            tile.style.display = 'none';
+        })
 
-            order.forEach(tile => {
-                tile.style.display = 'none';
-            })
+        // Teraz przenieś wszystkie elementy z tempArr do order
 
-            // Teraz przenieś wszystkie elementy z tempArr do order
+        for(let c=0; c<tempArr.length; c++) {
+            order.unshift(tempArr[c]);
+        }
 
-            for(let c=0; c<tempArr.length; c++) {
-                order.unshift(tempArr[c]);
-            }
+        // Na koniec przenieś wszystkie kafelki z animationContainer do board
 
-            // Na koniec przenieś wszystkie kafelki z animationContainer do board
-
-            for(let z=0; z<order.length; z++) {
-                board.appendChild(order[z]);
-            }
-
-
-            /* // Let's reduce sortedIcons array
-            while(sortediconsArr.length !== iter.value) {
-                iter.nextArr.push(sortediconsArr[sortediconsArr.length - 1]);
-                sortediconsArr.pop();
-            }
-
-            // iter.nextArr  -  ta tablica służy dla kafelków z display:none; 
-            // iter.arr - ta tablica posiada tylko te wartości, które są obecne dla iter.value (teraźniejszego stepu)
-
-            iter.array = [...sortediconsArr];
-
-            console.log(iter.array)
-            console.log(iter.array.length);
-
-            console.log(sortediconsArr);
-
-
-            for(let k=0; k<sortediconsArr.length; k++) {
-                let clone = sortediconsArr[k].cloneNode();
-                iter.nextArr.push(clone);
-            }
-
-            console.log('bugfix:  ', iter.nextArr);
-
-            let count = 0;
-            allTiles.forEach((tile, index) => {
-                if(count < iter.value) {
-                    console.log('tile detected !');
-                    let back = tile.querySelector('.tile-back');
-                    if(back.hasChildNodes()) { back.childNodes[0].remove(); }
-                
-                    // Now randomize, append, and slowly reduce the array length
-                    let rand = Math.floor(Math.random() * sortediconsArr.length);
-                    back.appendChild(sortediconsArr[rand]);
-
-                    //bugFixArray.push(sortediconsArr[rand]);
-
-                    sortediconsArr.splice(rand, 1);
-                    count++;
-                } else {
-                    console.log('we r here')
-                    //tile.remove();
-                    let back = tile.querySelector('.tile-back');
-                    if(back.hasChildNodes()) { 
-                        back.childNodes[0].remove(); 
-                    }
-                    back.appendChild(iter.nextArr[0]);
-                    iter.nextArr.shift();
-                    tile.style.display = 'none';
-                }
-            })
-
-            allTiles.forEach(tile => {
-                let back = tile.querySelector('.tile-back');
-                if(back.hasChildNodes()) {
-                    console.log('it has: ', back.childNodes[0]);
-                } else {
-                    console.log('NO CHILD NODES:  ', back);
-                }
-            }) */
-
-        //}
-
-        console.log(allTiles.length);
-        console.log(allTiles);
-
-    },
-
-    calcPhaseTilesCount_17: function(cardsOpened, tiles, foundTiles, iter) {
+        for(let z=0; z<order.length; z++) {
+            board.appendChild(order[z]);
+        }
 
     },
 
     tileClickAnimation_17: function(cardsOpened, tiles, foundTiles, iter) {
- /*        console.log('TILES: ' + tiles);
-        console.log('CURRENT STEP: ' + iter.value);
-        console.log('FOUND TILES: ' + foundTiles);
-        console.log('FOUND TARGET: ' + iter.amount);
- */
+
         let currTarget;
 
         if(cardsOpened.length <= 1) {
@@ -3092,9 +2639,6 @@ const flags = {
                 stepTiles.push(tile);   
             }
         })
-
-        console.log(stepTiles.length);
-        console.log(stepTiles);
 
         let degs = [20, 40, 60, 80, 100, 120, 140, 160, 200, 220, 240, 260, 280, 300, 320, 340];
 
@@ -3146,16 +2690,6 @@ const flags = {
                 this.divideIntoPhases_17(cardsOpened, tiles, foundTiles, iter);
                 this.increaseVisualDifficulty_17(cardsOpened, tiles, foundTiles, iter);
 
-                const allTiles = document.querySelectorAll('.tile');
-                allTiles.forEach(tile => {
-                    let back = tile.querySelector('.tile-back');
-                    if(back.hasChildNodes()) {
-                        console.log(back.childNodes[0]);
-                    } else {
-                        console.log('NO CHILD NODES:  ', back);
-                    }
-                })
-
                 document.querySelector('.board').dataset.animation = 'off';
                 document.querySelector('.board').setAttribute('pointerEvents', 'auto');
             }, 3000);
@@ -3171,7 +2705,6 @@ const flags = {
                     targets: '.background',
                     duration: 2400,
                     backgroundColor: '#000',
-                   // opacity: [1, 0],
                    filter: 'blur(10px)',
                     direction: 'alternate',
                 })
@@ -3181,7 +2714,6 @@ const flags = {
                     duration: 2400,
                     backgroundColor: '#000',
                     filter: 'hue-rotate(70deg)',
-                    //direction: 'alternate',
                 })
             } else if(iter.streak === 3) {
                 anime({
@@ -3190,7 +2722,6 @@ const flags = {
                     backgroundColor: '#fff',
                     filter: 'saturate(190%) invert(90%)',
                     easing: 'easeInSine',
-                    //direction: 'alternate',
                 })
             } else if(iter.streak === 4) {
                 anime({
@@ -3199,69 +2730,18 @@ const flags = {
                     backgroundColor: '#fff',
                     filter: 'brightness(30%) invert(0%) sepia(35%)',
                     easing: 'easeInSine',
-                    //direction: 'alternate',
                 })
             }
 
         }
     },
 
-    finallyAddMissingChildNodes_17: function(cardsOpened, tiles, foundTiles, iter) {
-        if(foundTiles + 2 === tiles) {
-            console.log('changing display...')
-            const allTiles = document.querySelectorAll('.tile');
-            allTiles.forEach(tile => {
-                //tile.style = 'display: block';
-                //console.log('new display attached');
-            })
-        }
-
-    },
-
-    /* recreateBoard_17: function(cardsOpened, tiles, foundTiles, iter) {
-
-        if(foundTiles+2 === tiles) {
-
-            cardsOpened[0].parentNode.remove();
-            cardsOpened[1].parentNode.remove();
-
-            const board = document.querySelector('.board');
-
-            for(let i=0; i<((levels[`lvl17`].rows) * (levels[`lvl17`].columns)); i++) {
-                // Front
-                let front = document.createElement('div');
-                front.classList.add('tile-front', 'tf-17');
-                // Back
-                let back = document.createElement('div');
-                back.classList.add('tile-back', 'tb-17');
-    
-                let newTile = document.createElement('div');
-                newTile.classList.add('tile', 't-17');
-    
-                newTile.style = 'visibility: hidden';
-
-                //let rand = Math.floor( Math.random() * iconArr.length);
-
-                newTile.appendChild(front);
-                newTile.appendChild(back);
-
-                //back.appendChild(iconArr[rand]);
-
-                //iconArr.splice(rand, 1);
-    
-                board.appendChild(newTile);
-                console.log('created');
-            }
-        }
-    }, */
-
-
 
 
 
     // LVL 18
     createCombinations_18: function(cardsOpened, tiles, foundTiles, iter) {
-        // Before remove lvl 17 background dummy styling
+        // Before, remove lvl 17 background dummy styling
         const bg = document.querySelector('.background');
         const allTiles = document.querySelectorAll('.tile');
         bg.style = '';
@@ -3273,8 +2753,6 @@ const flags = {
                 iconsArr.push(back.childNodes[0]);
             }
         })
-
-        console.log(iconsArr);
 
         for(let i=1; i<=(levels[`lvl18`].rows); i++) {
             iter.array.push(`r${i}`, `c${i}`);
@@ -3338,7 +2816,6 @@ const flags = {
             }
         })
 
-        //iter.array.splice(random, 1); // BUT ONLY IF THE CHALLENGE HAS BEEN PASSED ! so not in this func
         let finalChallengeTiles = document.querySelectorAll('.tile-challenge');
         iter.value = finalChallengeTiles.length * 2; // indicates how much turns u have to find all marked tiles
 
@@ -3352,21 +2829,14 @@ const flags = {
 
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])
         {   
-            /*if(!(cardsOpened[0].parentNode.classList.contains('tile-challenge')) && (!(cardsOpened[1].parentNode.classList.contains('tile-challenge')))) {
-                console.log('trapped;');
-                return;
-            } */
             let isChallengePassed = checkPassCondition(cardsOpened);
-            console.log(isChallengePassed);
 
             // Here add some animations
             
             if((cardsOpened[0].parentNode.classList.contains('tile-challenge') || (cardsOpened[1].parentNode.classList.contains('tile-challenge'))) && (iter.value === 0) && (isChallengePassed === false)) {
                 // If at the last available challenge turn very last challenge tiles did not match
                 const comparableClass = cardsOpened[0].childNodes[0].classList[1];
-                console.log(comparableClass);
                 cardsOpened[0].childNodes[0].classList.replace(comparableClass, 'fake-class');
-                console.log(cardsOpened[0].childNodes[0].classList[1]);
 
                 setTimeout(() => {
                     let fake = document.querySelector('.fake-class');
@@ -3391,9 +2861,7 @@ const flags = {
             } else {
                 // When you found a pair that's not associated with tile challenge by any means
                 const comparableClass = cardsOpened[0].childNodes[0].classList[1];
-                console.log(comparableClass);
                 cardsOpened[0].childNodes[0].classList.replace(comparableClass, 'fake-class');
-                console.log(cardsOpened[0].childNodes[0].classList[1]);
 
                 setTimeout(() => {
                     let fake = document.querySelector('.fake-class');
@@ -3408,9 +2876,6 @@ const flags = {
                 let remainCount = 0;
                 allChallengeTiles.forEach(ctile => {
                     let ctile_back = ctile.querySelector('.tile-back');
-                   /*  if(!(ctile.classList.contains('target'))) {
-                        remainCount++;
-                    } */
                     if((ctile_back.childNodes[0].classList[1] !==  cardsOpened[0].childNodes[0].classList[1]) && (ctile_back.childNodes[0].classList[1] !==  cardsOpened[1].childNodes[0].classList[1])) {
                         remainCount++;
                     }
@@ -3427,7 +2892,6 @@ const flags = {
         let challengeTiles = document.querySelectorAll('.tile-challenge');
 
         // First, check if player resolved random challenge
-        console.log(challengeTiles.length);
 
         if(challengeTiles.length === 0) {
             iter.array.splice(iter.amount, 1);
@@ -3437,13 +2901,11 @@ const flags = {
             const timer = 2200;
 
             // Anyway, check which iter array combinations are outdated
-            //this.testRemainCombinations_18(iter);
 
             setTimeout(() => {
                 this.testRemainCombinations_18(iter);
                 this.randomizeRemainIcons_18(cardsOpened, tiles, foundTiles, iter);
                 this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
-                console.log(document.querySelector('.board'))
             }, timer);
 
             async function winCAnimtion() {
@@ -3565,7 +3027,6 @@ const flags = {
                     completionBox.appendChild(completionText);
                     animationContainer.appendChild(completionBox);
 
-                    console.log('all ok!')
                 })
                 await challengeCompletion()
                 .then(() => {
@@ -3623,7 +3084,6 @@ const flags = {
             setTimeout(() => {
                 this.resetIcons_18(iter, foundTiles);
                 this.setChallenge_18(cardsOpened, tiles, foundTiles, iter);
-                //this.failedChallengeAnimation_18(cardsOpened, tiles, foundTiles, iter);
             }, timer);
 
             async function loseCAnimtion() {
@@ -3718,7 +3178,6 @@ const flags = {
                     completionBox.appendChild(completionText);
                     animationContainer.appendChild(completionBox);
 
-                    console.log('all ok!')
                 })
                 await challengeCompletion()
                 .then(() => {
@@ -3797,121 +3256,22 @@ const flags = {
     },
 
 
-    /* failedChallengeAnimation_18: function(cardsOpened, tiles, foundTiles, iter) {
-
-        document.querySelector('.board').dataset.animation = 'on';
-        document.querySelector('.board').setAttribute('pointerEvents', 'none');
-
-        if(iter.streak <= 0) {
-
-            async function reveal() {
-                const appear = anime({
-                    targets: '.tile',
-                    keyframes: [
-                        {rotateY: '+=180deg', duration: 1100, easing: 'easeInSine'},
-                        {rotateY: '-=180deg', duration: 1100, delay: 1700, easing: 'easeOutSine'},
-                    ],
-                    easing: 'easeInExpo',
-                }).finished;
-
-            await Promise.all([appear]);
-            }
-
-            async function showChallengeTiles() {
-                const show = anime({
-                    targets: '.tile-challenge',
-                    keyframes: [
-                        {rotateY: '+=180deg', duration: 900, easing: 'easeInExpo'},
-                        {rotateY: '-=180deg', duration: 900, delay: 3200, easing: 'easeOutQuint'},
-                    ],
-                }).finished;
-
-                await Promise.all([show]);
-            }
-
-            async function init() {
-                await reveal()
-                await showChallengeTiles()
-                    .then(() => {
-                        document.querySelector('.board').dataset.animation = 'off';
-                        document.querySelector('.board').setAttribute('pointerEvents', 'auto');
-                    })
-            }
-
-            init();
-        } else {
-            async function showChallengeTiles() {
-                const show = anime({
-                    targets: '.tile-challenge',
-                    keyframes: [
-                        {rotateY: '+=180deg', duration: 900, easing: 'easeInExpo'},
-                        {rotateY: '-=180deg', duration: 900, delay: 3200, easing: 'easeOutQuint'},
-                    ],
-                }).finished;
-
-                await Promise.all([show]);
-            }
-
-            async function init() {
-                await showChallengeTiles()
-                    .then(() => {
-                        document.querySelector('.board').dataset.animation = 'off';
-                        document.querySelector('.board').setAttribute('pointerEvents', 'auto');
-                    })
-            }
-
-            init();
-        }
-    }, */
-
     resetIcons_18: function(iter, foundTiles) {
-        //const allTiles = document.querySelectorAll('.tile');
-        // ABY OBLICZENIA DZIAŁAŁY POPARAWNIE, ITER.NEXTARR MUSI BARDZO PRECYZYJNIE OKREŚLAĆ RZECZYWISTĄ LICZBĘ ZNALEZIONYCH KAFLI :
-        // WAŻNA KWESTIA: CZY GRACZ ZNALAZŁ PARĘ W OSTATNEJ TURZE W PRZEGRANYM CHALLENGU ?
+
         if(iter.nextArr.length > 0) {
             iter.previousStep = iter.nextArr.length;
         }
 
-        console.log(iter.nextArr.length);
         iter.fTilesModifier =  (iter.fTilesModifier - iter.nextArr.length);
         if(iter.count === 0) {iter.fTilesModifier = (iter.previousStep * -1);}
         else if(iter.count === 1) {iter.fTilesModifier = -2;}
         iter.count = 0;
-        //foundTiles -= iter.fTilesModifier;
-        console.log(`That's current found tiles count:  `, foundTiles);
-        console.log(`Icons count to lower:  ` + iter.fTilesModifier);
-
 
         for(let p=0; p<iter.nextArr.length; p++) {
             iter.nextArr[p].parentNode.style.visibility  = 'visible';
             iter.nextArr[p].parentNode.style.opacity  = '1';
             iter.nextArr[p].parentNode.style.transform = 'rotateY(0deg)';
         }
-
-        /* UNCOMMENT FOR RANDOM ICON EFFECT
-
-        let visibleTiles = [];
-        let visibleIcons = [];
-        
-        allTiles.forEach(tile => {
-            if(tile.style.visibility === 'visible') {
-                tile.classList.remove('tile-challenge');
-                let back = tile.querySelector('.tile-back');
-                visibleIcons.push(back.childNodes[0]);
-                visibleTiles.push(tile);
-            }
-        })
-
-        for(let i=0; i<visibleTiles.length; i++) {
-            let rand = Math.floor(Math.random() * visibleIcons.length);
-            let back = visibleTiles[i].querySelector('.tile-back');
-            if(back.hasChildNodes()) {
-                back.childNodes[0].remove();
-            }
-            back.appendChild(visibleIcons[rand]);
-
-            visibleIcons.splice(rand, 1);
-        } */
 
     },
 
@@ -3924,15 +3284,11 @@ const flags = {
         
         allTiles.forEach(tile => {
             if((tile.style.visibility !== 'hidden') && (!(tile.classList.contains('target')))) {
-                //tile.classList.remove('tile-challenge');
                 let back = tile.querySelector('.tile-back');
                 visibleIcons.push(back.childNodes[0]);
                 visibleTiles.push(tile);
             }
         })
-
-        console.log(`%c visibleTiles:  ${visibleTiles}`, `background: #89b; color: #a2e; font-weight: 700;`);
-        console.log(`%c visibleIcons:  ${visibleIcons}`, `background: #a2e; color: #89b; font-weight: 700;`);
 
         for(let i=0; i<visibleTiles.length; i++) {
             let rand = Math.floor(Math.random() * visibleIcons.length);
@@ -3952,9 +3308,6 @@ const flags = {
         let countdown = document.querySelector('.countdown');
         countdown.textContent = `${iter.value}`;
     },
-
-
-
 
 
 
@@ -4051,37 +3404,6 @@ const flags = {
             board.appendChild(order[z]);
         }
 
-       // console.log(iter.array);  // UNTOUCHED
-       // console.log(sortediconsArr);  // SORTED
-        
-        /*         let actualIcons = [];
-
-        for(let i=0; i<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); i++) {
-            actualIcons.push(sortediconsArr[i]);
-            //sortediconsArr.shift();
-        }
-
-        // Before allTiles.length === 126
-        allTiles = document.querySelectorAll('.tile');
-        // Mow allTiles.length === 42
-
-        for(let x=0; x<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); x++) {
-            let rand = Math.floor(Math.random() * actualIcons.length);
-            let back = allTiles[x].querySelector('.tile-back');
-            if(back.hasChildNodes()) {
-                back.childNodes[0].remove();
-            }
-            back.appendChild(actualIcons[rand]);
-            actualIcons.splice(rand, 1);
-        } */
-
-        /*for(let x=0; x<((levels[`lvl19`].rows) * (levels[`lvl19`].columns)); x++) {
-            let back = allTiles[x].querySelector('.tile-back');
-            //console.log(back.childNodes[0].classList[1]);
-        } */
-
-        console.log(sortediconsArr.length);
-
         // Now we can empty our dummy array...
         iter.array = [];
         // ... and fill once again
@@ -4092,16 +3414,13 @@ const flags = {
 
         // After all we have 1 times every dummy icon (total: 42);
 
-        console.log('iter.array: ', iter.array);
-        console.log('sortediconsArr:  ', sortediconsArr);
-
     },
 
     createProgressBar_19: function(cardsOpened, tiles, foundTiles, iter) {
         const animationContainer = document.querySelector('.animationContainer');
         let progressBar = document.createElement('div');
         progressBar.classList.add('p-bar');
-        for(let j=0; j<(((levels[`lvl19`].rows) * (levels[`lvl19`].columns)) / 2); j++) {  // half of tiles, because wa are counting pairs !!
+        for(let j=0; j<(((levels[`lvl19`].rows) * (levels[`lvl19`].columns)) / 2); j++) {  // half of tiles, because we are counting pairs !!
             let progressStep = document.createElement('div');
             progressStep.classList.add('p-step');
             progressBar.appendChild(progressStep);
@@ -4139,8 +3458,6 @@ const flags = {
     appendDummyIcons_19: function(cardsOpened, tiles, foundTiles, iter) {
 
         // WHAT IS THE MAIN CONDITION TO FIRE THAT FUNCTION ?  ->  TURNS USED, OR TILES FOUND ? let it be tiles, turns used is impossible !!
-        // it'll be fired 7 times - 6 tiles per every count - not exactly like this !!!
-
 
         if((foundTiles+2 > (((levels[`lvl19`].rows) * (levels[`lvl19`].columns)) / 1.25)) && (iter.streak === 3) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
             // if  ftiles > 42 / 1.5 -> if ftiles > 33
@@ -4188,8 +3505,6 @@ const flags = {
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
             let progressBar = document.querySelector('.p-bar');
             let pBarItem = progressBar.querySelector(`.p-step:nth-of-type(${((foundTiles + 2) / 2)})`);
-            //pBarItem.style = 'background-image: radial-gradient(hsl(85, 30%, 50%), hsl(281, 40%, 50%) 25%, hsl(140, 50%, 60%));';
-            //pBarItem.style = 'background-image: linear-gradient(120deg, hsl(185, 30%, 50%), hsl(215, 40%, 50%) 25%, hsl(0, 0%, 0%))';
             
             anime({
                 targets: pBarItem,
@@ -4203,26 +3518,17 @@ const flags = {
 
     checkLevelProgress_19: function(cardsOpened, tiles, foundTiles, iter) {
         if((foundTiles+4 >= ((levels[`lvl19`].rows) * (levels[`lvl19`].columns))) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
-            console.log('FOUND TILES !!!  '+foundTiles);
             if(iter.amount > 0) {return; }
 
             iter.amount++;
-            console.log('YOU WON LV 19')
+
             // ADD STUFF
             iter.fTilesModifier = ((levels[`lvl19`].rows) * (levels[`lvl19`].columns) * 2);
-            //iter.extraTurns = -1;
+
             this.destroyAllFakes(cardsOpened, tiles, foundTiles, iter);
         }
     },
 
-    /* Create following animations :
-    
-    - When you add some dummy tiles (async + anime);
-    - Update progress bar (anime);   - ok, but might be improved
-    - When you (almost) win the game - fade those remain dummies (anime):
-    - Pair match  (?) -> (anime);
-    
-    */
 
     modifyGrid_19: function(iter, newDummiesCount, cardsOpened) {
 
@@ -4259,7 +3565,6 @@ const flags = {
 
                 if(isIterArrayInstance !== true) {
                     notExisting.push(tile);
-                    //animationContainer.appendChild(tile);
                 }
             }
         })
@@ -4316,64 +3621,6 @@ const flags = {
             board.appendChild(order[p]);
         }
 
-
-        /* 
-
-        allTiles.forEach(tile => {
-            if((tile.style.visibility === 'hidden') || (tile.classList.contains('target'))) {
-                tile.remove();
-            }
-        })
-
-        for(let d=0; d<newDummiesCount; d++) {
-            // Front
-            let front = document.createElement('div');
-            front.classList.add('tile-front', 'tf-19');
-            // Back
-            let back = document.createElement('div');
-            back.classList.add('tile-back', 'tb-19');
-
-            let newTile = document.createElement('div');
-            newTile.classList.add('tile', 't-19');
-
-
-            let rand = Math.floor( Math.random() * iter.array.length);
-
-            newTile.appendChild(front);
-            newTile.appendChild(back);
-
-            back.appendChild(iter.array[rand]);
-
-            iter.nextArr.push(iter.array[rand]);
-            iter.array.splice(rand, 1);
-
-            board.appendChild(newTile);
-            console.log('created');
-        }
-
-        // Now let's redistibute icons - grab all icons and set it randomly to already existing tiles, BUT WAIT FOR A WHILE AND LET
-        // THE LAST PAIR TO DISAPPEAR FROM THE SCREEN - done, cool
-
-        allTiles = document.querySelectorAll('.tile');
-        let allIcons = [];
-
-        allTiles.forEach(tile => {
-            let back = tile.querySelector('.tile-back');
-            allIcons.push(back.childNodes[0]);
-            back.childNodes[0].remove();
-        })
-
-        console.log(allTiles);
-        console.log(allIcons);
-
-        allTiles.forEach(tile => {
-            let rand = Math.floor( Math.random() * allIcons.length);
-            let back = tile.querySelector('.tile-back');
-            back.appendChild(allIcons[rand]);
-            allIcons.splice(rand, 1);
-        })
-
-        console.log(allIcons); */
     },
 
     asyncDummyChapter: function(iter, newDummiesCount) {
@@ -4698,13 +3945,8 @@ const flags = {
         }
 
         init3(); 
-        console.log('destroyed');
+
     },
-
-
-
-
-
 
 
 
@@ -4740,7 +3982,6 @@ const flags = {
 
         // 1
 
-        //let shadowMessage = 'THIS ONE WILL BE CONFUSING';
         let shadowMessage = 'THIS ONE IS THE FINAL LEVEL';
 
         for(let k=0; k<shadowMessage.length; k++) {
@@ -4943,7 +4184,6 @@ const flags = {
     createSeparateRooms_20: function(cardsOpened, tiles, foundTiles, iter) {
 
         iter.streak = null;
-        console.log(iter.array)
 
         const board = document.querySelector('.board');
         const novaGrid = document.createElement('div');
@@ -5069,14 +4309,11 @@ const flags = {
             targets: animationArray,
             duration: 2400,
             delay: anime.stagger(2400),
-            //opacity: [1, 0],
             filter: 'grayscale(100%)',
             easing: 'easeOutExpo',
         })
 
         // 2. Now activate two directoires, based on which room has been chosen
-
-        console.log(iter.value)
 
         const directoriesToActivate = {
             r1: ['arrow_1', 'arrow_2'],
@@ -5090,7 +4327,6 @@ const flags = {
         const firstLetter = startRoomClassName[0];
         const lastLetter = startRoomClassName[startRoomClassName.length - 1];
 
-        //console.log(firstLetter + lastLetter);
 
         // PUSH INITIAL ROOMS TO THE ARRAY THEN IN SECONDCLICK FUNCTIONS EXAMINE IF THE ROOMS ARENT EMPTY
         iter.amount = [];
@@ -5100,7 +4336,6 @@ const flags = {
 
         let arrowsToColor = directoriesToActivate[firstLetter + lastLetter];
         let thisRoomColors = [];
-        console.log(arrowsToColor);
 
         // Get the colors from board elems
         let thisRoom = document.querySelector(`.${startRoomClassName}`);
@@ -5114,10 +4349,7 @@ const flags = {
             else if(color !== thisRoomColors[0]) {thisRoomColors.push(color);}
         })
 
-        console.log(thisRoomColors); // star-orange, star-pink
-
         // We ve got proper colors, so now paint out arrows randomly
-        // ...
 
         // For all arrows add them two additional initial classes
         let allArrows = document.querySelectorAll(`.directory-arrow`);
@@ -5128,28 +4360,13 @@ const flags = {
         for(let n=0; n<colorOptions; n++) {
             let rand = Math.floor(Math.random() * thisRoomColors.length);
             let thisArrow = document.querySelector(`.directory-${arrowsToColor[n]}`);
-            console.log(thisArrow);
             thisArrow.classList.remove(thisArrow.classList[thisArrow.classList.length - 1]);
             thisArrow.classList.add(thisRoomColors[rand]);
             thisRoomColors.splice(rand, 1);
         } 
     },
 
-    lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter) {
-
-        // First check initial conditions
-        //if(!cardsOpened[0]) { this.pickRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter); }
-        if(foundTiles+2 === tiles) {
-            return;
-        }
-
-        else if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
-            this.pickRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter);
-        }
-    },
-
     pickRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter) {
-        console.log('i Love console.log');
         // Initial object - quite complicated tbh
 
         const conflict = 'conflict';
@@ -5178,7 +4395,6 @@ const flags = {
         let roomIdNo = iter.amount[rand].classList[1];
         let roomIndex = roomIdNo.indexOf('-');
         let random = roomIdNo.substring(roomIndex + 1);
-        console.log(' RANDOM IS:  ' + random)  // 1 / 2 / 3 / 4 - but it is always an existing room
 
         const behaviourControlObj = {          
             room_1: {
@@ -5220,8 +4436,7 @@ const flags = {
                     },
                     
                 },
-                arrow_3: {
-                    // It's gonna be rotated based on room number 
+                arrow_3: { 
                     arrow_magic: {
                         scenario: magic,
                         roomToGo: 4,
@@ -5369,29 +4584,22 @@ const flags = {
         // Let's get the room number first
         const room = tile.parentNode;
         let roomId = room.classList[1]; // roomNoFormatted, roomNoUnformatted to teraz roomId
-        console.log(roomId);
-
 
         // Now let's go for arrow identifier
 
         let starEffect = tile.querySelector('.star-effect');
 
-        let chosenColorPath = starEffect.classList[1];  // star_darkblue as an example
-
-        console.log(chosenColorPath); // star-pink  as an example - so the player chose pink path
+        let chosenColorPath = starEffect.classList[1];  // star-pink  as an example - so the player chose pink path
 
         // Now look for that arrow that contains that class - HENCE ITS SO IMPORTANT THAT BOTH ARROWS HAS TO BE COLORED EVERY TIME
         // ONLY ONCE, BECAUSE IT'S PLAYER COLOR CHOICE AND IT CAN BE ONLY 1 OF COURSE
         let arrowToFollow;
         const allArrows = document.querySelectorAll('.directory-arrow');
         allArrows.forEach((arrow) => {
-            //console.log(arrow.classList);
             if(arrow.classList.contains(chosenColorPath)) arrowToFollow = arrow;
         })
-
-        console.log(arrowToFollow); // We have now a proper arrow to follow further instructions on !!
         
-        let arrowAlt = arrowToFollow.alt;  // CAUSES ERRORS FOR SOME REASON
+        let arrowAlt = arrowToFollow.alt; 
         // (replacement for arrowAltFomratted);
 
         let arrowToFollowNo = arrowToFollow.classList[1];
@@ -5400,61 +4608,44 @@ const flags = {
         let arrowIdentifier = arrowToFollowNo.substring(initialIndex);
         // (replacement for arrowIdentifierFormatted)
 
-        console.log(roomId); // Room number compatible with behaviourControlObj
-        console.log(arrowIdentifier); // Finally compatible with behaviourControlObj ^^
-        console.log(arrowAlt); // Direction where the arrow points to
-
         const endChainProps = behaviourControlObj[roomId][arrowIdentifier][arrowAlt];
-        console.log(endChainProps);
         let scenario = endChainProps.scenario; // initially, if it's not then it would be changed at the right time (right below)  
         let roomToGo = endChainProps.roomToGo;  // those have to be set because it causes errors then
         // Czyli: jak nazywa się scenariusz i do którego pokoju zostaniesz teraz przeniesiony
 
         // Przypilnuj, czy scenariusz nie zostawi lub przeniesie Cię do pustego pokoju
-        // OD TEJ LINIJKI ZACZNIJ DZIAŁAĆ
-
         // Najpierw test, czy taka sytuacja ma miejsce
         let isNewRoomSafe = false;
         for(let v=0; v<iter.amount.length; v++) {
             let className = iter.amount[v].classList[1];
-            //console.log(className);
             let index = className.indexOf('_');
             let roomNo = className.substring(index + 1);
-
-            console.log(roomNo);
-            console.log(roomToGo);
 
             if(parseInt(roomNo) === parseInt(roomToGo)) {
                 isNewRoomSafe = true;
                 
             }
         }
-        console.log(isNewRoomSafe);
         if(isNewRoomSafe === false) {
             // Losuj jeden z istniejących pokoi jako nowe miejsce przekierowania (już niezależnie czy konflikt, magic, peaceful czy selfPointing)
             let rand = Math.floor(Math.random() * iter.amount.length);
             let className = iter.amount[rand].classList[1];
             let index = className.indexOf('_');
             let roomNumber = className.substring(index + 1);
-            console.log(roomNumber);
 
             scenario = conflict; // We have to transform player to the separate room, so yeah its conflict
             
             roomToGo = roomNumber;
-            random = roomToGo;  // BUT REALLY NOT QUITE SURE IF THAT STATEMENT IS CORRECT
+            random = roomToGo;
         }
 
         if(scenario === conflict) {
-            console.log('conflict scenario fired');
             this.fireConflictScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, random);
         } else if(scenario === peaceful) {
-            console.log('peaceful scenario fired');
             this.firePeacefulScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);     
         } else if(scenario === selfPointing) {
-            console.log('self-pointing scenario fired');
             this.fireSelfPointingScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
         } else if(scenario === magic) {
-            console.log('magic scenario fired');
             this.fireMagicScenario_20(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo);
         }
 
@@ -5478,24 +4669,16 @@ const flags = {
             arrow.classList.add('no-stars');
         })
         // Make use of behaviourControlObj a LOT !!
-        console.log(roomToGo);
         let finalIndex = roomId.indexOf('_');
         let formattedFirstPart = roomId.substring(0, finalIndex + 1);
         
         const currentRoom = formattedFirstPart + roomToGo; // This is the first indent in behaviourControlObj - we know what the current room is
 
-        console.log(currentRoom);
         // First, by roomToGo you can find a room_${roomToGo} - this is the new chosen room we will change its' arrows for !
-        //let arrowPositions = ['up', 'down', 'left', 'right'];
         let possibleArrows = behaviourControlObj[currentRoom];
 
         // Now let's set FIRST scenario based on RNG - but it has to consider which rooms are still active
         // Prepare a check code
-
-        console.log(possibleArrows);
-        //console.log(activeRooms);
-        // So now we have info which rooms are still available
-        //let scenarios = ['peaceful', 'self-pointing', 'magic'];
 
         // Bierzesz każdą strzałkę i dla każdego możliwej jej kombinacji (up, down, left, right...) sprawdzasz, czy jest ona możliwa
         // Te które są możliwe trzeba jakoś zapisać. Potem dla każdej strzałki losujesz scenariusz (ale na samym początku zrób losowanie RNG
@@ -5504,71 +4687,24 @@ const flags = {
         //  / zamkniętych możliwości;  Jeśli jednak 1szy scenariusz będzie magic, to wylosuj drugą strzałkę (która z pozostałych to będzie) i analogicznie
         // ustawiasz jej losowy, jeden z dostępnych już scenariuszy + na końcu daj im kolorki !
 
-        // OF COURSE IF THE LENGTH OF ACTIVE ROOMS IS 4 (WHICH MEANS ALL ROOMS) WE CAN OMMIT THIS FOR IN NESTED LOOP -- yeah, but dont do it for now
-
         // Check valid option and push them into nextArr
-        // IT MIGHT ALSO BE BUGGED - TRY TO REPAIR THAT
+
         for(let arrow in possibleArrows) { // konkretny numer strzałki w danym pokoju (arrow_1, arrow_2, arrow_3); // Zawsze są to 3 strzałki
-            console.log(arrow);
             for(let direction in possibleArrows[arrow]) { // konkretny kierunek w powyższych strzałkach (up, right, down, left || magic - przy arrow_3)
                 let directionChecked = possibleArrows[arrow][direction];
-                //console.log(directionChecked.roomToGo);
-               // for(let i=0; i<activeRooms.length; i++) {
-               //     let classToSearch = `room-${roomToGo}`; // Sprawdzamy tylko te strzałki, które mogą być aktywne w obrębie nowego pokoju, dla którego generujemy właśnie 2 nowe opcje wyboru
-               //     if(activeRooms[i].classList[1] === classToSearch) {
-                        // Szukamy wszystkich możliwych opcji w obrębie jednego pokoju
-                        iter.nextArr.push(
-                        {
-                            arrow: `${arrow}`,
-                            direction: `${direction}`, 
-                            scenario: `${directionChecked.scenario}`, 
-                            roomToGo: `${directionChecked.roomToGo}`, 
-                            
-                        }); 
-                  //  }
-               // }
+                // Szukamy wszystkich możliwych opcji w obrębie jednego pokoju
+                iter.nextArr.push(
+                {
+                    arrow: `${arrow}`,
+                    direction: `${direction}`, 
+                    scenario: `${directionChecked.scenario}`, 
+                    roomToGo: `${directionChecked.roomToGo}`, 
+                    
+                }); 
             }
         }
 
-/*         for(let m=0; m<iter.nextArr.length; m++) {
-            let arrowFormatted = iter.nextArr[m].arrow;
-            if(arrowFormatted.includes('_')) {
-                iter.nextArr[m].arrow = iter.nextArr[m].arrow.replace('_', '-');
-            } 
-            let directionFormatted = iter.nextArr[m].direction;
-            if(directionFormatted.includes('_')) {
-                iter.nextArr[m].direction = iter.nextArr[m].direction.replace('_', '-');
-            } 
-        } */
-
-        // In endgame it's crucial to remove cases when arrows (f.e. magic / peaceful leads to empty rooms)
-        // - not now, because we have something like automatic tracker, which in case of errors redirects to correct room :)
-        //console.log(activeRooms);
-
-       /*  for(let m=0; m<iter.nextArr.length; m++) {
-            //console.log(possibleoption);
-            let roomToCheck = iter.nextArr[m].roomToGo; // 1 / 2 / 3 or 4
-            let isSafe = false;
-            for(let j=0; j<activeRooms.length; j++) {
-                let index = activeRooms[j].classList[1].indexOf('-');
-                let roomId = activeRooms[j].classList[1].substring(index + 1);
-                console.log(roomId); // 1 / 2 / 3 or 4
-
-                if(roomToCheck === roomId) {
-                    isSafe = true;
-                }
-
-            }
-
-            if(isSafe === false) {
-                iter.nextArr.splice(m, 1);
-                m--;
-            }
-        } */
-
-
-        console.log(iter.nextArr);  // This array holds everyhing that is valid to use for randomizing stuff
-
+        // iter.nextArr holds everyhing that is valid to use for randomizing stuff
 
         // Randomized first arrow in compare to iter.nextArr possibilities, and second arrow randomize for remain possible cases
 
@@ -5576,27 +4712,18 @@ const flags = {
         let firstArrowProps = iter.nextArr[firstArrowNumber];
 
         let arrowId = iter.nextArr[firstArrowNumber].arrow;  // This one would be useful for our second arrow
-        console.log(arrowId)
         let scenarioName = iter.nextArr[firstArrowNumber].scenario; // This one would be useful for our second arrow
 
-        console.log(firstArrowProps);
         // Now adjust chosen arrow with custom properties !
         let firstArrow = document.querySelector(`.directory-${arrowId}`);
-        console.log(firstArrow)
-        //firstArrow.src = `${iter.nextArr[firstArrowNumber].direction}.svg`;
-        //firstArrow.alt = iter.nextArr[firstArrowNumber].direction;
-        console.log(firstArrow);
-
 
         firstArrow.src = `${iter.nextArr[firstArrowNumber].direction}.svg`;
         firstArrow.alt = iter.nextArr[firstArrowNumber].direction;
 
 
-        // TEST THIS ~!!!! - it s probably bugged
         for(let h=0; h<iter.nextArr.length; h++) {
-            console.log(h);
             // Jeśli druga strzałka = pierwsza  LUB jeśli scenariusz 1.strz = scenariusz 2. strz ORAZ nie jest to peacful LUB scenario to magic
-            if((arrowId === iter.nextArr[h].arrow) /* || ((scenarioName === iter.nextArr[h].scenario) && (scenarioName !== 'peaceful')) */ || (iter.nextArr[h].scenario === 'magic')) {
+            if((arrowId === iter.nextArr[h].arrow)  || (iter.nextArr[h].scenario === 'magic')) {
                 // Thanks to that, second arrow will not be the same as first !
                 iter.nextArr.splice(h, 1);
                 h = h-1;
@@ -5607,56 +4734,15 @@ const flags = {
 
         let secondArrowProps;
 
-
-
-        console.log(iter.nextArr);
-
-
         // NOW CREATE CUSTOM CONFLICT SCENARIO, APPEND IT TO THE NEXT ARR AND THEN PICK ONE OF THOSE SCENARIOS, ADD TO SECOND ARROW
         // AND FINALLY JUST GIVE THAT ARROWS ITS' ROOM COLORS (PLEASE USE CODE ABOVE FOR THAT IN ONSTARTFUNCTION () )
 
         // Wzór na konflikt : ARROW: który już istnieje w obiekcie; DIRECTION: który nie istineje w obiekcie; SCENARIO: 'conflict'; roomToGo: ?? -> albo wylosuj teraz albo zostaw funkcji fire_20
 
-        /* let randConflictArrow = Math.floor(Math.random() * iter.nextArr.length);
-        let possibleOptions = [];
-        let directions = ['arrow-up', 'arrow-down', 'arrow-left', 'arrow-right'];
-        for(let option of iter.nextArr) {
-            if(option.arrow === iter.nextArr[randConflictArrow].arrow) {
-                possibleOptions.push(option);
-                for(let a=0; a<directions.length; a++) {
-                    if(option.direction === directions[a]) {
-                        directions.splice(a, 1);
-                        a = a - 1;
-                    }
-                }
-            }
-        }
-
-        let randDirection = Math.floor(Math.random() * directions.length);
-       
-        let conflictScenario = {arrow: `${possibleOptions[0].arrow}`, direction: `${directions[randDirection]}`, scenario: 'conflict', roomToGo: `${random}`}
-        //possibleOptions.pop();
-        iter.nextArr.push(conflictScenario); */
-
         let secondArrowNumber = Math.floor(Math.random() * iter.nextArr.length);
         secondArrowProps = iter.nextArr[secondArrowNumber];
 
-        console.log(firstArrowProps);
-        console.log(secondArrowProps);
-
-        //let secondArrow = null;
-
-        //let secondArrow = null;
-        console.log(iter.nextArr[secondArrowNumber]);
-        console.log(iter.nextArr[secondArrowNumber].direction);
-       //if(secondArrowProps !== undefined) {  // ONLY FOR ENDGAME - no, second Arrow always has to be set to some value !!!
-            //let secondArrow = document.querySelector(`.directory-${iter.nextArr[secondArrowNumber].arrow}`);
-            //secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
-            //secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
-      // }
-
         let secondArrow = document.querySelector(`.directory-${iter.nextArr[secondArrowNumber].arrow}`);
-        //let firstArrow = document.querySelector(`.directory-${arrowId}`);
 
         async function darkenEffectTwo() {
             const a1 = anime({
@@ -5682,11 +4768,6 @@ const flags = {
             await darkenEffectTwo()
             .then(() => {
                 if((iter.nextArr.length - 1) >= (secondArrowNumber)) {
-                    /* console.log(iter);
-                    console.log(iter.nextArr);
-                    console.log(secondArrowNumber);
-                    console.log(iter.nextArr[secondArrowNumber]);
-                    console.log(iter.nextArr[secondArrowNumber].direction);  */
     
                     secondArrow.src = `${iter.nextArr[secondArrowNumber].direction}.svg`;
                     secondArrow.alt = iter.nextArr[secondArrowNumber].direction;
@@ -5704,19 +4785,6 @@ const flags = {
         const colorOptions = 2;
         let thisRoomColors = [];
         let arrowsToColor = [firstArrowProps, secondArrowProps];
-
-       // if(secondArrow) { arrowsToColor.push(secondArrowProps); }
-
-        // Get the colors from board elems
-        // And of course, make unformatted version of currenRoom
-
-        /* let currentRoomUnformatted = currentRoom;
-
-        if(currentRoom.includes('_')) {
-            currentRoomUnformatted = currentRoom.replace('_', '-');
-        }
-
-        console.log(currentRoomUnformatted);  //  should be f.e. room-3 */
 
 
         // Only count visible ones !
@@ -5737,37 +4805,23 @@ const flags = {
             else if(color !== thisRoomColors[0]) {thisRoomColors.push(color);}
         })
 
-        console.log(thisRoomColors); // star-orange, star-pink
-
         // We ve got proper colors, so now paint out arrows randomly
         // ...
 
         for(let n=0; n<arrowsToColor.length; n++) {
             let rand = Math.floor(Math.random() * thisRoomColors.length);
             let thisArrow = document.querySelector(`.directory-${arrowsToColor[n].arrow}`);
-            console.log(thisArrow);
+
             // Remove the very last class right before adding new one
             thisArrow.classList.remove(thisArrow.classList[thisArrow.classList.length - 1]);
             thisArrow.classList.add(thisRoomColors[rand]);
             thisRoomColors.splice(rand, 1);
         } 
 
-        // at the very end:  iter.nextArr = [];  IMPORTANT NOTE !
-        // .. and at very last empty iter.nextArr; -> IT ACTUALLY HAPPENS AT VERY END OF ASYNC FUNCTION
-        //iter.nextArr = [];
-
     },
 
     fireConflictScenario_20: function(cardsOpened, tiles, foundTiles, iter, scenario, roomToGo, roomNoUnformatted, random) {
-/*         const allRooms = document.querySelectorAll('.room');
-        const roomToVisit = document.querySelector(`.room_${random}`);
 
-        let roomsToBlock = [];
-
-        allRooms.forEach((room) => {
-            if(room.classList[1] !== roomToVisit.classList[1]){roomsToBlock.push(room); } 
-            room.style = 'pointer-events: none;'
-        }) */
         const allRooms = document.querySelectorAll('.room');  
         let roomsToBlock = [];
         let roomToVisit;
@@ -5775,7 +4829,6 @@ const flags = {
         let conflictQuotes = ['That leads to nowhere !', `Really want to go here ?`, `#404 Room Not Found`];
         const myQuote = this.pickrandomQuote_20(conflictQuotes);
 
-        console.log(roomToGo);
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
@@ -5861,10 +4914,7 @@ const flags = {
                 const citeDiv = document.querySelector('.citeDiv');
                 citeDiv.remove();
             })
-            // Some cool stuff in here
-            //await minifyGame()
             await unblockVisitRoom()
-            //await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
                 const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
@@ -5885,10 +4935,6 @@ const flags = {
         let roomsToBlock = [];
         let roomToVisit;
 
-/*         let peacefulQuotes = ['Perfect room, perfect choice', `We missed you at room ${roomToGo}`, `Make yourself at home`];
-        const myQuote = this.pickrandomQuote_20(peacefulQuotes); */
-
-        console.log(roomToGo);
         allRooms.forEach((room) => {
             if(room.classList[1] === `room_${roomToGo}`) {
                 roomToVisit = room;
@@ -5929,33 +4975,9 @@ const flags = {
             await Promise.all([a3]);
         }
 
-       /*  async function minifyGame() {
-            const a2 = anime({
-                targets:'.game',
-                duration: 2400,
-                opacity: ['100%', '0%'],
-                //rotate: '360deg',
-                easing: 'easeOutSine',
-            }).finished;
-
-            await Promise.all([a2]);
-        }
-
-        async function maxifyGame() {
-            const a4 = anime({
-                targets: '.game',
-                duration: 1700,
-                opacity: '100%',
-                easing: 'easeInSine',
-            }).finished;
-
-            await Promise.all([a4]);
-        } */
-
         async function init() {
             await blockRooms()
             await unblockVisitRoom()
-            //await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
                 const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
@@ -6063,10 +5085,7 @@ const flags = {
                 const citeDiv = document.querySelector('.citeDiv');
                 citeDiv.remove();
             })
-            // Some cool stuff in here
-            //await minifyGame()
             await unblockVisitRoom()
-            //await maxifyGame()
             .then(() => {
                 roomToVisit.style = 'pointer-events: auto;';
                 const allVisitRoomTiles = roomToVisit.querySelectorAll('.tile');
@@ -6235,8 +5254,6 @@ const flags = {
                 }
             })
 
-            console.log(uselessStars)
-
             anime({
                 targets: uselessStars,
                 duration: 500,
@@ -6285,8 +5302,6 @@ const flags = {
     tryToRemoveStarBinding_20: function(cardsOpened, tiles, foundTiles, iter) {
         
         let usefulStars = [];
-
-        // WORK ON THIS FUNCTION 
 
         if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
             iter.streak = cardsOpened[0];
@@ -6341,11 +5356,6 @@ const flags = {
 
             async function init() {
                 await unlock()
-                    .then(() => {
-                        for(let u=0; u<starsToLock.length; u++) {
-                           // starsToLock[u].style = 'pointer-events: none;';
-                        }
-                    })
             }
 
             init();
@@ -6394,7 +5404,6 @@ const flags = {
             }
 
             animationContainer.appendChild(mainGrid);
-
         }
     }
 }
