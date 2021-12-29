@@ -254,7 +254,7 @@ function Landing(props) {
     }
 
     return( 
-        <div>
+        <div className='landing-all'>
             <div className='layer'>
                 <div className='theme' ref={gameBoard}>
                     {allTiles}
@@ -262,8 +262,17 @@ function Landing(props) {
             </div>
 
             <div className='content'>
-                <span className="game-title">MEMO</span>
-                <button className='start' onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button>
+                <div className='content-section'>
+                    <div className="game-title">FLASH</div>
+                    <div className='game-subtitle'>The Ultimate Memory Game</div>
+                </div>
+               {/*  <div className='content-author'>
+                    <div className='from-author'> Created with love by @Martimex</div>
+                </div> */}
+                <div className='content-action' >
+                    <div className='from-author'> &copy; Created with love by @Martimex</div>
+                    <button className='start' onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button>
+                </div>
             </div>       
         </div>
     )

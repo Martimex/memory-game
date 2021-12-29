@@ -3,7 +3,7 @@ import react from 'react';
 import reactDom from 'react-dom';
 
 const el = document.querySelectorAll('div .layer .theme .card');
-//console.log(el);
+console.log(el);
 
 
 

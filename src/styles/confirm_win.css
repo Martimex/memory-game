@@ -69,12 +69,9 @@
     align-items: center;
     justify-content: center;
     font-size: 2rem;
-   /*  background: linear-gradient(66deg, hsl(24, 40%, 60%), hsl(277, 40%, 60%)); */
     color:darkorange;
-    
     z-index: 50;
     transform: rotateX(-20deg) rotateY(-15deg);
-    /* border: hsl(126, 40%, 60%) dashed .1rem; */
     border-radius: 20% 5%;
     box-shadow: -13px 13px 10px 0px hsla(277, 30%, 40%, 0.85);
     -webkit-box-shadow: -13px 13px 10px 0px hsla(277, 30%, 40%, 0.85);
@@ -93,9 +90,6 @@
     width: 100%; height: 100%;
     top: 0%; right: 0%;
     z-index: -120;
-/*     transform: rotateX(-20deg) rotateY(-15deg);
-    border: hsl(274, 40%, 60%) solid .3rem;
-    filter: blur(3px); */
     background: conic-gradient(
         #fd004ccc,
         #fe9000cc,
@@ -211,7 +205,6 @@
     min-width: 25%;
     left: 30%;
     border-radius: 25%;
-   /*  background-image: linear-gradient(90deg, hsla(126, 0%, 0%, 1), hsla(276, 50%, 60%, .85) 50%, hsla(126, 0%, 0%, 1)); */
     border: .5rem double hsla(277, 39%, 34%, 0.85);
 }
 
@@ -263,7 +256,6 @@
     padding: .4rem;
     width: 6rem;
     height: 2.4rem;
-    /* background-image: linear-gradient(70deg,hsla(126, 0%, 0%, 0.95), hsla(276, 30%, 30%, 0), hsla(126, 0%, 0%, 0.85)); */
     background: inherit;
     border: .2rem double hsla(276, 40%, 40%, 1);
     border-radius: 20%;
