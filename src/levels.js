@@ -31,7 +31,7 @@ const levels = {
         lv: 1,
         rows: 4,
         columns: 4,
-        tile_size: 80, // 80 x 0.1vw
+        tile_size: 70, // 80 x 0.1vw // now its 80 x 0.1rem;
         tiles: 16,   // 16 , 6
         iconSet: 'fas',
         counter: {
@@ -100,7 +100,7 @@ const levels = {
         lv: 4, // 4
         rows: 6, // 6
         columns: 6, // 6
-        tile_size: 50,
+        tile_size: 42,
         tiles: 36,  // 36
         iconSet: 'fas',
         counter: {
@@ -124,7 +124,7 @@ const levels = {
         lv: 5,
         rows: 6,
         columns: 5,
-        tile_size: 58,
+        tile_size: 48,
         tiles: 30,  // 30
         iconSet: 'fas',
         counter: {
@@ -152,7 +152,7 @@ const levels = {
         lv: 6,
         rows: 6,  // 6
         columns: 6,  // 6
-        tile_size: 61,
+        tile_size: 50,
         tiles: 36,  // 36
         iconSet: 'fas',
         counter: {
@@ -179,7 +179,7 @@ const levels = {
         lv: 7,
         rows: 5,
         columns: 8,
-        tile_size: 65,
+        tile_size: 58,
         tiles: 40,  // 40
         iconSet: 'fas',
         counter: {
@@ -204,7 +204,7 @@ const levels = {
         lv: 8,
         rows: 6,
         columns: 9,
-        tile_size: 52,
+        tile_size: 46,
         tiles: 54,  // 54
         iconSet: 'fas',
         counter: {
@@ -228,7 +228,7 @@ const levels = {
         lv: 9,
         rows: 6,
         columns: 7,
-        tile_size: 60,
+        tile_size: 50,
         tiles: 42,  // 42
         iconSet: 'fas',
         counter: {
@@ -253,7 +253,7 @@ const levels = {
         lv: 10,
         rows: 4,
         columns: 11,
-        tile_size: 66,
+        tile_size: 58,
         tiles: 44,  // 42, 52, 44
         iconSet: 'fas',
         counter: {
@@ -277,7 +277,7 @@ const levels = {
         lv: 11,
         rows: 4,
         columns: 11,
-        tile_size: 66,
+        tile_size: 52,
         tiles: 44,  // 42, 52, 44
         iconSet: 'fas',
         counter: {
@@ -328,7 +328,7 @@ const levels = {
         lv: 13,
         rows: 6,
         columns: 12,
-        tile_size: 46,
+        tile_size: 40,
         tiles: 72, 
         iconSet: 'fas',
         counter: {
@@ -355,7 +355,7 @@ const levels = {
         lv: 14,
         rows: 6,
         columns: 8,
-        tile_size: 55,
+        tile_size: 48,
         tiles: 48, 
         iconSet: 'fas',
         counter: {
@@ -431,7 +431,7 @@ const levels = {
         lv: 17,
         rows: 6, // 6
         columns: 8, // 8
-        tile_size: 52,
+        tile_size: 50,
         tiles: 96, // 92 // it's actually 48 + 24 + 12 + 8 + 4 = 96, but level is divided into phases (steps) + at the start 2 tiles are omitted
         iconSet: 'fas',
         counter: {
@@ -457,7 +457,7 @@ const levels = {
         lv: 18,
         rows: 6,
         columns: 6,
-        tile_size: 54,
+        tile_size: 50,
         tiles: 36, // 36
         iconSet: 'fas',
         counter: {
@@ -484,7 +484,7 @@ const levels = {
         lv: 19,
         rows: 6,
         columns: 7,
-        tile_size: 50,
+        tile_size: 46,
         tiles: 126, // it's 42 + (2 * 42) = 126 ;
         iconSet: 'fas',
         counter: {

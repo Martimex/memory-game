@@ -619,6 +619,7 @@ button:hover {
 
 .t-6 { 
     border-radius: 20%;
+    margin: .3rem;
     border: .3rem solid hsla(282, 80%, 40%, 15%);
     background-image: radial-gradient( hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%));
 }
@@ -882,7 +883,6 @@ button:hover {
 
 .board-8 {
     padding: -1rem;
-    border-block: initial;
     border-radius: 10%;
 }
 
@@ -900,6 +900,7 @@ button:hover {
 .t-8 {
     box-shadow: #000000;
     border-radius: 35%;
+    margin: .3rem;
     border: .8rem solid hsla(11, 93%, 29%, 20%);
     background-image: radial-gradient( hsla(11, 80%, 60%, 80%) 20%, hsl(33, 80%, 80%) 75%, hsla(55, 80%, 60%, 60%));
 }
@@ -1630,6 +1631,7 @@ button:hover {
 .t-14 { 
     border: .3rem solid hsla(66, 4%, 50%, .6);
     border-radius: 50%;
+    margin: .25rem;
 }
 
 .t-14::before, .t-14::after {
