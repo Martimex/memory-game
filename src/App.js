@@ -1,9 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
 import Landing from './components/landing.js';
 import Game from './components/game.js';
 import Preview from './components/preview.js';
-import ReactDOM from 'react-dom';
 import React, { useState } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';

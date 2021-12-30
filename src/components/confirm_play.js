@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { } from 'react';
 
 import '../styles/confirm_play.css';
 import '../styles/game.css';
 
-import Game from './game.js';
-import levels from '../levels.js';
 import anime from 'animejs/lib/anime.es.js';
 
 function ConfirmPlay(props) {

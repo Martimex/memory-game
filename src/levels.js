@@ -1,5 +1,4 @@
 import flags from './flags.js';
-import Game from './components/game';
 
 // PLEASE DO NOT TEST LEVELS WITH 2 TILES !!!
 // Look for functions containing word 'temporary' and verify if they are needed or not
@@ -158,7 +157,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 58, // 31, 40, 58
+            turns: 54, // 31, 40, 58, 54
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.resetBgImg_6(cardsOpened, tiles, foundTiles, iter);

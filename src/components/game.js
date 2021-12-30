@@ -1,8 +1,6 @@
-
-import  React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import  React, { useState, useEffect, useRef } from 'react';
 import '../styles/game.css';
 import  levels from '../levels.js';
-import flags from '../flags.js';
 
 import anime from 'animejs/lib/anime.es.js';
 
@@ -10,15 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import Preview from './preview.js';
+
 import GameInfo from './game_info.js';
 import Confirm from './confirm.js';
 import ConfirmPlay from './confirm_play';
 import ConfirmWin from './confirm_win';
 
-import { setIcon, fasArray, fabArray } from './landing.js';
-import { set } from 'animejs';
-import { render } from '@testing-library/react';
+import { setIcon, fasArray, /* fabArray */ } from './landing.js';
 
 library.add(fab, fas);
 
@@ -55,7 +51,7 @@ const timeScoreValue = 50; // Don't momdify aswell - it calculates score for eve
 function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
 
     let fasArrayCopy = [...fasArray]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
-    let fabArrayCopy = [...fabArray]; // Same here ...
+    //let fabArrayCopy = [...fabArray]; // Same here ...
 
     for(let i=0; i<(tiles/2); i++) { // Math.ceil(tileCodes.length/2) => it should be actually state value !!!
         let random = Math.floor(Math.random() * fasArrayCopy.length);
@@ -109,6 +105,7 @@ function Game(props) {
         // Clean-up function whenever you finish a level
         // First, clean up all State variables
 
+        setAnimationLoad(false);
         setLevel(level + 1);
         setFoundTiles(0);
         setScore(0);
@@ -161,7 +158,7 @@ function Game(props) {
         // Then proceed with new tiles, grid, icons...
 
         if(animationBox.current.childNodes.length > 0) {
-            for(let nodeCount = 0; nodeCount !== animationBox.current.childNodes.length; nodeCount = nodeCount) {
+            for(let nodeCount = 0; nodeCount !== animationBox.current.childNodes.length;) {
                 animationBox.current.childNodes[nodeCount].remove();
             }
     
@@ -190,7 +187,7 @@ function Game(props) {
         gameboard.current.addEventListener('click', clickable);
         handleCount = 0;
             // Starting animation in the first place -> 800 animation time + 1400 delay - 4000 ms is a safe delay
-    }, [setAnimationLoad]);
+    }, [animationLoad]);
 
     useEffect(() => {
 
@@ -244,8 +241,7 @@ function Game(props) {
     useEffect(() => {
 
         if(levels[`lvl${level-1}`].counter.turns !== null) {
-            if(((foundTiles+2) === tiles) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[0].childNodes[0].classList[1])) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
-                console.log('moves win');
+            if(((foundTiles+2) === tiles) && (cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {  // If you win the level...  // SetState is async, so we need to prepend a value right before
                 confirmSuccess();
             }
 
@@ -354,7 +350,6 @@ function Game(props) {
                 })
                 
             } else {
-                const temp = 0;
                 async function flipBack() {
                     const a1 = anime({
                         targets: [cardsOpened[0].parentNode, cardsOpened[1].parentNode],

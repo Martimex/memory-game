@@ -148,9 +148,9 @@ h1 {
     content: '';
     display: block;
     position: absolute;
-    top:-10%; left: -10%;
-    width: 120%;
-    height: 120%;
+    top:10%; left: 10%;
+    width: 80%;
+    height: 80%;
     background: linear-gradient(135deg, #000, #000, #000);
     box-shadow: 0px -17px 5px 16px rgba(0,0,0,0.95);
     -webkit-box-shadow: 0px -17px 5px 16px rgba(0,0,0,0.95);
@@ -158,18 +158,18 @@ h1 {
     z-index: -40;
 }
 
-.from-author::before {
+/* .from-author::before {
     content: '';
     display: block;
     position: absolute;
-    top:-10%; left: -20%;
-    width: 140%;
-    height: 120%;
-    border: .2rem dashed #ffcb2255;
+    top:0%; left: 0%;
+    width: 100%;
+    height: 100%;
+     border: .2rem dashed #ffcb2255; 
     border-style:groove;
     border-radius: 30%;
 }
-
+ */
 .start {
     background: linear-gradient(135deg, hsl(46, 4%, 2%), hsl(46, 94%, 42%), hsl(46, 4%, 2%));
     position: absolute;

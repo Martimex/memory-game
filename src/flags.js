@@ -1,8 +1,4 @@
-import { icon } from '@fortawesome/fontawesome-svg-core';
-import { get, random, set } from 'animejs';
 import anime from 'animejs/lib/anime.es.js';
-import { useRef } from 'react/cjs/react.development';
-import Game from './components/game.js';
 import levels from './levels.js';
 
 // #1 WINNING CONDITION :  if(foundTiles+2 === tiles) equals true
@@ -45,7 +41,6 @@ const flags = {
     // LVL 2
 
     setBackgroundFlood_2: function() {
-        let waterMaxheight = window.innerWidth;
         let animationContainer = document.querySelector('.animationContainer');
 
         for(let i=75; i>0; i--) {
@@ -255,8 +250,9 @@ const flags = {
         let tileTypeArr2 = [];
         let randomizedElems1 = [];
         let randomizedElems2 = [];
-        for(let a=0; a<tiles; a++) {
-            iconsArr.push(allTiles[a].childNodes[2].childNodes[0]);
+        for(let a=0; a<allTiles.length; a++) {
+            let back = allTiles[a].querySelector('.tile-back');
+            iconsArr.push(back.childNodes[0]);
         }
         function sortSvgs(array) {
             let compareArr = [];
@@ -283,11 +279,12 @@ const flags = {
 
         let sortediconsArr = sortSvgs(iconsArr);
 
-        for(let b=0; b<tiles; b++) {
+        for(let b=0; b<allTiles.length; b++) {
             if(b%2) {
                 tileTypeArr1.push(sortediconsArr[b]);
             } else { tileTypeArr2.push(sortediconsArr[b]); }
         }
+
         const tileType1 = document.querySelectorAll('.tileType1');
         const tileType2 = document.querySelectorAll('.tileType2');
 
@@ -483,7 +480,7 @@ const flags = {
         spinningBox.classList.add('spinning');
         game.appendChild(spinningBox);
         spinningBox.appendChild(board);
-        const rotation = anime({
+        anime({
             targets: spinningBox,
             duration: 14000,
             keyframes:[
@@ -602,6 +599,13 @@ const flags = {
     // LVL 7
 
     resetRotatingBoard_7: function() {
+        // Clean up level 6 styling
+        const allTiles = document.querySelectorAll('.tile');
+        allTiles.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            back.style = '';
+        })
+
         let randomDiv = document.createElement('div');
         let game = document.querySelector('.game');
         let board = document.querySelector('.board');
@@ -1006,10 +1010,6 @@ const flags = {
             el.classList.add('focused'); 
             focusedIcon.push(back.childNodes[0]);
         });
-
-        let currTarget = document.querySelector('.target-2') || document.querySelector('.target-1');
-        let back = currTarget.querySelector('.tile-back');
-        let svg = back.childNodes[0];
 
         let newBg = {color: 'n'};
         let newBor = {color: 'n'};
@@ -1584,6 +1584,10 @@ const flags = {
                 })
 
                 break;
+            }
+
+            default: {
+                // **EMPTY**
             }
         }
     },
@@ -3961,7 +3965,6 @@ const flags = {
         })
 
         const animationContainer = document.querySelector('.animationContainer');
-        const background = document.querySelector('.background');
 
         animationContainer.style = 'background-color: #000';
         document.querySelector('.board').dataset.animation = 'on';
@@ -4374,7 +4377,6 @@ const flags = {
         const selfPointing = 'self-pointing';
         const magic = 'magic';
 
-        const allRooms = document.querySelectorAll('.room');
         // Sprawdź tu, czy któryś z pokoi nie jest już pusty, i jeśli jest, to usuń go
         for(let j=0; j<iter.amount.length; j++) {
             let count = 0;
@@ -4653,6 +4655,16 @@ const flags = {
         this.setTwoScenariosOptions_20(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomId, behaviourControlObj, random);
     },
 
+    lookForRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter) {
+        if(foundTiles+2 === tiles) {
+            return;
+        }
+
+        else if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) {
+            this.pickRandomizingScenario_20(cardsOpened, tiles, foundTiles, iter);
+        }
+    },
+
     setTwoScenariosOptions_20: function(cardsOpened, tiles, foundTiles, iter, roomToGo, scenario, roomId, behaviourControlObj, random) {
         // Remove all star colorful classes
         let allArrows = document.querySelectorAll(`.directory-arrow`);
@@ -4712,7 +4724,7 @@ const flags = {
         let firstArrowProps = iter.nextArr[firstArrowNumber];
 
         let arrowId = iter.nextArr[firstArrowNumber].arrow;  // This one would be useful for our second arrow
-        let scenarioName = iter.nextArr[firstArrowNumber].scenario; // This one would be useful for our second arrow
+        //let scenarioName = iter.nextArr[firstArrowNumber].scenario; // This one would be useful for our second arrow
 
         // Now adjust chosen arrow with custom properties !
         let firstArrow = document.querySelector(`.directory-${arrowId}`);

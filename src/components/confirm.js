@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Game from './game.js';
+import React, { useRef } from 'react';
 import levels from '../levels.js';
 import anime from 'animejs/lib/anime.es.js';
 

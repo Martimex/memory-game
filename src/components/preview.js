@@ -1,11 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Game from './game.js';
-import levels from '../levels.js';
+import React, { } from 'react';
 import '../styles/preview.css';
 import anime from 'animejs/lib/anime.es.js';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fab } from '@fortawesome/free-brands-svg-icons';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 
 function Preview(props) {
 

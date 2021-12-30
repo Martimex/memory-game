@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import '../styles/landing.css';
 import '../animations/animeLanding.js';
-import ReactDOM from 'react-dom';
 import anime from 'animejs/lib/anime.es.js';
 import { colors } from '../vars.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,7 +9,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { tileCodes } from '../vars.js';
-import { useState } from 'react/cjs/react.development';
 
 library.add(fab, fas);
 
@@ -53,18 +51,6 @@ function Landing(props) {
     const tileCodes = props.tileCodes;
 
     const gameBoard = useRef(null);
-
-    useEffect(() => {
-        const board = gameBoard.current;
-        const allChilds = board.children;
-
-        for(let child of allChilds) {
-            let back = child.childNodes[2];
-            let svg = back.childNodes[0];
-        }
-
-    }, []);
-
 
     /* BELOW USED FOR TILES BORDER COLOR MANIPULATION */
 
@@ -179,7 +165,7 @@ function Landing(props) {
                     <div className='game-subtitle'>The Ultimate Memory Game</div>
                 </div>
                 <div className='content-action' >
-                    <div className='from-author'> &copy; Created with love by @Martimex</div>
+                    <div className='from-author'> &copy; Created with ♡ by @Martimex</div>
                     <button className='start' onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button>
                 </div>
             </div>       
