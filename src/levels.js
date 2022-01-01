@@ -183,7 +183,7 @@ const levels = {
         tiles: 40,  // 40
         iconSet: 'fas',
         counter: {
-            time: 150,  // 152, 150
+            time: 156,  // 152, 150
             turns: null, // 31
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
@@ -203,12 +203,12 @@ const levels = {
     lvl8: {
         lv: 8,
         rows: 6,
-        columns: 9,
+        columns: 8,
         tile_size: 46,
-        tiles: 54,  // 54
+        tiles: 48,  // 54
         iconSet: 'fas',
         counter: {
-            time: 252,  // 
+            time: 248,  // 
             turns: null, // 46
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
