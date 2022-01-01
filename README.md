@@ -4,7 +4,9 @@ Test your memorizing skills with this crazy game. Awake your hidden memorizing p
 
 ## Story time
 
-The idea of creating a memory game came spontaneously at the end of June 2021. During this time I was looking for picking a new framework to learn. I have chosen React. After few weeks of learning its basics, it turned out that combining memory game with a React app might be brilliant stuff. On July 13th I have created the repository and from on worked exclusively to create this project. The main template (landing page, main Game Component + bug resolving) was done in 1 month. After finishing the very basics, it was the high time to work on creating various levels. From early September to half of Dcember 2021 I was trying my best to design levels, which strongly differ from each ohter. Finally, on December 30th, the Flash Memo Game was deployed to production and from this day it is available to play.
+The idea of creating a memory game came spontaneously at the end of June 2021. During this time I was looking for picking a new framework to learn. I have chosen React. After few weeks of learning its basics, it turned out that combining memory game with a React app might be brilliant stuff. 
+
+On July 13th I have created the repository and from on worked exclusively to create this project. The main template (landing page, main Game Component + bug resolving) was done in 1 month. After finishing the very basics, it was the high time to work on creating various levels. From early September to half of Dcember 2021 I was trying my best to design levels, which strongly differ from each ohter. Finally, on December 30th, the Flash Memo Game was deployed to production and from this day it is available to play.
 
 During this time I have learnt a lot not only about React framework, but UX designing aswell. Thanks to this project, I feel way more comfortable creating various animations, making some cool SVGs, solving many new issues, and list goes on and on.
 
