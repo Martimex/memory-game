@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+# Flash Memo Game
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Test your memorizing skills with this crazy game. Awake your hidden memorizing potential by facing a series of challenging levels. Only the bravest Adventurers would make it through. Get rid of annoying tiles, find the right solutions and complete the epic Adventure through 20 levels. Would you dare to face them all?
 
-## Available Scripts
+## Story time
 
-In the project directory, you can run:
+The idea of creating a memory game came spontaneously at the end of June 2021. During this time I was looking for picking a new framework to learn. I have chosen React. After few weeks of learning its basics, it turned out that combining memory game with a React app might be brilliant stuff. On July 13th I have created the repository and from on worked exclusively to create this project. The main template (landing page, main Game Component + bug resolving) was done in 1 month. After finishing the very basics, it was the high time to work on creating various levels. From early September to half of Dcember 2021 I was trying my best to design levels, which strongly differ from each ohter. Finally, on December 30th, the Flash Memo Game was deployed to production and from this day it is available to play.
 
-### `npm start`
+During this time I have learnt a lot not only about React framework, but UX designing aswell. Thanks to this project, I feel way more comfortable creating various animations, making some cool SVGs, solving many new issues, and list goes on and on.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The project took approximately 400 - 450 hours to its initial release (including time to make those exhausing SVGs tho!). It might seem like a lot of the time for not that much complicated project, but I have spent quite a lot of the time on testing this game in order to be certain that it works OK.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Prerequisites
 
-### `npm test`
+No special requirements needed. However, I would highly recommend to play this game using mouse (instead of touchpads in laptops) for better in-game experience.\
+\
+IMPORTANT NOTE: This game is not available for mobile devices yet! Please wait patiently, this is one of main features coming out soon!
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Want to play the game ?
 
-### `npm run build`
+That's great! Here is the link: https://flashmemo.herokuapp.com/ \
+\
+Note: It might take a couple of seconds to load, please wait patiently.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Tools used
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Here is the brief list of tools used to create this App:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- ReactJS [framework]; 
+- NodeJS [runtime environment]; 
+- Font Awesome [for all that fancy icons in the game]; 
+- Anime.js [animation library - 99% of animations were made thanks to it]; 
+- Inkscape [tool for making SVG's];
+- Heroku [hosting provider];
 
-### `npm run eject`
+## Future improvements
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+A lot of improvements have already been done in this project, but there's a lot more still unfinished. Following is the current todo list (in order from the most important):
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Make a version accessible for mobile devices;
+2. Create a pause button for levels (especially useful for time based levels);
+3. A bit of work around levels balancing stuff;
+4. Minor bugs resolving;
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## License
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This game has been made under MIT License 
+© Martimex 2021
