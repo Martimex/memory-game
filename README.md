@@ -47,4 +47,4 @@ A lot of improvements have already been done in this project, but there's a lot 
 ## License
 
 This game has been made under MIT License 
-© Martimex 2021
+© Martimex 2022
