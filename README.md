@@ -46,5 +46,6 @@ A lot of improvements have already been done in this project, but there's a lot 
 
 ## License
 
-This game has been made under MIT License - follow this link for it's detailed content: https://github.com/Martimex/memory-game/blob/main/License \
+This game has been made under MIT License - follow this link for it's detailed content: https://github.com/Martimex/memory-game/blob/main/License 
+\
 © Martimex 2022
