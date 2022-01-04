@@ -13,6 +13,7 @@ import GameInfo from './game_info.js';
 import Confirm from './confirm.js';
 import ConfirmPlay from './confirm_play';
 import ConfirmWin from './confirm_win';
+import Pause from './pause';
 
 import { setIcon, fasArray, /* fabArray */ } from './landing.js';
 
@@ -33,7 +34,7 @@ let iter = {
     /*used ONLY for lvl 20 time multiplying */ timeAddon: 0,
     /*used for more advanced animation stuff*/ array: [],
     /*additional array for lvl 17 purposes*/ nextArr: [],
-    /*determines whether you passed level specific conditions - if not, value = false and u lose the level*/ passCondition: true,
+    /*determines whether its okay to do pause ATM*/ pauseCondition: true,
 };  // EXTRA VALUES FOR FLAG FUNCTIONS
 
 
@@ -90,6 +91,8 @@ function Game(props) {
     const [foundTiles, setFoundTiles] = useState(0);
     const [confirmValue, setConfirmValue] = useState(null); // przyjmuje wartości true / false  -> wygrałeś / przegrałeś ten poziom ?
 
+    const [pause, setPause] = useState(false); // is game paused? Should game be paused ?
+
     const all = useRef(null);
     const bg = useRef(null);
     const gameboard = useRef(null);
@@ -130,7 +133,7 @@ function Game(props) {
         iter.timeAddon = 0;
         iter.array = [];
         iter.nextArr = [];
-        iter.passCondition = true;
+        iter.pauseCondition = false; // by default, it is not allowed to turn on pasue btn
 
         async function finish() {
            await winLvAnimation()
@@ -193,7 +196,7 @@ function Game(props) {
 
         // ADD STARTING FLAG
         levels[`lvl${level-1}`].onStartFlag(cardsOpened, tiles, foundTiles, iter);
-
+        iter.pauseCondition = false;
         // Below add some Inverse / Reverse starting animation
         inverseReverse.current = anime.timeline({
             duration: 1400,
@@ -257,7 +260,9 @@ function Game(props) {
 
         if(levels[`lvl${level-1}`].counter.time !== null) {
             const stopwatch = setInterval(() => {
-                setTime((time + 1) - iter.timeAddon);
+                if(pause !== true) {
+                    setTime((time + 1) - iter.timeAddon);
+                }
             }, 1000);
     
             if((foundTiles === tiles) && (levels[`lvl${level-1}`].counter.time - time > 0)) {
@@ -274,7 +279,7 @@ function Game(props) {
             return () => clearInterval(stopwatch);
         }
 
-    }, [time, level]); // Level because normally we won't count down time - only when those time levels came in, so every time we need to check if new level is the time level
+    }, [time, level, pause]); // Level because normally we won't count down time - only when those time levels came in, so every time we need to check if new level is the time level
 
 
     let arr = [];
@@ -303,6 +308,7 @@ function Game(props) {
         resolveAnimationBugs();
 
         if(cardsOpened.length > 1) {
+            iter.pauseCondition = false;
             doCardsMatch(cardsOpened);
         }
     }
@@ -374,6 +380,7 @@ function Game(props) {
             isChecking = false;
     
             setTimeout(() => {
+                iter.pauseCondition = true;
                 gameboard.current.addEventListener('click', clickable); 
             }, 300); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
     
@@ -381,6 +388,7 @@ function Game(props) {
     }
         
     function resolveAnimationBugs() {
+
         let tilesToCheck = [...gameboard.current.childNodes];
         let buggedTiles = [];
         tilesToCheck.forEach((ttc, index) => {
@@ -508,6 +516,19 @@ function Game(props) {
         } 
     }
 
+    function pauseGame() {
+        if(iter.pauseCondition) {
+            setPause(true);
+        }
+    }
+
+    function continueGame() {
+        setPause(false);
+        if(time !== null) {
+            setTime(time + 1); // Taxing 1 second every time player press pause - in order to avoid taking time advantages (or animation skipping)
+        }
+    }
+
     return(
         <div className='all' ref={all}>
             <div className={`background bg-${level-1}`} ref={bg}>
@@ -516,12 +537,20 @@ function Game(props) {
                 </div>
 
                 {/*  ONLY FOR DEV LEVEL TESTING ->  <div onClick={() => {setLevel(level + 2); confirmSuccess();}}> XMM; </div>*/}
+                <div onClick={() => {setLevel(level + 0); confirmSuccess();}}> XMM; </div>
                 <div className={`game game-${level-1}`} ref={game}>
                     <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}rem)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}rem)`}}>
                         {allTiles}
                     </div>
                 </div>
+                <div className={(iter.pauseCondition) ? 'pause-btn' : 'pause-btn-not-active' } isVisual={iter.pauseCondition} onClick={pauseGame} > || </div>
                 <div className={`animationContainer aContainer-${level-1}`} ref={animationBox}></div>
+
+                {pause === true && (
+                    <div className='pause-box'>
+                        {<Pause continue={continueGame} />}
+                    </div>
+                )}
 
                 {confirmValue === 'play' && (
                     <div className='confirmation-p'>

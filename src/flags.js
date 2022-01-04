@@ -345,6 +345,15 @@ const flags = {
         const secondType = document.querySelectorAll('.tileType2');
 
         document.querySelector('.board').dataset.animation = 'on';
+        document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+        firstType.forEach(tile => {
+            tile.style.pointerEvents = 'none';
+        })
+
+        secondType.forEach(tile => {
+            tile.style.pointerEvents = 'auto';
+        })
 
         async function wait() {
             const a1 = anime({
@@ -371,6 +380,7 @@ const flags = {
         wait().then(() => {
             setTimeout(() => {
                 document.querySelector('.board').dataset.animation = 'off';
+                document.querySelector('.board').setAttribute('pointerEvents', 'auto');
             }, 2000);
         })
 
@@ -381,6 +391,15 @@ const flags = {
         const firstType = document.querySelectorAll('.tileType1');
 
         document.querySelector('.board').dataset.animation = 'on';
+        document.querySelector('.board').setAttribute('pointerEvents', 'none');
+
+        secondType.forEach(tile => {
+            tile.style.pointerEvents = 'none';
+        })
+        
+        firstType.forEach(tile => {
+            tile.style.pointerEvents = 'auto';
+        })
 
         async function wait() {
             const a1 = anime({
@@ -408,6 +427,7 @@ const flags = {
         wait().then(() => {
             setTimeout(() => {
                 document.querySelector('.board').dataset.animation = 'off';
+                document.querySelector('.board').setAttribute('pointerEvents', 'auto');
             }, 2000);
         })
     },

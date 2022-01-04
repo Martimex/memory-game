@@ -211,6 +211,37 @@ button:hover {
     overflow: hidden;
 }
 
+/* PAUSE BUTTON */
+
+.pause-btn {
+    position: absolute; bottom: 2vh; right: 2vw;
+    width: 4vw; height: 4vw;
+    max-width: 9vh;
+    max-height: 9vh;
+    border-radius: 50%;
+    padding: .8rem;
+    color: hsla(0, 0%, 0%, 0.5);
+    border: .3rem double hsla(0, 0%, 0%, .55);
+    background-image: linear-gradient(155deg, hsla(0, 0%, 0%, .2), hsla(0, 0%, 0%, .4), hsla(0, 0%, 0%, .7));
+    font-size: 2rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.pause-btn-not-active {
+    position: absolute; bottom: 2vh; right: 2vw;
+    width: 4vw; height: 4vw;
+    max-width: 9vh;
+    max-height: 9vh;
+    border-radius: 50%;
+    padding: .8rem;
+    color: hsla(0, 0%, 0%, 0.5);
+    border: .3rem double hsla(0, 0%, 0%, .55);
+    background-image: none;
+    font-size: 2rem;
+    font-weight: 800;
+    cursor: pointer;
+}
 
 
 
