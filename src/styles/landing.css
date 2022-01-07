@@ -108,7 +108,8 @@ h1 {
 }
 
 .content::before {
-    content: '';
+    content: 'ver. \ 1.0.0';
+    font-size: 1.4rem;
     display: block;
     position: absolute;  top: -.4rem; left: -.4rem;
     width: 4rem;
@@ -116,6 +117,7 @@ h1 {
     border: .2rem solid #ffae18;
     border-radius: 50%;
     background: #000;
+    color: #ffcb2299;
     -webkit-box-shadow: -14px -10px 13px 5px #FFC518; 
     box-shadow: -14px -10px 13px 5px #FFC518;
     -webkit-box-shadow: -5px -7px 13px 20px rgba(255,197,24,0.6); 
@@ -228,4 +230,149 @@ h1 {
 .fa-icon {
     color: #fffb;
     font-size: 1.2rem;
+}
+
+@media screen and (min-width: 340px) and (max-width: 768px) and (orientation: landscape) {
+    .game-title{
+        font-size: 1.8rem; /* M = Modified, so keep those and do not remove*/
+        letter-spacing: .2rem; /* M */
+    }
+
+    .theme {
+        grid-template-columns: repeat(21, 1.9rem); /* M */
+        grid-template-rows: repeat(10, 1.9rem); /* M */
+    }
+
+    .card {
+        margin: .5rem;
+        padding: .5rem; /* M */
+    }
+
+    .fa-icon {
+        font-size: .7rem; /* M */
+    }
+
+    .content {
+        width: 60vw; /* M */
+        height: 50vh; /* M */
+        position: absolute; top: 25vh; left: 20vw; /* M */
+    }
+
+    .content::before {
+        content: 'ver. \ 1.0.0'; /* M */
+        color: #ffcb2277;
+        font-size: 1.2rem; /* M */
+        -webkit-box-shadow: -2px -3px 9px 12px rgba(255,197,24,0.6);  /* M */
+        box-shadow: -2px -3px 9px 12px rgba(255,197,24,0.6);  /* M */
+    }
+
+    .content-section {
+        padding: .5rem; /* M */
+    }
+    
+    .from-author {
+        font-size: 1rem; /* M */
+        top: 5%;
+    }
+    
+    .start {
+        top: 30%; /* M */
+        box-shadow: 0px -10px 5px 10px rgba(0,0,0,0.5); /* M */
+        -webkit-box-shadow: 0px -10px 5px 10px rgba(0,0,0,0.5); /* M */
+        -moz-box-shadow: 0px -10px 5px 10px rgba(0,0,0,0.5); /* M */
+    }
+    
+    .game-subtitle {
+        font-size: 1.2rem; /* M */
+        box-shadow: 0px -8px 6px 8px rgba(0,0,0,0.9); /* M */
+        -webkit-box-shadow: 0px -8px 6px 8px rgba(0,0,0,0.9); /* M */
+        -moz-box-shadow: 0px -8px 6px 8px rgba(0,0,0,0.9);  /* M */
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 980px) and (orientation: landscape) { 
+    .game-title{
+        font-size: 1.8rem; /* M = Modified, so keep those and do not remove*/
+        letter-spacing: .2rem; /* M */
+    }
+
+    .theme {
+        grid-template-columns: repeat(21, 2.3rem); /* M */ /* M */
+        grid-template-rows: repeat(10, 2.3rem); /* M */ /* M */
+    }
+
+    .card {
+        margin: .5rem;
+        padding: .7rem; /* M */ /* M */
+    }
+
+    .fa-icon {
+        font-size: .7rem; /* M */
+    }
+
+    .content {
+        width: 50vw; /* M */ /* M */
+        height: 50vh; /* M */
+        position: absolute; top: 25vh; left: 25vw; /* M */ /* M */
+    }
+
+    .content::before {
+        content: 'ver. \ 1.0.0'; /* M */
+        color: #ffcb2277;
+        font-size: 1.2rem; /* M */
+        -webkit-box-shadow: -2px -3px 9px 12px rgba(255,197,24,0.6);  /* M */
+        box-shadow: -2px -3px 9px 12px rgba(255,197,24,0.6);  /* M */
+    }
+
+    .content-section {
+        padding: .5rem; /* M */
+    }
+    
+    .from-author {
+        font-size: 1rem; /* M */
+        top: 5%;
+    }
+    
+    .start {
+        top: 30%; /* M */
+        box-shadow: 0px -10px 5px 10px rgba(0,0,0,0.5); /* M */
+        -webkit-box-shadow: 0px -10px 5px 10px rgba(0,0,0,0.5); /* M */
+        -moz-box-shadow: 0px -10px 5px 10px rgba(0,0,0,0.5); /* M */
+    }
+    
+    .game-subtitle {
+        font-size: 1.2rem; /* M */
+        box-shadow: 0px -8px 6px 8px rgba(0,0,0,0.9); /* M */
+        -webkit-box-shadow: 0px -8px 6px 8px rgba(0,0,0,0.9); /* M */
+        -moz-box-shadow: 0px -8px 6px 8px rgba(0,0,0,0.9);  /* M */
+    }
+}
+
+@media screen and (min-width: 981px) and (max-width: 1240px) and (orientation: landscape) {
+    .theme {
+        grid-template-columns: repeat(21, 3rem); /* M */ /* M */ /* M */
+        grid-template-rows: repeat(10, 3rem); /* M */ /* M */ /* M */
+    }
+
+    .content-section {
+       
+    }
+
+    .card {
+        margin: .5rem;
+        padding: .9rem; /* M */ /* M */
+    }
+
+    .content {
+        width: 50vw; /* M */ /* M */
+        height: 36vh; /* M */
+        position: absolute; top: 32vh; left: 25vw; /* M */ /* M */
+    }
+
+    .start {
+        top: 30%; /* M */
+        box-shadow: 0px -10px 5px 10px rgba(0,0,0,0.5); /* M */
+        -webkit-box-shadow: 0px -10px 5px 10px rgba(0,0,0,0.5); /* M */
+        -moz-box-shadow: 0px -10px 5px 10px rgba(0,0,0,0.5); /* M */
+    }
 }
