@@ -354,10 +354,6 @@ h1 {
         grid-template-rows: repeat(10, 3rem); /* M */ /* M */ /* M */
     }
 
-    .content-section {
-       
-    }
-
     .card {
         margin: .5rem;
         padding: .9rem; /* M */ /* M */
