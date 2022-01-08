@@ -1,6 +1,7 @@
 import  React, { useState, useEffect, useRef } from 'react';
 import '../styles/game.css';
 import  levels from '../levels.js';
+import useMediaQuery from '../virtual_hooks/useMediaQuery';
 
 import anime from 'animejs/lib/anime.es.js';
 
@@ -78,6 +79,8 @@ function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
 
 //INIT
 function Game(props) {
+
+    const isDesktop = useMediaQuery('(min-width: 941px)');
 
     const [renderCount, setRenderCount] = useState(0);
     const [animationLoad, setAnimationLoad] = useState(false);
@@ -298,6 +301,14 @@ function Game(props) {
         <div className={`tile t-${level-1}`} key={index.toString()}><div className={`tile-front tf-${level-1}`}></div> <div className={`tile-back tb-${level-1}`}>{<FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon-${level-1}`}/>}</div></div>
     ); 
     
+    // Add proper styling based on device used by end user
+    let boardGridParams;
+    if(isDesktop) {
+        boardGridParams = {gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}rem)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}rem)`};
+    } else {
+        boardGridParams = {gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size_mobile)/10}rem)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size_mobile)/10}rem)`};
+    }
+
     function keepCardOpen(allCardNodes, card_back, card, target) {
       
         cardsOpened.push(card_back);
@@ -537,8 +548,9 @@ function Game(props) {
                 </div>
 
                 {/*  ONLY FOR DEV LEVEL TESTING ->  <div onClick={() => {setLevel(level + 2); confirmSuccess();}}> XMM; </div>*/}
+                {/* <div onClick={() => {setLevel(level + 10); confirmSuccess();}}> XMM; </div> */}
                 <div className={`game game-${level-1}`} ref={game}>
-                    <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={{gridTemplateColumns: `repeat(${levels[`lvl${level-1}`].columns}, ${(levels[`lvl${level-1}`].tile_size)/10}rem)`, gridTemplateRows: `repeat(${levels[`lvl${level-1}`].rows}, ${(levels[`lvl${level-1}`].tile_size)/10}rem)`}}>
+                    <div className={`board board-${level-1}`} ref={gameboard} data-animation='off' onClick={handleState} style={boardGridParams}>
                         {allTiles}
                     </div>
                 </div>

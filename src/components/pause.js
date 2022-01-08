@@ -1,6 +1,6 @@
 import React, { } from 'react';
 import '../styles/pause.css';
-import anime from 'animejs/lib/anime.es.js';
+/* import anime from 'animejs/lib/anime.es.js'; */
 
 function Pause(props) {
 

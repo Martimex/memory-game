@@ -32,6 +32,7 @@ const levels = {
         rows: 4,
         columns: 4,
         tile_size: 70, // 80 x 0.1vw // now its 80 x 0.1rem;
+        tile_size_mobile: 40,
         tiles: 16,   // 16 , 6
         iconSet: 'fas',
         counter: {
@@ -56,6 +57,7 @@ const levels = {
         rows: 3,
         columns: 8,
         tile_size: 64,
+        tile_size_mobile: 46,
         tiles: 24,  // 24
         iconSet: 'fas',
         counter: {
@@ -79,6 +81,7 @@ const levels = {
         rows: 4,
         columns: 5,
         tile_size: 66,
+        tile_size_mobile: 42,
         tiles: 20,  // 20
         iconSet: 'fas',
         counter: {
