@@ -211,7 +211,82 @@ button:hover {
     overflow: hidden;
 }
 
+/* PAUSE BUTTON */
 
+.pause-btn {
+    position: absolute; bottom: 2vh; right: 2vw;
+    width: 4vw; height: 4vw;
+    max-width: 9vh;
+    max-height: 9vh;
+    border-radius: 50%;
+    padding: .8rem;
+    color: hsla(0, 0%, 0%, 0.5);
+    border: .3rem double hsla(0, 0%, 0%, .55);
+    background-image: linear-gradient(155deg, hsla(0, 0%, 0%, .2), hsla(0, 0%, 0%, .4), hsla(0, 0%, 0%, .7));
+    font-size: 2rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.pause-btn-not-active {
+    position: absolute; bottom: 2vh; right: 2vw;
+    width: 4vw; height: 4vw;
+    max-width: 9vh;
+    max-height: 9vh;
+    border-radius: 50%;
+    padding: .8rem;
+    color: hsla(0, 0%, 0%, 0.5);
+    border: .3rem double hsla(0, 0%, 0%, .55);
+    background-image: none;
+    font-size: 2rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+
+/*HERE IS THE MEDIA QUERY LIST FOR MOBILE DEVICES*/ 
+
+@media screen and (min-width: 340px) and (max-width: 680px) and (orientation: landscape) {
+    .details-item {
+        font-size: 1.25rem;
+    }
+    .game-details {
+        padding: 2rem 0 1.4rem 0;
+    }
+
+    .confirmation-table-s, .confirmation-table-f {
+        position: absolute; top: 15%; left: 20%;
+        width: 60%; height: 70%;
+    }
+    .title-s, .title-f {
+        padding: .5rem 0rem;
+        font-size: 1.7rem;
+        font-weight: 650;
+        letter-spacing: .2rem;
+    }
+    .info-s, .info-f {
+        padding: .45rem 2.3rem .45rem 2.3rem;
+    }
+    .highscore-s, .highscore-f {
+        padding: .8rem;
+        font-weight: 550;
+        font-size: 1.15rem;
+    }
+    .btn-s, .btn-f {
+        height: 2.6rem;
+        width: 8rem;
+        font-size: 1.2rem;
+    }
+    
+}
+
+@media screen and (min-width: 681px) and (max-width: 940px) and (orientation: landscape) {
+
+}
+
+@media screen and (min-width: 941px) and (max-width: 1240px) and (orientation: landscape) {
+
+}
 
 
 /* LEVEL 1 */
