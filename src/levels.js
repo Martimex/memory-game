@@ -85,7 +85,7 @@ const levels = {
         tiles: 20,  // 20
         iconSet: 'fas',
         counter: {
-            time: 54, //  45, 50, 48, 54
+            time: 64, //  45, 50, 48, 54, (54 -> 64)
             turns: null, // 17
         },
         onStartFlag: function() {
@@ -108,7 +108,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 42, // 42
+            turns: 45, // 42, (42 -> 45)
         },
         onStartFlag: function() {
             flags.blockInverseAnimation_4();
@@ -160,7 +160,7 @@ const levels = {
         iconSet: 'fas',
         counter: {
             time: null,
-            turns: 54, // 31, 40, 58, 54
+            turns: 52, // 31, 40, 58, (54 -> 52)
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.resetBgImg_6(cardsOpened, tiles, foundTiles, iter);
@@ -235,7 +235,7 @@ const levels = {
         tiles: 42,  // 42
         iconSet: 'fas',
         counter: {
-            time: 165,  // 
+            time: 180,  // 165 -> 180 
             turns: null, // 22, 34, 40
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
