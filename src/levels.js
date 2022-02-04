@@ -264,7 +264,7 @@ const levels = {
             turns: 50, // 22, 34, 40, 44
         },
         onStartFlag: function(cardsOpened, tiles, foundTiles, iter) {
-
+            flags.removeLvl9Stylings_10(cardsOpened, tiles, foundTiles, iter);
         },
         onFirstClickFlag: function(cardsOpened, tiles, foundTiles, iter) {
             flags.animateBorders_10(cardsOpened, tiles, foundTiles, iter);

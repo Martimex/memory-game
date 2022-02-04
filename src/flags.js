@@ -1022,6 +1022,16 @@ const flags = {
 
     // LVL 10
 
+    removeLvl9Stylings_10: function(cardsOpened, tiles, foundTiles, iter) {
+        document.querySelector('.board').style.background = 'none';
+        const allTiles = document.querySelectorAll('.tile');
+        allTiles.forEach(tile => {
+            let back = tile.querySelector('.tile-back');
+            back.childNodes[0].style.fontSize = '1.8rem';
+            back.childNodes[0].style.color = 'hsla(229, 91%, 52%, .6)';
+        })
+    },
+
     animateBorders_10: function(cardsOpened, tiles, foundTiles, iter) {
         let focusedIcon = [];
         let target = document.querySelectorAll('.target');
