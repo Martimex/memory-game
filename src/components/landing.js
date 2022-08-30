@@ -10,6 +10,14 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { tileCodes } from '../vars.js';
 
+// 2.0 Import stuff
+import { all_levels } from '../global/all_levels.js';
+
+console.log(all_levels);
+
+
+//////////
+
 library.add(fab, fas);
 
 let usedIcons = [];
@@ -165,7 +173,7 @@ function Landing(props) {
                     <div className='game-subtitle'>The Ultimate Memory Game</div>
                 </div>
                 <div className='content-action' >
-                    <div className='from-author'> &copy; Created with ♡ by @Martimex</div>
+                    <div className='from-author'> The hardest memory game You would ever play...</div>
                     <button className='start' onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button>
                 </div>
             </div>       

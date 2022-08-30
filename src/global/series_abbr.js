@@ -1,0 +1,3 @@
+const series_abbr = {
+    
+}

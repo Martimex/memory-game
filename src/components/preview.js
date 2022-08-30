@@ -1,10 +1,30 @@
-import React, { } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/preview.css';
 import anime from 'animejs/lib/anime.es.js';
+import  { all_levels } from '../global/all_levels.js';
 
 function Preview(props) {
 
+    const [[levelChoose, serie], setLevelChoose] = useState([null, null]);
     const animationTextOpacity = React.useRef(null);
+
+    const levels_showcase = Object.keys(all_levels).map((serie_name, index) => 
+        <div className='showcase-serie-box' key={serie_name.toString()}>
+            {Object.keys(all_levels[serie_name]).map((lv, index) => 
+                <div className='showcase-level-box' 
+                    key={serie_name.toString() + index.toString()}
+                    onClick={() => {setLevelChoose([all_levels[serie_name][lv], serie_name])}}
+                > 
+                    {all_levels[serie_name][lv].tiles} 
+                </div>
+            )}
+        </div>
+    )
+
+    useEffect(() => {
+        console.log(levelChoose);
+        console.log(serie);
+    }, [levelChoose]);
 
     React.useEffect(() => {
         animationTextOpacity.current = anime({
@@ -66,6 +86,8 @@ function Preview(props) {
         await fadeAnimation()
     }
 
+    //console.log(all_levels['tf'][2].limitations) - here some props can be accessed
+
     return (
         <div className='bg-main'>
             <div className='seizure-box'>
@@ -74,9 +96,13 @@ function Preview(props) {
                         <div className='mode-title'>Adventure mode </div>
                     </div>
                     <div className='mode-block'>
-                        <div className='mode-about'>
+{/*                         <div className='mode-about'>
                             The magic journey through different levels. This mode awaits for brave Adventurer,
                             who is willing to overcome many various challenges. No mistakes allowed.
+                            {all_levels['tf'][2].tile_size}
+                        </div> */}
+                        <div>
+                            {levels_showcase}
                         </div>
                     </div>
                     <div className='proceed'>
