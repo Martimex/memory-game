@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/preview.css';
 import anime from 'animejs/lib/anime.es.js';
+
+import { LevelInfo } from './level_info.js';
 import  { all_levels } from '../global/all_levels.js';
 
 function Preview(props) {
@@ -115,6 +117,12 @@ function Preview(props) {
             <div className='return-home'>
                 <button className='back' onClick={() => {props.backToHome(); proceed();}}> H </button>
             </div>
+
+            { levelChoose && (
+                <LevelInfo serie_name={serie} level_details={levelChoose} closeLevelInfo={setLevelChoose} 
+                    changeComponent={props.changeComponent} proceed={proceed}
+                />
+            )}
         </div>
     )
 
