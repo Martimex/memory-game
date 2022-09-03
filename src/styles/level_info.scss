@@ -37,11 +37,24 @@ $textShadow_hex_alt : 77;
     @include flexBox;
 }
 
+.bg-placeholder {
+    @include absolute;
+    height: 100%;
+    z-index: -2;
+    border-radius: 5%;
+    filter: saturate(90%);
+    background-position: center;
+    background-size: 100%;
+    box-shadow: inset .4rem .4rem 2.6rem #111, .3rem .3rem 2rem #000;
+}
+
+
 .level-info-box-content {
+    z-index: 10;
     max-width: 75%;
     min-width: 50%;
     background-color:#222;
-    background-image: url('../bgs/bg-19.svg');
+    //background-image: url('../bgs/bg-17.svg');
     background-size: 100%;
     filter: saturate(90%);
     border-radius: 5%;
