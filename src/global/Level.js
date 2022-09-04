@@ -1,6 +1,7 @@
 class Level {
-    constructor(number, tiles, rows, columns, cords, tile_size, icon_set, limitations, starting_animation_time, compare_time, uncover, score, win) {
+    constructor(number, difficulty, tiles, rows, columns, cords, tile_size, icon_set, limitations, starting_animation_time, compare_time, uncover, score, win) {
         this.number = number;
+        this.difficulty = difficulty;
         this.tiles = tiles;
         this.rows = rows;
         this.columns = columns;

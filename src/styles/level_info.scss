@@ -1,4 +1,5 @@
 $starYellow : hsl(45, 67%, 60%);
+$starYellow_dimmed: hsla(45, 67%, 60%, .8);
 $textShadow_hex : 122;
 $textShadow_hex_alt : 77;
 
@@ -37,18 +38,6 @@ $textShadow_hex_alt : 77;
     @include flexBox;
 }
 
-.bg-placeholder {
-    @include absolute;
-    height: 100%;
-    z-index: -2;
-    border-radius: 5%;
-    filter: saturate(90%);
-    background-position: center;
-    background-size: 100%;
-    box-shadow: inset .4rem .4rem 2.6rem #111, .3rem .3rem 2rem #000;
-}
-
-
 .level-info-box-content {
     z-index: 10;
     max-width: 75%;
@@ -66,6 +55,18 @@ $textShadow_hex_alt : 77;
     place-items: center;
     box-shadow: inset .4rem .4rem 2.6rem #111, .3rem .3rem 2rem #000;
 }
+
+.bg-placeholder {
+    @include absolute;
+    height: 100%;
+    z-index: -2;
+    border-radius: 5%;
+    filter: saturate(90%);
+    background-position: center;
+    background-size: 100%;
+    box-shadow: inset .4rem .4rem 2.6rem #111, .3rem .3rem 2rem #000;
+}
+
 
 .level-info-box-content-item {
     height: 100%;
@@ -120,13 +121,13 @@ $textShadow_hex_alt : 77;
 
 .content-item-verification-circle {
     padding: .9em;
-    border: .15em solid #5b77;
+    border: .15em solid $starYellow_dimmed; //#5b77;
     border-radius: 50%;
 }
 
 .icon-check {
     font-size: 2.4rem;
-    color:#5b7;
+    color: $starYellow_dimmed; //#5b7;
 }
 
 .level-info-box-content-item[datatype='main'] {
@@ -138,11 +139,15 @@ $textShadow_hex_alt : 77;
 }
 
 .content-item-level, .content-item-time, .content-item-score, .content-item-trials,
-.content-item-serie, .content-item-version, .content-item-date 
+.content-item-version, .content-item-date 
 {
-    @include text3d;
+    @include text3d; // its only default color (visible when something goes wrong)
     font-size: 2.5rem;
     font-weight: 700;
+}
+
+.content-item-serie {
+    color: $starYellow_dimmed;
 }
 
 .content-item-level-circle {
@@ -169,14 +174,13 @@ $textShadow_hex_alt : 77;
     font-weight: 600;
 }
 
-
 .play {
     @include flexBox;
     //background: linear-gradient(135deg, hsla($textShadow_hex, 50%, 40%, .4), hsla($textShadow_hex_alt, 50%, 45%, .4));
     padding: .2em .2em;
     border-radius: 20%;
     border: .2em ridge;
-    border-color: #374 #364 #374 #384;
+    border-color: hsl(135, 40%, 33%) hsl(140, 33%, 30%) hsl(135, 40%, 33%) hsl(132, 45%, 37%);
     width: fit-content;
     white-space: nowrap;
     cursor: pointer;
@@ -190,7 +194,7 @@ $textShadow_hex_alt : 77;
     }
 
     &:hover .icon-play {
-        color: #384;
+        color: hsl(132, 45%, 37%);
         position: relative; 
         left: 0%;
         animation: moveRight 2s ease-out;

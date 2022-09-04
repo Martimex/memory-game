@@ -20,21 +20,6 @@
   justify-content: center;
 }
 
-.bg-placeholder {
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100vh;
-  height: 100%;
-  z-index: -2;
-  border-radius: 5%;
-  filter: saturate(90%);
-  background-position: center;
-  background-size: 100%;
-  box-shadow: inset 0.4rem 0.4rem 2.6rem #111, 0.3rem 0.3rem 2rem #000;
-}
-
 .level-info-box-content {
   z-index: 10;
   max-width: 75%;
@@ -49,6 +34,21 @@
   grid-template-columns: 30% 40% 30%;
   grid-template-rows: auto;
   place-items: center;
+  box-shadow: inset 0.4rem 0.4rem 2.6rem #111, 0.3rem 0.3rem 2rem #000;
+}
+
+.bg-placeholder {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100vh;
+  height: 100%;
+  z-index: -2;
+  border-radius: 5%;
+  filter: saturate(90%);
+  background-position: center;
+  background-size: 100%;
   box-shadow: inset 0.4rem 0.4rem 2.6rem #111, 0.3rem 0.3rem 2rem #000;
 }
 
@@ -109,13 +109,13 @@
 
 .content-item-verification-circle {
   padding: 0.9em;
-  border: 0.15em solid rgba(85, 187, 119, 0.4666666667);
+  border: 0.15em solid hsla(45deg, 67%, 60%, 0.8);
   border-radius: 50%;
 }
 
 .icon-check {
   font-size: 2.4rem;
-  color: #5b7;
+  color: hsla(45deg, 67%, 60%, 0.8);
 }
 
 .level-info-box-content-item[datatype=main] {
@@ -126,7 +126,7 @@
 }
 
 .content-item-level, .content-item-time, .content-item-score, .content-item-trials,
-.content-item-serie, .content-item-version, .content-item-date {
+.content-item-version, .content-item-date {
   background: -webkit-linear-gradient(135deg, hsla(122deg, 73%, 49%, 0.58), hsla(77deg, 64%, 49%, 0.68));
   filter: contrast(120%) saturate(120%);
   -webkit-background-clip: text;
@@ -135,6 +135,10 @@
   text-shadow: 3px 3px 3px hsla(77deg, 73%, 49%, 0.68);
   font-size: 2.5rem;
   font-weight: 700;
+}
+
+.content-item-serie {
+  color: hsla(45deg, 67%, 60%, 0.8);
 }
 
 .content-item-level-circle {
@@ -172,7 +176,7 @@
   padding: 0.2em 0.2em;
   border-radius: 20%;
   border: 0.2em ridge;
-  border-color: #374 #364 #374 #384;
+  border-color: hsl(135deg, 40%, 33%) hsl(140deg, 33%, 30%) hsl(135deg, 40%, 33%) hsl(132deg, 45%, 37%);
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
@@ -187,7 +191,7 @@
   box-shadow: #000 0.2em 0.2em 1em;
 }
 .play:hover .icon-play {
-  color: #384;
+  color: hsl(132deg, 45%, 37%);
   position: relative;
   left: 0%;
   -webkit-animation: moveRight 2s ease-out;

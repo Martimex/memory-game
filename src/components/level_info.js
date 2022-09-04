@@ -1,4 +1,6 @@
 import '../styles/level_info.css';
+import '../styles/variables/difficulty_colors.css';
+import { series_abbr } from '../global/series_abbr.js';
 import { background_gradients } from '../global/exceptions/background_gradients.js';
 import React, { useEffect, useRef } from 'react';
 import { faStar as star_full, faCheck as check, faFileAlt as notes, faChartBar as stats, faPlay as play } from '@fortawesome/free-solid-svg-icons';
@@ -29,7 +31,41 @@ function LevelInfo(props) {
 
     }
 
+    function applyDifficultyTextColors(difficulty) {
+
+       const difficulty_Dynamic_Elems = document.querySelectorAll('.dynamic-text');
+       for(let x=0; x< difficulty_Dynamic_Elems.length; x++) {
+            const styles = getComputedStyle(difficulty_Dynamic_Elems[x]);
+            const main_diff_col = styles.getPropertyValue(`--color_${difficulty}_main`);
+            const sec_diff_col = styles.getPropertyValue(`--color_${difficulty}_sec`);
+       
+            difficulty_Dynamic_Elems[x].style.backgroundImage  = `-webkit-linear-gradient(135deg, ${main_diff_col}, ${sec_diff_col})`;
+            difficulty_Dynamic_Elems[x].style.backgroundClip = `text`;
+            difficulty_Dynamic_Elems[x].style.textShadow = `.15rem .15rem .15rem ${sec_diff_col}`;
+        }
+
+        // For level round border
+        const level_tab = document.querySelector('.content-item-level');
+        const level_tab_styles = getComputedStyle(level_tab);
+        const border_col = level_tab_styles.getPropertyValue(`--border-color_${difficulty}`);
+        level_tab.style.borderColor = border_col;
+
+        // For play button border
+        const play_btn = document.querySelector('.play');
+        const play_btn_styles = getComputedStyle(play_btn);
+        const border_col_2 = play_btn_styles.getPropertyValue(`--border-color_${difficulty}`);
+        play_btn.style.borderColor = border_col_2;
+
+        // For play button icon
+        const play_icon = document.querySelector('.icon-play');
+        const play_icon_styles = getComputedStyle(play_icon);
+        const col = play_icon_styles.getPropertyValue(`--playIcon-color_${difficulty}`);
+        play_icon.style.color = col;
+
+    }
+
     useEffect(() => {
+        applyDifficultyTextColors(props.level_details.difficulty)
        const img_url = `bgs/${props.serie_name}/bg-${props.level_details.number}.svg`;
         loadBackground_preview(img_url)
             .then(() => {
@@ -62,7 +98,7 @@ function LevelInfo(props) {
                 <div className="level-info-box-content" >
                     <div className='level-info-box-content-item' datatype="info">
                         <div className='content-item-part'>
-                            <div className='content-item-serie'> {props.serie_name}  </div>
+                            <div className='content-item-serie'> {series_abbr[props.serie_name]}  </div>
                             {/* <div className='content-item-version'> 1.1 </div>
                             <div className='content-item-date'> 12.12.1453 </div> */}
                         </div>
@@ -89,14 +125,14 @@ function LevelInfo(props) {
 
                     <div className='level-info-box-content-item' datatype='main'>
                         <div className='content-item-level-circle'>
-                            <div className='content-item-level'>
+                            <div className='content-item-level dynamic-text'>
                                 {props.level_details.number}
                             </div>
                         </div>
                         <div className='content-item-part'> 
-                            <div className='content-item-time'> Time: {props.level_details.limitations['time'] || '-'} </div>
-                            <div className='content-item-time'> Turns: {props.level_details.limitations['turns'] || '-'}  </div>
-                            <div className='content-item-time'> Tiles: {props.level_details.tiles} </div>
+                            <div className='content-item-time dynamic-text'> Time: {props.level_details.limitations['time'] || '-'} </div>
+                            <div className='content-item-time dynamic-text'> Turns: {props.level_details.limitations['turns'] || '-'}  </div>
+                            <div className='content-item-time dynamic-text'> Tiles: {props.level_details.tiles} </div>
                             {/*<div className='content-item-score'> Score: 1200 </div>
                             <div className='content-item-trials'> Trials: 225 </div> */}
                         </div>
