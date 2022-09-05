@@ -3,7 +3,9 @@ import '../styles/preview.css';
 import anime from 'animejs/lib/anime.es.js';
 
 import { LevelInfo } from './level_info.js';
+import { SerieBox } from './serie_box.js';
 import  { all_levels } from '../global/all_levels.js';
+
 
 function Preview(props) {
 
@@ -11,16 +13,7 @@ function Preview(props) {
     const animationTextOpacity = React.useRef(null);
 
     const levels_showcase = Object.keys(all_levels).map((serie_name, index) => 
-        <div className='showcase-serie-box' key={serie_name.toString()}>
-            {Object.keys(all_levels[serie_name]).map((lv, index) => 
-                <div className='showcase-level-box' 
-                    key={serie_name.toString() + index.toString()}
-                    onClick={() => {setLevelChoose([all_levels[serie_name][lv], serie_name])}}
-                > 
-                    {all_levels[serie_name][lv].tiles} 
-                </div>
-            )}
-        </div>
+        <SerieBox serie={serie_name} setLevelChoose={setLevelChoose} key={serie_name.toString()} />
     )
 
     useEffect(() => {
@@ -92,30 +85,27 @@ function Preview(props) {
 
     return (
         <div className='bg-main'>
-            <div className='seizure-box'>
-                <div className='mode-description'>
-                    <div className='mode-block'>
-                        <div className='mode-title'>Adventure mode </div>
+            <div className='seizure-flexbox'>
+                <div className='top-bar'>
+                    <div className='top-bar__return'>
+                        <button className='return-back' onClick={() => {props.backToHome(); proceed();}}> H </button>
                     </div>
-                    <div className='mode-block'>
-{/*                         <div className='mode-about'>
-                            The magic journey through different levels. This mode awaits for brave Adventurer,
-                            who is willing to overcome many various challenges. No mistakes allowed.
-                            {all_levels['tf'][2].tile_size}
-                        </div> */}
-                        <div>
-                            {levels_showcase}
-                        </div>
+
+                    <div className='top-bar__title'>
+                        <div className='title-name'> Choose your level </div>
                     </div>
-                    <div className='proceed'>
-                        <button className='proceed-play'  onClick={() => {props.changeComponent(); proceed();}} onMouseOver={() => {animateBtn();}} onMouseOut={() => {animatwBtnBack();}}> Start </button>
+
+                    <div className='top-bar__follow'>
+                        <div className='follow-me'> Follow me </div>    
                     </div>
+                    
+                </div>
+
+                <div className='showcase-block'>
+                    {levels_showcase}
                 </div>
 
 
-            </div>
-            <div className='return-home'>
-                <button className='back' onClick={() => {props.backToHome(); proceed();}}> H </button>
             </div>
 
             { levelChoose && (
