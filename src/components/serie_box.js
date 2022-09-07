@@ -10,6 +10,9 @@ const colors_number = 4;
 
 const dynamic_classes = {
     level_borders: 'mode-block__serie__border',
+    level_tile_main: 'mode-block__serie__tile',
+    level_tile_front: 'mode-block__serie__level',
+    level_tile_back: 'mode-block__serie__back-side',
 } 
 
 let currentlyColoredBorders = [
@@ -70,22 +73,64 @@ function openUpFire(e) {
     console.log(currentlyColoredBorders);
 }
 
+function flipTile(e, mouseEventName) {
+
+    if(e.target.classList.contains(`${dynamic_classes.level_tile_front}`)) {
+        const tile = e.target; //.querySelector(`.${dynamic_classes.level_tile_front}`); 
+        // expected parent: '.mode-block__serie__level' 
+        return;
+        const flip = anime.timeline({
+
+        })
+
+        if(mouseEventName === 'over') {
+            flip
+            .add ({
+                targets: tile,
+                duration: 800,
+                easing: 'easeInSine',
+                backgroundImage: 'radial-gradient(#0005, #0005, #0005)',
+                //opacity: 0,
+                loop: false,
+            })
+        }
+
+        else if(mouseEventName === 'out') {
+            flip
+            .add ({
+                targets: tile,
+                duration: 800,
+                easing: 'easeOutSine',
+                backgroundImage: 'radial-gradient(#444, #333, #222)',
+                loop: false,
+            })
+        }
+    }
+}
+
 function SerieBox(props) {
 
     return(
-        <div className='mode-block__serie' onClick={(e) => openUpFire(e)}>
+        <div className='mode-block__serie' onClick={(e) => openUpFire(e)} onMouseOver={(e) => flipTile(e, 'over')} onMouseOut={(e) => {flipTile(e, 'out')}} >
             {/* <div className='serie-title'> {series_abbr[props.serie]} </div> */}
             <div className='serie-content invisible'>
                 {Object.keys(all_levels[props.serie]).map((lv, index) =>
-                    <div className={`${dynamic_classes.level_borders}`} key={props.serie.toString() + index.toString()}>
-                        <div className='mode-block__serie__level'
-                            onClick={() => {props.setLevelChoose([all_levels[props.serie][lv], props.serie])}}
-                        >
+                    <div className={`${dynamic_classes.level_borders}`} key={props.serie.toString() + index.toString()}
+                        onClick={() => {props.setLevelChoose([all_levels[props.serie][lv], props.serie])}}
+                    >
+                        <div className='bg-layer'>
+                            <div className={`${dynamic_classes.level_tile_main}`}>
+                                <div className={`${dynamic_classes.level_tile_front}`}>
 
-                            {(all_levels[props.serie][lv].number < 10)? '0'+all_levels[props.serie][lv].number : all_levels[props.serie][lv].number} 
+                                    {(all_levels[props.serie][lv].number < 10)? '0'+all_levels[props.serie][lv].number : all_levels[props.serie][lv].number} 
 
-                        </div>
-                    </div>   
+
+                                </div>   
+                                
+                                <div className={`${dynamic_classes.level_tile_back}`} > </div>
+                            </div>
+                        </div> 
+                    </div>
                 )}
             </div>
         </div>
