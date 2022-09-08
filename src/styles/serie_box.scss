@@ -6,39 +6,68 @@
 
 .mode-block__serie {
 
-    @include flexBox;
+    //@include flexBox;
+    display: grid;
+    place-items: center;
+    grid-template-columns: 1fr;
     margin: 2em 0;
-    background: #222;
+    //background: #222;
     background-image: linear-gradient(0deg, #000, #111,  #272727, #111, #000);
     border: .1rem solid #333;
     border-radius: 5%;
     padding: 2.3em;
+    box-shadow: 1em 2em 3.2em #111;
 
     &:hover {
         cursor: pointer;
     }
 
     .serie-title {
+        grid-row-start: 1;
+        grid-column-start: 1;
         pointer-events: none;
-        font-size: 1.5rem;
+        font-size: 2.5rem;
         color: #ddd;
+        white-space: nowrap;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+        font-style: italic;
+        font-weight: 650;
+
+        &::before {
+            content: '«';
+        }
+
+        &::after {
+            content: '»';
+        }
+        
+        &:hover {
+            opacity: .8;
+        }
     }
 
     .serie-content {
         @include flexBox;
         flex-wrap: wrap;
+        grid-row-start: 1;
+        grid-column-start: 1;
         position: relative;
         gap: 1.5em;
+        pointer-events: none;
     }
 
     .mode-block__serie__border {
         @include flexBox;
+        pointer-events: auto;
         font-size: 1.3rem;
         background-image: linear-gradient(135deg, #ff0000, #ffff00, #00ff00, #0000ff, #fb0094);
         box-shadow: .1em .1em .7em #bbba;
         border-radius: 15%;
         padding: .2rem;
         z-index: 10;
+        // Trick
+        opacity: 0;
     }
 
     .bg-layer {
@@ -95,4 +124,5 @@
 
 .invisible {
     display: none;
+    visibility: hidden;
 }
