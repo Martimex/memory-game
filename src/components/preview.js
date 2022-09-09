@@ -6,14 +6,18 @@ import { LevelInfo } from './level_info.js';
 import { SerieBox } from './serie_box.js';
 import  { all_levels } from '../global/all_levels.js';
 
+import { faGithub as github} from '@fortawesome/free-brands-svg-icons';
+import { faHome as home} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Preview(props) {
 
     const [[levelChoose, serie], setLevelChoose] = useState([null, null]);
+    const [chosenSerieName, setChosenSerieName] = useState('Choose a serie');
     const animationTextOpacity = React.useRef(null);
 
     const levels_showcase = Object.keys(all_levels).map((serie_name, index) => 
-        <SerieBox serie={serie_name} setLevelChoose={setLevelChoose} key={serie_name.toString()} />
+        <SerieBox serie={serie_name} setSerieName={setChosenSerieName} setLevelChoose={setLevelChoose} key={serie_name.toString()} />
     )
 
     useEffect(() => {
@@ -88,15 +92,19 @@ function Preview(props) {
             <div className='seizure-flexbox'>
                 <div className='top-bar'>
                     <div className='top-bar__return'>
-                        <button className='return-back' onClick={() => {props.backToHome(); proceed();}}> H </button>
+                        <button className='return-back' onClick={() => {props.backToHome(); proceed();}}> 
+                            <FontAwesomeIcon icon={home} className="icon-home" />
+                        </button>
                     </div>
 
                     <div className='top-bar__title'>
-                        <div className='title-name'> Choose your level </div>
+                        <div className='title-name'> {chosenSerieName} </div>
                     </div>
 
                     <div className='top-bar__follow'>
-                        <div className='follow-me'> Follow me </div>    
+                        <div className='follow-me'>
+                            <FontAwesomeIcon icon={github} className="icon-github" />
+                        </div>    
                     </div>
                     
                 </div>

@@ -24,11 +24,11 @@ $topbar__margin--leftright: 2em;
 }
 
 .bg-main {
-    background: #000;
+    background: #111;
+    background-image: linear-gradient(135deg, #000, #111, #111, #222, #111, #111, #000);
     position: absolute; top:0%; left: 0%;
     width: 100%;
-    height: 100%;
-    background-image: radial-gradient( hsl(120, 0%, 0%) 55%, hsl(128, 81%, 20%) 70%, hsl(128, 0%, 10%) 90% );
+    //background-image: radial-gradient( hsl(120, 0%, 0%) 55%, hsl(128, 81%, 20%) 70%, hsl(128, 0%, 10%) 90% );
     filter:saturate(120%);
 }
 
@@ -44,18 +44,24 @@ $topbar__margin--leftright: 2em;
     width: 100%;
     justify-content: space-between;
     color: #fff;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
 
     .top-bar__return {
         margin: $topbar__margin--topbottom $topbar__margin--leftright;
 
         .return-back {
             background: inherit;
-            color: hsl(128, 81%, 20%);
             border-radius: 50%;
-            font-size: 2.5rem;
-            width: 5rem; 
-            height: 5rem;
+            font-size: 2.4em;
+            //padding: .1em;
+        }
+
+        .icon-home {
+            color: #dddd;
+            background: #6669;
+            box-shadow: 0em -.1em .8em #dddd;
+            border-radius: 50%;
+            padding: .1em;
         }
     }
 
@@ -63,7 +69,15 @@ $topbar__margin--leftright: 2em;
 
 
         .title-name {
-
+            background: -webkit-linear-gradient(135deg, #dddd, #dddd);
+            filter: contrast(120%) saturate(120%); 
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: .2rem .2rem .3rem #ddd9;
+            font-size: 2.6rem;
+            font-weight: 650;
+            letter-spacing: .2rem;
         }
     }
 
@@ -71,8 +85,16 @@ $topbar__margin--leftright: 2em;
         margin: $topbar__margin--topbottom $topbar__margin--leftright;
 
         .follow-me {
-
+            font-size: 2.8em;
         }
+
+        .icon-github {
+            color: #ddd;
+            box-shadow: 0em -.1em .8em #ddd, inset 0em 0em .8em #666;
+            border-radius: 50%;
+            padding: .1em;
+        }
+
     }
 }
 

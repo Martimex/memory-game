@@ -26,33 +26,32 @@ let animationFinishController = [true, true];
 
 function flipTile(e, mouseEventName) {
 
-    if(e.target.classList.contains(`${dynamic_classes.level_tile_front}`)) {
+    if(e.target.classList.contains(`${dynamic_classes.serie_block}`)) {
         const tile = e.target; //.querySelector(`.${dynamic_classes.level_tile_front}`); 
         // expected parent: '.mode-block__serie__level' 
         return;
-        const flip = anime.timeline({
-
-        })
 
         if(mouseEventName === 'over') {
-            flip
-            .add ({
+            anime({
                 targets: tile,
-                duration: 800,
+                duration: 3000,
+               // borderColor: ['#333 #333 #333 #333', '#000 #888 #888 #000'],
+                //boxShadow: ['1em 2em 3.2em #333', '1em 2em 3.2em #ddd'],
+                boxShadowColor: '#ddd',
                 easing: 'easeInSine',
-                backgroundImage: 'radial-gradient(#0005, #0005, #0005)',
-                //opacity: 0,
-                loop: false,
+                direction: 'alternate',
+                loop: true,
             })
         }
 
         else if(mouseEventName === 'out') {
-            flip
-            .add ({
+            anime({
                 targets: tile,
-                duration: 800,
+                duration: 1200,
+                //borderColor: '#333',
+                //boxShadow: ['1em 2em 3.2em #111'],
+                boxShadowColor: '#333',
                 easing: 'easeOutSine',
-                backgroundImage: 'radial-gradient(#444, #333, #222)',
                 loop: false,
             })
         }
@@ -130,26 +129,46 @@ function SerieBox(props) {
         }
     
         async function fadeText() {
+            const timing = 650;
             const a1 = anime({
                 targets: section_title,
-                duration: 650,
+                duration: timing,
                 translateX: '30%',
                 filter: 'sepia(70%)',
                 opacity: 0,
                 easing: 'easeOutSine',
             }).finished;
-            await Promise.all([a1]);
+            
+            const b1= anime({
+                targets: e.target,
+                duration: timing,
+                filter: ['contrast(100%)', 'contrast(140%)'],
+                easing: 'linear',
+            }).finished;
+
+            await Promise.all([a1, b1]);
         }
     
         async function showUpLevels() {
+            const timing = 500;
+            const staggering = 120;
+            const total_stagger = timing + (staggering * section_content_tiles.length);
             const a2 = anime({
                 targets: section_content_tiles,
-                duration: 500,
-                delay: anime.stagger(120),
+                duration: timing,
+                delay: anime.stagger(staggering),
                 opacity: 1,
                 easing: 'easeInCubic',
             }).finished;
-            await Promise.all([a2]);
+
+            const b2 = anime({
+                targets: e.target,
+                duration: total_stagger,
+                filter: ['constrast(140%)', 'contrast(100%)'],
+                easing: 'linear',
+            }).finished;
+
+            await Promise.all([a2, b2]);
         }
     
         animationChain();
@@ -208,7 +227,7 @@ function SerieBox(props) {
     
 
     return(
-        <div className={`${dynamic_classes.serie_block}`} onClick={(e) => {openUpFire(e)} } onMouseOver={(e) => flipTile(e, 'over')} onMouseOut={(e) => {flipTile(e, 'out')}} >
+        <div className={`${dynamic_classes.serie_block}`} onClick={(e) => {openUpFire(e); props.setSerieName(series_abbr[props.serie])} } onMouseOver={(e) => flipTile(e, 'over')} onMouseOut={(e) => {flipTile(e, 'out')}} >
             <div className='serie-title'> {series_abbr[props.serie]} </div> 
             <div className='serie-content invisible'>
                 {Object.keys(all_levels[props.serie]).map((lv, index) =>
