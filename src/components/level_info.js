@@ -11,10 +11,32 @@ import anime from 'animejs';
 function LevelInfo(props) {
 
     const bg_placeholder_ref = useRef(null);
+    const levelInfoAll_ref = useRef(null);
+    const levelBox_ref = useRef(null);
 
     function checkCloseCondition(e) {
         if(e.target.classList.contains('level-info-box')) {
-            props.closeLevelInfo([null, null]);
+            
+            document.body.style.overflow = 'auto';
+
+            async function init() {
+                await animation()
+                await props.closeLevelInfo([null, null]);
+            }
+
+            async function animation() {
+                const a1 = anime({
+                    targets: levelBox_ref.current,
+                    duration: 500,
+                    opacity: [1, 0],
+                    translateX: '-=8%',
+                    easing: 'linear',
+                }).finished;
+                await Promise.all([a1]);
+            }
+
+           init();
+
         }
     }
 
@@ -64,7 +86,15 @@ function LevelInfo(props) {
 
     }
 
+    function setLevelBoxPosition(newScreen) {
+        const scrolled = window.scrollY;
+        console.warn('scrolled: ', scrolled);
+        newScreen.style.top = `${scrolled}px`;
+        levelBox_ref.current.style.opacity = 1; // That prevents form initial flickering (combined with CSS style for opacity: 0)
+    }
+
     useEffect(() => {
+        setLevelBoxPosition(levelInfoAll_ref.current);
         applyDifficultyTextColors(props.level_details.difficulty)
        const img_url = `bgs/${props.serie_name}/bg-${props.level_details.number}.svg`;
         loadBackground_preview(img_url)
@@ -93,8 +123,8 @@ function LevelInfo(props) {
     }, [])
 
     return (
-        <div className='level-info-blurred' onClick={(e) => checkCloseCondition(e)} >
-            <div className="level-info-box">
+        <div className='level-info-blurred' ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
+            <div className="level-info-box" ref={levelBox_ref}>
                 <div className="level-info-box-content" >
                     <div className='level-info-box-content-item' datatype="info">
                         <div className='content-item-part'>

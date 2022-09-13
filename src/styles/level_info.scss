@@ -31,11 +31,13 @@ $textShadow_hex_alt : 77;
     z-index: 111;
     background: #111b;
     overflow: hidden;
+    //top: 375px;
 }
 
 .level-info-box {
     @include absolute;
     @include flexBox;
+    opacity: 0;
 }
 
 .level-info-box-content {

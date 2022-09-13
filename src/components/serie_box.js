@@ -22,7 +22,11 @@ let currentlyColoredBorders = [
 
 let recentShowUpBox = null;
 
-let animationFinishController = [true, true];
+let animationFinishController = 
+{
+  first: true, 
+  second: true,
+};
 
 function flipTile(e, mouseEventName) {
 
@@ -62,11 +66,12 @@ function SerieBox(props) {
 
     function openUpFire(e) {
         //console.warn(e.target.classList);
-        if(!animationFinishController[0] || !animationFinishController[1]) return; // Dont fire if both animations are not completed
+        //console.warn('openUpFire:  ', animationFinishController[`first`], animationFinishController[`second`] );
+        if(!animationFinishController[`first`] || !animationFinishController[`second`]) return; // Dont fire if both animations are not completed
         if(e.target === recentShowUpBox) return; // Dont fire if old and new sections are the same
         if(!e.target.classList.contains(`${dynamic_classes.serie_block}`)) return; // Only section block can be targeted
         const thisSerieTiles = e.target.querySelectorAll(`.${dynamic_classes.level_borders}`);
-        console.log(thisSerieTiles);
+        //console.log(thisSerieTiles);
         thisSerieTiles.forEach(level_tile => {
             currentlyColoredBorders.push([]); // arr for tile
             const colorsCopy = [...rainbowColors];
@@ -108,7 +113,7 @@ function SerieBox(props) {
     }
     
     function animateSectionShowUp(e) {
-        animationFinishController[0] = false;
+        animationFinishController['first'] = false;
         const section_title = e.target.querySelector(`.serie-title`);
         const section_content = e.target.querySelector(`.serie-content`);
         const section_content_tiles = section_content.querySelectorAll(`.${dynamic_classes.level_borders}`);
@@ -124,7 +129,7 @@ function SerieBox(props) {
             })
             await showUpLevels()
             .then(() => {
-                animationFinishController[0] = true;
+                animationFinishController[`first`] = true;
             })
         }
     
@@ -177,8 +182,7 @@ function SerieBox(props) {
     function animateOtherSectionHide(e) {
 
         if(recentShowUpBox) {
-            animationFinishController[1] = false;
-            console.log(recentShowUpBox);
+            animationFinishController[`second`] = false;
             const section_title_old = recentShowUpBox.querySelector(`.serie-title`);
             const section_content_old = recentShowUpBox.querySelector(`.serie-content`);
             const section_content_tiles_old = section_content_old.querySelectorAll(`.${dynamic_classes.level_borders}`);
@@ -191,7 +195,7 @@ function SerieBox(props) {
                 await showText()
                 .then(() => {
                     section_content_old.classList.add('invisible');
-                    animationFinishController[1] = true;
+                    animationFinishController[`second`] = true;
                 })
             }
 
@@ -225,9 +229,16 @@ function SerieBox(props) {
         recentShowUpBox = e.target;
     }
     
+    function checkSerieNameChange() {
+        // Object properties are not updated !
+        //console.warn('check: ', animationFinishController['first'], animationFinishController['second']);
+        if((animationFinishController[`first`] === true)  && (animationFinishController[`second`]) === true)  {
+            props.setSerieName(series_abbr[props.serie])
+        }
+    }
 
     return(
-        <div className={`${dynamic_classes.serie_block}`} onClick={(e) => {openUpFire(e); props.setSerieName(series_abbr[props.serie])} } onMouseOver={(e) => flipTile(e, 'over')} onMouseOut={(e) => {flipTile(e, 'out')}} >
+        <div className={`${dynamic_classes.serie_block}`} onClick={(e) => {checkSerieNameChange(); openUpFire(e); } } onMouseOver={(e) => flipTile(e, 'over')} onMouseOut={(e) => {flipTile(e, 'out')}} >
             <div className='serie-title'> {series_abbr[props.serie]} </div> 
             <div className='serie-content invisible'>
                 {Object.keys(all_levels[props.serie]).map((lv, index) =>

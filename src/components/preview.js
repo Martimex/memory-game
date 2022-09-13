@@ -27,6 +27,13 @@ function Preview(props) {
     useEffect(() => {
         console.log(levelChoose);
         console.log(serie);
+        if(levelChoose !== null) {
+           // document.querySelector('.bg-main').style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+        } else if(!levelChoose) {
+            //document.body.style.overflow = 'auto'; -> declaration moved to leve_info Component
+        }
+
     }, [levelChoose]);
 
     React.useEffect(() => {
