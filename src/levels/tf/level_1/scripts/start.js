@@ -1,0 +1,44 @@
+import anime from 'animejs/lib/anime.es.js';
+
+function level_start() {
+
+    async function startAnimation() {
+        await showTiles()
+        await hideTiles()
+            .then(() => {
+                console.warn('Animation complete !');
+            })
+    }
+
+    async function showTiles() {
+        const a1 = anime({
+            targets: '.tile',
+            duration: 1400,
+            transitionProperty: 'all',
+            rotateY: '180deg',
+            easing: 'easeInOutQuart',
+            loop: false,
+        }).finished;
+
+        await Promise.all([a1]);
+    }
+
+    async function hideTiles() {
+        const a2 = anime({
+            targets: '.tile',
+            duration: 1400,
+            transitionProperty: 'all',
+            rotateY: '0deg',
+            easing: 'easeInOutQuart',
+            loop: false,
+        }, '+=600').finished;
+
+        await Promise.all([a2]);
+    }
+
+    // Init
+    startAnimation();
+}
+
+
+export {level_start};

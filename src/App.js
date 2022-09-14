@@ -1,6 +1,7 @@
 import './App.css';
 import Landing from './components/landing.js';
-import Game from './components/game.js';
+//import Game from './components/game.js';
+import Game from './components/memory_game.js';
 import Preview from './components/preview.js';
 import React, { useState } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -15,7 +16,9 @@ library.add(fab, fas);
 function App() {
 
   const [state, setState] = useState('start');
-  const [level, setLevel] = useState(1);
+  const [level, setLevel] = useState(1);  // outdated - porperty will be reworked
+  const [newLevel, setNewLevel] = useState(null);
+  const [newSerie, setNewSerie] = useState(null);
 
   const timing = 1000;
 
@@ -23,7 +26,9 @@ function App() {
     setState('game');
   }
 
-  const triggerChangeComponentDelayed = () => {
+  const triggerChangeComponentDelayed = (new_lv, serie_name) => {
+    setNewLevel(new_lv);
+    setNewSerie(serie_name);
     setTimeout(() => {
       setState('game');
     }, timing);
@@ -50,7 +55,7 @@ function App() {
       )}
 
       {state === 'game' && (
-        <Game changeComponent={triggerChangeComponent} preview={triggerChangeComponentToPreview} tileCodes={tileCodes} level={level}  />
+        <Game changeComponent={triggerChangeComponent} preview={triggerChangeComponentToPreview} tileCodes={tileCodes} level={level} newLevel={newLevel} newSerie={newSerie}  />
       )}
 
     </div>
