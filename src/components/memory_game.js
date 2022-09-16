@@ -17,7 +17,7 @@ import ConfirmWin from './confirm_win';
 import Pause from './pause';
 
 // Level based stuff
-//import {level_start} from '../levels/tf/level_1/scripts/start.js';
+import {uncoverPatterns} from '../global/predefined/uncover_patterns.js';
 
 
 import { setIcon, fasArray, /* fabArray */ } from './landing.js';
@@ -80,6 +80,22 @@ function setRandomIcons(fasArray, usedIcons, randomizedIcons, tiles) {
     }
 
 }
+
+async function loadOtherModules(serieName, levelNumber) {
+    const xclick = await import(`../levels/${serieName}/level_${levelNumber}/scripts/xclick.js`);
+    const match = await import(`../levels/${serieName}/level_${levelNumber}/scripts/match.js`);
+    const stagecomplete = await import(`../levels/${serieName}/level_${levelNumber}/scripts/stagecomplete.js`);
+    const end = await import(`../levels/${serieName}/level_${levelNumber}/scripts/end.js`);
+    
+    return {
+        xclick: xclick,
+        match: match,
+        stagecomplete: stagecomplete,
+        end: end,
+    }
+}
+
+let otherModules = null; // we can use it to access our scripts
 
 //INIT
 function Game(props) {
@@ -204,39 +220,20 @@ function Game(props) {
         // ADD STARTING FLAG
         levels[`lvl${level-1}`].onStartFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter); // later on this line will became useless
         iter.pauseCondition = false;
-        // Below add some Inverse / Reverse starting animation
-
-        /* inverseReverse.current = anime.timeline({
-            duration: 1400,
-            easing: 'easeInOutQuart',
-        });
-
-        inverseReverse.current
-        .add ({
-            targets: '.tile',
-            transitionProperty: 'all',
-            rotateY: '180deg',
-            loop: false,
-        })
-
-        .add ({
-            targets: '.tile',
-            transitionProperty: 'all',
-            rotateY: '0deg',
-            loop: false,
-        }, '+=600') */
      
     }, [level]);
 
     function clickable(e)  {
         if(gameboard.current.dataset.animation !== 'off') {return;}
         if(e.target.classList.contains('tile')) {
+            // Open up the tile
             anime({
                 targets: e.target,
                 duration: 3200,
                 transitionProperty: 'all',
                 rotateY: 180,
             })
+            console.warn(props.newLevel.uncover.count); // its our new equivalent of cardsOpened.length - but dynamic !
             let trgt = e.target;
             let node = e.target.childNodes;
             for( let i = 0; i < node.length; i++) {
@@ -326,9 +323,13 @@ function Game(props) {
         // Lets do it in advance
         resolveAnimationBugs();
 
-        if(cardsOpened.length > 1) {
+        if(cardsOpened.length === props.newLevel.uncover.count) {
             iter.pauseCondition = false;
-            doCardsMatch(cardsOpened);
+            doCardsMatch(cardsOpened);  // PLEASE REBUILD THAT
+
+            const doesMatch = uncoverPatterns[props.newLevel.uncover.pattern](cardsOpened);
+
+            otherModules[`match`].match(doesMatch, cardsOpened); // doesMatch determines whether player meets required condition to remove tiles
         }
     }
     
@@ -482,14 +483,18 @@ function Game(props) {
                 if(cardsOpened.length === 1) {
                     handleCheck = 0;
                     handleCount++;
-                    levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter);
+                    //levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter);
+
+                    // Try to call 
+                    otherModules[`xclick`].xclick(1, cardsOpened[0].parentNode); // pass ( click no, target )
                 }
             }
 
             else if((handleCheck < 1) && (cardsOpened[1]))  {
                 cardsOpened[1].parentNode.classList.add('target', 'target-2');
                 if(cardsOpened.length > 1) {
-                    levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter, time);
+                    //levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter, time);
+                    otherModules[`xclick`].xclick(2, cardsOpened[1].parentNode); // pass ( click no, target )
                     handleCheck++;
                     handleCount = 0;
                 }       
@@ -552,8 +557,11 @@ function Game(props) {
     useEffect(() => {  // or useLayoutEffect if that will not work
         // Here set state once rendering is completed, then another useEffect when we have a finished board and can go for starting animation
         async function loadDynamic() {
-            let loadStart = await import(`../levels/tf/level_${props.newLevel.number}/scripts/start.js`);
+            let loadStart = await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/scripts/start.js`);
             loadStart.level_start(props.newLevel);
+            otherModules = await loadOtherModules(props.newSerie, props.newLevel.number);
+            console.log(otherModules);
+            
         }
 
         console.time();

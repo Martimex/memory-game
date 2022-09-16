@@ -16,6 +16,7 @@ function level_start() {
             duration: 1400,
             transitionProperty: 'all',
             rotateY: '180deg',
+            borderColor: ['hsl(4, 87%, 62%)', 'hsl(45, 50%, 80%)'],
             easing: 'easeInOutQuart',
             loop: false,
         }).finished;
@@ -29,6 +30,7 @@ function level_start() {
             duration: 1400,
             transitionProperty: 'all',
             rotateY: '0deg',
+            borderColor: ['hsl(45, 50%, 80%)', 'hsl(4, 87%, 62%)'],
             easing: 'easeInOutQuart',
             loop: false,
         }, '+=600').finished;
