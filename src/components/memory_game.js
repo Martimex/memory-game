@@ -96,6 +96,7 @@ async function loadOtherModules(serieName, levelNumber) {
 }
 
 let otherModules = null; // we can use it to access our scripts
+let pointsInStage = 0; // determines how man points player gets during current stage of the level
 
 //INIT
 function Game(props) {
@@ -106,15 +107,20 @@ function Game(props) {
     const [animationLoad, setAnimationLoad] = useState(false);
     const [tiles, setTiles] = useState(null);  // Ta wartość odpowiada za poprawne malowanie ekranu - NIE WOLNO JEJ MODYFIKOWAĆ W TRAKCIE GRY !
     const [level, setLevel] = useState(props.level);
-    const [score, setScore] = useState(0);
+
     const [scoreMultiplier, setScoreMultiplier] = useState(1);
     const [highscore, setHighscore] = useState(0);
-    const [moves, setMoves] = useState(0);
+    const [moves, setMoves] = useState(0);  
     const [time, setTime] = useState(null);
     const [foundTiles, setFoundTiles] = useState(0);
     const [confirmValue, setConfirmValue] = useState(null); // przyjmuje wartości true / false  -> wygrałeś / przegrałeś ten poziom ?
 
     const [pause, setPause] = useState(false); // is game paused? Should game be paused ?
+
+    const [score, setScore] = useState(0);
+    const [turns, setTurns] = useState(0);
+    const [clickNo, setClickNo] = useState(0); // use to calculate click number (mostly for xClick script)
+    const [stageNo, setStageNo] = useState(0); // use to switch stages (if level has few stages)
 
     const all = useRef(null);
     const bg = useRef(null);
@@ -141,6 +147,8 @@ function Game(props) {
         //setTiles(levels[`lvl${level}`].tiles);
         setConfirmValue(null);
         setRenderCount(0);
+
+        setTurns(0);
 
         scoreAddon = 0;
         handleCount = 0;
@@ -204,13 +212,13 @@ function Game(props) {
     //  Render Count pomaga pozbyć się mylących błędów z konsoli - zmienna pilnuje, czy render wykonał się 1 raz. Jeśli ma się on wykonać po raz
     //  kolejny, to nie tworzymy na nowo tabeli z ikonkami (unikamy podmiany ikon na planszy podczas gry)
     if(renderCount < 1) {
-        setRandomIcons(fasArray, usedIcons, randomizedIcons, props.newLevel.tiles);
+        setRandomIcons(fasArray, usedIcons, randomizedIcons, props.newLevel.tiles[stageNo]);
         setRenderCount(renderCount + 1);
     }
 
     useEffect(() => {
-        gameboard.current.removeEventListener('click', clickable);
-        gameboard.current.addEventListener('click', clickable);
+       // gameboard.current.removeEventListener('click', clickable);
+       // gameboard.current.addEventListener('click', clickable);
         handleCount = 0;
             // Starting animation in the first place -> 800 animation time + 1400 delay - 4000 ms is a safe delay
     }, [animationLoad]);
@@ -218,32 +226,35 @@ function Game(props) {
     useEffect(() => {
 
         // ADD STARTING FLAG
-        levels[`lvl${level-1}`].onStartFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter); // later on this line will became useless
+        levels[`lvl${level-1}`].onStartFlag(cardsOpened, props.newLevel.tiles[stageNo], foundTiles, iter); // later on this line will became useless
         iter.pauseCondition = false;
      
     }, [level]);
 
+    function conditionsAreMet(e) {
+        if(gameboard.current.dataset.animation !== 'off') {return false;}
+        if(!e.target.classList.contains('tile')) {return false;}
+        const isNotAlreadyOpened = checkTilesOrigin(cardsOpened, e.target);
+        if(!isNotAlreadyOpened) { console.error('Lack of origin detected'); return false; }
+
+        return true;
+    }
+
     function clickable(e)  {
-        if(gameboard.current.dataset.animation !== 'off') {return;}
-        if(e.target.classList.contains('tile')) {
-            // Open up the tile
-            anime({
-                targets: e.target,
-                duration: 3200,
-                transitionProperty: 'all',
-                rotateY: 180,
-            })
-            console.warn(props.newLevel.uncover.count); // its our new equivalent of cardsOpened.length - but dynamic !
-            let trgt = e.target;
-            let node = e.target.childNodes;
-            for( let i = 0; i < node.length; i++) {
-                if((node[i].classList !== undefined) && (node[i].classList.contains('tile-back'))) {
-                    keepCardOpen(node, node[i], e, trgt);
-                }
-            }
-        } else {
-            //  **Nothing happens**
+        // console.warn(props.newLevel.uncover.count); // its our new equivalent of cardsOpened.length - but dynamic !
+
+        const tile_back = e.target.querySelector('.tile-back');
+        cardsOpened.push(tile_back);
+        cardsOpened[cardsOpened.length - 1].parentNode.classList.add(`target`, `target-${cardsOpened.length}`);
+
+        keepCardOpen(e);
+    }
+
+    function checkTilesOrigin(cardsOpened, new_tile) {
+        for(let n=0; n<cardsOpened.length; n++) {
+            if(cardsOpened[n].parentNode === new_tile) return false;
         }
+        return true;
     }
 
     useEffect(() => {
@@ -295,7 +306,7 @@ function Game(props) {
         }
     }
 
-    for(let i=0; i<props.newLevel.tiles; i++) {
+    for(let i=0; i<props.newLevel.tiles[stageNo]; i++) {
         arr.push('');
     };
 
@@ -307,105 +318,173 @@ function Game(props) {
     //console.log(allTiles);
 
     // Add proper styling based on device used by end user
-    let boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns}, ${(props.newLevel.tile_size)/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows}, ${(props.newLevel.tile_size)/10}rem)`};
+    let boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns[stageNo]}, ${(props.newLevel.tile_size[stageNo])/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows[stageNo]}, ${(props.newLevel.tile_size[stageNo])/10}rem)`};
     /* if(isDesktop) {  UNCOMMENT AND MAKE A DEVELOPMENT LATER WHEN WORKING WITH MEDIA QUERIES !!!
         boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns}, ${(props.newLevel.tile_size)/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows}, ${(props.newLevel.tile_size)/10}rem)`};
     } else {
         boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns}, ${(props.newLevel.tile_size_mobile)/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows}, ${(props.newLevel.tile_size_mobile)/10}rem)`};
     } */
 
-    function keepCardOpen(allCardNodes, card_back, card, target) {
-      
-        cardsOpened.push(card_back);
-
-        checkParentOrigin(cardsOpened, target); // Prevents from tile + outer tile border click bug
+    function keepCardOpen(e) {
        
+        // Open up the tile
+        async function openUp() {
+            const a1 = anime({
+                targets: e.target,
+                duration: props.newLevel.tile_animation[stageNo][`time`],
+                transitionProperty: 'all',
+                easing: props.newLevel.tile_animation[stageNo][`easing`],
+                rotateY: 180,
+            }).finished;
+
+            await Promise.all([a1]);
+        }
+            
+
+        setClickNo(clickNo + 1);
+
         // Lets do it in advance
         resolveAnimationBugs();
 
-        if(cardsOpened.length === props.newLevel.uncover.count) {
+        if(cardsOpened.length === props.newLevel.uncover[stageNo][`count`]) {
+            gameboard.current.dataset.animation = 'on';
+            // Checking...
+            setTurns(turns + 1);
+            //console.log(usedTurns);
+            console.warn('COŚ KREATYWNEGO');
             iter.pauseCondition = false;
-            doCardsMatch(cardsOpened);  // PLEASE REBUILD THAT
+            //doCardsMatch(cardsOpened);  // PLEASE REBUILD THAT
 
-            const doesMatch = uncoverPatterns[props.newLevel.uncover.pattern](cardsOpened);
+            const doesMatch = uncoverPatterns[props.newLevel.uncover[stageNo][`pattern`]](cardsOpened);
 
-            otherModules[`match`].match(doesMatch, cardsOpened); // doesMatch determines whether player meets required condition to remove tiles
+            otherModules[`match`].match(doesMatch, cardsOpened, stageNo); // doesMatch determines whether player meets required condition to remove tiles
+        
+            console.time();
+            openUp()
+                .then(() => {
+                    console.timeEnd();
+                    doCardsMatch(doesMatch, cardsOpened);  // PLEASE REBUILD THAT
+                })
+        } else {
+            openUp();
         }
     }
-    
-    function checkParentOrigin(cardsOpened, target) {
 
-        if((cardsOpened.length > 1) && (cardsOpened[0].parentNode === cardsOpened[1].parentNode)) {
-            handleCount++;
-            cardsOpened.pop();
-        }
-    }
-
-    function doCardsMatch(cardsOpened) {
+    function doCardsMatch(doesMatch, cardsOpened) {
         // Block the click listener for a brief checkout duration
-        gameboard.current.removeEventListener('click', clickable);
+       // gameboard.current.removeEventListener('click', clickable);
+        console.log(cardsOpened);
+        isChecking = true;
 
         setTimeout(() => {
-            isChecking = true;
-        }, 200)
 
-        setTimeout(() => {
+            if(doesMatch) {
 
-            if(cardsOpened[1] === undefined) { cardsOpened.pop(); return;}
-            if(cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1]) { // czy pary się zgadzają? TAK -> usuń je z planszy;  NIE -> odwróć z powrotem
+                setScore(score + props.newLevel.score[stageNo][`count`]);
 
                 async function fade() {
                     const a1 = anime({
                         targets: [cardsOpened[0].parentNode, cardsOpened[1].parentNode],
-                        duration: 1800,
+                        duration: props.newLevel.tile_animation[stageNo][`time`],
+                        easing: props.newLevel.tile_animation[stageNo][`easing`],
                         opacity: [1, 0],
-                    })
+                    }).finished;
 
                    await Promise.all([a1]);
                 }
 
                 fade().then(() => {
+                    console.log('now !');
                     cardsOpened[0].parentNode.style = 'visibility: hidden';
                     cardsOpened[1].parentNode.style = 'visibility: hidden';
                 
-                    resolveAnimationBugs(); // Tab switching issue
+                    //resolveAnimationBugs(); // Tab switching issue
 
-                    for(let i=0; i<=1; i++) {
-                        cardsOpened.pop();
+                    for(let i=0; i<cardsOpened.length; i++) {
+                        cardsOpened[i].parentNode.classList.remove(`target`, `target-${i+1}`);
                     }
-                })
-                
-            } else {
-                async function flipBack() {
-                    const a1 = anime({
-                        targets: [cardsOpened[0].parentNode, cardsOpened[1].parentNode],
-                        duration: 2200,
-                        rotateY: 0,
-                    })
 
-                    Promise.all([a1]);
+                    while(cardsOpened.length) {cardsOpened.pop();}
+
+
+                    //gameboard.current.addEventListener('click', clickable); 
+
+                    // Check game progress - do player finish level or stage ?
+                    pointsInStage += props.newLevel.win[stageNo][`pointsPerMatch`];
+                    checkStageSuccess(pointsInStage);
+
+                    setClickNo(0);
+                    isChecking = false;
+                    gameboard.current.dataset.animation = 'off';
+                })
+            }
+
+            else {
+
+                const copy = [...cardsOpened];
+
+                for(let i=0; i<cardsOpened.length; i++) {
+                    console.log(cardsOpened[i]);
+                    cardsOpened[i].parentNode.classList.remove(`target`, `target-${i+1}`);
+                }
+
+                console.log('removing cardsOpened');
+                while(cardsOpened.length) {cardsOpened.pop();}
+
+                //gameboard.current.addEventListener('click', clickable);
+
+                setClickNo(0);
+                gameboard.current.dataset.animation = 'off';
+                flipBack(copy);
+                isChecking = false;
+
+                async function flipBack(copy) {
+                    const a1 = anime({
+                        targets: [copy[0].parentNode, copy[1].parentNode],
+                        duration: props.newLevel.tile_animation[stageNo][`time`],
+                        rotateY: [180, 0],
+                        easing: props.newLevel.tile_animation[stageNo][`easing`],
+                    }).finished;
+
+                    await Promise.all([a1]);
                 }
                 
-                flipBack().then(() => {
+                /*  flipBack().then(() => {
 
-                    resolveAnimationBugs(); // Tab switching issue
+                    //resolveAnimationBugs(); // Tab switching issue
 
-                    for(let i=0; i<=1; i++) {
-                        cardsOpened.pop();
+                    for(let i=0; i<cardsOpened.length; i++) {
+                        console.log(cardsOpened[i]);
+                        cardsOpened[i].parentNode.classList.remove(`target`, `target-${i+1}`);
                     }
-                })
 
+                    while(cardsOpened.length) {cardsOpened.pop();}
+
+                    isChecking = false;
+                    gameboard.current.addEventListener('click', clickable);
+        
+                }) */
+                
             }
-    
-            isChecking = false;
-    
-            setTimeout(() => {
-                iter.pauseCondition = true;
-                gameboard.current.addEventListener('click', clickable); 
-            }, 300); // this timer has to be longer than CSS reverse animation count  - currently it's 700 ms!!!
-    
-        }, 1400); // this time allows to see two opened tiles for user - he can check whether they match or not
+
+        }, props.newLevel.compare_time[stageNo])
+
     }
+
+    function checkStageSuccess(pointsInStage) {
+        if(pointsInStage >= props.newLevel.win[stageNo][`value`]) {
+            if(stageNo + 1 === props.newLevel.stages) {
+                // Level completed !
+                setConfirmValue(true);
+            } 
+            else if(stageNo + 1 !== props.newLevel.stages) {
+                // Move to the new stage 
+                setStageNo(stageNo + 1);
+                pointsInStage = 0;
+            }
+        }
+    }
+
         
     function resolveAnimationBugs() {
 
@@ -468,7 +547,7 @@ function Game(props) {
         setConfirmValue(false);
 
         // IT IS NOT WORKING (?)
-        gameboard.current.removeEventListener('click', clickable);
+       // gameboard.current.removeEventListener('click', clickable);
     }
 
     function handleState() {
@@ -486,7 +565,7 @@ function Game(props) {
                     //levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter);
 
                     // Try to call 
-                    otherModules[`xclick`].xclick(1, cardsOpened[0].parentNode); // pass ( click no, target )
+                    //otherModules[`xclick`].xclick(1, cardsOpened[0].parentNode); // pass ( click no, target )
                 }
             }
 
@@ -494,7 +573,7 @@ function Game(props) {
                 cardsOpened[1].parentNode.classList.add('target', 'target-2');
                 if(cardsOpened.length > 1) {
                     //levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter, time);
-                    otherModules[`xclick`].xclick(2, cardsOpened[1].parentNode); // pass ( click no, target )
+                    //otherModules[`xclick`].xclick(2, cardsOpened[1].parentNode); // pass ( click no, target )
                     handleCheck++;
                     handleCount = 0;
                 }       
@@ -504,7 +583,7 @@ function Game(props) {
         }
             
         if((cardsOpened.length > 1) && (!(isChecking))) {
-
+            return;
             for(let i=0; i < cardsOpened.length; i++) {
                 cardsOpened[i].parentNode.classList.remove('target');
                 cardsOpened[i].parentNode.classList.remove('target-1');
@@ -540,6 +619,24 @@ function Game(props) {
         } 
     }
 
+    useEffect(() => {
+        console.log(' ??? ');
+        if(clickNo > 0) {
+            console.log('xclick activation');
+            otherModules[`xclick`].xclick(clickNo, cardsOpened[cardsOpened.length - 1].parentNode, stageNo);
+        } else {
+            //cardsOpened
+        }
+    }, [clickNo])
+
+    useEffect(() => {
+        if(stageNo > 0) {
+            // From here we know level is not yet completed !
+
+            // Here we are gonna create and prepare all things and stuff for new level stage
+        }
+    }, [stageNo])
+
     function pauseGame() {
         if(iter.pauseCondition) {
             setPause(true);
@@ -558,7 +655,7 @@ function Game(props) {
         // Here set state once rendering is completed, then another useEffect when we have a finished board and can go for starting animation
         async function loadDynamic() {
             let loadStart = await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/scripts/start.js`);
-            loadStart.level_start(props.newLevel);
+            loadStart.level_start(stageNo);
             otherModules = await loadOtherModules(props.newSerie, props.newLevel.number);
             console.log(otherModules);
             
@@ -570,20 +667,20 @@ function Game(props) {
                 console.timeEnd();
             })
 
-        console.log(props.newLevel, props.newLevel.number);
+        //console.log(props.newLevel, props.newLevel.number);
     }, []);
 
     return(
         <div className='all' ref={all}>
             <div className={`background bg-${props.newLevel.number}`} ref={bg}>
                 <div className='game-info'>
-                    <GameInfo level={props.newLevel.number}  moves={props.newLevel.limitations['turns']} time={props.newLevel.limitations['time']} score={score}  />
+                    <GameInfo level={props.newLevel.number} moves={(props.newLevel.limitations[stageNo]['turns'] - turns)} time={props.newLevel.limitations[stageNo]['time']} score={score}  />
                 </div>
 
                 {/*  ONLY FOR DEV LEVEL TESTING ->  <div onClick={() => {setLevel(level + 2); confirmSuccess();}}> XMM; </div>*/}
                 {/* <div onClick={() => {setLevel(level + 10); confirmSuccess();}}> XMM; </div> */}
                 <div className={`game game-${props.newLevel.number}`} ref={game}>
-                    <div className={`board board-${props.newLevel.number}`} ref={gameboard} data-animation='off' onClick={handleState} style={boardGridParams}>
+                    <div className={`board board-${props.newLevel.number}`} ref={gameboard} data-animation='off' onClick={(e) => { if(conditionsAreMet(e)) { clickable(e); setClickNo(clickNo + 1); }}}  style={boardGridParams}>
                         {allTiles}
                     </div>
                 </div>

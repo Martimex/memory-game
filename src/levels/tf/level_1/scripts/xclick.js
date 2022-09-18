@@ -1,6 +1,6 @@
 import anime from 'animejs/lib/anime.es.js';
 
-function xclick(click_no, target) {
+function xclick(click_no, target, stageNo) {
     console.warn(click_no, target);
 
     async function whiteBorders() {
@@ -32,9 +32,9 @@ function xclick(click_no, target) {
                 
                 const a2 = anime({
                     targets: targets,
-                    //delay: 400,
-                    duration: 200,
+                    duration: 1200,
                     borderColor: 'hsl(4, 87%, 62%)',
+                    easing: 'easeOutExpo',
                 }).finished;
 
                 await Promise.all([a2]);
