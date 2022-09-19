@@ -93,6 +93,10 @@ function LevelInfo(props) {
         levelBox_ref.current.style.opacity = 1; // That prevents form initial flickering (combined with CSS style for opacity: 0)
     }
 
+    function blockClicking() {
+        document.body.style.pointerEvents = 'none';
+    }
+
     useEffect(() => {
         setLevelBoxPosition(levelInfoAll_ref.current);
         applyDifficultyTextColors(props.level_details.difficulty)
@@ -166,7 +170,7 @@ function LevelInfo(props) {
                             {/*<div className='content-item-score'> Score: 1200 </div>
                             <div className='content-item-trials'> Trials: 225 </div> */}
                         </div>
-                        <div className='play' onClick={() => { props.changeComponent(props.level_details, props.serie_name); props.proceed(); } } >
+                        <div className='play' onClick={() => { blockClicking(); props.changeComponent(props.level_details, props.serie_name); props.proceed(); } } >
                             {/* Once play button is clicked, do not forget to temporarily block click events during level load time */}
                             <div className='play-level'> 
                                 <FontAwesomeIcon icon={play} className="icon-play"> </FontAwesomeIcon>

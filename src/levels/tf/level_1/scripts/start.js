@@ -1,6 +1,6 @@
 import anime from 'animejs/lib/anime.es.js';
 
-function level_start(stageNo) {
+async function level_start(stageNo) {
 
     async function startAnimation() {
         await showTiles()
@@ -39,7 +39,7 @@ function level_start(stageNo) {
     }
 
     // Init
-    startAnimation();
+    await startAnimation();
 }
 
 
