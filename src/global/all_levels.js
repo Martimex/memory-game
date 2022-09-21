@@ -2,9 +2,26 @@ import { Level } from './Level.js';
 
 /* Each stage array has to have the same array length ! */
 
+// original lvl 1 :
+// 1: new Level(1, 1, 'easy', [16], [4], [4], [ [] ], [70], ['fas'], [ {turns: 13, time: 35} ], [850], [ {time: 400, easing: 'linear'} ], [800], [ {count: 2, pattern: 'pairs'} ], [ {count: 100, extras: ''} ], [ {value: 16, pointsPerMatch: 2, pattern: 'tilesFound'} ]),
+
 const all_levels = {
     tf: {
-        1: new Level(1, 1, 'easy', [16], [4], [4], [ [] ], [70], ['fas'], [ {turns: 13, time: 35} ], [850], [ {time: 400, easing: 'linear'} ], [800], [ {count: 2, pattern: 'pairs'} ], [ {count: 100, extras: ''} ], [ {value: 16, pointsPerMatch: 2, pattern: 'tilesFound'} ]),
+        1: new Level(1, 2, 'easy', 
+            [16, 4], 
+            [4, 2], 
+            [4, 2], 
+            [ [], [] ], 
+            [70, 70], 
+            ['fas', 'fas'], 
+            [ {turns: 13, time: 35}, {time: 5} ], 
+            [850, 850], 
+            [ {time: 400, easing: 'linear'}, {time: 400, easing: 'linear'} ],
+            [800, 800],
+            [ {count: 2, pattern: 'pairs'}, {count: 2, pattern: 'pairs'} ],
+            [ {count: 100, extras: ''}, {count: 100, extras: ''} ],
+            [ {value: 16, pointsPerMatch: 2, pattern: 'tilesFound'}, {value: 4, pointsPerMatch: 2, pattern: 'tilesFound'}  ]),
+            
         2: new Level(2, 1, 'medium', 24, 3, 8, [], 64, 'fas',  {time: 75}, 650,  {time: 600, easing: 'easeInExpo'}, 500, {count: 2, pattern: 'pairs'}, {count: 100, extras: ''}, {value: 16, pattern: 'tilesFound'}),
         3: new Level(3, 1, 'easy', 20, 4, 5, [], 66, 'fas', {time: 64}, ),
         4: new Level(4, 1, 'medium', 36, 6, 6, [], 42, 'fas', {turns: 45}, ),
