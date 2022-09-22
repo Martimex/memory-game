@@ -1,6 +1,6 @@
 import anime from 'animejs/lib/anime.es.js';
 
-async function level_start(stageNo) {
+async function level_start(stageNo, time, tileShowTime) {
 
     async function startAnimation() {
         await showTiles()
@@ -13,7 +13,7 @@ async function level_start(stageNo) {
     async function showTiles() {
         const a1 = anime({
             targets: '.tile',
-            duration: 1400,
+            duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
             borderColor: ['hsl(4, 87%, 62%)', 'hsl(45, 50%, 80%)'],
@@ -27,13 +27,13 @@ async function level_start(stageNo) {
     async function hideTiles() {
         const a2 = anime({
             targets: '.tile',
-            duration: 1400,
+            duration: time,
             transitionProperty: 'all',
             rotateY: '0deg',
             borderColor: ['hsl(45, 50%, 80%)', 'hsl(4, 87%, 62%)'],
             easing: 'easeInOutQuart',
             loop: false,
-        }, '+=600').finished;
+        }, `+=${tileShowTime}`).finished;
 
         await Promise.all([a2]);
     }

@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 import { tileCodes } from '../vars.js';
 
 // 2.0 Import stuff
@@ -18,20 +19,23 @@ console.log(all_levels);
 
 //////////
 
-library.add(fab, fas);
+library.add(fab, fas, far);
 
 let usedIcons = [];
 let randomizedIcons = [];
 
-let fasArray = Object.keys(library.definitions.fas);
-let fabArray = Object.keys(library.definitions.fab);
+const icon_Sets = {
+    fas: Object.keys(library.definitions.fas),
+    fab: Object.keys(library.definitions.fab), // not working for some reason
+    far: Object.keys(library.definitions.far),
+}
 
-function getRandomIcons(fasArray, usedIcons, randomizedIcons) {
-    let fasArrayCopy = [...fasArray]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
+function getRandomIcons(iconSet, usedIcons, randomizedIcons) {
+    let iconSetCopy = [...iconSet]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
     for(let i=0; i<(tileCodes.length/2); i++) { // Math.ceil(tileCodes.length/2) => it should be actually state value !!!
-        let random = Math.floor(Math.random() * fasArrayCopy.length);
-        usedIcons.push(fasArrayCopy[random]);
-        fasArrayCopy.splice(random, 1);
+        let random = Math.floor(Math.random() * iconSetCopy.length);
+        usedIcons.push(iconSetCopy[random]);
+        iconSetCopy.splice(random, 1);
     }
     let duplicate = usedIcons;
     usedIcons.push(...duplicate);
@@ -52,13 +56,16 @@ function setIcon(usedIcons) {
 
 
 // INIT
-getRandomIcons(fasArray, usedIcons, randomizedIcons);
+getRandomIcons(icon_Sets[`fas`], usedIcons, randomizedIcons);
 
 function Landing(props) {
 
     const tileCodes = props.tileCodes;
 
     const gameBoard = useRef(null);
+    console.log(icon_Sets['fas']);
+    console.warn(icon_Sets['fab']);
+    
 
     /* BELOW USED FOR TILES BORDER COLOR MANIPULATION */
 
@@ -145,7 +152,7 @@ function Landing(props) {
     }, []);
 
     const allTiles = tileCodes.map((code, index) => 
-        <div className={`card ${code}`} key={index.toString()}><div className='card-front'></div> <div className='card-back'><FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`fa-icon ${code}`}/></div></div>
+        <div className={`card ${code}`} key={index.toString()}><div className='card-front'></div> <div className='card-back'><FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`${code}`}/></div></div>
     );
 
     const changeScreen = React.useRef(null);
@@ -182,4 +189,4 @@ function Landing(props) {
 }
 
 export default Landing;
-export { getRandomIcons, setIcon, fasArray, fabArray };
+export { getRandomIcons, setIcon, icon_Sets };

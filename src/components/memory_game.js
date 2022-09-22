@@ -18,9 +18,9 @@ import Pause from './pause';
 
 // Level based stuff
 import {uncoverPatterns} from '../global/predefined/uncover_patterns.js';
+import {scoreExtras} from '../global/predefined/score_extras.js';
 
-
-import { setIcon, fasArray, /* fabArray */ } from './landing.js';
+import { setIcon, icon_Sets } from './landing.js';
 
 library.add(fab, fas);
 
@@ -61,17 +61,21 @@ const duplicateIcons = {
     triplets: 3, 
 }
 
-function setRandomIcons(fasArray, tiles, pattern) {
+const inGameCounters = {
+    spreeCount: 0,
+}
 
-    let fasArrayCopy = [...fasArray]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
+function setRandomIcons(iconSet, tiles, pattern) { // iconSet = fasArray
+
+    let iconSetCopy = [...iconSet]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
     let usedIcons = [];
     let randomizedIcons = [];
     //let fabArrayCopy = [...fabArray]; // Same here ...
 
     for(let i=0; i<(tiles/duplicateIcons[pattern]); i++) { // Math.ceil(tileCodes.length/2) => it should be actually state value !!!
-        let random = Math.floor(Math.random() * fasArrayCopy.length);
-        usedIcons.push(fasArrayCopy[random]);
-        fasArrayCopy.splice(random, 1);
+        let random = Math.floor(Math.random() * iconSetCopy.length);
+        usedIcons.push(iconSetCopy[random]);
+        iconSetCopy.splice(random, 1);
     }
 
     let duplicate = [];
@@ -116,9 +120,6 @@ function Game(props) {
 
     const isDesktop = useMediaQuery('(min-width: 941px)');
 
-    const [renderCount, setRenderCount] = useState(0);
-    //const [animationLoad, setAnimationLoad] = useState(false);
-    const [tiles, setTiles] = useState(null);  // Ta wartość odpowiada za poprawne malowanie ekranu - NIE WOLNO JEJ MODYFIKOWAĆ W TRAKCIE GRY !
     const [level, setLevel] = useState(props.level);
 
     const [scoreMultiplier, setScoreMultiplier] = useState(1);
@@ -143,7 +144,6 @@ function Game(props) {
     const game = useRef(null);
     const gameinfo_ref = useRef(null);
     const animationBox = useRef(null);
-    const inverseReverse = useRef(null); // Starting animation
 
     //If you lose, the Icon Array has to be cleared out completely - neglecting can cause pushing not paired icons to array
     
@@ -162,7 +162,6 @@ function Game(props) {
         setTime(0);
         //setTiles(levels[`lvl${level}`].tiles);
         setConfirmValue(null);
-        setRenderCount(0);
 
         //setTurns(0);
         pointsInStage = 0;
@@ -283,6 +282,9 @@ function Game(props) {
 
     useEffect(() => {
 
+        // 0. Reset all inGameCounters
+        resetInGameCounters();
+
         // 1. Reset turns / time / stageScore variables first
         setTime(0);
         turns = 0;
@@ -298,7 +300,7 @@ function Game(props) {
             arr.push('');
         };
 
-        randomizedIconsArray = setRandomIcons(fasArray, props.newLevel.tiles[stageNo], props.newLevel.uncover[stageNo][`pattern`]);
+        randomizedIconsArray = setRandomIcons(icon_Sets[`${props.newLevel.icon_set[stageNo]}`], props.newLevel.tiles[stageNo], props.newLevel.uncover[stageNo][`pattern`]);
 
         let allTiles =  
         arr.map((tile, index) =>  {
@@ -315,7 +317,9 @@ function Game(props) {
     //console.log(allTiles);
 
     // Add proper styling based on device used by end user
+
     let boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns[stageNo]}, ${(props.newLevel.tile_size[stageNo])/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows[stageNo]}, ${(props.newLevel.tile_size[stageNo])/10}rem)`};
+    
     /* if(isDesktop) {  UNCOMMENT AND MAKE A DEVELOPMENT LATER WHEN WORKING WITH MEDIA QUERIES !!!
         boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns}, ${(props.newLevel.tile_size)/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows}, ${(props.newLevel.tile_size)/10}rem)`};
     } else {
@@ -341,7 +345,7 @@ function Game(props) {
         setClickNo(clickNo + 1);
 
         // Lets do it in advance
-        resolveAnimationBugs();
+        //resolveAnimationBugs();
 
         if(cardsOpened.length === props.newLevel.uncover[stageNo][`count`]) {
             gameboard.current.dataset.animation = 'on';
@@ -374,7 +378,7 @@ function Game(props) {
         console.log(cardsOpened);
         isChecking = true;
 
-        if(doesMatch) { pointsInStage += props.newLevel.win[stageNo][`pointsPerMatch`];}
+        manageValuesAndCounters(doesMatch);
 
         if(props.newLevel.limitations[stageNo][`time`]) {
             if(props.newLevel.limitations[stageNo][`time`] - time <= 0) {
@@ -390,7 +394,9 @@ function Game(props) {
 
             if(doesMatch) {
 
-                setScore(score + props.newLevel.score[stageNo][`count`]);
+                setScore(score + props.newLevel.score[stageNo][`count`] 
+                    + ((props.newLevel.score[stageNo][`extras`])?  scoreExtras[`${props.newLevel.score[stageNo][`extras`]}`](inGameCounters, props.newLevel.score[stageNo][`count`]) : 0)
+                );
 
                 async function fade() {
                     const a1 = anime({
@@ -459,6 +465,21 @@ function Game(props) {
 
         }, props.newLevel.compare_time[stageNo])
 
+    }
+
+    function manageValuesAndCounters(doesMatch) {
+        // This function is used for managing all counters in one place (to make things cleaner)
+
+        if(doesMatch) {
+            pointsInStage += props.newLevel.win[stageNo][`pointsPerMatch`];
+            inGameCounters['spree'] += 1;
+        } else {
+            inGameCounters['spree'] = 0;
+        }
+    }
+
+    function resetInGameCounters() {
+        inGameCounters['spree'] = 0;
     }
 
     function checkLosingConditions() {
@@ -642,7 +663,7 @@ function Game(props) {
     async function loadDynamic() {
        // await newStageFadeOut()
         let loadStart = await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/scripts/start.js`);
-        loadStart.level_start(stageNo)
+        loadStart.level_start(stageNo, props.newLevel.starting_animation[stageNo][`time`], props.newLevel.starting_animation[stageNo][`tileShowTime`])
             .then(() => {
                 // After animation is completed...
                 setTime(1);
@@ -703,7 +724,7 @@ function Game(props) {
         <div className='all' ref={all}>
             <div className={`background bg-${props.newLevel.number}`} ref={bg}>
                 <div className='game-info' ref={gameinfo_ref} >
-                    <GameInfo level={props.newLevel.number} moves={(props.newLevel.limitations[stageNo]['turns'] - turns)} time={props.newLevel.limitations[stageNo]['time'] - time} score={score}  />
+                    <GameInfo level={props.newLevel.number} moves={props.newLevel.limitations[stageNo]['turns'] - turns} time={props.newLevel.limitations[stageNo]['time'] - time} score={score}  />
                 </div>
 
                 {/*  ONLY FOR DEV LEVEL TESTING ->  <div onClick={() => {setLevel(level + 2); confirmSuccess();}}> XMM; </div>*/}
