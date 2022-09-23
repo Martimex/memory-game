@@ -1,0 +1,14 @@
+.t-1 { /* Front size of card */
+  border: 0.2rem solid hsl(4deg, 87%, 62%);
+  background: hsl(4deg, 66%, 56%);
+  margin: 0.5rem;
+  border-radius: 10%;
+}
+
+.tf-1 { /* Have no clue what this class is for */
+  background: hsl(4deg, 87%, 62%);
+}
+
+.tb-1 { /* Back side of card */
+  background: hsl(4deg, 87%, 62%);
+}/*# sourceMappingURL=main.css.map */

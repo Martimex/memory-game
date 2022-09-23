@@ -1,5 +1,9 @@
 import  React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
 import '../styles/game.css';
+
+import '../global/global_styles.css';
+//import '../levels/tf/level_1/styles/bg.css';
+
 import  levels from '../levels.js';
 import useMediaQuery from '../virtual_hooks/useMediaQuery';
 
@@ -55,6 +59,12 @@ const moveScoreValue = 150; // Don't momdify aswell - it calculates score for ev
 const timeScoreValue = 50; // Don't momdify aswell - it calculates score for every remaining second after you've succeded, it's calculated twice, so add '/2' value
 
 const stageUpdateTime = 800;
+
+const classes = {
+    firstPlan: 'firstPlanContainer',
+    secondPlan: 'secondPlanContainer',
+    animationPlan: 'animationContainer',
+}
 
 const duplicateIcons = {
     pairs: 2,
@@ -720,6 +730,24 @@ function Game(props) {
         }
     }
 
+    useEffect(() => {
+        loadStyles();
+        appendPlansElems();
+    }, []);
+
+    async function loadStyles() {
+        console.warn('Importing ???')
+        await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/main.css`); // for styling tiles
+        await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/firstPlan.css`); // for first plan fancy elements
+        await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/secondPlan.css`); // for second plan fancy elements
+        await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/bg.css`); // for adding background to the level
+    }
+
+    async function appendPlansElems() {
+        const plansElems = await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/generatePlanItems.js`);
+        plansElems.generateItems(classes[`firstPlan`], classes[`secondPlan`]);
+    }
+
     return(
         <div className='all' ref={all}>
             <div className={`background bg-${props.newLevel.number}`} ref={bg}>
@@ -735,7 +763,10 @@ function Game(props) {
                     </div>
                 </div>
                 {/* <div className={(iter.pauseCondition) ? 'pause-btn' : 'pause-btn-not-active' } isVisual={iter.pauseCondition} onClick={pauseGame} > || </div> */}
-                <div className={`animationContainer aContainer-${props.newLevel.number}`} ref={animationBox}></div>
+                
+                <div className={`${classes[`firstPlan`]} firstPlan-${props.newLevel.number}`}> </div>
+                <div className={`${classes[`secondPlan`]} secondPlan-${props.newLevel.number}`}> </div>
+                <div className={`${classes[`animationPlan`]} aContainer-${props.newLevel.number}`} ref={animationBox}></div>
 
                 {/*{pause === true && (
                     <div className='pause-box'>
