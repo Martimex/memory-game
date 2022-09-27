@@ -55,7 +55,7 @@ function App() {
       )}
 
       {state === 'game' && (
-        <Game changeComponent={triggerChangeComponent} preview={triggerChangeComponentToPreview} tileCodes={tileCodes} level={level} newLevel={newLevel} newSerie={newSerie}  />
+        <Game changeComponent={triggerChangeComponentToPreview} preview={triggerChangeComponentToPreview} tileCodes={tileCodes} level={level} newLevel={newLevel} newSerie={newSerie}  />
       )}
 
     </div>

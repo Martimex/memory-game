@@ -73,6 +73,8 @@ const duplicateIcons = {
 
 const inGameCounters = {
     spreeCount: 0,
+    totalRemainingTime: [],
+    totalRemainingTurns: [],
 }
 
 function setRandomIcons(iconSet, tiles, pattern) { // iconSet = fasArray
@@ -505,7 +507,11 @@ function Game(props) {
     function checkStageSuccess(pointsInStage) {
 
         if( (pointsInStage >= props.newLevel.win[stageNo][`value`]) ) {
-            // If you are about to complete the level, but last pair you found at 1sec, you lose then win the level. Please work on that now
+            // Update inGameCounters for accumulative remaining turns / time
+            if(props.newLevel.limitations[stageNo][`turns`]) inGameCounters[`totalRemainingTurns`].push(props.newLevel.limitations[stageNo][`turns`] - turns); // - turns
+            if(props.newLevel.limitations[stageNo][`time`])  inGameCounters[`totalRemainingTime`].push(props.newLevel.limitations[stageNo][`time`] - time); // - time
+
+
             if(stageNo + 1 === props.newLevel.stages) {
                 // Level completed !
                 setConfirmValue(true);
@@ -779,17 +785,19 @@ function Game(props) {
                         {<ConfirmPlay value={'play'} level={level} next={changeTileNumber} /> }
                     </div>
                 )} */}
-                {confirmValue === true && (
-                    <div className='confirmation-s'>
-                        <Confirm value={true} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} next={changeTileNumber}/>
-                    </div>
+                {confirmValue !== null && (
+                    <Confirm value={confirmValue} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
+                        turns={(confirmValue)? inGameCounters[`totalRemainingTurns`] : props.newLevel.limitations[stageNo][`turns`] - turns} 
+                        time={(confirmValue) ? inGameCounters[`totalRemainingTime`] : props.newLevel.limitations[stageNo][`time`] - time} 
+                        start={props.preview} next={props.changeComponent}
+                    />
                 )}
-                {confirmValue === false && (
+{/*                 {confirmValue === false && (
                     <div className='confirmation-f'>
-                        <Confirm value={false} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} turns={((levels[`lvl${level-1}`].counter.turns) - moves)} time={(levels[`lvl${level-1}`].counter.time) - time} start={props.preview}/>,
+                        <Confirm value={false} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} turns={props.newLevel.limitations[stageNo][`turns`] - turns} time={props.newLevel.limitations[stageNo][`time`] - time} start={props.preview}/>,
                     </div>
-                )}
-                {(levels[`lvl${level-1}`].lv === 'gg') && (
+                )} */}
+                {(levels[`lvl${level-1}`].lv === 'gg') && ( // confirmValue === true
                     <div className='confirmation-w'>
                         {<ConfirmWin level={level} highscore={highscore} start={props.preview} />}
                     </div>

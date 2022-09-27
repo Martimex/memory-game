@@ -3,7 +3,7 @@ import anime from 'animejs/lib/anime.es.js';
 async function stagecomplete(stageNo) {
 
     let game = document.querySelector('.background');
-    console.error(stageNo);
+    //console.error(stageNo);
 
     console.warn('Stage complete animation');
 

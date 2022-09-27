@@ -1,0 +1,154 @@
+@mixin flexBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flexGrid {
+    display: grid;
+    grid-template-columns: 1;
+    grid-template-rows: auto;
+    
+}
+
+@mixin flexGridElement {
+    grid-row-start: 1;
+    grid-column-start: 1;
+}
+
+.confirmation-bg {
+    position: absolute; top: 0%; left: 0%;
+    width: 100%;
+    min-height: 100vh;
+    background: #000a;
+    z-index: 600; // the most shallow element in game
+    @include flexBox;
+}
+
+.confirm-box {
+    min-width: 40%;
+    //max-width: 70%;
+}
+
+.confirm {
+    border-radius: 10%;
+    box-shadow: .2rem .2rem 2rem #111, inset .2rem .2rem 2rem #111;
+    background-image: linear-gradient(135deg, #222, #333d, #222);
+    padding: 2rem 3rem 1rem 3rem;
+}
+
+.confirm-win {
+    color: hsl(111, 40%, 50%);
+
+}
+
+.confirm-lost {
+    color: hsl(11, 40%, 50%);
+    padding-bottom: 2em;
+
+}
+
+/*  1  */
+
+.confirm__info {
+    @include flexGrid;
+    place-items: center;
+}
+
+.info-title {
+    width: 100%;
+    font-size: 1.7rem;
+    font-weight: 750;
+    padding: .5em;
+    padding-top: 0;
+    margin-bottom: .2em;
+    letter-spacing: .15rem;
+}
+
+.info-title-win {
+    border-bottom: .1rem dashed hsl(111, 30%, 40%);
+
+}
+
+.info-title-lost {
+    border-bottom: .1rem dashed hsl(11, 30%, 40%);
+
+}
+
+.info-param {
+    width: 90%;
+    font-size: 1.1rem;
+    margin: .3em;
+    @include flexBox;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.param-name {
+    justify-self: flex-start;
+}
+
+.param-value {
+    justify-self: flex-end;
+}
+
+.info-highscore {
+    @include flexBox;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: .3em;
+    margin-top: .9em;
+}
+
+.highscore-name, .highscore-value {
+    color: hsl(49, 45%, 50%) !important;
+    margin: 0 .8em;
+}
+
+.info-stars {
+    @include flexBox;
+    justify-content: space-around;
+}
+
+/*  2  */
+
+.action {
+    margin-top: 1.2em;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.action_container {
+    font-size: 1.3rem;
+    //opacity: 1 !important;
+}
+
+.action_container--win {
+    @include flexBox;
+}
+
+.action_container--lost {
+    @include flexBox;
+    gap: 2.5rem;
+    justify-content: space-around;
+}
+
+.win-btn, .lost-btn {
+    width: 50%;
+    border-radius: 10%;
+    box-shadow: .2rem .2rem 2rem #111, inset .2rem .2rem 2rem #111;
+    background-image: linear-gradient(135deg, #222, #333d, #222);
+    padding: 1rem 3rem 1rem 3rem;
+    font-weight: 600;
+    flex-wrap: nowrap;
+}
+
+.win-btn {
+    color: hsl(111, 40%, 50%);
+}
+
+.lost-btn {
+    color: hsl(11, 40%, 50%);
+}
