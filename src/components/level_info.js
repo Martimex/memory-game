@@ -88,7 +88,6 @@ function LevelInfo(props) {
 
     function setLevelBoxPosition(newScreen) {
         const scrolled = window.scrollY;
-        console.warn('scrolled: ', scrolled);
         newScreen.style.top = `${scrolled}px`;
         levelBox_ref.current.style.opacity = 1; // That prevents form initial flickering (combined with CSS style for opacity: 0)
     }
@@ -133,8 +132,6 @@ function LevelInfo(props) {
                     <div className='level-info-box-content-item' datatype="info">
                         <div className='content-item-part'>
                             <div className='content-item-serie'> {series_abbr[props.serie_name]}  </div>
-                            {/* <div className='content-item-version'> 1.1 </div>
-                            <div className='content-item-date'> 12.12.1453 </div> */}
                         </div>
                         <div className='content-item-part'>
                             <div className='content-item-flex'>

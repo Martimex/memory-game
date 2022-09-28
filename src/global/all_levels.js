@@ -2,9 +2,6 @@ import { Level } from './Level.js';
 
 /* Each stage array has to have the same array length ! */
 
-// original lvl 1 :
-// 1: new Level(1, 1, 'easy', [16], [4], [4], [ [] ], [70], ['fas'], [ {turns: 13, time: 35} ], [850], [ {time: 400, easing: 'linear'} ], [800], [ {count: 2, pattern: 'pairs'} ], [ {count: 100, extras: ''} ], [ {value: 16, pointsPerMatch: 2, pattern: 'tilesFound'} ]),
-
 const all_levels = {
     tf: {
         1: new Level(1, 2, 'easy', 
@@ -14,7 +11,7 @@ const all_levels = {
             [ [], [] ], 
             [70, 60], 
             ['fas', 'far'], 
-            [ {turns: 13,  time: 3}, {time: 5} ], 
+            [ {turns: 13,  time: 35}, {time: 5} ], 
             [ {time: 1400, tileShowTime: 900}, {time: 1400, tileShowTime: 600} ], 
             [ {time: 400, easing: 'linear'}, {time: 400, easing: 'linear'} ],
             [800, 800],

@@ -28,57 +28,20 @@ let animationFinishController =
   second: true,
 };
 
-function flipTile(e, mouseEventName) {
-
-    if(e.target.classList.contains(`${dynamic_classes.serie_block}`)) {
-        const tile = e.target; //.querySelector(`.${dynamic_classes.level_tile_front}`); 
-        // expected parent: '.mode-block__serie__level' 
-        return;
-
-        if(mouseEventName === 'over') {
-            anime({
-                targets: tile,
-                duration: 3000,
-               // borderColor: ['#333 #333 #333 #333', '#000 #888 #888 #000'],
-                //boxShadow: ['1em 2em 3.2em #333', '1em 2em 3.2em #ddd'],
-                boxShadowColor: '#ddd',
-                easing: 'easeInSine',
-                direction: 'alternate',
-                loop: true,
-            })
-        }
-
-        else if(mouseEventName === 'out') {
-            anime({
-                targets: tile,
-                duration: 1200,
-                //borderColor: '#333',
-                //boxShadow: ['1em 2em 3.2em #111'],
-                boxShadowColor: '#333',
-                easing: 'easeOutSine',
-                loop: false,
-            })
-        }
-    }
-}
 
 function SerieBox(props) {
 
     function openUpFire(e) {
-        //console.warn(e.target.classList);
-        //console.warn('openUpFire:  ', animationFinishController[`first`], animationFinishController[`second`] );
         if(!animationFinishController[`first`] || !animationFinishController[`second`]) return; // Dont fire if both animations are not completed
         if(e.target === recentShowUpBox) return; // Dont fire if old and new sections are the same
         if(!e.target.classList.contains(`${dynamic_classes.serie_block}`)) return; // Only section block can be targeted
         const thisSerieTiles = e.target.querySelectorAll(`.${dynamic_classes.level_borders}`);
-        //console.log(thisSerieTiles);
         thisSerieTiles.forEach(level_tile => {
             currentlyColoredBorders.push([]); // arr for tile
             const colorsCopy = [...rainbowColors];
             let gradient_String = '';
     
             for(let color_no = 0; color_no < colors_number; color_no++) {
-                // 1. Get rand 2. Push 3. Splice
                 let rand = Math.floor(Math.random() * colorsCopy.length);
                 currentlyColoredBorders[currentlyColoredBorders.length -1].push(colorsCopy[rand]);
                 gradient_String+= (color_no !== colors_number - 1)? ` ${colorsCopy[rand]},` : ` ${colorsCopy[rand]}`;
@@ -231,14 +194,13 @@ function SerieBox(props) {
     
     function checkSerieNameChange() {
         // Object properties are not updated !
-        //console.warn('check: ', animationFinishController['first'], animationFinishController['second']);
         if((animationFinishController[`first`] === true)  && (animationFinishController[`second`]) === true)  {
             props.setSerieName(series_abbr[props.serie])
         }
     }
 
     return(
-        <div className={`${dynamic_classes.serie_block}`} onClick={(e) => {checkSerieNameChange(); openUpFire(e); } } onMouseOver={(e) => flipTile(e, 'over')} onMouseOut={(e) => {flipTile(e, 'out')}} >
+        <div className={`${dynamic_classes.serie_block}`} onClick={(e) => {checkSerieNameChange(); openUpFire(e); } } >
             <div className='serie-title'> {series_abbr[props.serie]} </div> 
             <div className='serie-content invisible'>
                 {Object.keys(all_levels[props.serie]).map((lv, index) =>

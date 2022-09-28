@@ -1,7 +1,6 @@
 import anime from 'animejs/lib/anime.es.js';
 
 function xclick(click_no, target, stageNo) {
-    console.warn(click_no, target);
 
     async function whiteBorders() {
         const a1 = anime({

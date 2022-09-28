@@ -2,7 +2,6 @@
 // recommended: divide into 2 functions: first plan and second plan, each responsible for its' own object plan.
 
 function generateItems(fpClass, spClass) {
-    console.log('Generating items for... ', fpClass, ' and ', spClass);
     generateFirstPlanItems(fpClass);
     generateSecondPlanItems(spClass);
 }

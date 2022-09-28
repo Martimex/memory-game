@@ -1,8 +1,7 @@
-import  React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
+import  React, { useState, useEffect, useRef } from 'react';
 import '../styles/game.css';
 
 import '../global/global_styles.css';
-//import '../levels/tf/level_1/styles/bg.css';
 
 import  levels from '../levels.js';
 import useMediaQuery from '../virtual_hooks/useMediaQuery';
@@ -16,9 +15,9 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 
 import GameInfo from './game_info.js';
 import Confirm from './confirm.js';
-import ConfirmPlay from './confirm_play';
+//import ConfirmPlay from './confirm_play'; -> can be removed later along with the Component
 import ConfirmWin from './confirm_win';
-import Pause from './pause';
+//import Pause from './pause'; -> can be removed later along with the Component
 
 // Level based stuff
 import {uncoverPatterns} from '../global/predefined/uncover_patterns.js';
@@ -27,9 +26,6 @@ import {scoreExtras} from '../global/predefined/score_extras.js';
 import { setIcon, icon_Sets } from './landing.js';
 
 library.add(fab, fas);
-
-let usedIcons = [];
-let randomizedIcons = [];
 
 let iter = {
     // Add more keys if necessary
@@ -77,14 +73,13 @@ const inGameCounters = {
     totalRemainingTurns: [],
 }
 
-function setRandomIcons(iconSet, tiles, pattern) { // iconSet = fasArray
+function setRandomIcons(iconSet, tiles, pattern) { 
 
-    let iconSetCopy = [...iconSet]; // Create a copy of fasArray; direct assigning (fasArrayCopy = fasArray) would affect fasArray too!
+    let iconSetCopy = [...iconSet]; 
     let usedIcons = [];
     let randomizedIcons = [];
-    //let fabArrayCopy = [...fabArray]; // Same here ...
 
-    for(let i=0; i<(tiles/duplicateIcons[pattern]); i++) { // Math.ceil(tileCodes.length/2) => it should be actually state value !!!
+    for(let i=0; i<(tiles/duplicateIcons[pattern]); i++) { 
         let random = Math.floor(Math.random() * iconSetCopy.length);
         usedIcons.push(iconSetCopy[random]);
         iconSetCopy.splice(random, 1);
@@ -96,7 +91,7 @@ function setRandomIcons(iconSet, tiles, pattern) { // iconSet = fasArray
         duplicate.push(...usedIcons);
     }
 
-    const usedIconsCopy = [...duplicate]; // Same here - creating a copy; do not assign values directly(it works for original ref only) !!
+    const usedIconsCopy = [...duplicate]; 
 
     for(let j=0; j<usedIconsCopy.length; j++) {
         randomizedIcons.push(setIcon(duplicate));
@@ -134,14 +129,11 @@ function Game(props) {
 
     const [level, setLevel] = useState(props.level);
 
-    const [scoreMultiplier, setScoreMultiplier] = useState(1);
-    const [highscore, setHighscore] = useState(0);
-    const [moves, setMoves] = useState(0);  
-    //const [time, setTime] = useState(null);
-    const [foundTiles, setFoundTiles] = useState(0);
+    const [scoreMultiplier, setScoreMultiplier] = useState(1); // REMOVE AFTER TRANSFORMING OLD LEVELS INTO A NEW SYSTEM
+    const [highscore, setHighscore] = useState(0); // REMOVE AFTER TRANSFORMING OLD LEVELS INTO A NEW SYSTEM
+    const [moves, setMoves] = useState(0);   // REMOVE AFTER TRANSFORMING OLD LEVELS INTO A NEW SYSTEM
+    const [foundTiles, setFoundTiles] = useState(0); // REMOVE AFTER TRANSFORMING OLD LEVELS INTO A NEW SYSTEM
 
-
-    const [pause, setPause] = useState(false); // is game paused? Should game be paused ?
 
     const [confirmValue, setConfirmValue] = useState(null); // ALWAYS SET IT TO NULL (INITIAL) ||  true / false (is level fully Completed ?)
     const [score, setScore] = useState(0);
@@ -157,100 +149,16 @@ function Game(props) {
     const gameinfo_ref = useRef(null);
     const animationBox = useRef(null);
 
-    //If you lose, the Icon Array has to be cleared out completely - neglecting can cause pushing not paired icons to array
-    
-    // If you win...
-    const changeTileNumber = () => {
-
-        // Clean-up function whenever you finish a level
-        // First, clean up all State variables
-
-        //setAnimationLoad(false);
-        setLevel(level + 1);
-        setFoundTiles(0);
-        setScore(0);
-        setScoreMultiplier(1);
-        setMoves(0);
-        setTime(0);
-        //setTiles(levels[`lvl${level}`].tiles);
-        setConfirmValue(null);
-
-        //setTurns(0);
-        pointsInStage = 0;
-        turns = 0;
-
-        scoreAddon = 0;
-        handleCount = 0;
-        handleCheck = 0;
-
-        iter.value = 0;
-        iter.amount = 0;
-        iter.count = 0;
-        iter.streak = 0;
-        iter.previousStep = 0;
-        iter.extraTurns = 0;
-        iter.fTilesModifier = 0;
-        iter.timeAddon = 0;
-        iter.array = [];
-        iter.nextArr = [];
-        iter.pauseCondition = false; // by default, it is not allowed to turn on pasue btn
-
-        async function finish() {
-           await winLvAnimation()
-        }
-
-        cleanup();
-        finish();
-    }
-
-    const winLvAnimation = async () => {
-
-        const a1 = anime({
-            targets: bg.current,
-            duration: 2000,
-            opacity: [0, 1],
-            easing: 'linear',
-        }).finished;
-
-        await Promise.all([a1]);
-    
-    }
-
-    const cleanup = () => {
-        // Tu będzie rotate wszystkich ikon; w skrócie: przywracamy poziom do stanu pierwotnego i potem tworzymy kolejny poziom
-        // Then proceed with new tiles, grid, icons...
-
-        if(animationBox.current.childNodes.length > 0) {
-            for(let nodeCount = 0; nodeCount !== animationBox.current.childNodes.length;) {
-                animationBox.current.childNodes[nodeCount].remove();
-            }
-    
-        }
-
-        for(let x=0; x<gameboard.current.childNodes.length; x++) {
-            gameboard.current.childNodes[x].style = `visibility: visible`;
-        }
-
-    }
-
-    //  Render Count pomaga pozbyć się mylących błędów z konsoli - zmienna pilnuje, czy render wykonał się 1 raz. Jeśli ma się on wykonać po raz
-    //  kolejny, to nie tworzymy na nowo tabeli z ikonkami (unikamy podmiany ikon na planszy podczas gry)
-/*     if(renderCount < 1) {
-        randomizedIconsArray = setRandomIcons(fasArray, props.newLevel.tiles[stageNo]);
-        setRenderCount(renderCount + 1);
-    } */
-
     function conditionsAreMet(e) {
         if(gameboard.current.dataset.animation !== 'off') {return false;}
         if(!e.target.classList.contains('tile')) {return false;}
         const isNotAlreadyOpened = checkTilesOrigin(cardsOpened, e.target);
-        if(!isNotAlreadyOpened) { console.error('Lack of origin detected'); return false; }
+        if(!isNotAlreadyOpened) {  return false; }
 
         return true;
     }
 
     function clickable(e)  {
-        // console.warn(props.newLevel.uncover.count); // its our new equivalent of cardsOpened.length - but dynamic !
 
         const tile_back = e.target.querySelector('.tile-back');
         cardsOpened.push(tile_back);
@@ -280,7 +188,6 @@ function Game(props) {
             }, 1000);
     
             if((props.newLevel.limitations[stageNo][`time`] - time < 0) && (pointsInStage < props.newLevel.win[stageNo][`value`])) {
-                //confirmFailure();
                 setConfirmValue(false);
                 clearInterval(stopwatch);
             }
@@ -290,7 +197,7 @@ function Game(props) {
             console.error('TIME COUNTDOWN NOT ADDED TO THE LEVEL !');
         }
 
-    }, [time]); // Level because normally we won't count down time - only when those time levels came in, so every time we need to check if new level is the time level
+    }, [time]);
 
     useEffect(() => {
 
@@ -324,10 +231,6 @@ function Game(props) {
 
     }, [stageNo])
 
-    //console.log(' LOADED ELEMENTS CAN BE OVERWHELMING')
-    
-    //console.log(allTiles);
-
     // Add proper styling based on device used by end user
 
     let boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns[stageNo]}, ${(props.newLevel.tile_size[stageNo])/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows[stageNo]}, ${(props.newLevel.tile_size[stageNo])/10}rem)`};
@@ -339,7 +242,6 @@ function Game(props) {
     } */
 
     function keepCardOpen(e) {
-       
         // Open up the tile
         async function openUp() {
             const a1 = anime({
@@ -352,19 +254,12 @@ function Game(props) {
 
             await Promise.all([a1]);
         }
-            
 
         setClickNo(clickNo + 1);
 
-        // Lets do it in advance
-        //resolveAnimationBugs();
-
         if(cardsOpened.length === props.newLevel.uncover[stageNo][`count`]) {
             gameboard.current.dataset.animation = 'on';
-            // Checking...
             turns = turns + 1;
-            //console.log(usedTurns);
-            console.warn('COŚ KREATYWNEGO');
             iter.pauseCondition = false;
 
             const doesMatch = uncoverPatterns[props.newLevel.uncover[stageNo][`pattern`]](cardsOpened);
@@ -373,11 +268,9 @@ function Game(props) {
 
             otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo); // doesMatch determines whether player meets required condition to remove tiles
         
-            console.time();
             openUp()
                 .then(() => {
-                    console.timeEnd();
-                    doCardsMatch(doesMatch, cardsOpened);  // PLEASE REBUILD THAT
+                    doCardsMatch(doesMatch, cardsOpened); 
                 })
         } else {
             openUp();
@@ -386,8 +279,6 @@ function Game(props) {
 
     function doCardsMatch(doesMatch, cardsOpened) {
         // Block the click listener for a brief checkout duration
-       // gameboard.current.removeEventListener('click', clickable);
-        console.log(cardsOpened);
         isChecking = true;
 
         manageValuesAndCounters(doesMatch);
@@ -422,17 +313,12 @@ function Game(props) {
                 }
 
                 fade().then(() => {
-                    console.log('now !');
                     cardsOpened_parentNodes.forEach((parent, index) => {
                         parent.style = 'visibility: hidden';
                         parent.classList.remove(`target`, `target-serie-${stageNo}`, `target-${index + 1}`);
                     })
-                
-                    //resolveAnimationBugs(); // Tab switching issue
 
                     while(cardsOpened.length) {cardsOpened.pop();}
-
-                    //gameboard.current.addEventListener('click', clickable); 
 
                     // Check game progress - do player finish level or stage ?
                     checkStageSuccess(pointsInStage);
@@ -450,10 +336,7 @@ function Game(props) {
                     cardsOpened_parentNodes[i].classList.remove(`target`, `target-serie-${stageNo}`, `target-${i+1}`);
                 }
 
-                console.log('removing cardsOpened');
                 while(cardsOpened.length) {cardsOpened.pop();}
-
-                //gameboard.current.addEventListener('click', clickable);
 
                 setClickNo(0);
                 gameboard.current.dataset.animation = 'off';
@@ -496,7 +379,6 @@ function Game(props) {
 
     function checkLosingConditions() {
         if(props.newLevel.limitations[stageNo][`turns`]) { // if this stage take care of turns used
-            console.log(props.newLevel.limitations[stageNo][`turns`], turns)
             if( (props.newLevel.limitations[stageNo][`turns`] - turns <= 0) && (pointsInStage < props.newLevel.win[stageNo][`value`]) && (confirmValue === null) ) { 
                 // if we have no turns left, and still didnt complete current stage
                 setConfirmValue(false);
@@ -508,8 +390,8 @@ function Game(props) {
 
         if( (pointsInStage >= props.newLevel.win[stageNo][`value`]) ) {
             // Update inGameCounters for accumulative remaining turns / time
-            if(props.newLevel.limitations[stageNo][`turns`]) inGameCounters[`totalRemainingTurns`].push(props.newLevel.limitations[stageNo][`turns`] - turns); // - turns
-            if(props.newLevel.limitations[stageNo][`time`])  inGameCounters[`totalRemainingTime`].push(props.newLevel.limitations[stageNo][`time`] - time); // - time
+            if(props.newLevel.limitations[stageNo][`turns`]) inGameCounters[`totalRemainingTurns`].push(props.newLevel.limitations[stageNo][`turns`] - turns);
+            if(props.newLevel.limitations[stageNo][`time`])  inGameCounters[`totalRemainingTime`].push(props.newLevel.limitations[stageNo][`time`] - time); 
 
 
             if(stageNo + 1 === props.newLevel.stages) {
@@ -528,7 +410,6 @@ function Game(props) {
         await otherModules[`stagecomplete`].stagecomplete(stageNo)
         await newStageFadeOut()
             .then(() => {
-                console.warn('now set the stage');
                 newStageFadeIn()
                 setStageNo(stageNo + 1);
             })
@@ -542,142 +423,7 @@ function Game(props) {
         return parentsNodeArr;
     }
 
-        
-    function resolveAnimationBugs() {
-
-        let tilesToCheck = [...gameboard.current.childNodes];
-        let buggedTiles = [];
-        tilesToCheck.forEach((ttc, index) => {
-            let transform = ttc.style.transform;
-            let query = 'rotateY';
-            let pos = transform.indexOf(query);
-            let end = transform.indexOf(')', pos);
-            let transformValue = transform.substring(pos + query.length, end + 1);
-
-            if(cardsOpened[1]) { // Resolve after second click
-                if((ttc.style.visibility !== 'hidden')  && (transformValue !== '(0deg)') && (cardsOpened[0].parentNode !== ttc) && (cardsOpened[1].parentNode !== ttc))  {
-                    buggedTiles.push(ttc);
-                }
-            } else {  // Resolve after first click
-                if((ttc.style.visibility !== 'hidden')  && (transformValue !== '(0deg)') && (cardsOpened[0].parentNode !== ttc))  {
-                    buggedTiles.push(ttc);
-                }
-            }
-        })
-
-        if(buggedTiles.length > 0) {
-            anime({
-                targets: buggedTiles,
-                duration: 500,
-                rotateY: '0deg',
-                easing: 'easeOutSine',
-            })
-        }
-    }
-
-    function confirmSuccess() {
-     
-        scoreAddon = (scorePerPair * scoreMultiplier);
-
-        if(levels[`lvl${level-1}`].counter.turns !== null) {
-            setHighscore(highscore + score +  scoreAddon + ((levels[`lvl${level-1}`].counter.turns - moves) * moveScoreValue));
-        }
-        else {  // So it was time level
-            setHighscore(highscore + score  + ((levels[`lvl${level-1}`].counter.time - time) * timeScoreValue));
-        } 
-
-        setConfirmValue(true);
-    }
-
-    function confirmFailure() {
-        
-        if(levels[`lvl${level-1}`].counter.turns !== null) {
-            setHighscore(highscore + score + scoreAddon + ((levels[`lvl${level-1}`].counter.turns - moves) * moveScoreValue));
-        }
-        else {  // So it was time level
-            setHighscore(highscore + score  + ((levels[`lvl${level-1}`].counter.time - time) * timeScoreValue));
-            if(cardsOpened.length > 0) {  // If you lose time game and click 1 tile before losing...
-                cardsOpened.pop();
-            }
-        } 
-
-        setConfirmValue(false);
-
-        // IT IS NOT WORKING (?)
-       // gameboard.current.removeEventListener('click', clickable);
-    }
-
-    function handleState() {
-
-        // PREVENT FIRSTCLICK AND SECONDCLICK MULTIPLE TIMES INVOKING WHEN USER KEEPS PRESSING THE SAME TILE / SOME TILES MULTIPLE TIMES !!!!
-        if(isChecking) {return;}
-
-        if(gameboard.current.dataset.animation === 'off') {
-
-            if((handleCount < 1) && (cardsOpened[0])) {
-                cardsOpened[0].parentNode.classList.add('target', 'target-1');
-                if(cardsOpened.length === 1) {
-                    handleCheck = 0;
-                    handleCount++;
-                    //levels[`lvl${level-1}`].onFirstClickFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter);
-
-                    // Try to call 
-                    //otherModules[`xclick`].xclick(1, cardsOpened[0].parentNode); // pass ( click no, target )
-                }
-            }
-
-            else if((handleCheck < 1) && (cardsOpened[1]))  {
-                cardsOpened[1].parentNode.classList.add('target', 'target-2');
-                if(cardsOpened.length > 1) {
-                    //levels[`lvl${level-1}`].onSecondClickFlag(cardsOpened, props.newLevel.tiles, foundTiles, iter, time);
-                    //otherModules[`xclick`].xclick(2, cardsOpened[1].parentNode); // pass ( click no, target )
-                    handleCheck++;
-                    handleCount = 0;
-                }       
-            }
-
-            
-        }
-            
-        if((cardsOpened.length > 1) && (!(isChecking))) {
-            return;
-            for(let i=0; i < cardsOpened.length; i++) {
-                cardsOpened[i].parentNode.classList.remove('target');
-                cardsOpened[i].parentNode.classList.remove('target-1');
-                cardsOpened[i].parentNode.classList.remove('target-2');
-            }
-
-            setTimeout(() => {
-
-                if(cardsOpened.length <= 1) {return;} 
-
-                if(cardsOpened[0].parentNode === cardsOpened[1].parentNode) {
-                    return;
-                } 
-
-                if(levels[`lvl${level-1}`].counter.turns !== null) {
-                    setMoves(moves + 1 + iter.extraTurns);
-                }
-
-                if((cardsOpened[0].childNodes[0].classList[1] === cardsOpened[1].childNodes[0].classList[1])) {
-                    setFoundTiles(foundTiles + 2 + iter.fTilesModifier);
-                    setScore(score +(scorePerPair * scoreMultiplier));
-                    scoreAddon = ((scorePerPair * scoreMultiplier) +50);  // if u lose, but the last pair match
-                    setScoreMultiplier(scoreMultiplier + 0.5);
-                }
-                else {
-                    setScoreMultiplier(1);
-                    scoreAddon = 0;  // if u lose, but the last pair doesn't match
-                }
-
-            }, 1200) 
-            // Block the scope and prevents from fast-clicking turn decreasing behaviour
-            handleCount = 0;
-        } 
-    }
-
     async function loadDynamic() {
-       // await newStageFadeOut()
         let loadStart = await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/scripts/start.js`);
         loadStart.level_start(stageNo, props.newLevel.starting_animation[stageNo][`time`], props.newLevel.starting_animation[stageNo][`tileShowTime`])
             .then(() => {
@@ -686,8 +432,6 @@ function Game(props) {
                 document.body.style.pointerEvents = 'auto'; // unlock clicking (previously blocked in leve_info *play btn onClick*)
             })
         otherModules = await loadOtherModules(props.newSerie, props.newLevel.number);
-        console.log(otherModules);
-        
     }
 
     async function newStageFadeIn() {
@@ -714,27 +458,12 @@ function Game(props) {
 
 
     useEffect(() => {
-        console.log(' ??? ');
         if(clickNo > 0) {
-            console.log('xclick activation');
             otherModules[`xclick`].xclick(clickNo, cardsOpened[cardsOpened.length - 1].parentNode, stageNo);
         } else {
-            //cardsOpened
+            //
         }
     }, [clickNo])
-
-    function pauseGame() {
-        if(iter.pauseCondition) {
-            setPause(true);
-        }
-    }
-
-    function continueGame() {
-        setPause(false);
-        if(time !== null) {
-            setTime(time + 1); // Taxing 1 second every time player press pause - in order to avoid taking time advantages (or animation skipping)
-        }
-    }
 
     useEffect(() => {
         loadStyles();
@@ -742,7 +471,6 @@ function Game(props) {
     }, []);
 
     async function loadStyles() {
-        console.warn('Importing ???')
         await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/main.css`); // for styling tiles
         await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/firstPlan.css`); // for first plan fancy elements
         await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/secondPlan.css`); // for second plan fancy elements
@@ -754,12 +482,6 @@ function Game(props) {
         plansElems.generateItems(classes[`firstPlan`], classes[`secondPlan`]);
     }
 
-/*     useEffect(() => {
-        if(confirmValue !== null) {
-            props.confirmComponent(); // it's fake state (temporary, see App.js for more details)
-        }
-    }, [confirmValue]) */
-
     return(
         <div className='all' ref={all}>
             <div className={`background bg-${props.newLevel.number}`} ref={bg}>
@@ -767,30 +489,16 @@ function Game(props) {
                     <GameInfo level={props.newLevel.number} moves={props.newLevel.limitations[stageNo]['turns'] - turns} time={props.newLevel.limitations[stageNo]['time'] - time} score={score}  />
                 </div>
 
-                {/*  ONLY FOR DEV LEVEL TESTING ->  <div onClick={() => {setLevel(level + 2); confirmSuccess();}}> XMM; </div>*/}
-                {/* <div onClick={() => {setLevel(level + 10); confirmSuccess();}}> XMM; </div> */}
                 <div className={`game game-${props.newLevel.number}`} ref={game}>
                     <div className={`board board-${props.newLevel.number}`} ref={gameboard} data-animation='off' onClick={(e) => { if(conditionsAreMet(e)) { clickable(e); setClickNo(clickNo + 1); }}}  style={boardGridParams}>
                         {boardState}
                     </div>
                 </div>
-                {/* <div className={(iter.pauseCondition) ? 'pause-btn' : 'pause-btn-not-active' } isVisual={iter.pauseCondition} onClick={pauseGame} > || </div> */}
                 
                 <div className={`${classes[`firstPlan`]} firstPlan-${props.newLevel.number}`}> </div>
                 <div className={`${classes[`secondPlan`]} secondPlan-${props.newLevel.number}`}> </div>
                 <div className={`${classes[`animationPlan`]} aContainer-${props.newLevel.number}`} ref={animationBox}></div>
 
-                {/*{pause === true && (
-                    <div className='pause-box'>
-                        {<Pause continue={continueGame} />}
-                    </div>
-                )} */}
-
-{/*                 {confirmValue === 'play' && (
-                    <div className='confirmation-p'>
-                        {<ConfirmPlay value={'play'} level={level} next={changeTileNumber} /> }
-                    </div>
-                )} */}
                 {confirmValue !== null && (
                     <Confirm value={confirmValue} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
                         turns={(confirmValue)? inGameCounters[`totalRemainingTurns`] : (props.newLevel.limitations[stageNo][`turns`])? props.newLevel.limitations[stageNo][`turns`] - turns : 0} 
@@ -798,12 +506,8 @@ function Game(props) {
                         start={props.preview} next={props.changeComponent} restart={props.confirmComponent}
                     />
                 )}
-{/*                 {confirmValue === false && (
-                    <div className='confirmation-f'>
-                        <Confirm value={false} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} turns={props.newLevel.limitations[stageNo][`turns`] - turns} time={props.newLevel.limitations[stageNo][`time`] - time} start={props.preview}/>,
-                    </div>
-                )} */}
-                {(levels[`lvl${level-1}`].lv === 'gg') && ( // confirmValue === true
+
+                {(props.newLevel.cords === 'gg') && ( 
                     <div className='confirmation-w'>
                         {<ConfirmWin level={level} highscore={highscore} start={props.preview} />}
                     </div>

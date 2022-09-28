@@ -5,9 +5,6 @@ async function level_start(stageNo, time, tileShowTime) {
     async function startAnimation() {
         await showTiles()
         await hideTiles()
-            .then(() => {
-                console.warn('Animation complete !');
-            })
     }
 
     async function showTiles() {

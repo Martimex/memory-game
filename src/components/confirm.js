@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import anime from 'animejs/lib/anime.es.js';
 import '../styles/confirm.css';
 import {level_end_messages} from '../global/predefined/level_end_messages.js';
-import { set } from 'animejs';
 import { faStar as star_empty} from '@fortawesome/free-regular-svg-icons';
 import { faStar as star_full} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -28,21 +27,8 @@ function Confirm(props) {
     const [endMessage, setEndMessage] = useState(null);
 
     const table = useRef(null);
-    const levelVis = useRef(null);
-    const counterVis = useRef(null);
-    const counterVis2 = useRef(null); 
-    const scoreVis = useRef(null);
-    const highscoreVis = useRef(null);
-
     const confBtn = useRef(null);
     const actionBox_ref = useRef(null);
-
-    let confirmParams = ['.info-level-val', '.info-counter-moves-val', '.info-counter-time-val', '.info-score-val'];
-    let highscoreParam = '.total-score';
-    const showParamsDuration = 1000;
-    const delayStagger = 500;
-    const calcParamsDuration = 1600;
-    const showButtonDuration = 1200;
 
     let sub;
     if(props.turns !== null) {
@@ -56,7 +42,7 @@ function Confirm(props) {
         document.querySelector(`.${static_classes['action_container']}`).style.pointerEvents = 'none';
         document.querySelectorAll(`.${static_classes['param_name']}`).forEach(el => el.style.opacity = 0);
         document.querySelectorAll(`.${static_classes['param_value']}`).forEach(el => el.style.opacity = 0);
-        const valuesArr = [props.time, props.turns, [props.score]]; // props.score is within array because its a numeric value only
+        const valuesArr = [props.time, props.turns, [props.score]]; // props.score is within array because is the only numeric value (and we need to ensure each param is type of array)
         const allParamNames = document.querySelectorAll(`.${static_classes[`param_name`]}`);
         const allParamValues = document.querySelectorAll(`.${static_classes[`param_value`]}`)
 
@@ -77,14 +63,13 @@ function Confirm(props) {
                 await showGottenStars()
                 await showWinButton()
                     .then(() => {
-                        //console.log('win animation done');
                         document.querySelector(`.${static_classes['win_btn']}`).style.pointerEvents = 'auto';
                     })
             }
 
             async function showTitle() {
                 const a1 = anime({
-                    targets: `.${static_classes['title']}`, // title - param
+                    targets: `.${static_classes['title']}`,
                     duration: 1200,
                     translateX: ['-15%', '0%'],
                     opacity: [0, 1],
@@ -112,7 +97,6 @@ function Confirm(props) {
             async function showParamValue(el, valueArr) {
                 await fadeInParamValue(el)
                 for(let x=0; x<valueArr.length; x++) {
-                    console.log(el, valueArr[x]);
                     await addParamsValue(el, valueArr[x]);
                 }
             }
@@ -195,7 +179,7 @@ function Confirm(props) {
                     duration: 900,
                     opacity: [0, 1],
                     scale: ['0%', '100%'],
-                    easing: 'easeInOutQuint',  // expo
+                    easing: 'easeInOutQuint',
                 }).finished;
                 await Promise.all([a9]);
             }
