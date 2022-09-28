@@ -14,7 +14,7 @@ const all_levels = {
             [ [], [] ], 
             [70, 60], 
             ['fas', 'far'], 
-            [ {turns: 13, time: 35}, {time: 5} ], 
+            [ {turns: 13,  time: 3}, {time: 5} ], 
             [ {time: 1400, tileShowTime: 900}, {time: 1400, tileShowTime: 600} ], 
             [ {time: 400, easing: 'linear'}, {time: 400, easing: 'linear'} ],
             [800, 800],

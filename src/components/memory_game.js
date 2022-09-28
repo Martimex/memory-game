@@ -754,6 +754,12 @@ function Game(props) {
         plansElems.generateItems(classes[`firstPlan`], classes[`secondPlan`]);
     }
 
+/*     useEffect(() => {
+        if(confirmValue !== null) {
+            props.confirmComponent(); // it's fake state (temporary, see App.js for more details)
+        }
+    }, [confirmValue]) */
+
     return(
         <div className='all' ref={all}>
             <div className={`background bg-${props.newLevel.number}`} ref={bg}>
@@ -787,9 +793,9 @@ function Game(props) {
                 )} */}
                 {confirmValue !== null && (
                     <Confirm value={confirmValue} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
-                        turns={(confirmValue)? inGameCounters[`totalRemainingTurns`] : props.newLevel.limitations[stageNo][`turns`] - turns} 
-                        time={(confirmValue) ? inGameCounters[`totalRemainingTime`] : props.newLevel.limitations[stageNo][`time`] - time} 
-                        start={props.preview} next={props.changeComponent}
+                        turns={(confirmValue)? inGameCounters[`totalRemainingTurns`] : (props.newLevel.limitations[stageNo][`turns`])? props.newLevel.limitations[stageNo][`turns`] - turns : 0} 
+                        time={(confirmValue) ? inGameCounters[`totalRemainingTime`] : (props.newLevel.limitations[stageNo][`time`])? props.newLevel.limitations[stageNo][`time`] - time : 0} 
+                        start={props.preview} next={props.changeComponent} restart={props.confirmComponent}
                     />
                 )}
 {/*                 {confirmValue === false && (

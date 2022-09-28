@@ -77,11 +77,9 @@ function Preview(props) {
 
     const changeScreen = React.useRef(null);
 
-    async function fadeAnimation() {
+/*     async function fadeAnimation() {
 
-        const a1 = changeScreen.current;
-
-        changeScreen.current = anime({
+        const a1 = anime({
             targets: 'body',
             duration: props.timing,
             opacity: [1, 0],
@@ -94,7 +92,7 @@ function Preview(props) {
 
     async function proceed() {
         await fadeAnimation()
-    }
+    } */
 
     useEffect(() => {
         async function fade() {
@@ -169,7 +167,7 @@ function Preview(props) {
             <div className='seizure-flexbox'>
                 <div className='top-bar' ref={topBarRef}>
                     <div className='top-bar__return'>
-                        <button className='return-back' onClick={() => {props.backToHome(); proceed();}}> 
+                        <button className='return-back' onClick={() => {props.backToHome(); props.proceed();}}> 
                             <FontAwesomeIcon icon={home} className="icon-home" />
                         </button>
                     </div>
@@ -195,7 +193,7 @@ function Preview(props) {
 
             { levelChoose && (
                 <LevelInfo serie_name={serie} level_details={levelChoose} closeLevelInfo={setLevelChoose} 
-                    changeComponent={props.changeComponent} proceed={proceed}
+                    changeComponent={props.changeComponent} proceed={props.proceed}
                 />
             )}
         </div>

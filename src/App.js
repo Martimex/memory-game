@@ -3,14 +3,30 @@ import Landing from './components/landing.js';
 //import Game from './components/game.js';
 import Game from './components/memory_game.js';
 import Preview from './components/preview.js';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { tileCodes } from './vars.js';
 
+import anime from 'animejs/lib/anime.es.js';
 
 library.add(fab, fas);
+
+const timing = 1000;
+
+async function fadeAnimation() {
+        
+  const a1 = anime({
+      targets: 'body',
+      duration: timing,
+      opacity: [1, 0],
+      direction: 'alternate',
+      easing: 'linear',
+  })
+
+  await Promise.all([a1]);
+}
 
 
 function App() {
@@ -20,7 +36,9 @@ function App() {
   const [newLevel, setNewLevel] = useState(null);
   const [newSerie, setNewSerie] = useState(null);
 
-  const timing = 1000;
+  const proceed = async() => {
+      await fadeAnimation()
+  }
 
   const triggerChangeComponent = () => {
     setState('game');
@@ -38,11 +56,21 @@ function App() {
     setState('preview');
   }
 
+  const triggerChangeComponentToConfirm = () => {
+    setState('confirm'); // this is 'fake' state, meaning it will not change any new component by itself
+  }
+
   const triggerStartDelayed = () => {
     setTimeout(() => {
       setState('start');
     }, timing);
   }
+
+  useEffect(() => {
+    if(state === 'confirm') { // it's a trick to trigger level restart
+      setState('game')
+    }
+  }, [state])
 
   return (
     <div className="App">
@@ -51,11 +79,11 @@ function App() {
       )}
 
       {state === 'preview' && (
-        <Preview changeComponent={triggerChangeComponentDelayed} backToHome={triggerStartDelayed} timing={timing} level={level} nextLV={() => {setLevel(level + 1)}} />
+        <Preview changeComponent={triggerChangeComponentDelayed} proceed={proceed} backToHome={triggerStartDelayed} timing={timing} level={level} nextLV={() => {setLevel(level + 1)}} />
       )}
 
       {state === 'game' && (
-        <Game changeComponent={triggerChangeComponentToPreview} preview={triggerChangeComponentToPreview} tileCodes={tileCodes} level={level} newLevel={newLevel} newSerie={newSerie}  />
+        <Game changeComponent={triggerChangeComponentToPreview} proceed={proceed} restartGame={triggerChangeComponent} confirmComponent={triggerChangeComponentToConfirm} preview={triggerChangeComponentToPreview} tileCodes={tileCodes} level={level} newLevel={newLevel} newSerie={newSerie}  />
       )}
 
     </div>

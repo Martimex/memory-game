@@ -53,115 +53,6 @@ function Confirm(props) {
 
     useEffect(() => {
 
-        async function hideButton() {
-            const a0 = anime({
-                targets: ['.action-box'],
-                duration: 0,
-                opacity: [0, 0],
-                easing: 'linear',
-            }).finished;
-            
-            const a00 = anime({
-                targets: [confirmParams, highscoreParam],
-                duration: 0,
-                opacity: [0, 0],
-                easing: 'linear',
-            }).finished;
-
-            await Promise.all([a0, a00]);
-        }
-
-        async function showParams() {
-            const a1 = anime({
-                targets: confirmParams,
-                duration: showParamsDuration,
-                delay: anime.stagger(delayStagger),
-                easing: 'easeInSine',
-                opacity: [0, 1],
-            }).finished;
-
-            const a01 = anime({
-                targets: highscoreParam,
-                duration: showParamsDuration,
-                opacity: [0, 1],
-                round: 1,
-                keyframes: [
-                    {textContent: (props.highscore), duration: 100, opacity: 0 },
-                    {textContent: (props.highscore - sub), duration: 100, opacity: 0.1},
-                    {opacity: 1, duration: (showParamsDuration - 200)},
-                ],
-            })
-
-            await Promise.all([a1, a01]);
-        }
-
-
-        async function calcParams() {
-
-            const a2 = anime({
-                targets: ['.total-score'],
-                duration: calcParamsDuration,
-                easing: 'linear',
-                round: 1,
-                textContent: [(props.highscore - sub), props.highscore],
-            }).finished;
-            
-            const a3 = anime({
-                targets: ['.info-score-val'],
-                duration: calcParamsDuration,
-                easing: 'linear',
-                round: 1,
-                textContent: [props.score, 0],
-            }).finished;
-
-            let a4;
-
-            if(props.turns !== null) {
-                a4 = anime({
-                    targets: ['.info-counter-moves-val'],
-                    duration: calcParamsDuration,
-                    easing: 'linear',
-                    round: 1,
-                    textContent: [props.turns, 0],
-                }).finished;
-
-            } else if(props.time !== null) {
-                a4 = anime({
-                    targets: ['.info-counter-time-val'],
-                    duration: calcParamsDuration,
-                    easing: 'linear',
-                    round: 1,
-                    textContent: [props.time, 0],
-                }).finished;
-            }
-
-            await Promise.all([a2, a3, a4]);
-        }
-
-        async function showButton() {
-
-            const a5 = anime({
-                targets: ['.confirmation-btn'],
-                duration: showButtonDuration,
-                opacity: [0, 1],
-                easing: 'linear',
-            }).finished;
-
-            await Promise.all([a5]);
-        }
-
-        async function init() {
-            confBtn.current.style.pointerEvents = 'none';
-            await hideButton()
-            await showParams()
-            await calcParams()
-            await showButton()
-                .then(() => {
-                    confBtn.current.style.pointerEvents = 'auto';
-                })
-        }
-
-        //init(); ALL LINES ABOVE THIS STATEMENT ARE TO BE REMOVED COMPLETELY
         document.querySelector(`.${static_classes['action_container']}`).style.pointerEvents = 'none';
         document.querySelectorAll(`.${static_classes['param_name']}`).forEach(el => el.style.opacity = 0);
         document.querySelectorAll(`.${static_classes['param_value']}`).forEach(el => el.style.opacity = 0);
@@ -389,6 +280,15 @@ function Confirm(props) {
         setEndMessage(level_end_messages[`${end}`][rand]);
     }, [])
 
+    function fadeAnimation() {
+        anime({
+            targets: 'body',
+            duration: 1000,
+            opacity: [0, 1],
+            easing: 'linear',
+        })
+    }
+
     return (
         <div className={`${static_classes['bg']}`}>
             <div className={`${static_classes['box']}`}>
@@ -400,7 +300,7 @@ function Confirm(props) {
 
                         <div className={`${static_classes['param']}`}>
                             <div className={`${static_classes['param_name']}`}> Time: </div>
-                            <div className={`${static_classes['param_value']}`}> {(props.value) ? 0 : props.time}</div>
+                            <div className={`${static_classes['param_value']}`}> {(props.value) ? 0 :  props.time}</div>
                         </div>
 
                         <div className={`${static_classes['param']}`}>
@@ -436,12 +336,12 @@ function Confirm(props) {
                     <div className={`${static_classes['action_container']}`} ref={actionBox_ref}>
                         {(props.value) ?
                             <div className={'action_container--win'} ref={table} >
-                                <div className={`${static_classes[`win_btn`]}`}  onClick={props.start} ref={confBtn} > Go to menu </div>
+                                <div className={`${static_classes[`win_btn`]}`}  onClick={() => {props.start(); fadeAnimation()}} ref={confBtn} > Go to menu </div>
                             </div>
                             :
                             <div className={'action_container--lost'} ref={table} >
-                                <div className={`${static_classes[`lost_btn`]}`} onClick={props.next} ref={confBtn} > Retry </div>
-                                <div className={`${static_classes[`lost_btn`]}`} onClick={props.start} ref={confBtn} > Back </div>
+                                <div className={`${static_classes[`lost_btn`]}`} onClick={() => {props.restart(); fadeAnimation()}} ref={confBtn} > Retry </div>
+                                <div className={`${static_classes[`lost_btn`]}`} onClick={() => {props.start(); fadeAnimation()}} ref={confBtn} > Back </div>
                             </div>
                         }
                     </div>
