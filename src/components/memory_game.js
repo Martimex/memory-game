@@ -500,7 +500,7 @@ function Game(props) {
                 <div className={`${classes[`animationPlan`]} aContainer-${props.newLevel.number}`} ref={animationBox}></div>
 
                 {confirmValue !== null && (
-                    <Confirm value={confirmValue} level={level} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
+                    <Confirm value={confirmValue} level={level} level_no={props.newLevel.number} newSerie={props.newSerie} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
                         turns={(confirmValue)? inGameCounters[`totalRemainingTurns`] : (props.newLevel.limitations[stageNo][`turns`])? props.newLevel.limitations[stageNo][`turns`] - turns : 0} 
                         time={(confirmValue) ? inGameCounters[`totalRemainingTime`] : (props.newLevel.limitations[stageNo][`time`])? props.newLevel.limitations[stageNo][`time`] - time : 0} 
                         start={props.preview} next={props.changeComponent} restart={props.confirmComponent}

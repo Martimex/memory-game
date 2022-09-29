@@ -27,7 +27,6 @@ function xclick(click_no, target, stageNo) {
             
             async function whiteBordersFade() {
                 const targets = document.querySelectorAll('.target');
-                console.log(targets);
                 
                 const a2 = anime({
                     targets: targets,

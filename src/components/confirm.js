@@ -5,6 +5,8 @@ import {level_end_messages} from '../global/predefined/level_end_messages.js';
 import { faStar as star_empty} from '@fortawesome/free-regular-svg-icons';
 import { faStar as star_full} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { set } from 'animejs';
+import { equation } from '../global/predefined/stars_equation.js';
 
 const static_classes = {  // Simply classes which are unaffected by game result (win / lost) ?
     bg: `confirmation-bg`,
@@ -17,6 +19,8 @@ const static_classes = {  // Simply classes which are unaffected by game result 
     highscore: `info-highscore`,
     highscore_value: `highscore-value`,
     star: `icon-star`,
+    star_empty: `icon-star_empty`,
+    star_full: `icon-star_full`,
     action_container: `action_container`,
     win_btn: `win-btn`,
     lost_btn: `lost-btn`,
@@ -25,6 +29,9 @@ const static_classes = {  // Simply classes which are unaffected by game result 
 function Confirm(props) {
 
     const [endMessage, setEndMessage] = useState(null);
+    const [allStars, setAllStars] = useState(
+        <FontAwesomeIcon icon={star_empty} className={`${static_classes['star']} ${static_classes[`star_empty`]}`}></FontAwesomeIcon>
+    ); // we use this initial value as a placeholder - to hold space for dynamically rendered stars
 
     const table = useRef(null);
     const confBtn = useRef(null);
@@ -37,20 +44,23 @@ function Confirm(props) {
         sub = (props.score + (props.time * props.tsv));
     }
 
-    useEffect(() => {
+    async function callEndAnimation() {
 
-        document.querySelector(`.${static_classes['action_container']}`).style.pointerEvents = 'none';
-        document.querySelectorAll(`.${static_classes['param_name']}`).forEach(el => el.style.opacity = 0);
-        document.querySelectorAll(`.${static_classes['param_value']}`).forEach(el => el.style.opacity = 0);
+        // also import stars condition file
+        const star_conditions = await import(`../levels/${props.newSerie}/level_${props.level_no}/starConditions.js`)
+        const stars_full_count = checkGottenStars(star_conditions);
+        console.warn(`props.time: ${props.time}   props.turns: ${props.turns}  || stars gotten:  `,stars_full_count);
+        makeStars(stars_full_count);
+        fireEndAnimation();
+    }
+
+    function fireEndAnimation() {
+
         const valuesArr = [props.time, props.turns, [props.score]]; // props.score is within array because is the only numeric value (and we need to ensure each param is type of array)
         const allParamNames = document.querySelectorAll(`.${static_classes[`param_name`]}`);
         const allParamValues = document.querySelectorAll(`.${static_classes[`param_value`]}`)
 
         if(props.value) {
-
-            document.querySelector(`.${static_classes['win_btn']}`).style.transform = 'scale(0%)';
-            document.querySelectorAll(`.${static_classes['star']}`).forEach(el => el.style.opacity = 0);
-            document.querySelector(`.${static_classes['highscore']}`).style.opacity = 0;
 
             // Win animation
             async function winAnimation() {
@@ -255,14 +265,65 @@ function Confirm(props) {
 
             lostAnimation();
         }
-    }, [])
+    }
 
+    
+    function checkGottenStars(star_conditions) {
+        // 1. We can assume that each level has 3 stars, therefore star_conditions array of object is length of 3
+        // 2. It also should be noted, that each sooner star have more severe obtain conditions than the previous one
+        for(let star_no = 0; star_no < 3; star_no++) {
+            let areConditionsMet = checkStarCondition(star_conditions[`starConditions`][star_no]);
+            if(!areConditionsMet) return star_no; 
+        }
+
+        return 3;
+
+        function checkStarCondition(conditionSet) {
+            // 1. props name has to be IDENTICAL as for each starCondition condition element
+            // 2. currently only one parameter can be set inside key of Object property name (eg. time can have 'moreThan' prop, but cannot have 'lessThan' simultaneously)
+            // 3. Currently supported props: turns & time
+            for(let key in conditionSet) {
+                console.log(props[key], key, Object.keys(conditionSet[key]), Object.values(conditionSet[key]));
+                const checkConditionPass = equation(props[`${Object.keys(conditionSet)[0]}`].reduce((accumVariable, curValue) => accumVariable + curValue , 0), Object.values(conditionSet[key]), ...Object.keys(conditionSet[key]));
+                console.log(checkConditionPass)
+                if(!checkConditionPass) { return false; }
+            }
+            //console.log(props[`${Object.keys(conditionSet)[0]}`].reduce((accumVariable, curValue) => accumVariable + curValue , 0),  `${Object.keys(conditionSet)[0][0]}`)
+            //console.log(props[`${Object.keys(conditionSet[0])}`, `${Object.keys(conditionSet[0])}`])
+            return true;
+        }
+    }
+
+    function makeStars(stars_full_count) {
+        let starArr = ['', '', '']; // has always to be of length: 3
+        let stars = starArr.map((el, index) => {
+            return <FontAwesomeIcon key={'star_' + index} icon={(index < stars_full_count)? star_full : star_empty} className={(index < stars_full_count)? `${static_classes['star']} ${static_classes[`star_full`]}` : `${static_classes['star']} ${static_classes[`star_empty`]}`}></FontAwesomeIcon>
+        }) 
+        setAllStars(stars);
+    }
 
     useEffect(() => {
+
+        // Hide confirmbox elements
+        document.querySelector(`.${static_classes['action_container']}`).style.pointerEvents = 'none';
+        document.querySelectorAll(`.${static_classes['param_name']}`).forEach(el => el.style.opacity = 0);
+        document.querySelectorAll(`.${static_classes['param_value']}`).forEach(el => el.style.opacity = 0);
+        if(props.value) {
+            document.querySelector(`.${static_classes['win_btn']}`).style.transform = 'scale(0%)';
+            document.querySelector(`.${static_classes['highscore']}`).style.opacity = 0;
+        }
+
+
+
         let end = (props.value)? 'win' : 'lose';
         let rand = Math.floor(Math.random() * level_end_messages[`${end}`].length);
         setEndMessage(level_end_messages[`${end}`][rand]);
+        callEndAnimation();
     }, [])
+
+    useEffect(() => {
+        document.querySelectorAll(`.${static_classes['star']}`).forEach(el => el.style.opacity = 0);
+    }, [allStars])
 
     function fadeAnimation() {
         anime({
@@ -305,9 +366,7 @@ function Confirm(props) {
                                 </div> 
     
                                 <div className='info-stars'>
-                                    <FontAwesomeIcon icon={star_full} className={`${static_classes['star']} icon-star_full`}></FontAwesomeIcon>
-                                    <FontAwesomeIcon icon={star_empty} className={`${static_classes['star']} icon-star_empty`}></FontAwesomeIcon>
-                                    <FontAwesomeIcon icon={star_empty} className={`${static_classes['star']} icon-star_empty`}></FontAwesomeIcon>
+                                    {allStars}
                                 </div>
                             </div>
                         )}

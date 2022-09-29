@@ -1,0 +1,32 @@
+Descriptive walkthrough on how to create levels :
+
+1. Head out to /global/all_levels.js file
+	a) Inside appropiate serie abbreviation object, create a class instance (new Level) and fill
+ 	   it with properties. Make use of level 1 as an example.
+	b) Keep in mind that each constructor property is a dynamic vakue with EXCEPTION of 
+	   starting_animation field, which is associated with a SCRIPT named start.
+
+2. Prepare necessary files
+	a) First off, create a SVG image, which then would be stored inside /PUBLIC/bgs/{serie_name} 
+	folder. 
+	b) Go to /LEVELS folder, followed by /{serie_name} folder and add folder named level_{number}
+	c) Inside this folder, prepare:
+		I) [file] Generate Plan items - manages plan decorations and features
+		II) [folder] styles
+		III) [folder] scripts
+
+	d) For STYLES, add following files:
+		- main.css -> responsible for main tile layout
+		- bg.css -> responsible for adding a background for level
+		- firstPlan.css -> revolved around some stuff ongoing around the level first Plan
+		- secondPlan.css -> revolved around some stuff ongoing around the level second Plan
+		- *your bg SVG file* -> it will be included by bg.css file
+
+	e) For SCRIPTS, add following files:
+		- start.js -> contains all starting animations for each stage beginning
+		- xclick.js -> animations for each click no. that is before match checking 
+		- match.js -> responsible to correspond to finding / not finding a match
+		- stagecomplete.js -> fires once player completes (or not) stage / level [AKA last stage]
+
+3. Fill the files however you like. Also make sure to test level enough to prevent it from having 
+   sone visual / gameplay bugs.
