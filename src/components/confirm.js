@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import anime from 'animejs/lib/anime.es.js';
 import '../styles/confirm.css';
 import {level_end_messages} from '../global/predefined/level_end_messages.js';
@@ -47,10 +47,12 @@ function Confirm(props) {
     async function callEndAnimation() {
 
         // also import stars condition file
-        const star_conditions = await import(`../levels/${props.newSerie}/level_${props.level_no}/starConditions.js`)
-        const stars_full_count = checkGottenStars(star_conditions);
-        console.warn(`props.time: ${props.time}   props.turns: ${props.turns}  || stars gotten:  `,stars_full_count);
-        makeStars(stars_full_count);
+        if(props.value) {
+            const star_conditions = await import(`../levels/${props.newSerie}/level_${props.level_no}/starConditions.js`)
+            const stars_full_count = checkGottenStars(star_conditions);
+            console.warn(`props.time: ${props.time}   props.turns: ${props.turns}  || stars gotten:  `,stars_full_count);
+            makeStars(stars_full_count);
+        }
         fireEndAnimation();
     }
 
@@ -303,22 +305,21 @@ function Confirm(props) {
     }
 
     useEffect(() => {
-
-        // Hide confirmbox elements
-        document.querySelector(`.${static_classes['action_container']}`).style.pointerEvents = 'none';
-        document.querySelectorAll(`.${static_classes['param_name']}`).forEach(el => el.style.opacity = 0);
-        document.querySelectorAll(`.${static_classes['param_value']}`).forEach(el => el.style.opacity = 0);
-        if(props.value) {
-            document.querySelector(`.${static_classes['win_btn']}`).style.transform = 'scale(0%)';
-            document.querySelector(`.${static_classes['highscore']}`).style.opacity = 0;
-        }
-
-
-
         let end = (props.value)? 'win' : 'lose';
         let rand = Math.floor(Math.random() * level_end_messages[`${end}`].length);
         setEndMessage(level_end_messages[`${end}`][rand]);
         callEndAnimation();
+    }, [])
+
+    useLayoutEffect(() => {
+        // Hide confirmbox elements
+        document.querySelector(`.${static_classes['action_container']}`).style.pointerEvents = 'none';
+        //document.querySelectorAll(`.${static_classes['param_name']}`).forEach(el => el.style.opacity = 0);
+        //document.querySelectorAll(`.${static_classes['param_value']}`).forEach(el => el.style.opacity = 0);
+        if(props.value) {
+            document.querySelector(`.${static_classes['win_btn']}`).style.transform = 'scale(0%)';
+            document.querySelector(`.${static_classes['highscore']}`).style.opacity = 0;
+        }
     }, [])
 
     useEffect(() => {

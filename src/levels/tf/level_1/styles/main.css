@@ -11,4 +11,29 @@
 
 .tb-1 { /* Back side of card */
   background: hsl(4deg, 87%, 62%);
+}
+
+.fa-icon-1 {
+  color: hsl(4deg, 87%, 95%);
+  font-size: 1.4rem;
+}
+
+.level-1::after, .counter-1::after, .score-1::after {
+  content: "";
+  display: block;
+  width: 100%;
+  margin: 0.2rem 0.8rem;
+  border: solid 0.1rem hsl(4deg, 87%, 62%);
+}
+
+.level-1 {
+  color: hsl(4deg, 87%, 84%);
+}
+
+.counter-1 {
+  color: hsl(4deg, 87%, 84%);
+}
+
+.score-1 {
+  color: hsl(4deg, 87%, 84%);
 }/*# sourceMappingURL=main.css.map */

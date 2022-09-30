@@ -47,6 +47,7 @@
   padding-top: 0;
   margin-bottom: 0.2em;
   letter-spacing: 0.15rem;
+  opacity: 0;
 }
 
 .info-title-win {
@@ -70,10 +71,12 @@
 
 .param-name {
   justify-self: flex-start;
+  opacity: 0;
 }
 
 .param-value {
   justify-self: flex-end;
+  opacity: 0;
 }
 
 .info-highscore {

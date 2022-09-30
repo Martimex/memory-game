@@ -11,9 +11,10 @@ Descriptive walkthrough on how to create levels :
 	folder. 
 	b) Go to /LEVELS folder, followed by /{serie_name} folder and add folder named level_{number}
 	c) Inside this folder, prepare:
-		I) [file] Generate Plan items - manages plan decorations and features
-		II) [folder] styles
-		III) [folder] scripts
+		I) [file] generatePlanItems.js - manages plan decorations and features
+		II) [file] starConditions.js - handles star obtaining conditions regarding the level
+		III) [folder] styles
+		IV) [folder] scripts
 
 	d) For STYLES, add following files:
 		- main.css -> responsible for main tile layout

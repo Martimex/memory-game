@@ -1,6 +1,6 @@
 import anime from 'animejs/lib/anime.es.js';
 
-function xclick(click_no, target, stageNo) {
+async function xclick(click_no, target, stageNo) {
 
     async function whiteBorders() {
         const a1 = anime({
@@ -12,36 +12,40 @@ function xclick(click_no, target, stageNo) {
         await Promise.all([a1]);
     }
 
-    switch(click_no) {
-        case 1: {
-            whiteBorders();
-            break;
-        }
+    async function whiteBordersFade() {
+        const targets = document.querySelectorAll('.target');
+        
+        const a2 = anime({
+            targets: targets,
+            duration: 1200,
+            borderColor: 'hsl(4, 87%, 62%)',
+            easing: 'easeOutExpo',
+        }).finished;
 
-        case 2: {
+        await Promise.all([a2]);
+    }
 
-            async function chain() {
-                await whiteBorders()
-                await whiteBordersFade();
+    async function runXClick() {
+        switch(click_no) {
+            case 1: {
+                whiteBorders();
+                break;
             }
-            
-            async function whiteBordersFade() {
-                const targets = document.querySelectorAll('.target');
-                
-                const a2 = anime({
-                    targets: targets,
-                    duration: 1200,
-                    borderColor: 'hsl(4, 87%, 62%)',
-                    easing: 'easeOutExpo',
-                }).finished;
-
-                await Promise.all([a2]);
+    
+            case 2: {
+    
+                async function chain() {
+                    await whiteBorders()
+                    await whiteBordersFade();
+                }
+    
+                chain();
+                break;
             }
-
-            chain();
-            break;
         }
     }
+
+    await runXClick();
 
 }
 

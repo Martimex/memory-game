@@ -105,14 +105,14 @@ async function loadOtherModules(serieName, levelNumber) {
     const xclick = await import(`../levels/${serieName}/level_${levelNumber}/scripts/xclick.js`);
     const match = await import(`../levels/${serieName}/level_${levelNumber}/scripts/match.js`);
     const stagecomplete = await import(`../levels/${serieName}/level_${levelNumber}/scripts/stagecomplete.js`);
-    const end = await import(`../levels/${serieName}/level_${levelNumber}/scripts/end.js`);
+    //const end = await import(`../levels/${serieName}/level_${levelNumber}/scripts/end.js`);
     
     return {
         start: start,
         xclick: xclick,
         match: match,
         stagecomplete: stagecomplete,
-        end: end,
+        //end: end,
     }
 }
 
@@ -266,11 +266,14 @@ function Game(props) {
 
             const cardsOpened_parentNodes = setParentNodes(cardsOpened);
 
-            otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo); // doesMatch determines whether player meets required condition to remove tiles
+            //otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo); // doesMatch determines whether player meets required condition to remove tiles
         
             openUp()
                 .then(() => {
-                    doCardsMatch(doesMatch, cardsOpened); 
+                    otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo) // doesMatch determines whether player meets required condition to remove tiles
+                        .then(() => {
+                            doCardsMatch(doesMatch, cardsOpened)
+                        })
                 })
         } else {
             openUp();

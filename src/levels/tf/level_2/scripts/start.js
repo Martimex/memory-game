@@ -1,6 +1,7 @@
 import anime from 'animejs/lib/anime.es.js';
 
 async function level_start(stageNo, time, tileShowTime) {
+    console.warn(time, tileShowTime);
 
     async function startAnimation() {
         await showTiles()
@@ -13,8 +14,7 @@ async function level_start(stageNo, time, tileShowTime) {
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
-            borderColor: ['hsl(4, 87%, 62%)', 'hsl(45, 50%, 80%)'],
-            easing: 'linear',
+            easing: 'easeInSine',
             loop: false,
         }).finished;
 
@@ -24,21 +24,32 @@ async function level_start(stageNo, time, tileShowTime) {
     async function hideTiles() {
         const a2 = anime({
             targets: '.tile',
-            duration: time,
             delay: tileShowTime,
+            duration: time,
             transitionProperty: 'all',
             rotateY: '0deg',
-            borderColor: ['hsl(45, 50%, 80%)', 'hsl(4, 87%, 62%)'],
-            easing: 'linear',
+            easing: 'easeOutSine',
             loop: false,
         }).finished;
 
         await Promise.all([a2]);
     }
 
-    // Init
-    await startAnimation();
-}
+    async function createFlood() {
+        const b1 = anime({
+            targets: '.flood-elem',
+            duration: 400,
+            delay: anime.stagger(1000, {from: 'last'}),
+            opacity: [0, .4],
+            easing: 'easeInSine',
+        }).finished;
 
+        await b1;
+    }
+
+    // Init
+    await startAnimation()
+    createFlood();
+}
 
 export {level_start};
