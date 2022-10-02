@@ -309,7 +309,7 @@ function Game(props) {
                         targets: cardsOpened_parentNodes,
                         duration: props.newLevel.tile_animation[stageNo][`time`],
                         easing: props.newLevel.tile_animation[stageNo][`easing`],
-                        opacity: [1, 0],
+                        opacity: 0,
                     }).finished;
 
                    await Promise.all([a1]);
@@ -399,7 +399,11 @@ function Game(props) {
 
             if(stageNo + 1 === props.newLevel.stages) {
                 // Level completed !
-                setConfirmValue(true);
+                async function finishGame() {
+                    await otherModules[`stagecomplete`].stagecomplete(stageNo, true)
+                }
+                finishGame()
+                    .then(() => setConfirmValue(true));
             } 
             else if(stageNo + 1 !== props.newLevel.stages) {
                 // Move to the new stage + block pointer events just during new stage animations
@@ -410,7 +414,7 @@ function Game(props) {
     }
 
     async function nextStageTransition() {
-        await otherModules[`stagecomplete`].stagecomplete(stageNo)
+        await otherModules[`stagecomplete`].stagecomplete(stageNo, false);
         await newStageFadeOut()
             .then(() => {
                 newStageFadeIn()
@@ -462,7 +466,7 @@ function Game(props) {
 
     useEffect(() => {
         if(clickNo > 0) {
-            otherModules[`xclick`].xclick(clickNo, cardsOpened[cardsOpened.length - 1].parentNode, stageNo);
+            otherModules[`xclick`].xclick(clickNo, cardsOpened[cardsOpened.length - 1].parentNode, stageNo, props.newLevel);
         } else {
             //
         }
