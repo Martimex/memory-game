@@ -40,7 +40,7 @@ const all_levels = {
             [ [] ],
             [66],
             ['fas'],
-            [{time: 77}], // 64
+            [{time: 67}], // 64
             [ {time: 700, tileShowTime: 700} ], 
             [ {time: 800, easing: 'easeInSine'} ], 
             [900],

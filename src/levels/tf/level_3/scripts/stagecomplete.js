@@ -3,7 +3,7 @@ import anime from 'animejs/lib/anime.es.js';
 async function stagecomplete(stageNo, isLevelCompleted) {
 
     let game = document.querySelector('.background');
-    console.error('stageNo is:  ' + stageNo);
+    //console.error('stageNo is:  ' + stageNo);
 
     async function init() {
         await fadeScreen()
@@ -12,8 +12,8 @@ async function stagecomplete(stageNo, isLevelCompleted) {
     async function fadeScreen() {
         const a1 = anime({
             targets: game,
-            duration: 2500,
-            opacity: .5,
+            duration: 2000,
+            opacity: .65,
             easing: 'easeInQuad',
         }).finished;
 

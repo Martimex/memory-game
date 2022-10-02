@@ -1,8 +1,8 @@
 
 const starConditions = [
-    {time: {moreEqualThan: 18}}, 
-    {time: {moreEqualThan: 23}}, 
-    {time: {moreEqualThan: 27}}, 
+    {time: {moreEqualThan: 8}}, 
+    {time: {moreEqualThan: 13}}, 
+    {time: {moreEqualThan: 17}}, 
 ]
 
 
