@@ -97,6 +97,7 @@ function LevelInfo(props) {
     }
 
     useEffect(() => {
+        document.body.style.overflowY = 'hidden';
         setLevelBoxPosition(levelInfoAll_ref.current);
         applyDifficultyTextColors(props.level_details.difficulty)
        const img_url = `bgs/${props.serie_name}/bg-${props.level_details.number}.svg`;

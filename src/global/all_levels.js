@@ -33,7 +33,7 @@ const all_levels = {
             [ {count: 2, pattern: 'pairs'} ],
             [ {count: 100, extras: 'spree'} ],
             [ {value: 24, pointsPerMatch: 2, pattern: 'tilesFound'} ] ),
-        3: new Level(3, 1, 'medium',
+        3: new Level(3, 1, 'easy',
             [20],
             [4], 
             [5], 

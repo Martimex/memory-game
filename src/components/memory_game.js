@@ -473,6 +473,7 @@ function Game(props) {
     }, [clickNo])
 
     useEffect(() => {
+        document.body.style.overflowY = 'auto';
         loadStyles();
         appendPlansElems();
     }, []);

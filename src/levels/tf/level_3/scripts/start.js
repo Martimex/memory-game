@@ -42,9 +42,13 @@ async function level_start(stageNo, time, tileShowTime) {
     await startAnimation()
         .then(() => {
 
+            const board = document.querySelector('.board')
+            const oddTiles = board.querySelectorAll('.t-3:nth-of-type(odd)');
+            const evenTiles = board.querySelectorAll('.t-3:nth-of-type(even)');
+
             // Run infinite background animation
             anime({
-                targets: '.t-3:nth-of-type(even)',
+                targets: evenTiles,
                 duration: 9000,
                 background: [`linear-gradient(90deg, hsla(252, 50%, 40%, .6), hsla(142, 80%, 30%, .6))`, `linear-gradient(90deg, hsla(142, 80%, 30%, .6), hsla(252, 50%, 40%, .6))`],
                 direction: 'alternate',
@@ -53,7 +57,7 @@ async function level_start(stageNo, time, tileShowTime) {
             })
 
             anime({
-                targets: '.t-3:nth-of-type(odd)',
+                targets: oddTiles,
                 duration: 7500,
                 background: [`linear-gradient(90deg, hsla(142, 80%, 30%, .6), hsla(252, 50%, 40%, .6))`, `linear-gradient(90deg, hsla(252, 50%, 40%, .6), hsla(142, 80%, 30%, .6))`],
                 direction: 'alternate',

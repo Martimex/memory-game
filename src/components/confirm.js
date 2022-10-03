@@ -18,6 +18,7 @@ const static_classes = {  // Simply classes which are unaffected by game result 
     param_value: `param-value`,
     highscore: `info-highscore`,
     highscore_value: `highscore-value`,
+    star_box: `info-stars`,
     star: `icon-star`,
     star_empty: `icon-star_empty`,
     star_full: `icon-star_full`,
@@ -324,6 +325,7 @@ function Confirm(props) {
 
     useEffect(() => {
         document.querySelectorAll(`.${static_classes['star']}`).forEach(el => el.style.opacity = 0);
+        if(props.value) { document.querySelector(`.${static_classes['star_box']}`).style.opacity = 1; }
     }, [allStars])
 
     function fadeAnimation() {
@@ -366,7 +368,7 @@ function Confirm(props) {
                                     <div className={`${static_classes['highscore_value']}`}> 0 </div>
                                 </div> 
     
-                                <div className='info-stars'>
+                                <div className={`${static_classes['star_box']}`}>
                                     {allStars}
                                 </div>
                             </div>
