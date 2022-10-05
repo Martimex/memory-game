@@ -270,7 +270,7 @@ function Game(props) {
         
             openUp()
                 .then(() => {
-                    otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo) // doesMatch determines whether player meets required condition to remove tiles
+                    otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props.newLevel) // doesMatch determines whether player meets required condition to remove tiles
                         .then(() => {
                             doCardsMatch(doesMatch, cardsOpened)
                         })
@@ -512,6 +512,7 @@ function Game(props) {
                         turns={(confirmValue)? inGameCounters[`totalRemainingTurns`] : (props.newLevel.limitations[stageNo][`turns`])? props.newLevel.limitations[stageNo][`turns`] - turns : 0} 
                         time={(confirmValue) ? inGameCounters[`totalRemainingTime`] : (props.newLevel.limitations[stageNo][`time`])? props.newLevel.limitations[stageNo][`time`] - time : 0} 
                         start={props.preview} next={props.changeComponent} restart={props.confirmComponent}
+                        variables={props.newLevel.variables}
                     />
                 )}
 

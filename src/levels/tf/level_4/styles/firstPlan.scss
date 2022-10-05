@@ -1,0 +1,36 @@
+@mixin flexBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.secret-container {
+  @include flexBox;
+
+  font-size: 1.2rem; 
+  position: absolute;
+  bottom: 0%;
+  left: 0%;
+  border-radius: 25%;
+  width: 2rem;
+  height: 2rem;
+  padding: 1.4em;
+  margin: 2em;
+
+ // background-image: linear-gradient(30deg, #7777, #8888, #7777);
+  border: .2rem dashed #222;
+}
+
+.secret-container__block {
+  @include flexBox;
+}
+
+.secret-container__counter {
+  //color: hsl(55, 70%, 40%);
+  color: #666;
+  font-size: 2.2rem;
+  font-weight: 650;
+  z-index: 210; // 10 units more than firstContainer base z-index value
+  user-select: none;
+
+}/*# sourceMappingURL=firstPlan.css.map */

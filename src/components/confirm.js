@@ -73,6 +73,7 @@ function Confirm(props) {
                 }
                 await showHighscore()
                 await removeParamValue(allParamValues)
+                    .then(() => { document.querySelector(`.${static_classes['star_box']}`).style.opacity = 1; }) // condition: if(props.value)
                 await showGottenStars()
                 await showWinButton()
                     .then(() => {
@@ -274,6 +275,7 @@ function Confirm(props) {
     function checkGottenStars(star_conditions) {
         // 1. We can assume that each level has 3 stars, therefore star_conditions array of object is length of 3
         // 2. It also should be noted, that each sooner star have more severe obtain conditions than the previous one
+        console.error(props.variables);
         for(let star_no = 0; star_no < 3; star_no++) {
             let areConditionsMet = checkStarCondition(star_conditions[`starConditions`][star_no]);
             if(!areConditionsMet) return star_no; 
@@ -284,15 +286,26 @@ function Confirm(props) {
         function checkStarCondition(conditionSet) {
             // 1. props name has to be IDENTICAL as for each starCondition condition element
             // 2. currently only one parameter can be set inside key of Object property name (eg. time can have 'moreThan' prop, but cannot have 'lessThan' simultaneously)
-            // 3. Currently supported props: turns & time
+            // 3. Currently supported props: turns & time + level variables
+            // 4. NOTE: When using variables, only one condition property can be supported. Correct pattern is:
+            //  ->   variables: {secret_solved: {equal: true}} - variables refer to property name of newLevel obj, which should be always typed as it is,
+            //  + next - secret_solved is example of one and only property that can be used inside variables. No more are allowed atm. However this property
+            //  could be a result of other variables values, which are previously checked inside other level specific functions. Fe: if some variables have
+            //  desired values, we can set the property (fe. secret_solved) to true, and based on that provide a star at the end level.
+            let index = 0;
+            console.warn(conditionSet);
             for(let key in conditionSet) {
                 console.log(props[key], key, Object.keys(conditionSet[key]), Object.values(conditionSet[key]));
-                const checkConditionPass = equation(props[`${Object.keys(conditionSet)[0]}`].reduce((accumVariable, curValue) => accumVariable + curValue , 0), Object.values(conditionSet[key]), ...Object.keys(conditionSet[key]));
+
+                const checkConditionPass = (props[`${Object.keys(conditionSet)[index]}`] instanceof Array)?
+                    equation(props[`${Object.keys(conditionSet)[index]}`].reduce((accumVariable, curValue) => accumVariable + curValue , 0), Object.values(conditionSet[key]), ...Object.keys(conditionSet[key]))
+                    :
+                    equation(props[key][`${Object.keys(conditionSet[key])}`], ...Object.values(...Object.values(conditionSet[key])), ...Object.keys(...Object.values(conditionSet[key])),);
+                index++;
                 console.log(checkConditionPass)
                 if(!checkConditionPass) { return false; }
             }
-            //console.log(props[`${Object.keys(conditionSet)[0]}`].reduce((accumVariable, curValue) => accumVariable + curValue , 0),  `${Object.keys(conditionSet)[0][0]}`)
-            //console.log(props[`${Object.keys(conditionSet[0])}`, `${Object.keys(conditionSet[0])}`])
+
             return true;
         }
     }
@@ -325,7 +338,7 @@ function Confirm(props) {
 
     useEffect(() => {
         document.querySelectorAll(`.${static_classes['star']}`).forEach(el => el.style.opacity = 0);
-        if(props.value) { document.querySelector(`.${static_classes['star_box']}`).style.opacity = 1; }
+        //if(props.value) { document.querySelector(`.${static_classes['star_box']}`).style.opacity = 1; }
     }, [allStars])
 
     function fadeAnimation() {

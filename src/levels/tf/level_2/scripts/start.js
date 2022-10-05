@@ -1,7 +1,7 @@
 import anime from 'animejs/lib/anime.es.js';
 
 async function level_start(stageNo, time, tileShowTime) {
-    console.warn(time, tileShowTime);
+    //console.warn(time, tileShowTime);
 
     async function startAnimation() {
         await showTiles()

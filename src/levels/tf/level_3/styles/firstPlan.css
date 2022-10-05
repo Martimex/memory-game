@@ -51,7 +51,6 @@
 }
 
 .lantern {
-  background-image: url("./lantern.svg");
   position: absolute;
   bottom: 10%;
   padding: 5.4rem;

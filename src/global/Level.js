@@ -1,5 +1,5 @@
 class Level {
-    constructor(number, stages, difficulty, tiles, rows, columns, cords, tile_size, icon_set, limitations, starting_animation, tile_animation, compare_time, uncover, score, win) {
+    constructor(number, stages, difficulty, tiles, rows, columns, cords, tile_size, icon_set, limitations, starting_animation, tile_animation, compare_time, uncover, score, win, variables) {
         this.number = number;
         this.stages = stages;
         this.difficulty = difficulty;
@@ -16,6 +16,7 @@ class Level {
         this.uncover = uncover;
         this.score = score;
         this.win = win;
+        this.variables = variables;
     }
 
     run() {
