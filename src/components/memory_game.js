@@ -64,7 +64,8 @@ const classes = {
 
 const duplicateIcons = {
     pairs: 2,
-    triplets: 3, 
+    triplets: 3,
+    quads: 4,
 }
 
 const inGameCounters = {

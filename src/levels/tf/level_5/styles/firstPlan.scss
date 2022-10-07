@@ -1,0 +1,91 @@
+$green: hsl(88, 80%, 50%);
+$green--fade: hsla(88, 100%, 50%, .1);
+$blue: hsl(177, 80%, 50%);
+$blue--fade: hsla(177, 80%, 50%, .1);
+$yellow: hsl(55, 80%, 50%);
+$yellow--fade: hsla(55, 80%, 50%, .1);
+$violet: hsl(266, 80%, 50%);
+$violet--fade: hsla(266, 80%, 50%, .1);
+
+.dot-g {
+    width: 1rem;
+    position: absolute;
+    height: 1rem;
+    border-radius: 50%;
+
+    // Animate
+}
+
+.dot-g::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -.5rem;
+    width: 1rem;
+    height: 1rem;
+    //background: #f00;
+    border-radius: 50%;
+}
+
+.version--green {
+    animation: cycle 12s linear infinite;
+    background: $green;
+    box-shadow: 0 0 1rem $green,
+                0 0 2rem $green,
+                0 0 3rem $green,
+                0 0 4rem $green,
+                0 0 0 .25rem $green--fade,
+}
+
+.version--blue {
+    animation: cycle 10s linear infinite;
+    background: $blue;
+    box-shadow: 0 0 1rem $blue,
+                0 0 2rem $blue,
+                0 0 3rem $blue,
+                0 0 4rem $blue,
+                0 0 0 .25rem $blue--fade,
+}
+
+.version--yellow {
+    animation: cycle 6s linear infinite;
+    background: $yellow;
+    box-shadow: 0 0 1rem $yellow,
+                0 0 2rem $yellow,
+                0 0 3rem $yellow,
+                0 0 4rem $yellow,
+                0 0 0 .25rem $yellow--fade,
+}
+
+.version--violet {
+    animation: cycle 8s linear infinite;
+    background: $violet;
+    box-shadow: 0 0 1rem $violet,
+                0 0 2rem $violet,
+                0 0 3rem $violet,
+                0 0 4rem $violet,
+                0 0 0 .25rem $violet--fade,
+}
+
+@keyframes cycle {
+    0% {
+        filter: hue-rotate(0deg);
+        transform: rotate(0deg);
+        scale: 1;
+        transform: translateX(0rem);
+    }
+
+    50% {
+        scale: 1.3;
+        opacity: .2;
+        //transform: translateX(3rem);
+
+    }
+
+    100% {
+        filter: hue-rotate(360deg);
+        transform: rotate(360deg);
+        scale: 1;
+        transform: translateX(0rem);
+    }
+}
