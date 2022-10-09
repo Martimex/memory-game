@@ -1,0 +1,54 @@
+/* body {
+    overflow: hidden;  // THIS IS EXCEPTIONAL ONLY FOR THIS LEVEL - IT PREVENTS FROM SCROLLBAR APPEARING WHEN BOARD IS CONSTANTLY ROTATING
+} */
+.board {
+  border-radius: 10%;
+  gap: 0.1rem;
+}
+
+.fa-icon-6 {
+  color: hsla(282deg, 80%, 40%, 0.8);
+  font-size: 1.2rem;
+}
+
+.t-6 {
+  border-radius: 20%;
+  margin: 0.1rem;
+  border: 0.3rem solid hsla(282deg, 80%, 40%, 0.15);
+  background-image: radial-gradient(hsl(52deg, 80%, 60%) 20%, hsl(29deg, 80%, 60%) 45%, hsl(282deg, 80%, 40%));
+}
+
+.tb-6 {
+  color: hsl(51deg, 94%, 53%);
+}
+
+.level-6::after, .score-6::after, .counter-6::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 0.4vh;
+}
+
+.level-6::after {
+  background: hsl(282deg, 66%, 52%);
+}
+
+.counter-6::after {
+  background: hsl(344deg, 66%, 42%);
+}
+
+.score-6::after {
+  background: hsl(52deg, 66%, 52%);
+}
+
+.level-6 {
+  color: hsl(282deg, 66%, 62%);
+}
+
+.counter-6 {
+  color: hsl(344deg, 66%, 52%);
+}
+
+.score-6 {
+  color: hsl(52deg, 66%, 62%);
+}/*# sourceMappingURL=main.css.map */

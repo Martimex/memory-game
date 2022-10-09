@@ -83,7 +83,22 @@ const all_levels = {
             [ {value: 32, pointsPerMatch: 2, pattern: 'tilesFound'}, {value: 20, pointsPerMatch: 4, pattern: 'tilesFound'} ],
             { wasMatch: true, } ),
 
-        6: new Level(6, 1, 'insane', 36, 6, 6, [], 50, 'fas', {turns: 52}, ),
+        6: new Level(6, 1, 'insane',
+            [36],
+            [6],
+            [6],
+            [ [] ],
+            [32],
+            ['fas'],
+            [ {time: 1155, turns: 40} ],  // was 155 seconds \\ was 52 turns 
+            [ {time: 1000, tileShowTime: 1200} ], 
+            [ {time: 500, easing: 'linear'} ],
+            [800],
+            [ {count: 2, pattern: 'pairs'} ],
+            [ {count: 100, extras: 'spree'} ],
+            [ {value: 36, pointsPerMatch: 2, pattern: 'tilesFound'} ],
+            {} ),
+
         7: new Level(7, 1, 'insane', 40, 5, 8, [], 58, 'fas', {time: 156}, ),
         8: new Level(8, 1, 'extreme', 48, 6, 8, [], 46, 'fas', {time: 235}, ),
         9: new Level(9, 1, 'easy', 42, 6, 7, [], 50, 'fas', {time: 180}, ),
