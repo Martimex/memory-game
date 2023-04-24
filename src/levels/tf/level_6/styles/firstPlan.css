@@ -22,7 +22,7 @@
 }
 
 .tornado-1 .tornado-elem {
-  background-image: linear-gradient(135deg, hsl(54deg, 50%, 60%), hsl(9deg, 50%, 60%));
+  background-image: linear-gradient(135deg, hsl(54, 50%, 60%), hsl(9, 50%, 60%));
 }
 
 .tornado-2 {
@@ -31,7 +31,7 @@
 }
 
 .tornado-2 .tornado-elem {
-  background-image: linear-gradient(135deg, hsl(88deg, 50%, 60%), hsl(344deg, 50%, 60%));
+  background-image: linear-gradient(135deg, hsl(88, 50%, 60%), hsl(344, 50%, 60%));
 }
 
 .tornado-3 {
@@ -40,7 +40,7 @@
 }
 
 .tornado-3 .tornado-elem {
-  background-image: linear-gradient(135deg, hsl(310deg, 50%, 60%), hsl(240deg, 50%, 60%));
+  background-image: linear-gradient(135deg, hsl(310, 50%, 60%), hsl(240, 50%, 60%));
 }
 
 .tornado-4 {
@@ -49,5 +49,5 @@
 }
 
 .tornado-4 .tornado-elem {
-  background-image: linear-gradient(135deg, hsl(211deg, 50%, 60%), hsl(299deg, 50%, 60%));
+  background-image: linear-gradient(135deg, hsl(211, 50%, 60%), hsl(299, 50%, 60%));
 }/*# sourceMappingURL=firstPlan.css.map */

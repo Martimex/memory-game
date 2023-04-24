@@ -11,8 +11,8 @@
  */
 body {
   overflow-x: hidden !important;
-/*   overflow-y: auto !important; */  
-  background-color: hsl(0deg, 0%, 0%);
+  overflow-y: auto !important;
+  background-color: hsl(0, 0%, 0%);
 }
 
 button:hover, .tile:hover {
@@ -73,8 +73,7 @@ button:hover, .tile:hover {
 }
 
 .tile-front {
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .tile-back {
@@ -83,8 +82,7 @@ button:hover, .tile:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   transform: rotateY(180deg);
 }
 
@@ -101,7 +99,6 @@ button:hover, .tile:hover {
   letter-spacing: 0.1rem;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
 }
 
@@ -115,5 +112,5 @@ button:hover, .tile:hover {
   position: absolute;
   height: 100%;
   top: 0%;
-  background: hsl(2deg, 0%, 0%);
+  background: hsl(2, 0%, 0%);
 }/*# sourceMappingURL=global_styles.css.map */

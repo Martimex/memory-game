@@ -12,38 +12,7 @@
 }
 .mode-block__serie:hover {
   cursor: pointer;
-  -webkit-animation: borderHighlight 6s linear infinite;
-          animation: borderHighlight 6s linear infinite;
-}
-@-webkit-keyframes borderHighlight {
-  0% {
-    border-color: #333;
-    box-shadow: 1em 2em 2.6em #111;
-  }
-  20% {
-    border-color: #222 #333 #333 #222;
-    box-shadow: 0.8em 1.5em 2.8em #222;
-  }
-  40% {
-    border-color: #111 #444 #444 #111;
-    box-shadow: 0.9em 1.8em 3em #222;
-  }
-  50% {
-    border-color: #000 #555 #555 #000;
-    box-shadow: 1em 2em 3.2em #333;
-  }
-  60% {
-    border-color: #111 #444 #444 #111;
-    box-shadow: 0.9em 1.8em 3em #222;
-  }
-  80% {
-    border-color: #222 #333 #333 #222;
-    box-shadow: 0.8em 1.5em 2.8em #222;
-  }
-  100% {
-    border-color: #333;
-    box-shadow: 1em 2em 2.6em #111;
-  }
+  animation: borderHighlight 6s linear infinite;
 }
 @keyframes borderHighlight {
   0% {
@@ -134,8 +103,7 @@
   z-index: 20;
 }
 .mode-block__serie .mode-block__serie__tile {
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   display: grid;
   grid-template-columns: 1fr;
   transform-style: preserve-3d;
@@ -158,8 +126,7 @@
   z-index: 40;
   grid-row-start: 1;
   grid-column-start: 1;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   transform: rotateY(180deg);
   transition-property: all;
   background-image: radial-gradient(#444, #333, #222);

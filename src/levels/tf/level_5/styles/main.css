@@ -7,7 +7,7 @@
 }
 
 .fa-icon-5 {
-  color: hsla(51deg, 84%, 53%, 0.8);
+  color: hsla(51, 84%, 53%, 0.8);
   font-size: 1.1rem;
 }
 
@@ -22,9 +22,9 @@
 }
 
 .level-5, .counter-5, .score-5 {
-  color: hsla(51deg, 84%, 53%, 0.8);
+  color: hsla(51, 84%, 53%, 0.8);
   font-weight: 200;
-  text-shadow: 0.2rem 0.2rem 2rem hsl(51deg, 84%, 53%), 0.1rem 0.1rem 1rem hsl(34deg, 84%, 53%), 0.1rem 0.1rem 0.5rem #777;
+  text-shadow: 0.2rem 0.2rem 2rem hsl(51, 84%, 53%), 0.1rem 0.1rem 1rem hsl(34, 84%, 53%), 0.1rem 0.1rem 0.5rem #777;
 }
 
 .aContainer-5 {
@@ -36,7 +36,7 @@
 .message {
   font-size: 2.2rem;
   font-weight: 650;
-  background: linear-gradient(to right, hsl(124deg, 60%, 50%), hsl(166deg, 70%, 45%));
+  background: linear-gradient(to right, hsl(124, 60%, 50%), hsl(166, 70%, 45%));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

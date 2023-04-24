@@ -2,8 +2,8 @@
   border-radius: 50%;
   position: absolute;
   padding: 2em;
-  background-image: radial-gradient(hsl(222deg, 40%, 50%), hsl(242deg, 40%, 50%), hsl(262deg, 40%, 50%));
-  border: 0.15rem dotted hsl(144deg, 40%, 60%);
+  background-image: radial-gradient(hsl(222, 40%, 50%), hsl(242, 40%, 50%), hsl(262, 40%, 50%));
+  border: 0.15rem dotted hsl(144, 40%, 60%);
   opacity: 0;
 }
 
@@ -54,8 +54,8 @@
   position: absolute;
   bottom: 10%;
   padding: 5.4rem;
-  border: 0.3rem dotted hsl(222deg, 40%, 50%);
-  box-shadow: inset 0 0 2rem hsl(222deg, 40%, 50%), inset 1rem 1rem 4rem hsl(252deg, 50%, 50%);
+  border: 0.3rem dotted hsl(222, 40%, 50%);
+  box-shadow: inset 0 0 2rem hsl(222, 40%, 50%), inset 1rem 1rem 4rem hsl(252, 50%, 50%);
   border-radius: 50%;
   opacity: 0;
 }

@@ -7,19 +7,19 @@
 }
 
 .fa-icon-6 {
-  color: hsla(282deg, 80%, 40%, 0.8);
+  color: hsla(282, 80%, 40%, 0.8);
   font-size: 1.2rem;
 }
 
 .t-6 {
   border-radius: 20%;
   margin: 0.1rem;
-  border: 0.3rem solid hsla(282deg, 80%, 40%, 0.15);
-  background-image: radial-gradient(hsl(52deg, 80%, 60%) 20%, hsl(29deg, 80%, 60%) 45%, hsl(282deg, 80%, 40%));
+  border: 0.3rem solid hsla(282, 80%, 40%, 0.15);
+  background-image: radial-gradient(hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%));
 }
 
 .tb-6 {
-  color: hsl(51deg, 94%, 53%);
+  color: hsl(51, 94%, 53%);
 }
 
 .level-6::after, .score-6::after, .counter-6::after {
@@ -30,25 +30,25 @@
 }
 
 .level-6::after {
-  background: hsl(282deg, 66%, 52%);
+  background: hsl(282, 66%, 52%);
 }
 
 .counter-6::after {
-  background: hsl(344deg, 66%, 42%);
+  background: hsl(344, 66%, 42%);
 }
 
 .score-6::after {
-  background: hsl(52deg, 66%, 52%);
+  background: hsl(52, 66%, 52%);
 }
 
 .level-6 {
-  color: hsl(282deg, 66%, 62%);
+  color: hsl(282, 66%, 62%);
 }
 
 .counter-6 {
-  color: hsl(344deg, 66%, 52%);
+  color: hsl(344, 66%, 52%);
 }
 
 .score-6 {
-  color: hsl(52deg, 66%, 62%);
+  color: hsl(52, 66%, 62%);
 }/*# sourceMappingURL=main.css.map */

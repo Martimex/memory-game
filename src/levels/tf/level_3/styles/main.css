@@ -8,15 +8,15 @@
 }
 
 .fa-icon-3:nth-of-type(n) {
-  color: hsla(252deg, 50%, 40%, 0.6);
+  color: hsla(252, 50%, 40%, 0.6);
 }
 
 .fa-icon-3:nth-of-type(2n) {
-  color: hsla(12deg, 50%, 40%, 0.6);
+  color: hsla(12, 50%, 40%, 0.6);
 }
 
 .t-3 {
-  border: 0.2rem solid hsla(142deg, 80%, 30%, 0.5);
+  border: 0.2rem solid hsla(142, 80%, 30%, 0.5);
   border: none;
   padding: 0.3rem;
   border-radius: 5%;
@@ -27,15 +27,15 @@
 }
 
 .t-3:nth-of-type(n) {
-  background-image: linear-gradient(90deg, hsla(142deg, 80%, 30%, 0.6), hsla(252deg, 50%, 40%, 0.6));
+  background-image: linear-gradient(90deg, hsla(142, 80%, 30%, 0.6), hsla(252, 50%, 40%, 0.6));
 }
 
 .t-3:nth-of-type(2n) {
-  background-image: linear-gradient(90deg, hsla(252deg, 50%, 40%, 0.6), hsla(142deg, 80%, 30%, 0.6));
+  background-image: linear-gradient(90deg, hsla(252, 50%, 40%, 0.6), hsla(142, 80%, 30%, 0.6));
 }
 
 .level-3, .counter-3, .score-3 {
-  text-shadow: 1px 1px 2px hsl(299deg, 30%, 40%), 0 0 1em hsl(55deg, 30%, 40%), 0 0 0.5em hsl(299deg, 30%, 40%);
-  color: hsla(142deg, 80%, 50%, 0.5);
+  text-shadow: 1px 1px 2px hsl(299, 30%, 40%), 0 0 1em hsl(55, 30%, 40%), 0 0 0.5em hsl(299, 30%, 40%);
+  color: hsla(142, 80%, 50%, 0.5);
   font-style: oblique;
 }/*# sourceMappingURL=main.css.map */

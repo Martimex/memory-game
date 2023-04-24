@@ -23,11 +23,11 @@
 }
 
 .confirm-win {
-  color: hsl(111deg, 40%, 50%);
+  color: hsl(111, 40%, 50%);
 }
 
 .confirm-lost {
-  color: hsl(11deg, 40%, 50%);
+  color: hsl(11, 40%, 50%);
   padding-bottom: 2em;
 }
 
@@ -47,15 +47,14 @@
   padding-top: 0;
   margin-bottom: 0.2em;
   letter-spacing: 0.15rem;
-  opacity: 0;
 }
 
 .info-title-win {
-  border-bottom: 0.1rem dashed hsl(111deg, 30%, 40%);
+  border-bottom: 0.1rem dashed hsl(111, 30%, 40%);
 }
 
 .info-title-lost {
-  border-bottom: 0.1rem dashed hsl(11deg, 30%, 40%);
+  border-bottom: 0.1rem dashed hsl(11, 30%, 40%);
 }
 
 .info-param {
@@ -71,12 +70,10 @@
 
 .param-name {
   justify-self: flex-start;
-  opacity: 0;
 }
 
 .param-value {
   justify-self: flex-end;
-  opacity: 0;
 }
 
 .info-highscore {
@@ -90,7 +87,7 @@
 }
 
 .highscore-name, .highscore-value {
-  color: hsl(49deg, 45%, 50%) !important;
+  color: hsl(49, 45%, 50%) !important;
   margin: 0 0.8em;
 }
 
@@ -99,7 +96,6 @@
   align-items: center;
   justify-content: center;
   justify-content: space-around;
-  opacity: 0;
 }
 
 /*  2  */
@@ -139,9 +135,9 @@
 }
 
 .win-btn {
-  color: hsl(111deg, 40%, 50%);
+  color: hsl(111, 40%, 50%);
 }
 
 .lost-btn {
-  color: hsl(11deg, 40%, 50%);
+  color: hsl(11, 40%, 50%);
 }/*# sourceMappingURL=confirm.css.map */
