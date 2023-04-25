@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import '../styles/preview.css';
 import anime from 'animejs/lib/anime.es.js';
 
-import { LevelInfo } from './level_info.js';
-import { SerieBox } from './serie_box.js';
+import { LevelInfo } from './level_info.jsx';
+import { SerieBox } from './serie_box.jsx';
 import  { all_levels } from '../global/all_levels.js';
 
 import { faGithub as github} from '@fortawesome/free-brands-svg-icons';

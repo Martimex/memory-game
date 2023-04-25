@@ -1,8 +1,8 @@
 import './App.css';
-import Landing from './components/landing.js';
+import Landing from './components/landing.jsx';
 //import Game from './components/game.js';
-import Game from './components/memory_game.js';
-import Preview from './components/preview.js';
+import Game from './components/memory_game.jsx';
+import Preview from './components/preview.jsx';
 import React, { useState, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';

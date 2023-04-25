@@ -114,3 +114,9 @@ button:hover, .tile:hover {
   top: 0%;
   background: hsl(2, 0%, 0%);
 }/*# sourceMappingURL=global_styles.css.map */
+
+@media screen and (orientation: landscape) and (max-width: 1000px) {
+  html {
+    font-size: 11px;
+  }
+}

@@ -13,8 +13,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
-import GameInfo from './game_info.js';
-import Confirm from './confirm.js';
+import GameInfo from './game_info.jsx';
+import Confirm from './confirm.jsx';
 //import ConfirmPlay from './confirm_play'; -> can be removed later along with the Component
 import ConfirmWin from './confirm_win';
 //import Pause from './pause'; -> can be removed later along with the Component
@@ -23,7 +23,7 @@ import ConfirmWin from './confirm_win';
 import {uncoverPatterns} from '../global/predefined/uncover_patterns.js';
 import {scoreExtras} from '../global/predefined/score_extras.js';
 
-import { setIcon, icon_Sets } from './landing.js';
+import { setIcon, icon_Sets } from './landing.jsx';
 
 library.add(fab, fas);
 

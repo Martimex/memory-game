@@ -5,7 +5,7 @@ import {level_end_messages} from '../global/predefined/level_end_messages.js';
 import { faStar as star_empty} from '@fortawesome/free-regular-svg-icons';
 import { faStar as star_full} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { set } from 'animejs';
+//import { set } from 'animejs';
 import { equation } from '../global/predefined/stars_equation.js';
 
 const static_classes = {  // Simply classes which are unaffected by game result (win / lost) ?
