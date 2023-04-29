@@ -1,4 +1,7 @@
-import anime from 'animejs/lib/anime.es.js';
+import * as Animation from "animejs"
+import styles_global from '../../../../global/global_styles.module.css';
+
+const anime = Animation.default;
 
 async function level_start(stageNo, time, tileShowTime) {
 
@@ -9,7 +12,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function showTiles() {
         const a1 = anime({
-            targets: '.tile',
+            targets: `.${styles_global['tile']}`,
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
@@ -23,7 +26,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function hideTiles() {
         const a2 = anime({
-            targets: '.tile',
+            targets: `.${styles_global['tile']}`,
             duration: time,
             delay: tileShowTime,
             transitionProperty: 'all',

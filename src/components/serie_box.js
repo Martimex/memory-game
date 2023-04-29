@@ -1,10 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import { all_levels } from '../global/all_levels.js';
-import '../styles/serie_box.css';
+import styles from '../styles/serie_box.module.css';
 import { series_abbr } from '../global/series_abbr.js';
 import { rainbowColors } from '../global/rainbow_colors.js';
 
-import anime from 'animejs/lib/anime.es.js';
+//import anime from 'animejs/lib/anime.es.js';
+//import anime from "animejs";
+import * as Animation from 'animejs';
+
+// DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
+const anime = Animation.default;
 
 const colors_number = 4;
 
@@ -34,8 +39,8 @@ function SerieBox(props) {
     function openUpFire(e) {
         if(!animationFinishController[`first`] || !animationFinishController[`second`]) return; // Dont fire if both animations are not completed
         if(e.target === recentShowUpBox) return; // Dont fire if old and new sections are the same
-        if(!e.target.classList.contains(`${dynamic_classes.serie_block}`)) return; // Only section block can be targeted
-        const thisSerieTiles = e.target.querySelectorAll(`.${dynamic_classes.level_borders}`);
+        if(!e.target.classList.contains(styles[`${dynamic_classes.serie_block}`])) return; // Only section block can be targeted
+        const thisSerieTiles = e.target.querySelectorAll(`.${styles[dynamic_classes.level_borders]}`);
         thisSerieTiles.forEach(level_tile => {
             currentlyColoredBorders.push([]); // arr for tile
             const colorsCopy = [...rainbowColors];
@@ -77,18 +82,19 @@ function SerieBox(props) {
     
     function animateSectionShowUp(e) {
         animationFinishController['first'] = false;
-        const section_title = e.target.querySelector(`.serie-title`);
-        const section_content = e.target.querySelector(`.serie-content`);
-        const section_content_tiles = section_content.querySelectorAll(`.${dynamic_classes.level_borders}`);
+        const section_title = e.target.querySelector(`.${styles['serie-title']}`);
+        const section_content = e.target.querySelector(`.${styles['serie-content']}`);
+        //console.log(e, e.target, section_title, section_content);
+        const section_content_tiles = section_content.querySelectorAll(`.${styles[dynamic_classes.level_borders]}`);
     
-        section_content.classList.remove('invisible');
+        section_content.classList.remove(styles['invisible']);
        
         section_content_tiles.forEach(lv_tile => lv_tile.style.pointerEvents = 'auto');
     
         async function animationChain() {
             await fadeText()
             .then(() => {
-                section_title.classList.add('invisible');
+                section_title.classList.add(styles['invisible']);
             })
             await showUpLevels()
             .then(() => {
@@ -146,18 +152,18 @@ function SerieBox(props) {
 
         if(recentShowUpBox) {
             animationFinishController[`second`] = false;
-            const section_title_old = recentShowUpBox.querySelector(`.serie-title`);
-            const section_content_old = recentShowUpBox.querySelector(`.serie-content`);
-            const section_content_tiles_old = section_content_old.querySelectorAll(`.${dynamic_classes.level_borders}`);
+            const section_title_old = recentShowUpBox.querySelector(`.${styles['serie-title']}`);
+            const section_content_old = recentShowUpBox.querySelector(`.${styles['serie-content']}`);
+            const section_content_tiles_old = section_content_old.querySelectorAll(`.${styles[dynamic_classes.level_borders]}`);
 
             section_content_tiles_old.forEach(lv_tile => lv_tile.style.pointerEvents = 'none');
 
             async function animationChain() {
-                section_title_old.classList.remove('invisible');
+                section_title_old.classList.remove(styles['invisible']);
                 await hideLevels()
                 await showText()
                 .then(() => {
-                    section_content_old.classList.add('invisible');
+                    section_content_old.classList.add(styles['invisible']);
                     animationFinishController[`second`] = true;
                 })
             }
@@ -200,23 +206,23 @@ function SerieBox(props) {
     }
 
     return(
-        <div className={`${dynamic_classes.serie_block}`} onClick={(e) => {checkSerieNameChange(); openUpFire(e); } } >
-            <div className='serie-title'> {series_abbr[props.serie]} </div> 
-            <div className='serie-content invisible'>
+        <div className={styles[`${dynamic_classes.serie_block}`]} onClick={(e) => {checkSerieNameChange(); openUpFire(e); } } >
+            <div className={styles['serie-title']}> {series_abbr[props.serie]} </div> 
+            <div className={`${styles['serie-content']} ${styles['invisible']}`}>
                 {Object.keys(all_levels[props.serie]).map((lv, index) =>
-                    <div className={`${dynamic_classes.level_borders}`} key={props.serie.toString() + index.toString()}
+                    <div className={styles[`${dynamic_classes.level_borders}`]} key={props.serie.toString() + index.toString()}
                         onClick={() => {props.setLevelChoose([all_levels[props.serie][lv], props.serie])}}
                     >
-                        <div className='bg-layer'>
-                            <div className={`${dynamic_classes.level_tile_main}`}>
-                                <div className={`${dynamic_classes.level_tile_front}`}>
+                        <div className={styles['bg-layer']}>
+                            <div className={styles[`${dynamic_classes.level_tile_main}`]}>
+                                <div className={styles[`${dynamic_classes.level_tile_front}`]}>
 
                                     {(all_levels[props.serie][lv].number < 10)? '0'+all_levels[props.serie][lv].number : all_levels[props.serie][lv].number} 
 
 
                                 </div>   
                                 
-                                <div className={`${dynamic_classes.level_tile_back}`} > </div>
+                                <div className={styles[`${dynamic_classes.level_tile_back}`]} > </div>
                             </div>
                         </div> 
                     </div>

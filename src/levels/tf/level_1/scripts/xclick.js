@@ -1,4 +1,6 @@
-import anime from 'animejs/lib/anime.es.js';
+import * as Animation from "animejs"
+
+const anime = Animation.default;
 
 async function xclick(click_no, target, stageNo, levelObj) {
 

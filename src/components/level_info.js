@@ -1,12 +1,15 @@
-import '../styles/level_info.css';
-import '../styles/variables/difficulty_colors.css';
+import styles from '../styles/level_info.module.css';
+import styles_diffcolors from '../styles/variables/difficulty_colors.module.css';
 import { series_abbr } from '../global/series_abbr.js';
 import { background_gradients } from '../global/exceptions/background_gradients.js';
 import React, { useEffect, useRef } from 'react';
 import { faStar as star_full, faCheck as check, faFileAlt as notes, faChartBar as stats, faPlay as play } from '@fortawesome/free-solid-svg-icons';
 import { faStar as star_empty} from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import anime from 'animejs';
+import * as Animation from 'animejs';
+
+// DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
+const anime = Animation.default;
 
 function LevelInfo(props) {
 
@@ -15,8 +18,7 @@ function LevelInfo(props) {
     const levelBox_ref = useRef(null);
 
     function checkCloseCondition(e) {
-        if(e.target.classList.contains('level-info-box')) {
-            
+        if(e.target.classList.contains(`${styles['level-info-box']}`)) {
             document.body.style.overflow = 'auto';
 
             async function init() {
@@ -54,8 +56,8 @@ function LevelInfo(props) {
     }
 
     function applyDifficultyTextColors(difficulty) {
-
-       const difficulty_Dynamic_Elems = document.querySelectorAll('.dynamic-text');
+        console.warn(styles_diffcolors);
+       const difficulty_Dynamic_Elems = document.querySelectorAll(`.${styles['dynamic-text']}`);
        for(let x=0; x< difficulty_Dynamic_Elems.length; x++) {
             const styles = getComputedStyle(difficulty_Dynamic_Elems[x]);
             const main_diff_col = styles.getPropertyValue(`--color_${difficulty}_main`);
@@ -67,19 +69,19 @@ function LevelInfo(props) {
         }
 
         // For level round border
-        const level_tab = document.querySelector('.content-item-level');
+        const level_tab = document.querySelector(`.${styles['content-item-level']}`);
         const level_tab_styles = getComputedStyle(level_tab);
         const border_col = level_tab_styles.getPropertyValue(`--border-color_${difficulty}`);
         level_tab.style.borderColor = border_col;
 
         // For play button border
-        const play_btn = document.querySelector('.play');
+        const play_btn = document.querySelector(`.${styles['play']}`);
         const play_btn_styles = getComputedStyle(play_btn);
         const border_col_2 = play_btn_styles.getPropertyValue(`--border-color_${difficulty}`);
         play_btn.style.borderColor = border_col_2;
 
         // For play button icon
-        const play_icon = document.querySelector('.icon-play');
+        const play_icon = document.querySelector(`.${styles['icon-play']}`);
         const play_icon_styles = getComputedStyle(play_icon);
         const col = play_icon_styles.getPropertyValue(`--playIcon-color_${difficulty}`);
         play_icon.style.color = col;
@@ -127,62 +129,62 @@ function LevelInfo(props) {
     }, [])
 
     return (
-        <div className='level-info-blurred' ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
-            <div className="level-info-box" ref={levelBox_ref}>
-                <div className="level-info-box-content" >
-                    <div className='level-info-box-content-item' datatype="info">
-                        <div className='content-item-part'>
-                            <div className='content-item-serie'> {series_abbr[props.serie_name]}  </div>
+        <div className={styles['level-info-blurred']} ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
+            <div className={styles['level-info-box']} ref={levelBox_ref}>
+                <div className={styles['level-info-box-content']} >
+                    <div className={styles['level-info-box-content-item']} datatype="info">
+                        <div className={styles['content-item-part']}>
+                            <div className={styles['content-item-serie']}> {series_abbr[props.serie_name]}  </div>
                         </div>
-                        <div className='content-item-part'>
-                            <div className='content-item-flex'>
+                        <div className={styles['content-item-part']}>
+                            <div className={styles['content-item-flex']}>
                                 {/* Once this button is clicked, that section changes to whatever the button is about, with 
                                     possibility to scroll the section down (if necessary) and moving back to main section 
                                 */}
-                                <div className='content-item-origin_btn'>
-                                    <FontAwesomeIcon icon={notes} className="icon-notes"></FontAwesomeIcon>
+                                <div className={styles['content-item-origin_btn']}>
+                                    <FontAwesomeIcon icon={notes} className={styles['icon-notes']}></FontAwesomeIcon>
                                 </div>
 
-                                <div className='content-item-stats_btn'>
-                                    <FontAwesomeIcon icon={stats} className="icon-stats"></FontAwesomeIcon>
+                                <div className={styles['content-item-stats_btn']}>
+                                    <FontAwesomeIcon icon={stats} className={styles['icon-stats']}></FontAwesomeIcon>
                                 </div>
                             </div>
                         </div>
-                        <div className='content-item-verification'>
-                            <div className='content-item-verification-circle'>
-                                <FontAwesomeIcon icon={check} className="icon-check"></FontAwesomeIcon>
+                        <div className={styles['content-item-verification']}>
+                            <div className={styles['content-item-verification-circle']}>
+                                <FontAwesomeIcon icon={check} className={styles['icon-check']}></FontAwesomeIcon>
                             </div>
                         </div>
                     </div>
 
-                    <div className='level-info-box-content-item' datatype='main'>
-                        <div className='content-item-level-circle'>
-                            <div className='content-item-level dynamic-text'>
+                    <div className={styles['level-info-box-content-item']} datatype='main'>
+                        <div className={styles['content-item-level-circle']}>
+                            <div className={`${styles['content-item-level']} ${styles['dynamic-text']}`}>
                                 {props.level_details.number}
                             </div>
                         </div>
-                        <div className='content-item-part'> 
-                            <div className='content-item-time dynamic-text'> Time: {props.level_details.limitations['time'] || '-'} </div>
-                            <div className='content-item-time dynamic-text'> Turns: {props.level_details.limitations['turns'] || '-'}  </div>
-                            <div className='content-item-time dynamic-text'> Tiles: {props.level_details.tiles} </div>
-                            {/*<div className='content-item-score'> Score: 1200 </div>
-                            <div className='content-item-trials'> Trials: 225 </div> */}
+                        <div className={styles['content-item-part']}> 
+                            <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Time: {props.level_details.limitations['time'] || '-'} </div>
+                            <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Turns: {props.level_details.limitations['turns'] || '-'}  </div>
+                            <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Tiles: {props.level_details.tiles} </div>
+                            {/*<div className={styles['content-item-score']}> Score: 1200 </div>
+                            <div className={styles['content-item-trials']}> Trials: 225 </div> */}
                         </div>
-                        <div className='play' onClick={() => { blockClicking(); props.changeComponent(props.level_details, props.serie_name); props.proceed(); } } >
+                        <div className={styles['play']} onClick={() => { blockClicking(); props.changeComponent(props.level_details, props.serie_name); props.proceed(); } } >
                             {/* Once play button is clicked, do not forget to temporarily block click events during level load time */}
-                            <div className='play-level'> 
-                                <FontAwesomeIcon icon={play} className="icon-play"> </FontAwesomeIcon>
+                            <div className={styles['play-level']}> 
+                                <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
                             </div>
                         </div>
                     </div>
 
-                    <div className='level-info-box-content-item' datatype='stars'>
-                        <FontAwesomeIcon icon={star_full} className="icon-star_full"></FontAwesomeIcon>
-                        <FontAwesomeIcon icon={star_empty} className="icon-star_empty"></FontAwesomeIcon>
-                        <FontAwesomeIcon icon={star_empty} className="icon-star_empty"></FontAwesomeIcon>
+                    <div className={styles['level-info-box-content-item']} datatype='stars'>
+                        <FontAwesomeIcon icon={star_full} className={styles['icon-star_full']}></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon>
                     </div>
 
-                    <div className='bg-placeholder' ref={bg_placeholder_ref} ></div>
+                    <div className={styles['bg-placeholder']} ref={bg_placeholder_ref} ></div>
                 </div>
             </div>
         </div>

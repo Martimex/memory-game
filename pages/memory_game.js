@@ -1,27 +1,26 @@
 import  React, { useState, useEffect, useRef } from 'react';
-import '../styles/game.css';
+import '../src/styles/game.module.css';
 
-import '../global/global_styles.css';
+import styles_global from '../src/global/global_styles.module.css';
 
-import  levels from '../levels.js';
-import useMediaQuery from '../virtual_hooks/useMediaQuery';
+import  levels from '../src/levels.js';
+import useMediaQuery from '../src/virtual_hooks/useMediaQuery';
 
-import anime from 'animejs/lib/anime.es.js';
-
+import * as Animation from "animejs"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
-import GameInfo from './game_info.js';
-import Confirm from './confirm.js';
+import GameInfo from '../src/components/game_info.js';
+import Confirm from '../src/components/confirm.js';
 //import ConfirmPlay from './confirm_play'; -> can be removed later along with the Component
-import ConfirmWin from './confirm_win';
+import ConfirmWin from '../src/components/confirm_win';
 //import Pause from './pause'; -> can be removed later along with the Component
 
 // Level based stuff
-import {uncoverPatterns} from '../global/predefined/uncover_patterns.js';
-import {scoreExtras} from '../global/predefined/score_extras.js';
+import {uncoverPatterns} from '../src/global/predefined/uncover_patterns.js';
+import {scoreExtras} from '../src/global/predefined/score_extras.js';
 
 import { setIcon, icon_Sets } from './landing.js';
 
@@ -57,9 +56,9 @@ const timeScoreValue = 50; // Don't momdify aswell - it calculates score for eve
 const stageUpdateTime = 800;
 
 const classes = {
-    firstPlan: 'firstPlanContainer',
-    secondPlan: 'secondPlanContainer',
-    animationPlan: 'animationContainer',
+    firstPlan: styles_global['firstPlanContainer'],
+    secondPlan: styles_global['secondPlanContainer'],
+    animationPlan: styles_global['animationContainer'],
 }
 
 const duplicateIcons = {
@@ -102,10 +101,10 @@ function setRandomIcons(iconSet, tiles, pattern) {
 }
 
 async function loadOtherModules(serieName, levelNumber) {
-    const start = await import(`../levels/${serieName}/level_${levelNumber}/scripts/start.js`);
-    const xclick = await import(`../levels/${serieName}/level_${levelNumber}/scripts/xclick.js`);
-    const match = await import(`../levels/${serieName}/level_${levelNumber}/scripts/match.js`);
-    const stagecomplete = await import(`../levels/${serieName}/level_${levelNumber}/scripts/stagecomplete.js`);
+    const start = await import(`../src/levels/${serieName}/level_${levelNumber}/scripts/start.js`);
+    const xclick = await import(`../src/levels/${serieName}/level_${levelNumber}/scripts/xclick.js`);
+    const match = await import(`../src/levels/${serieName}/level_${levelNumber}/scripts/match.js`);
+    const stagecomplete = await import(`../src/levels/${serieName}/level_${levelNumber}/scripts/stagecomplete.js`);
     //const end = await import(`../levels/${serieName}/level_${levelNumber}/scripts/end.js`);
     
     return {
@@ -117,6 +116,14 @@ async function loadOtherModules(serieName, levelNumber) {
     }
 }
 
+const cssModules = {
+    // We are going to use it to assign styles to dynamic imports. They will be used as style object within JSX 
+    main: '',
+    bg: '',
+    firstPlan: '',
+    secondPlan: '',
+}
+
 let otherModules = null; // we can use it to access our scripts
 let pointsInStage = 0; // determines how many points player gets during current stage of the level
 let turns = 0; // detaermines how much turns player used in current stage
@@ -124,7 +131,14 @@ let arr = []; // for applying proper number of tiles that has to be rendered for
 let randomizedIconsArray = []; // array which holds random icons for newly created tiles 
 
 //INIT
+let allTiles;
+
+const anime = Animation.default;
+
 function Game(props) {
+
+    // This hooks exist because of switching to Next.js and thanks to it we can perform styles loading once player requests a given level (CSS provided the moment user sees the level screen)
+    const [renderStyleModules, setRenderStyleModules] = useState(false);
 
     const isDesktop = useMediaQuery('(min-width: 941px)');
 
@@ -152,7 +166,7 @@ function Game(props) {
 
     function conditionsAreMet(e) {
         if(gameboard.current.dataset.animation !== 'off') {return false;}
-        if(!e.target.classList.contains('tile')) {return false;}
+        if(!e.target.classList.contains(styles_global['tile'])) {return false;}
         const isNotAlreadyOpened = checkTilesOrigin(cardsOpened, e.target);
         if(!isNotAlreadyOpened) {  return false; }
 
@@ -161,9 +175,9 @@ function Game(props) {
 
     function clickable(e)  {
 
-        const tile_back = e.target.querySelector('.tile-back');
+        const tile_back = e.target.querySelector(`.${styles_global['tile-back']}`);
         cardsOpened.push(tile_back);
-        cardsOpened[cardsOpened.length - 1].parentNode.classList.add(`target`, `target-serie-${stageNo}`, `target-${cardsOpened.length}`);
+        cardsOpened[cardsOpened.length - 1].parentNode.classList.add(`target`, `target-serie-${stageNo}`, `target-${cardsOpened.length}`); // classcheck
 
         keepCardOpen(e);
     }
@@ -222,12 +236,13 @@ function Game(props) {
 
         randomizedIconsArray = setRandomIcons(icon_Sets[`${props.newLevel.icon_set[stageNo]}`], props.newLevel.tiles[stageNo], props.newLevel.uncover[stageNo][`pattern`]);
 
-        let allTiles =  
+        allTiles =  
         arr.map((tile, index) =>  {
-            return <div className={`tile t-${props.newLevel.number}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`tile-front tf-${props.newLevel.number}`}></div> <div className={`tile-back tb-${props.newLevel.number}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={`fa-icon-${props.newLevel.number}`}/>}</div></div>
+            return <div className={`${styles_global['tile']} ${cssModules.main && cssModules.main[`t-${props.newLevel.number}`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${cssModules.main && cssModules.main[`tf-${props.newLevel.number}`]}`}></div> <div className={`${styles_global[`tile-back`]} ${cssModules.main && cssModules.main[`tb-${props.newLevel.number}`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={cssModules.main && cssModules.main[`fa-icon-${props.newLevel.number}`]}/>}</div></div>
         }); 
-        setBoardState(allTiles); 
+        setBoardState(allTiles);
 
+        //loadStyles()
         loadDynamic()
 
     }, [stageNo])
@@ -319,7 +334,7 @@ function Game(props) {
                 fade().then(() => {
                     cardsOpened_parentNodes.forEach((parent, index) => {
                         parent.style = 'visibility: hidden';
-                        parent.classList.remove(`target`, `target-serie-${stageNo}`, `target-${index + 1}`);
+                        parent.classList.remove(`target`, `target-serie-${stageNo}`, `target-${index + 1}`); //classcheck
                     })
 
                     while(cardsOpened.length) {cardsOpened.pop();}
@@ -337,7 +352,7 @@ function Game(props) {
 
                 for(let i=0; i<cardsOpened.length; i++) {
                     // cardsOpened.length is ALWAYS equal to cardsOpened_parentNodes.length
-                    cardsOpened_parentNodes[i].classList.remove(`target`, `target-serie-${stageNo}`, `target-${i+1}`);
+                    cardsOpened_parentNodes[i].classList.remove(`target`, `target-serie-${stageNo}`, `target-${i+1}`); //classcheck
                 }
 
                 while(cardsOpened.length) {cardsOpened.pop();}
@@ -432,7 +447,17 @@ function Game(props) {
     }
 
     async function loadDynamic() {
-        let loadStart = await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/scripts/start.js`);
+        // 0. First let's import some level-based styling
+        await loadStyles();
+        // 1. Init icons 
+        allTiles =  
+        arr.map((tile, index) =>  {
+            return <div className={`${styles_global['tile']} ${cssModules.main && cssModules.main[`t-${props.newLevel.number}`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${cssModules.main && cssModules.main[`tf-${props.newLevel.number}`]}`}></div> <div className={`${styles_global[`tile-back`]} ${cssModules.main && cssModules.main[`tb-${props.newLevel.number}`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={cssModules.main && cssModules.main[`fa-icon-${props.newLevel.number}`]}/>}</div></div>
+        }); 
+        // 2. Now perform DOM repaint by fire useState hook
+        setBoardState(allTiles); 
+        // 3. Execute start script, launch animation, etc.
+        let loadStart = await import(`../src/levels/${props.newSerie}/level_${props.newLevel.number}/scripts/start.js`);
         loadStart.level_start(stageNo, props.newLevel.starting_animation[stageNo][`time`], props.newLevel.starting_animation[stageNo][`tileShowTime`])
             .then(() => {
                 // After animation is completed...
@@ -440,6 +465,7 @@ function Game(props) {
                 document.body.style.pointerEvents = 'auto'; // unlock clicking (previously blocked in leve_info *play btn onClick*)
             })
         otherModules = await loadOtherModules(props.newSerie, props.newLevel.number);
+
     }
 
     async function newStageFadeIn() {
@@ -475,38 +501,38 @@ function Game(props) {
 
     useEffect(() => {
         document.body.style.overflowY = 'auto';
-        loadStyles();
+        //loadStyles();
         appendPlansElems();
     }, []);
 
     async function loadStyles() {
-        await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/main.css`); // for styling tiles
-        await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/firstPlan.css`); // for first plan fancy elements
-        await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/secondPlan.css`); // for second plan fancy elements
-        await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/styles/bg.css`); // for adding background to the level
+        cssModules.main = await import(`../src/levels/${props.newSerie}/level_${props.newLevel.number}/styles/main.module.css`); // for styling tiles
+        cssModules.firstPlan = await import(`../src/levels/${props.newSerie}/level_${props.newLevel.number}/styles/firstPlan.module.css`); // for first plan fancy elements
+        cssModules.secondPlan = await import(`../src/levels/${props.newSerie}/level_${props.newLevel.number}/styles/secondPlan.module.css`); // for second plan fancy elements
+        cssModules.bg =  await import(`../src/levels/${props.newSerie}/level_${props.newLevel.number}/styles/bg.module.css`); // for adding background to the level
     }
 
     async function appendPlansElems() {
-        const plansElems = await import(`../levels/${props.newSerie}/level_${props.newLevel.number}/generatePlanItems.js`);
+        const plansElems = await import(`../src/levels/${props.newSerie}/level_${props.newLevel.number}/generatePlanItems.js`);
         plansElems.generateItems(classes[`firstPlan`], classes[`secondPlan`]);
     }
 
     return(
-        <div className='all' ref={all}>
-            <div className={`background bg-${props.newLevel.number}`} ref={bg}>
+        <div className={styles_global['all']} ref={all}>
+            <div className={`${styles_global[`background`]} ${cssModules.bg && cssModules.bg[`bg-${props.newLevel.number}`]}`} ref={bg}>
                 <div className='game-info' ref={gameinfo_ref} >
-                    <GameInfo level={props.newLevel.number} moves={props.newLevel.limitations[stageNo]['turns'] - turns} time={props.newLevel.limitations[stageNo]['time'] - time} score={score}  />
+                    <GameInfo newSerie={props.newSerie} level={props.newLevel.number} moves={props.newLevel.limitations[stageNo]['turns'] - turns} time={props.newLevel.limitations[stageNo]['time'] - time} score={score}  />
                 </div>
 
-                <div className={`game game-${props.newLevel.number}`} ref={game}>
-                    <div className={`board board-${props.newLevel.number}`} ref={gameboard} data-animation='off' onClick={(e) => { if(conditionsAreMet(e)) { clickable(e); setClickNo(clickNo + 1); }}}  style={boardGridParams}>
+                <div className={`${styles_global[`game`]} ${cssModules.bg && cssModules.bg[`game-${props.newLevel.number}`]}`} ref={game}>
+                    <div className={`${styles_global[`board`]} ${cssModules.bg && cssModules.bg[`board-${props.newLevel.number}`]}`} ref={gameboard} data-animation='off' onClick={(e) => { if(conditionsAreMet(e)) { clickable(e); setClickNo(clickNo + 1); }}}  style={boardGridParams}>
                         {boardState}
                     </div>
                 </div>
                 
-                <div className={`${classes[`firstPlan`]} firstPlan-${props.newLevel.number}`}> </div>
-                <div className={`${classes[`secondPlan`]} secondPlan-${props.newLevel.number}`}> </div>
-                <div className={`${classes[`animationPlan`]} aContainer-${props.newLevel.number}`} ref={animationBox}></div>
+                <div className={`${classes[`firstPlan`]} ${cssModules.firstPlan && cssModules.firstPlan[`firstPlan-${props.newLevel.number}`]}`}> </div>
+                <div className={`${classes[`secondPlan`]} ${cssModules.secondPlan && cssModules.secondPlan[`secondPlan-${props.newLevel.number}`]}`}> </div>
+                <div className={`${classes[`animationPlan`]} ${cssModules.main && cssModules.main[`aContainer-${props.newLevel.number}`]}`} ref={animationBox}></div>
 
                 {confirmValue !== null && (
                     <Confirm value={confirmValue} level={level} level_no={props.newLevel.number} newSerie={props.newSerie} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 

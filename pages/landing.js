@@ -1,28 +1,27 @@
-import React, { useRef } from 'react';
-import '../styles/landing.css';
-import '../animations/animeLanding.js';
-import anime from 'animejs/lib/anime.es.js';
-import { colors } from '../vars.js';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import styles from '../src/styles/landing.module.css';
+import '../src/animations/animeLanding.js';
+//import anime from 'animejs/lib/anime.es.js';
+import * as Animation from "animejs";
+import { colors, tileCodes } from '../src/vars.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { library, config } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { tileCodes } from '../vars.js';
 
 // 2.0 Import stuff
-import { all_levels } from '../global/all_levels.js';
-
-console.log(all_levels);
-
+import { all_levels } from '../src/global/all_levels.js';
+//console.log(all_levels);
 
 //////////
 
+//config.autoAddCss = false;
 library.add(fab, fas, far);
 
-let usedIcons = [];
-let randomizedIcons = [];
+const usedIcons = [];
+const randomizedIcons = [];
 
 const icon_Sets = {
     fas: Object.keys(library.definitions.fas),
@@ -45,6 +44,7 @@ function getRandomIcons(iconSet, usedIcons, randomizedIcons) {
     for(let j=0; j<usedIconsCopy.length; j++) {
         randomizedIcons.push(setIcon(usedIcons));
     }
+    console.warn(randomizedIcons);
 }
 
 function setIcon(usedIcons) {
@@ -54,18 +54,25 @@ function setIcon(usedIcons) {
     return chosenIcon;
 }
 
-
-// INIT
-getRandomIcons(icon_Sets[`fas`], usedIcons, randomizedIcons);
+// We need to declare this variable outside of function component, to prevent it from being re-rendered and causing SVG path mismatch between SSR and CSR
+let allTiles;
 
 function Landing(props) {
+    // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
+    const anime = Animation.default;
+
+    // We use this hook to apply icon coloring animation (see useLayoutEffect below)
+    const [render, setRender] = useState(false);
+
+    useEffect(() => {
+        // This useEffect happens only once - that is mandatory here !s
+        getRandomIcons(icon_Sets[`fas`], usedIcons, randomizedIcons);
+        setRender(true);
+    }, []);
 
     const tileCodes = props.tileCodes;
 
     const gameBoard = useRef(null);
-    console.log(icon_Sets['fas']);
-    console.warn(icon_Sets['fab']);
-    
 
     /* BELOW USED FOR TILES BORDER COLOR MANIPULATION */
 
@@ -77,7 +84,14 @@ function Landing(props) {
     const animationRef9 = React.useRef(null);
     const animationRef10 = React.useRef(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
+
+        anime({
+            targets: `.${styles['start']}`,
+            duration: 3000,
+            opacity: [0, 1],
+            easing: 'linear',
+        })
 
         animationRef4.current = anime({
             targets: ['.t11'],
@@ -149,39 +163,39 @@ function Landing(props) {
             loop: true,
         })
 
-    }, []);
+    }, [render]);
 
-    const allTiles = tileCodes.map((code, index) => 
-        <div className={`card ${code}`} key={index.toString()}><div className='card-front'></div> <div className='card-back'><FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`${code}`}/></div></div>
+    allTiles = tileCodes.map((code, index) => 
+        <div className={`${styles[`card`]} ${code}`} key={index.toString()}><div className={styles['card-front']}></div> <div className={styles['card-back']}> {randomizedIcons.length && <FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`${styles[`fa-icon`]} ${code}`}/>} </div></div>
     );
 
-    const changeScreen = React.useRef(null);
+    /* const changeScreen = React.useRef(null); */
 
     function fadeAnimation() {
-        changeScreen.current = anime({
+/*         changeScreen.current = anime({
             targets: 'body',
             duration: 1000,
             opacity: [0, 1],
             easing: 'linear',
-        })
+        }) */
     }
 
     return( 
-        <div className='landing-all'>
-            <div className='layer'>
-                <div className='theme' ref={gameBoard}>
+        <div className={styles['landing-all']}>
+            <div className={styles['layer']}>
+                <div className={styles['theme']} ref={gameBoard}>
                     {allTiles}
                 </div>
             </div>
 
-            <div className='content'>
-                <div className='content-section'>
-                    <div className="game-title">FLASH</div>
-                    <div className='game-subtitle'>The Ultimate Memory Game</div>
+            <div className={styles['content']}>
+                <div className={styles['content-section']}>
+                    <div className={styles["game-title"]}>FLASH</div>
+                    <div className={styles['game-subtitle']}>The Ultimate Memory Game</div>
                 </div>
-                <div className='content-action' >
-                    <div className='from-author'> The hardest memory game You would ever play...</div>
-                    <button className='start' onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button>
+                <div className={styles['content-action']}>
+                    <div className={styles['from-author']}> The hardest memory game You would ever play...</div>
+                    <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button>
                 </div>
             </div>       
         </div>

@@ -1,30 +1,32 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import anime from 'animejs/lib/anime.es.js';
-import '../styles/confirm.css';
+import * as Animation from "animejs";
+import styles_confirm from '../styles/confirm.module.css';
 import {level_end_messages} from '../global/predefined/level_end_messages.js';
 import { faStar as star_empty} from '@fortawesome/free-regular-svg-icons';
 import { faStar as star_full} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { set } from 'animejs';
+//import { set } from 'animejs';
 import { equation } from '../global/predefined/stars_equation.js';
 
+const anime = Animation.default;
+
 const static_classes = {  // Simply classes which are unaffected by game result (win / lost) ?
-    bg: `confirmation-bg`,
-    box: `confirm-box`,
-    title: `info-title`,
-    info: `confirm__info`,
-    param: `info-param`,
-    param_name: `param-name`,
-    param_value: `param-value`,
-    highscore: `info-highscore`,
-    highscore_value: `highscore-value`,
-    star_box: `info-stars`,
-    star: `icon-star`,
-    star_empty: `icon-star_empty`,
-    star_full: `icon-star_full`,
-    action_container: `action_container`,
-    win_btn: `win-btn`,
-    lost_btn: `lost-btn`,
+    bg: styles_confirm[`confirmation-bg`],
+    box: styles_confirm[`confirm-box`],
+    title: styles_confirm[`info-title`],
+    info: styles_confirm[`confirm__info`],
+    param: styles_confirm[`info-param`],
+    param_name: styles_confirm[`param-name`],
+    param_value: styles_confirm[`param-value`],
+    highscore: styles_confirm[`info-highscore`],
+    highscore_value: styles_confirm[`highscore-value`],
+    star_box: styles_confirm[`info-stars`],
+    star: styles_confirm[`icon-star`],
+    star_empty: styles_confirm[`icon-star_empty`],
+    star_full: styles_confirm[`icon-star_full`],
+    action_container: styles_confirm[`action_container`],
+    win_btn: styles_confirm[`win-btn`],
+    lost_btn: styles_confirm[`lost-btn`],
 }
 
 function Confirm(props) {
@@ -353,9 +355,9 @@ function Confirm(props) {
     return (
         <div className={`${static_classes['bg']}`}>
             <div className={`${static_classes['box']}`}>
-                <div className={(props.value) ? 'confirm confirm-win' : 'confirm confirm-lost'}>
+                <div className={(props.value) ? `${styles_confirm['confirm']} ${styles_confirm['confirm-win']}` : `${styles_confirm['confirm']} ${styles_confirm['confirm-lost']}`}>
                     <div className={`${static_classes['info']}`}>
-                        <div className={(props.value) ? `${static_classes['title']} info-title-win` : `${static_classes['title']} info-title-lost`}>
+                        <div className={(props.value) ? `${static_classes['title']} ${styles_confirm['info-title-win']}` : `${static_classes['title']} ${styles_confirm['info-title-lost']}`}>
                             {endMessage}
                         </div>
 

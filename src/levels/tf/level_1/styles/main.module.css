@@ -1,0 +1,43 @@
+.aContainer-1 {
+    box-sizing: border-box; /* We can use game animation container styling the way that it fits a given level best */
+}
+
+.t-1 { /* Front size of card */
+    border: 0.2rem solid hsl(4, 87%, 62%);
+    background: hsl(4, 66%, 56%);
+    margin: 0.5rem;
+    border-radius: 10%;
+}
+
+.tf-1 { /* Have no clue what this class is for */
+    background: hsl(4, 87%, 62%);
+}
+
+.tb-1 { /* Back side of card */
+    background: hsl(4, 87%, 62%);
+}
+
+.fa-icon-1 {
+    color: hsl(4, 87%, 95%);
+    font-size: 1.4rem;
+}
+
+.level-1::after, .counter-1::after, .score-1::after {
+    content: "";
+    display: block;
+    width: 100%;
+    margin: 0.2rem 0.8rem;
+    border: solid 0.1rem hsl(4, 87%, 62%);
+}
+
+.level-1 {
+    color: hsl(4, 87%, 84%);
+}
+
+.counter-1 {
+    color: hsl(4, 87%, 84%);
+}
+
+.score-1 {
+    color: hsl(4, 87%, 84%);
+}

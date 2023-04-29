@@ -1,16 +1,20 @@
 import React, { useEffect, useState, useRef } from 'react';
-import '../styles/preview.css';
-import anime from 'animejs/lib/anime.es.js';
+import styles from '../src/styles/preview.module.css';
+import * as Animation from 'animejs';
+//import anime from 'animejs/lib/anime.es.js';
+//import anime from "animejs/lib/anime.es.js"
 
-import { LevelInfo } from './level_info.js';
-import { SerieBox } from './serie_box.js';
-import  { all_levels } from '../global/all_levels.js';
+import { LevelInfo } from '../src/components/level_info.js';
+import { SerieBox } from '../src/components/serie_box.js';
+import  { all_levels } from '../src/global/all_levels.js';
 
 import { faGithub as github} from '@fortawesome/free-brands-svg-icons';
 import { faHome as home} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Preview(props) {
+    // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
+    const anime = Animation.default;
 
     const [[levelChoose, serie], setLevelChoose] = useState([null, null]);
     const [chosenSerie, setChosenSerie] = useState(null);
@@ -40,7 +44,7 @@ function Preview(props) {
         
         async function animate() {
             const a1 = anime({
-                targets: currSerie.current,
+                targets: `.${styles['title-name']}`,
                 duration: 500,
                 opacity: [1, 0],
                 easing: 'linear',
@@ -55,7 +59,7 @@ function Preview(props) {
 
     useEffect(() => {
         anime({
-            targets: currSerie.current,
+            targets: `.${styles['title-name']}`,
             duration: 500,
             opacity: [0, 1],
             easing: 'linear',
@@ -71,9 +75,9 @@ function Preview(props) {
     });
 
     function checkStickyBar() {
-        const isSticky_before = topBarRef.current.classList.contains('sticky');
-        topBarRef.current.classList.toggle('sticky', window.scrollY > 0);
-        const isSticky_after = topBarRef.current.classList.contains('sticky');
+        const isSticky_before = topBarRef.current.classList.contains(styles['sticky']);
+        topBarRef.current.classList.toggle(styles['sticky'], window.scrollY > 0);
+        const isSticky_after = topBarRef.current.classList.contains(styles['sticky']);
 
         if(isSticky_before !== isSticky_after) {
             if(isSticky_after === true) {
@@ -99,28 +103,28 @@ function Preview(props) {
     }
 
     return (
-        <div className='bg-main'>
-            <div className='seizure-flexbox'>
-                <div className='top-bar' ref={topBarRef}>
-                    <div className='top-bar__return'>
-                        <button className='return-back' onClick={() => {props.backToHome(); props.proceed();}}> 
-                            <FontAwesomeIcon icon={home} className="icon-home" />
+        <div className={styles['bg-main']}>
+            <div className={styles['seizure-flexbox']}>
+                <div className={styles['top-bar']} ref={topBarRef}>
+                    <div className={styles['top-bar__return']}>
+                        <button className={styles['return-back']} onClick={() => {props.backToHome(); props.proceed();}}> 
+                            <FontAwesomeIcon icon={home} className={styles["icon-home"]} />
                         </button>
                     </div>
 
-                    <div className='top-bar__title'>
-                        <div className='title-name' ref={currSerie}> {chosenSerieName ? chosenSerieName : `Choose a serie` } </div>
+                    <div className={styles['top-bar__title']}>
+                        <div className={styles['title-name']} ref={currSerie}> {chosenSerieName ? chosenSerieName : `Choose a serie` } </div>
                     </div>
 
-                    <div className='top-bar__follow'>
-                        <div className='follow-me'>
-                            <FontAwesomeIcon icon={github} className="icon-github" />
+                    <div className={styles['top-bar__follow']}>
+                        <div className={styles['follow-me']}>
+                            <FontAwesomeIcon icon={github} className={styles["icon-github"]} />
                         </div>    
                     </div>
                     
                 </div>
 
-                <div className='showcase-block'>
+                <div className={styles['showcase-block']}>
                     {levels_showcase}
                 </div>
 

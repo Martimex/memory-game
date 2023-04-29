@@ -1,6 +1,7 @@
 import React, { } from 'react';
-import '../styles/confirm_win.css';
-import anime from 'animejs/lib/anime.es.js';
+import '../styles/confirm_win.module.css';
+//import anime from 'animejs/lib/anime.es.js';
+//import anime from "animejs";
 
 function ConfirmWin(props) {
 

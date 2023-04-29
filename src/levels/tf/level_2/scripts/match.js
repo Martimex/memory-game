@@ -1,5 +1,5 @@
-import anime from 'animejs/lib/anime.es.js';
-
+//import anime from 'animejs/lib/anime.es.js';
+//import anime from "animejs"
 async function match(isMatch, cardsOpened_parentNodes, stageNo) {
     // Fire some animations when we found / do not found a match
     const targets = document.querySelectorAll('.target');

@@ -1,28 +1,30 @@
-import './App.css';
-import Landing from './components/landing.js';
+//import '../src/App.css'; temporarily commented out, You can uncomment and test if you feel like it
+import Landing from './landing.js';
 //import Game from './components/game.js';
-import Game from './components/memory_game.js';
-import Preview from './components/preview.js';
+import Game from './memory_game.js';
+import Preview from './preview.js';
 import React, { useState, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { tileCodes } from './vars.js';
+import { tileCodes } from '../src/vars.js';
 
-import anime from 'animejs/lib/anime.es.js';
+//import anime from 'animejs/lib/anime.es.js';
+import * as Animation from "animejs";
 
 library.add(fab, fas);
 
 const timing = 1000;
+const anime = Animation.default;
 
 async function fadeAnimation() {
         
   const a1 = anime({
-      targets: 'body',
-      duration: timing,
-      opacity: [1, 0],
-      direction: 'alternate',
-      easing: 'linear',
+    targets: 'body',
+    duration: timing,
+    opacity: [1, 0],
+    direction: 'alternate',
+    easing: 'linear',
   })
 
   await Promise.all([a1]);

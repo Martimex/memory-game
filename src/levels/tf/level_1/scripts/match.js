@@ -1,4 +1,6 @@
-import anime from 'animejs/lib/anime.es.js';
+import * as Animation from "animejs"
+
+const anime = Animation.default;
 
 async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject) {
     // Fire some animations when we found / do not found a match
