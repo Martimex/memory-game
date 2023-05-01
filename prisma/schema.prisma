@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String     @id @default(cuid())
+  name           String?    @unique
+  email          String?    @unique
+  role           String
+  playedLevels   Level[]
+  progressLevels Progress[]
+}
+
+model Level {
+  id                 String  @id @default(cuid())
+  number             Int
+  name               String
+  serie_name         String 
+  difficulty         String
+  stages             Int
+  tiles              Json
+  rows               Json
+  columns            Json
+  coords             Json?
+  tile_size          Json
+  icon_set           Json
+  limitations        Json
+  starting_animation Json
+  tile_animation     Json
+  compare_time       Json
+  uncover            Json
+  score              Json
+  win                Json
+  variables          Json?
+  User       User?   @relation(fields: [userId], references: [id])
+  userId     String?
+}
+
+model Progress {
+  id          String  @id
+  stars_got   Int
+  lv_progress Int
+  highscore   Int
+  User        User?   @relation(fields: [userId], references: [id])
+  userId      String?
+}
