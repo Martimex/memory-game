@@ -201,23 +201,23 @@ function SerieBox(props) {
     function checkSerieNameChange() {
         // Object properties are not updated !
         if((animationFinishController[`first`] === true)  && (animationFinishController[`second`]) === true)  {
-            props.setSerieName(series_abbr[props.serie])
+            props.setSerieName(props.serie.name)
         }
     }
 
     return(
         <div className={styles[`${dynamic_classes.serie_block}`]} onClick={(e) => {checkSerieNameChange(); openUpFire(e); } } >
-            <div className={styles['serie-title']}> {series_abbr[props.serie]} </div> 
+            <div className={styles['serie-title']}> {props.serie.name} </div> 
             <div className={`${styles['serie-content']} ${styles['invisible']}`}>
-                {Object.keys(all_levels[props.serie]).map((lv, index) =>
-                    <div className={styles[`${dynamic_classes.level_borders}`]} key={props.serie.toString() + index.toString()}
-                        onClick={() => {props.setLevelChoose([all_levels[props.serie][lv], props.serie])}}
+                {props.serie.Levels.map((lv, index) =>
+                    <div className={styles[`${dynamic_classes.level_borders}`]} key={lv.name.toString() + lv.number.toString()}
+                        onClick={() => {props.setLevelChoose([lv, props.serie.name_abbr, props.serie.name])}}
                     >
                         <div className={styles['bg-layer']}>
                             <div className={styles[`${dynamic_classes.level_tile_main}`]}>
                                 <div className={styles[`${dynamic_classes.level_tile_front}`]}>
 
-                                    {(all_levels[props.serie][lv].number < 10)? '0'+all_levels[props.serie][lv].number : all_levels[props.serie][lv].number} 
+                                    {(index + 1 < 10)? '0'+ (index + 1) : (index + 1)} 
 
 
                                 </div>   

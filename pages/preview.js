@@ -19,13 +19,14 @@ export const getStaticProps = async () => {
     // Data object is available under /preview (for example: http://localhost:3000/preview)
     // Note that by adding getStaticProps, loading http://localhost:3000/preview will give us 2 level instances from the Database, 
     // while going for http://localhost:3000/ (our 'old' no-route implementation) gives us props which we passed from index.js file
-    const data = await prisma.level.findMany({
-        where: { serie_name: 'The Flash' },
-    /*     include: {
-            level: {
-                select: { name: true }
+    const data = await prisma.serie.findMany({
+        /* where: { index: true }, */
+        take: 5,
+        include: {
+            Levels: {
+                select: { name: true, number: true, stages: true, difficulty: true, creatorUserId: true, }
             },
-        }, */
+        },
     
     });
     //console.log(data);
@@ -37,19 +38,25 @@ export const getStaticProps = async () => {
 
 function Preview( props ) {
     // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
-    console.warn(props);
+    console.warn(props.data, all_levels);
     const anime = Animation.default;
 
-    const [[levelChoose, serie], setLevelChoose] = useState([null, null]);
+    const [[levelChoose, serie_abbr, serie_name], setLevelChoose] = useState([null, null]);
     const [chosenSerie, setChosenSerie] = useState(null);
     const [chosenSerieName, setChosenSerieName] = useState(null);
 
     const currSerie = useRef(null);
     const topBarRef = useRef(null);
 
-    const levels_showcase = Object.keys(all_levels).map((serie_name, index) => 
+    /* const levels_showcase = Object.keys(all_levels).map((serie_name, index) => 
         <SerieBox serie={serie_name} setSerieName={setChosenSerie} setLevelChoose={setLevelChoose} key={serie_name.toString()} />
-    )
+    ) */
+
+    //props.data.map((serie, index) => console.log(serie.name));
+
+    const levels_showcase = props.data.map((serie, index) => 
+        <SerieBox serie={serie} setSerieName={setChosenSerie} setLevelChoose={setLevelChoose} key={serie.index.toString() + serie.name} />
+    )   
 
     useEffect(() => {
         if(levelChoose !== null) {
@@ -141,7 +148,6 @@ function Preview( props ) {
                     </div>
 
                     <div className={styles['top-bar__follow']}>
-                        <p>HI # </p>
                         <div className={styles['follow-me']} onClick={() => console.log(props)}>
                             <FontAwesomeIcon icon={github} className={styles["icon-github"]} />
                         </div>    
@@ -157,7 +163,7 @@ function Preview( props ) {
             </div>
 
             { levelChoose && (
-                <LevelInfo serie_name={serie} level_details={levelChoose} closeLevelInfo={setLevelChoose} 
+                <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} level_details={levelChoose} closeLevelInfo={setLevelChoose} 
                     changeComponent={props.changeComponent} proceed={props.proceed}
                 />
             )}

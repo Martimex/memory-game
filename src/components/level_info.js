@@ -102,7 +102,7 @@ function LevelInfo(props) {
         document.body.style.overflowY = 'hidden';
         setLevelBoxPosition(levelInfoAll_ref.current);
         applyDifficultyTextColors(props.level_details.difficulty)
-       const img_url = `bgs/${props.serie_name}/bg-${props.level_details.number}.svg`;
+       const img_url = `bgs/${props.serie_abbr}/bg-${props.level_details.number}.svg`;
         loadBackground_preview(img_url)
             .then(() => {
                 bg_placeholder_ref.current.style.backgroundImage = `url(${img_url})`;
@@ -115,8 +115,8 @@ function LevelInfo(props) {
             })
             .catch((error) => { console.log(error); 
                 // + Handle exceptions for TF serie levels (1 to 6), because they only have default SVG backgrounds, but CSS gradients
-                if((props.serie_name === 'tf') && (parseInt(props.level_details.number) <= 6)) {
-                    bg_placeholder_ref.current.style.backgroundImage = background_gradients[props.serie_name][props.level_details.number];
+                if((props.serie_abbr === 'tf_1') && (parseInt(props.level_details.number) <= 6)) {
+                    bg_placeholder_ref.current.style.backgroundImage = background_gradients[props.serie_abbr][props.level_details.number];
                     
                     anime({
                         targets: bg_placeholder_ref.current,
@@ -128,13 +128,16 @@ function LevelInfo(props) {
             })
     }, [])
 
+    console.log(props, props.serie);
+    console.log(props.level_details);
+
     return (
         <div className={styles['level-info-blurred']} ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
             <div className={styles['level-info-box']} ref={levelBox_ref}>
                 <div className={styles['level-info-box-content']} >
                     <div className={styles['level-info-box-content-item']} datatype="info">
                         <div className={styles['content-item-part']}>
-                            <div className={styles['content-item-serie']}> {series_abbr[props.serie_name]}  </div>
+                            <div className={styles['content-item-serie']}> {props.serie_name}  </div>
                         </div>
                         <div className={styles['content-item-part']}>
                             <div className={styles['content-item-flex']}>
@@ -164,13 +167,16 @@ function LevelInfo(props) {
                             </div>
                         </div>
                         <div className={styles['content-item-part']}> 
-                            <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Time: {props.level_details.limitations['time'] || '-'} </div>
+{/*                             <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Time: {props.level_details.limitations['time'] || '-'} </div>
                             <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Turns: {props.level_details.limitations['turns'] || '-'}  </div>
-                            <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Tiles: {props.level_details.tiles} </div>
+                            <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Tiles: {props.level_details.tiles} </div> */}
+                            <div className={`${styles['content-item-level_name']} ${styles['dynamic-text']}`}>  {props.level_details.name} </div>
+{/*                             <div className={`${styles['content-item-level_difficulty']} ${styles['dynamic-text']}`}> {props.level_details.creatorUserId} </div> */}
+                            <div className={`${styles['content-item-level_id']} ${styles['dynamic-text']}`}>  id: [#{props.level_details.number}]  Diff: {props.level_details.difficulty} </div>
                             {/*<div className={styles['content-item-score']}> Score: 1200 </div>
                             <div className={styles['content-item-trials']}> Trials: 225 </div> */}
                         </div>
-                        <div className={styles['play']} onClick={() => { blockClicking(); props.changeComponent(props.level_details, props.serie_name); props.proceed(); } } >
+                        <div className={styles['play']} onClick={() => { blockClicking(); props.changeComponent(props.level_details, props.serie_abbr); props.proceed(); } } >
                             {/* Once play button is clicked, do not forget to temporarily block click events during level load time */}
                             <div className={styles['play-level']}> 
                                 <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>

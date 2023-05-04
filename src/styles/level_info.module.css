@@ -97,6 +97,13 @@
     color: hsla(45, 40%, 60%, 0.5);
 }
 
+.content-item-part {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
+}
+
 .content-item-stats_btn:hover, .content-item-origin_btn:hover {
     background-image: linear-gradient(135deg, hsla(45, 40%, 60%, 0.1), hsla(45, 40%, 60%, 0.1));
     cursor: pointer;
@@ -130,7 +137,7 @@
     border-radius: 0%;
 }
 
-.content-item-level, .content-item-time, .content-item-score, .content-item-trials,
+.content-item-level, .content-item-level_name, .content-item-level_id, .content-item-level_difficulty,
 .content-item-version, .content-item-date {
     background: -webkit-linear-gradient(135deg, hsla(122, 73%, 49%, 0.58), hsla(77, 64%, 49%, 0.68));
     filter: contrast(120%) saturate(120%);
@@ -164,9 +171,13 @@
     border-radius: 50%;
 }
 
-.content-item-time, .content-item-score, .content-item-trials {
+.content-item-level_name, .content-item-level_id, .content-item-level_difficulty {
     font-size: 1.5rem;
     font-weight: 600;
+}
+
+.content-item-level_name {
+    font-size: 1.8rem;
 }
 
 .content-item-serie, .content-item-version, .content-item-date {

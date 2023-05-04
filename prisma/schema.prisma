@@ -15,15 +15,14 @@ model User {
   name           String?    @unique
   email          String?    @unique
   role           String
-  playedLevels   Level[]
   progressLevels Progress[]
+  createdLevels  Level[]
 }
 
 model Level {
-  id                 String  @id @default(cuid())
-  number             Int
+  id                 String     @id @default(cuid())
+  number             Int        @unique @default(autoincrement())
   name               String
-  serie_name         String 
   difficulty         String
   stages             Int
   tiles              Json
@@ -40,15 +39,28 @@ model Level {
   score              Json
   win                Json
   variables          Json?
-  User       User?   @relation(fields: [userId], references: [id])
-  userId     String?
+  Created_By         User?      @relation(fields: [creatorUserId], references: [id])
+  Serie              Serie?     @relation(fields: [serieId], references: [id])
+  creatorUserId      String?
+  serieId            String?
+  Progress           Progress[]
+}
+
+model Serie {
+  id        String  @id @default(cuid())
+  index     Int     @default(autoincrement())
+  name      String  @unique
+  name_abbr String  @unique
+  Levels    Level[]
 }
 
 model Progress {
-  id          String  @id
+  id          String @id @default(cuid())
   stars_got   Int
   lv_progress Int
   highscore   Int
-  User        User?   @relation(fields: [userId], references: [id])
-  userId      String?
+  User        User   @relation(fields: [userId], references: [id])
+  Level       Level  @relation(fields: [levelId], references: [id])
+  userId      String
+  levelId     String
 }
