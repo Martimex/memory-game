@@ -24,7 +24,7 @@ export const getStaticProps = async () => {
         take: 5,
         include: {
             Levels: {
-                select: { name: true, number: true, stages: true, difficulty: true, creatorUserId: true, }
+                select: { id: true, name: true, number: true, stages: true, difficulty: true, creatorUserId: true, }
             },
         },
     
@@ -41,7 +41,7 @@ function Preview( props ) {
     console.warn(props.data, all_levels);
     const anime = Animation.default;
 
-    const [[levelChoose, serie_abbr, serie_name], setLevelChoose] = useState([null, null]);
+    const [[levelChoose, lv_index, serie_abbr, serie_name, serie_desc], setLevelChoose] = useState([null, null, null, null, null]);
     const [chosenSerie, setChosenSerie] = useState(null);
     const [chosenSerieName, setChosenSerieName] = useState(null);
 
@@ -163,7 +163,7 @@ function Preview( props ) {
             </div>
 
             { levelChoose && (
-                <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} level_details={levelChoose} closeLevelInfo={setLevelChoose} 
+                <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} serie_desc={serie_desc} level_details={levelChoose} lv_index={lv_index} closeLevelInfo={setLevelChoose} 
                     changeComponent={props.changeComponent} proceed={props.proceed}
                 />
             )}

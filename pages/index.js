@@ -1,7 +1,7 @@
 //import '../src/App.css'; temporarily commented out, You can uncomment and test if you feel like it
 import Landing from './landing.js';
 //import Game from './components/game.js';
-import Game from './memory_game.js';
+import Game from './preview/[id].js';
 import Preview from './preview.js';
 import React, { useState, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';

@@ -47,11 +47,12 @@ model Level {
 }
 
 model Serie {
-  id        String  @id @default(cuid())
-  index     Int     @default(autoincrement())
-  name      String  @unique
-  name_abbr String  @unique
-  Levels    Level[]
+  id               String  @id @default(cuid())
+  index            Int     @default(autoincrement())
+  name             String  @unique
+  name_abbr        String  @unique
+  description      String?
+  Levels           Level[]
 }
 
 model Progress {

@@ -1,3 +1,4 @@
+import Router from "next/router";
 import styles from '../styles/level_info.module.css';
 import styles_diffcolors from '../styles/variables/difficulty_colors.module.css';
 import { series_abbr } from '../global/series_abbr.js';
@@ -144,13 +145,14 @@ function LevelInfo(props) {
                                 {/* Once this button is clicked, that section changes to whatever the button is about, with 
                                     possibility to scroll the section down (if necessary) and moving back to main section 
                                 */}
-                                <div className={styles['content-item-origin_btn']}>
+{/*                                 <div className={styles['content-item-origin_btn']}>
                                     <FontAwesomeIcon icon={notes} className={styles['icon-notes']}></FontAwesomeIcon>
                                 </div>
 
                                 <div className={styles['content-item-stats_btn']}>
                                     <FontAwesomeIcon icon={stats} className={styles['icon-stats']}></FontAwesomeIcon>
-                                </div>
+                                </div> */}
+                                {props.serie_desc? props.serie_desc : "<< No description provided >>"}
                             </div>
                         </div>
                         <div className={styles['content-item-verification']}>
@@ -163,7 +165,7 @@ function LevelInfo(props) {
                     <div className={styles['level-info-box-content-item']} datatype='main'>
                         <div className={styles['content-item-level-circle']}>
                             <div className={`${styles['content-item-level']} ${styles['dynamic-text']}`}>
-                                {props.level_details.number}
+                                {props.lv_index}
                             </div>
                         </div>
                         <div className={styles['content-item-part']}> 
@@ -176,7 +178,13 @@ function LevelInfo(props) {
                             {/*<div className={styles['content-item-score']}> Score: 1200 </div>
                             <div className={styles['content-item-trials']}> Trials: 225 </div> */}
                         </div>
-                        <div className={styles['play']} onClick={() => { blockClicking(); props.changeComponent(props.level_details, props.serie_abbr); props.proceed(); } } >
+{/*                         <div className={styles['play']} onClick={() => { blockClicking(); props.changeComponent(props.level_details, props.serie_abbr); props.proceed(); } } >
+                            Once play button is clicked, do not forget to temporarily block click events during level load time
+                            <div className={styles['play-level']}> 
+                                <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
+                            </div>
+                        </div> */}
+                        <div className={styles['play']} onClick={() => { blockClicking(); Router.push('/preview/[id]', `/preview/${props.level_details.id}`) } } >
                             {/* Once play button is clicked, do not forget to temporarily block click events during level load time */}
                             <div className={styles['play-level']}> 
                                 <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>

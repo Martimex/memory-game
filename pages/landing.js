@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import Router from "next/router";
 import styles from '../src/styles/landing.module.css';
 import '../src/animations/animeLanding.js';
 //import anime from 'animejs/lib/anime.es.js';
@@ -195,7 +196,8 @@ function Landing(props) {
                 </div>
                 <div className={styles['content-action']}>
                     <div className={styles['from-author']}> The hardest memory game You would ever play...</div>
-                    <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button>
+                    {/* <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button> */}
+                    <button className={styles['start']} onClick={() => {Router.push("/preview")}}> Play </button>
                 </div>
             </div>       
         </div>

@@ -209,9 +209,9 @@ function SerieBox(props) {
         <div className={styles[`${dynamic_classes.serie_block}`]} onClick={(e) => {checkSerieNameChange(); openUpFire(e); } } >
             <div className={styles['serie-title']}> {props.serie.name} </div> 
             <div className={`${styles['serie-content']} ${styles['invisible']}`}>
-                {props.serie.Levels.map((lv, index) =>
+                {[].concat([...props.serie.Levels]).sort((a, b) => a.number - b.number).map((lv, index) =>
                     <div className={styles[`${dynamic_classes.level_borders}`]} key={lv.name.toString() + lv.number.toString()}
-                        onClick={() => {props.setLevelChoose([lv, props.serie.name_abbr, props.serie.name])}}
+                        onClick={() => {props.setLevelChoose([lv, index+1, props.serie.name_abbr, props.serie.name, props.serie.description])}}
                     >
                         <div className={styles['bg-layer']}>
                             <div className={styles[`${dynamic_classes.level_tile_main}`]}>
