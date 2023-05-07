@@ -38,12 +38,13 @@ export const getStaticProps = async () => {
 
 function Preview( props ) {
     // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
-    console.warn(props.data, all_levels);
+    //console.warn(props.data, all_levels);
     const anime = Animation.default;
 
     const [[levelChoose, lv_index, serie_abbr, serie_name, serie_desc], setLevelChoose] = useState([null, null, null, null, null]);
     const [chosenSerie, setChosenSerie] = useState(null);
     const [chosenSerieName, setChosenSerieName] = useState(null);
+    const [isLevelStart, setLevelStart] = useState(false);
 
     const currSerie = useRef(null);
     const topBarRef = useRef(null);
@@ -164,7 +165,7 @@ function Preview( props ) {
 
             { levelChoose && (
                 <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} serie_desc={serie_desc} level_details={levelChoose} lv_index={lv_index} closeLevelInfo={setLevelChoose} 
-                    changeComponent={props.changeComponent} proceed={props.proceed}
+                    changeComponent={props.changeComponent}
                 />
             )}
         </div>

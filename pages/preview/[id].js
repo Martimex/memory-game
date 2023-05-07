@@ -1,4 +1,5 @@
 import  React, { useState, useEffect, useRef } from 'react';
+import Router from "next/router";
 import '../../src/styles/game.module.css';
 
 import styles_global from '../../src/global/global_styles.module.css';
@@ -137,6 +138,13 @@ let allTiles;
 
 const anime = Animation.default;
 
+/* export async function getStaticPaths() {
+    return {
+        paths: [{ params: { id: 'clh515vi700009ss46njnn4s5' } }],
+        fallback: false, // can also be true or 'blocking'
+    };
+}
+ */
 export const getServerSideProps = async({ params }) => {
     console.log(params);
     const level = await prisma.level.findUnique({
@@ -167,8 +175,10 @@ export const getServerSideProps = async({ params }) => {
         throw new Error(`Rewriting object properties left new object version with less than expected properties. Old version had ${Object.keys(level).length} properties, while new version has ${Object.keys(sampleObj).length} properties included.`);
     }
 
+    sampleObj['someArr'] = [];
+
     return {
-        props: sampleObj //JSON.parse(JSON.stringify(level))
+        props: sampleObj, //JSON.parse(JSON.stringify(level))
     };
 };
 
@@ -176,7 +186,7 @@ export const getServerSideProps = async({ params }) => {
 
 function Game(props) {
     // !!!  comments means that we HAVE TO uncomment the code pieces after some development is done for the component
-    console.warn(props);
+    /* console.warn(props); */
 /*     const allKeys = Object.keys(props);
     console.log(allKeys); */
     /* for(let key in props) {
@@ -221,6 +231,7 @@ function Game(props) {
     const [foundTiles, setFoundTiles] = useState(0); // REMOVE AFTER TRANSFORMING OLD LEVELS INTO A NEW SYSTEM
 
 
+    const [testValue, setTestValue] = useState(false); // REMOVE AFTER TESTING
     const [confirmValue, setConfirmValue] = useState(null); // ALWAYS SET IT TO NULL (INITIAL) ||  true / false (is level fully Completed ?)
     const [score, setScore] = useState(0);
     const [time, setTime] = useState(0);
@@ -286,7 +297,9 @@ function Game(props) {
     }, [time]);
 
     useEffect(() => {
-
+        console.log(cardsOpened);
+        console.log('Resetting....', cardsOpened);
+        console.log(props.someArr);
         // 0. Reset all inGameCounters
         resetInGameCounters();
 
@@ -294,6 +307,7 @@ function Game(props) {
         setTime(0);
         turns = 0;
         pointsInStage = 0;
+        cardsOpened = [];
 
         if(arr.length > 0) {
             while(arr.length > 0) {
@@ -307,11 +321,12 @@ function Game(props) {
 
         randomizedIconsArray = setRandomIcons(icon_Sets[`${props.icon_set[stageNo]}`], props.tiles[stageNo], props.uncover[stageNo][`pattern`]);
 
-        allTiles =  
-        arr.map((tile, index) =>  {
+        allTiles =  arr.map((tile, index) =>  {
             return <div className={`${styles_global['tile']} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={cssModules.main && cssModules.main[`fa-icon_custom`]}/>}</div></div>
-        }); 
+        });
+
         setBoardState(allTiles);
+        setTestValue(!testValue);
 
         //loadStyles()
         loadDynamic()
@@ -329,6 +344,7 @@ function Game(props) {
     } */
 
     function keepCardOpen(e) {
+        props.someArr.push(1);
         // Open up the tile
         async function openUp() {
             const a1 = anime({
@@ -517,28 +533,49 @@ function Game(props) {
         return parentsNodeArr;
     }
 
-    // FLAG => continue searching for 'props' down here
     async function loadDynamic() {
         // 0. First let's import some level-based styling
         await loadStyles();
         // 1. Init icons 
-        allTiles =  
-        arr.map((tile, index) =>  {
-            return <div className={`${styles_global['tile']} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={cssModules.main && cssModules.main[`fa-icon_custom`]}/>}</div></div>
-        }); 
+        allTiles = arr.map((tile, index) =>  {
+            return <div data-get={'tile'} className={`${styles_global['tile']} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={cssModules.main && cssModules.main[`fa-icon_custom`]}/>}</div></div>
+        });
         // 2. Now perform DOM repaint by fire useState hook
-        setBoardState(allTiles); 
+        console.log('ALLTILES: ', allTiles);
+        setBoardState(allTiles);
         // 3. Execute start script, launch animation, etc.
-        let loadStart = await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/scripts/start.js`);
-        loadStart.level_start(stageNo, props.starting_animation[stageNo][`time`], props.starting_animation[stageNo][`tileShowTime`])
+        
+    }
+
+    useEffect(() => {
+        if(boardState) {
+            async function run() {
+                let loadStart = await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/scripts/start.js`);
+                loadStart.level_start(stageNo, props.starting_animation[stageNo][`time`], props.starting_animation[stageNo][`tileShowTime`])
+                    .then(() => {
+                        // After animation is completed...
+                        setTime(1);
+                        document.body.style.pointerEvents = 'auto'; // unlock clicking (previously blocked in leve_info *play btn onClick*)
+                    })
+                otherModules = await loadOtherModules(props.Serie.name_abbr, props.number);    
+            }
+            run();
+        }
+    }, [boardState])
+
+/*     useEffect(() => {
+        async function runDynamic() {
+            let loadStart = await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/scripts/start.js`);
+            loadStart.level_start(stageNo, props.starting_animation[stageNo][`time`], props.starting_animation[stageNo][`tileShowTime`])
             .then(() => {
                 // After animation is completed...
                 setTime(1);
                 document.body.style.pointerEvents = 'auto'; // unlock clicking (previously blocked in leve_info *play btn onClick*)
             })
-        otherModules = await loadOtherModules(props.Serie.name_abbr, props.number);
-
-    }
+            otherModules = await loadOtherModules(props.Serie.name_abbr, props.number);
+        }
+        runDynamic();
+    }, [boardState]) */
 
     async function newStageFadeIn() {
         const a1 = anime({
@@ -573,6 +610,7 @@ function Game(props) {
 
     useEffect(() => {
         document.body.style.overflowY = 'auto';
+        setBoardState(null);
         //loadStyles();
         appendPlansElems();
     }, []);
@@ -610,7 +648,7 @@ function Game(props) {
                     <Confirm value={confirmValue} level={level} level_no={props.number} newSerie={props.Serie.name_abbr} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
                         turns={(confirmValue)? inGameCounters[`totalRemainingTurns`] : (props.limitations[stageNo][`turns`])? props.limitations[stageNo][`turns`] - turns : 0} 
                         time={(confirmValue) ? inGameCounters[`totalRemainingTime`] : (props.limitations[stageNo][`time`])? props.limitations[stageNo][`time`] - time : 0} 
-                        start={props.preview} next={props.changeComponent} restart={props.confirmComponent}
+                        start={() => {/* setTestValue(!testValue); */ Router.push('/preview')}} next={props.changeComponent} restart={() => {setBoardState(null); setStageNo(0)}}
                         variables={props.variables}
                     />
                 )}

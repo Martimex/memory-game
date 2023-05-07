@@ -4,11 +4,13 @@ import styles_global from '../global/global_styles.module.css';
 let styles_main = '';
 
 function GameInfo(props) {
-
+    //console.log(props);
     async function loadItemsStyling() {
-        styles_main = await import(`../levels/${props.newSerie}/level_${props.level}/styles/main.module.css`) 
+        if(props.newSerie && props.level) {
+            styles_main = await import(`../levels/${props.newSerie}/level_${props.level}/styles/main.module.css`) 
+        }
     }
-
+    
     loadItemsStyling();
 
     return (

@@ -1,18 +1,24 @@
 import * as Animation from "animejs"
-import styles_global from '../../../../global/global_styles.module.css';
+/* import styles_global from '../../../../global/global_styles.module.css'; */
 
 const anime = Animation.default;
+let styles_global = '';
 
 async function level_start(stageNo, time, tileShowTime) {
 
     async function startAnimation() {
+        styles_global = await import('../../../../global/global_styles.module.css')
         await showTiles()
         await hideTiles()
     }
 
+    //global_styles_tile__HyRUk  global_styles_tile__HyRUk global_styles_tile__HyRUk
+
+    const divs = document.querySelectorAll('div[data-get="tile"]');
+
     async function showTiles() {
         const a1 = anime({
-            targets: `.${styles_global['tile']}`,
+            targets: `.${styles_global['tile']}` /* divs */,
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
@@ -26,7 +32,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function hideTiles() {
         const a2 = anime({
-            targets: `.${styles_global['tile']}`,
+            targets: `.${styles_global['tile']}` /* divs */,
             duration: time,
             delay: tileShowTime,
             transitionProperty: 'all',

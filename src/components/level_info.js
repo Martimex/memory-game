@@ -13,7 +13,7 @@ import * as Animation from 'animejs';
 const anime = Animation.default;
 
 function LevelInfo(props) {
-
+    console.log(props);
     const bg_placeholder_ref = useRef(null);
     const levelInfoAll_ref = useRef(null);
     const levelBox_ref = useRef(null);
@@ -129,8 +129,8 @@ function LevelInfo(props) {
             })
     }, [])
 
-    console.log(props, props.serie);
-    console.log(props.level_details);
+   /*  console.log(props, props.serie);
+    console.log(props.level_details); */
 
     return (
         <div className={styles['level-info-blurred']} ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
@@ -184,7 +184,7 @@ function LevelInfo(props) {
                                 <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
                             </div>
                         </div> */}
-                        <div className={styles['play']} onClick={() => { blockClicking(); Router.push('/preview/[id]', `/preview/${props.level_details.id}`) } } >
+                        <div className={styles['play']} onClick={() => { blockClicking(); /* props.proceed(); */ Router.push('/preview/[id]', `/preview/${props.level_details.id}`) } } >
                             {/* Once play button is clicked, do not forget to temporarily block click events during level load time */}
                             <div className={styles['play-level']}> 
                                 <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
