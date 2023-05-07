@@ -45,7 +45,7 @@ let iter = {
 };  // EXTRA VALUES FOR FLAG FUNCTIONS
 
 
-let cardsOpened = [];
+let cardsOpened = [];   // WE WILL NOT USE IT ANYMORE, BECAUSE WE STORE THIS VARIABLE IN PROPS GAINED BY SSR FUNCTION: getServerSideProps
 let handleCount = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag poprzez kliknięcie - dotyczy onFirstClick
 let handleCheck = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag poprzez kliknięcie - dotyczy onSecondClick
 
@@ -70,11 +70,11 @@ const duplicateIcons = {
     quads: 4,
 }
 
-const inGameCounters = {
+/* const inGameCounters = {
     spreeCount: 0,
     totalRemainingTime: [],
     totalRemainingTurns: [],
-}
+} */
 
 function setRandomIcons(iconSet, tiles, pattern) { 
 
@@ -156,6 +156,13 @@ export const getServerSideProps = async({ params }) => {
         }
     });
 
+    const allGameCounters = {
+        cardsOpened: [],
+        spreeCount: 0,
+        totalRemainingTime: [],
+        totalRemainingTurns: [],
+    }
+
     let sampleObj = {};
 
     for(let key in JSON.parse(JSON.stringify(level))) {
@@ -175,10 +182,10 @@ export const getServerSideProps = async({ params }) => {
         throw new Error(`Rewriting object properties left new object version with less than expected properties. Old version had ${Object.keys(level).length} properties, while new version has ${Object.keys(sampleObj).length} properties included.`);
     }
 
-    sampleObj['someArr'] = [];
+    //sampleObj['someArr'] = [];
 
     return {
-        props: sampleObj, //JSON.parse(JSON.stringify(level))
+        props: { level: sampleObj, gameCounters: allGameCounters} //JSON.parse(JSON.stringify(level))
     };
 };
 
@@ -186,7 +193,7 @@ export const getServerSideProps = async({ params }) => {
 
 function Game(props) {
     // !!!  comments means that we HAVE TO uncomment the code pieces after some development is done for the component
-    /* console.warn(props); */
+    console.warn(props);
 /*     const allKeys = Object.keys(props);
     console.log(allKeys); */
     /* for(let key in props) {
@@ -249,7 +256,7 @@ function Game(props) {
     function conditionsAreMet(e) {
         if(gameboard.current.dataset.animation !== 'off') {return false;}
         if(!e.target.classList.contains(styles_global['tile'])) {return false;}
-        const isNotAlreadyOpened = checkTilesOrigin(cardsOpened, e.target);
+        const isNotAlreadyOpened = checkTilesOrigin(props.gameCounters.cardsOpened, e.target);
         if(!isNotAlreadyOpened) {  return false; }
 
         return true;
@@ -258,13 +265,14 @@ function Game(props) {
     function clickable(e)  {
 
         const tile_back = e.target.querySelector(`.${styles_global['tile-back']}`);
-        cardsOpened.push(tile_back);
-        cardsOpened[cardsOpened.length - 1].parentNode.classList.add(`target`, `target-serie-${stageNo}`, `target-${cardsOpened.length}`); // classcheck
+        props.gameCounters.cardsOpened.push(tile_back);
+        props.gameCounters.cardsOpened[props.gameCounters.cardsOpened.length - 1].parentNode.classList.add(`target`, `target-serie-${stageNo}`, `target-${props.gameCounters.cardsOpened.length}`); // classcheck
 
         keepCardOpen(e);
     }
 
     function checkTilesOrigin(cardsOpened, new_tile) {
+        // Everything here in fact refer to props.gameCounters.cardsOpened
         for(let n=0; n<cardsOpened.length; n++) {
             if(cardsOpened[n].parentNode === new_tile) return false;
         }
@@ -273,18 +281,18 @@ function Game(props) {
 
     useEffect(() => {
 
-        if(props.limitations[stageNo][`time`]) { 
+        if(props.level.limitations[stageNo][`time`]) { 
             // Each level has to have time counting !!!
 
             if((time === 0) || (confirmValue !== null)) {return;} // We have a separate setTime call which sets time to 1 after initial animation finish 
 
             const stopwatch = setInterval(() => {
-                if(pointsInStage < props.win[stageNo][`value`]) {
+                if(pointsInStage < props.level.win[stageNo][`value`]) {
                     setTime((time + 1) - iter.timeAddon);
                 }
             }, 1000);
     
-            if((props.limitations[stageNo][`time`] - time < 0) && (pointsInStage < props.win[stageNo][`value`])) {
+            if((props.level.limitations[stageNo][`time`] - time < 0) && (pointsInStage < props.level.win[stageNo][`value`])) {
                 setConfirmValue(false);
                 clearInterval(stopwatch);
             }
@@ -297,17 +305,18 @@ function Game(props) {
     }, [time]);
 
     useEffect(() => {
-        console.log(cardsOpened);
-        console.log('Resetting....', cardsOpened);
-        console.log(props.someArr);
-        // 0. Reset all inGameCounters
-        resetInGameCounters();
+        //console.log(cardsOpened);
+        //console.log('Resetting....', cardsOpened);
+        
+        // 0. Reset all gameCounters - we will use it now for props.gameCounters*
+        resetGameCounters();
 
         // 1. Reset turns / time / stageScore variables first
         setTime(0);
         turns = 0;
         pointsInStage = 0;
-        cardsOpened = [];
+        if(props.gameCounters.cardsOpened.length) { props.gameCounters.cardsOpened = [] };
+        console.log(props.gameCounters.cardsOpened);
 
         if(arr.length > 0) {
             while(arr.length > 0) {
@@ -315,27 +324,27 @@ function Game(props) {
             }
         }
     
-        for(let i=0; i<props.tiles[stageNo]; i++) {
+        for(let i=0; i<props.level.tiles[stageNo]; i++) {
             arr.push('');
         };
 
-        randomizedIconsArray = setRandomIcons(icon_Sets[`${props.icon_set[stageNo]}`], props.tiles[stageNo], props.uncover[stageNo][`pattern`]);
+        randomizedIconsArray = setRandomIcons(icon_Sets[`${props.level.icon_set[stageNo]}`], props.level.tiles[stageNo], props.level.uncover[stageNo][`pattern`]);
 
         allTiles =  arr.map((tile, index) =>  {
             return <div className={`${styles_global['tile']} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={cssModules.main && cssModules.main[`fa-icon_custom`]}/>}</div></div>
         });
 
         setBoardState(allTiles);
-        setTestValue(!testValue);
+        //setTestValue(!testValue);
 
         //loadStyles()
         loadDynamic()
 
-    }, [stageNo])
+    }, [stageNo, testValue])
 
     // Add proper styling based on device used by end user
 
-    let boardGridParams = {gridTemplateColumns: `repeat(${props.columns[stageNo]}, ${(props.tile_size[stageNo])/10}rem)`, gridTemplateRows: `repeat(${props.rows[stageNo]}, ${(props.tile_size[stageNo])/10}rem)`};
+    let boardGridParams = {gridTemplateColumns: `repeat(${props.level.columns[stageNo]}, ${(props.level.tile_size[stageNo])/10}rem)`, gridTemplateRows: `repeat(${props.level.rows[stageNo]}, ${(props.level.tile_size[stageNo])/10}rem)`};
     
     /* if(isDesktop) {  UNCOMMENT AND MAKE A DEVELOPMENT LATER WHEN WORKING WITH MEDIA QUERIES !!!
         boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns}, ${(props.newLevel.tile_size)/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows}, ${(props.newLevel.tile_size)/10}rem)`};
@@ -344,14 +353,13 @@ function Game(props) {
     } */
 
     function keepCardOpen(e) {
-        props.someArr.push(1);
         // Open up the tile
         async function openUp() {
             const a1 = anime({
                 targets: e.target,
-                duration: props.tile_animation[stageNo][`time`],
+                duration: props.level.tile_animation[stageNo][`time`],
                 transitionProperty: 'all',
-                easing: props.tile_animation[stageNo][`easing`],
+                easing: props.level.tile_animation[stageNo][`easing`],
                 rotateY: 180,
             }).finished;
 
@@ -360,22 +368,22 @@ function Game(props) {
 
         setClickNo(clickNo + 1);
 
-        if(cardsOpened.length === props.uncover[stageNo][`count`]) {
+        if(props.gameCounters.cardsOpened.length === props.level.uncover[stageNo][`count`]) {
             gameboard.current.dataset.animation = 'on';
             turns = turns + 1;
             iter.pauseCondition = false;
 
-            const doesMatch = uncoverPatterns[props.uncover[stageNo][`pattern`]](cardsOpened);
+            const doesMatch = uncoverPatterns[props.level.uncover[stageNo][`pattern`]](props.gameCounters.cardsOpened);
 
-            const cardsOpened_parentNodes = setParentNodes(cardsOpened);
+            const cardsOpened_parentNodes = setParentNodes(props.gameCounters.cardsOpened);
 
             //otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo); // doesMatch determines whether player meets required condition to remove tiles
         
             openUp()
                 .then(() => {
-                    otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props/* props.newLevel */) // doesMatch determines whether player meets required condition to remove tiles
+                    otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props.level/* props.newLevel */) // doesMatch determines whether player meets required condition to remove tiles
                         .then(() => {
-                            doCardsMatch(doesMatch, cardsOpened)
+                            doCardsMatch(doesMatch, props.gameCounters.cardsOpened)
                         })
                 })
         } else {
@@ -387,31 +395,33 @@ function Game(props) {
         // Block the click listener for a brief checkout duration
         isChecking = true;
 
+        // EVERY cardsOpened statement here refers to props.gameCounters.cardsOpened
+
         manageValuesAndCounters(doesMatch);
 
-        if(props.limitations[stageNo][`time`]) {
-            if(props.limitations[stageNo][`time`] - time <= 0) {
+        if(props.level.limitations[stageNo][`time`]) {
+            if(props.level.limitations[stageNo][`time`] - time <= 0) {
                 // We need to block winning condition when player is left with too little time
                 setConfirmValue(false);
                 return;
             }
         }
-
+        console.log('totalRemainingTurns: ',  props.gameCounters[`totalRemainingTurns`], "  totalRemainingTime: ", props.gameCounters[`totalRemainingTime`])
         setTimeout(() => {
 
             const cardsOpened_parentNodes = setParentNodes(cardsOpened);
 
             if(doesMatch) {
 
-                setScore(score + props.score[stageNo][`count`] 
-                    + ((props.score[stageNo][`extras`])?  scoreExtras[`${props.score[stageNo][`extras`]}`](inGameCounters, props.score[stageNo][`count`]) : 0)
+                setScore(score + props.level.score[stageNo][`count`] 
+                    + ((props.level.score[stageNo][`extras`])?  scoreExtras[`${props.level.score[stageNo][`extras`]}`](props.gameCounters, props.level.score[stageNo][`count`]) : 0)
                 );
 
                 async function fade() {
                     const a1 = anime({
                         targets: cardsOpened_parentNodes,
-                        duration: props.tile_animation[stageNo][`time`],
-                        easing: props.tile_animation[stageNo][`easing`],
+                        duration: props.level.tile_animation[stageNo][`time`],
+                        easing: props.level.tile_animation[stageNo][`easing`],
                         opacity: 0,
                     }).finished;
 
@@ -452,9 +462,9 @@ function Game(props) {
                 async function flipBack(cardsOpened_parentNodes) {
                     const a1 = anime({
                         targets: cardsOpened_parentNodes,
-                        duration: props.tile_animation[stageNo][`time`],
+                        duration: props.level.tile_animation[stageNo][`time`],
                         rotateY: [180, 0],
-                        easing: props.tile_animation[stageNo][`easing`],
+                        easing: props.level.tile_animation[stageNo][`easing`],
                     }).finished;
 
                     await Promise.all([a1]);
@@ -464,7 +474,7 @@ function Game(props) {
 
             checkLosingConditions();
 
-        }, props.compare_time[stageNo])
+        }, props.level.compare_time[stageNo])
 
     }
 
@@ -472,20 +482,20 @@ function Game(props) {
         // This function is used for managing all counters in one place (to make things cleaner)
 
         if(doesMatch) {
-            pointsInStage += props.win[stageNo][`pointsPerMatch`];
-            inGameCounters['spree'] += 1;
+            pointsInStage += props.level.win[stageNo][`pointsPerMatch`];
+            props.gameCounters['spree'] += 1;
         } else {
-            inGameCounters['spree'] = 0;
+            props.gameCounters['spree'] = 0;
         }
     }
 
-    function resetInGameCounters() {
-        inGameCounters['spree'] = 0;
+    function resetGameCounters() {
+        props.gameCounters['spree'] = 0;
     }
 
     function checkLosingConditions() {
-        if(props.limitations[stageNo][`turns`]) { // if this stage take care of turns used
-            if( (props.limitations[stageNo][`turns`] - turns <= 0) && (pointsInStage < props.win[stageNo][`value`]) && (confirmValue === null) ) { 
+        if(props.level.limitations[stageNo][`turns`]) { // if this stage take care of turns used
+            if( (props.level.limitations[stageNo][`turns`] - turns <= 0) && (pointsInStage < props.level.win[stageNo][`value`]) && (confirmValue === null) ) { 
                 // if we have no turns left, and still didnt complete current stage
                 setConfirmValue(false);
             }
@@ -494,13 +504,13 @@ function Game(props) {
 
     function checkStageSuccess(pointsInStage) {
 
-        if( (pointsInStage >= props.win[stageNo][`value`]) ) {
-            // Update inGameCounters for accumulative remaining turns / time
-            if(props.limitations[stageNo][`turns`]) inGameCounters[`totalRemainingTurns`].push(props.limitations[stageNo][`turns`] - turns);
-            if(props.limitations[stageNo][`time`])  inGameCounters[`totalRemainingTime`].push(props.limitations[stageNo][`time`] - time); 
+        if( (pointsInStage >= props.level.win[stageNo][`value`]) ) {
+            // Update gameCounters for accumulative remaining turns / time
+            if(props.level.limitations[stageNo][`turns`]) props.gameCounters[`totalRemainingTurns`].push(props.level.limitations[stageNo][`turns`] - turns);
+            if(props.level.limitations[stageNo][`time`])  props.gameCounters[`totalRemainingTime`].push(props.level.limitations[stageNo][`time`] - time); 
 
 
-            if(stageNo + 1 === props.stages) {
+            if(stageNo + 1 === props.level.stages) {
                 // Level completed !
                 async function finishGame() {
                     await otherModules[`stagecomplete`].stagecomplete(stageNo, true)
@@ -508,7 +518,7 @@ function Game(props) {
                 finishGame()
                     .then(() => setConfirmValue(true));
             } 
-            else if(stageNo + 1 !== props.stages) {
+            else if(stageNo + 1 !== props.level.stages) {
                 // Move to the new stage + block pointer events just during new stage animations
                 document.body.style.pointerEvents = 'none';
                 nextStageTransition()
@@ -526,6 +536,7 @@ function Game(props) {
     }
 
     function setParentNodes(cardsOpened) {
+        // EVERY cardsOpened statement in fact refers to props.gameCounters.cardsOpened 
         let parentsNodeArr = [];
         cardsOpened.forEach(tile => {
             parentsNodeArr.push(tile.parentNode);
@@ -550,18 +561,38 @@ function Game(props) {
     useEffect(() => {
         if(boardState) {
             async function run() {
-                let loadStart = await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/scripts/start.js`);
-                loadStart.level_start(stageNo, props.starting_animation[stageNo][`time`], props.starting_animation[stageNo][`tileShowTime`])
+                let loadStart = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/scripts/start.js`);
+                loadStart.level_start(stageNo, props.level.starting_animation[stageNo][`time`], props.level.starting_animation[stageNo][`tileShowTime`])
                     .then(() => {
                         // After animation is completed...
                         setTime(1);
                         document.body.style.pointerEvents = 'auto'; // unlock clicking (previously blocked in leve_info *play btn onClick*)
                     })
-                otherModules = await loadOtherModules(props.Serie.name_abbr, props.number);    
+                otherModules = await loadOtherModules(props.level.Serie.name_abbr, props.level.number);    
             }
             run();
         }
     }, [boardState])
+
+    function restartLevel() {
+        gameboard.current.dataset.animation = 'off'; // prevents from bug happening when player opens 2 tiles, which are not closed again before time runs out
+        resetAllGameCounters(props.gameCounters);
+        setTestValue(!testValue);
+        setBoardState(null);
+        setClickNo(0); // Setting back to 0 prevents from bug, where clicking first turn for already restarted level make animations not runnings
+        setStageNo(0);
+        setScore(0); // reset score value to 0 after lose
+        setConfirmValue(null);
+    }
+
+    function resetAllGameCounters(allGameCounters) {
+        for(let key in allGameCounters) {
+            if(allGameCounters[key] instanceof String) { allGameCounters[key] = ''}
+            else if(allGameCounters[key] instanceof Number) { allGameCounters[key] = 0}
+            else if(allGameCounters[key] instanceof Array) { allGameCounters[key] = []}
+            else { console.error(`DETECTED UNSUPPORTED KEY TYPE WHEN RESETTING COUNTER VALUES. FOUND TYPE: ${typeof(key)}`) };
+        }
+    }
 
 /*     useEffect(() => {
         async function runDynamic() {
@@ -602,7 +633,7 @@ function Game(props) {
 
     useEffect(() => {
         if(clickNo > 0) {
-            otherModules[`xclick`].xclick(clickNo, cardsOpened[cardsOpened.length - 1].parentNode, stageNo, props/* props.newLevel */);
+            otherModules[`xclick`].xclick(clickNo, props.gameCounters.cardsOpened[props.gameCounters.cardsOpened.length - 1].parentNode, stageNo, props.level/* props.newLevel */);
         } else {
             //
         }
@@ -616,14 +647,14 @@ function Game(props) {
     }, []);
 
     async function loadStyles() {
-        cssModules.main = await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/styles/main.module.css`); // for styling tiles
-        cssModules.firstPlan = await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/styles/firstPlan.module.css`); // for first plan fancy elements
-        cssModules.secondPlan = await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/styles/secondPlan.module.css`); // for second plan fancy elements
-        cssModules.bg =  await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/styles/bg.module.css`); // for adding background to the level
+        cssModules.main = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/styles/main.module.css`); // for styling tiles
+        cssModules.firstPlan = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/styles/firstPlan.module.css`); // for first plan fancy elements
+        cssModules.secondPlan = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/styles/secondPlan.module.css`); // for second plan fancy elements
+        cssModules.bg =  await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/styles/bg.module.css`); // for adding background to the level
     }
 
     async function appendPlansElems() {
-        const plansElems = await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/generatePlanItems.js`);
+        const plansElems = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/generatePlanItems.js`);
         plansElems.generateItems(classes[`firstPlan`], classes[`secondPlan`]);
     }
 
@@ -631,7 +662,7 @@ function Game(props) {
         <div className={styles_global['all']} ref={all}>
             <div className={`${styles_global[`background`]} ${cssModules.bg && cssModules.bg[`background_custom`]}`} ref={bg}>
                 <div className='game-info' ref={gameinfo_ref} >
-                    <GameInfo newSerie={props.Serie.name_abbr} level={props.number} moves={props.limitations[stageNo]['turns'] - turns} time={props.limitations[stageNo]['time'] - time} score={score}  />
+                    <GameInfo newSerie={props.level.Serie.name_abbr} level={props.level.number} moves={props.level.limitations[stageNo]['turns'] - turns} time={props.level.limitations[stageNo]['time'] - time} score={score}  />
                 </div>
 
                 <div className={`${styles_global[`game`]} ${cssModules.bg && cssModules.bg[`game_custom`]}`} ref={game}>
@@ -645,17 +676,17 @@ function Game(props) {
                 <div className={`${classes[`animationPlan`]} ${cssModules.main && cssModules.main[`aContainer_custom`]}`} ref={animationBox}></div>
 
                 {confirmValue !== null && (
-                    <Confirm value={confirmValue} level={level} level_no={props.number} newSerie={props.Serie.name_abbr} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
-                        turns={(confirmValue)? inGameCounters[`totalRemainingTurns`] : (props.limitations[stageNo][`turns`])? props.limitations[stageNo][`turns`] - turns : 0} 
-                        time={(confirmValue) ? inGameCounters[`totalRemainingTime`] : (props.limitations[stageNo][`time`])? props.limitations[stageNo][`time`] - time : 0} 
-                        start={() => {/* setTestValue(!testValue); */ Router.push('/preview')}} next={props.changeComponent} restart={() => {setBoardState(null); setStageNo(0)}}
-                        variables={props.variables}
+                    <Confirm value={confirmValue} level={level} level_no={props.level.number} newSerie={props.level.Serie.name_abbr} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
+                        turns={(confirmValue)? props.gameCounters[`totalRemainingTurns`] : (props.level.limitations[stageNo][`turns`])? props.level.limitations[stageNo][`turns`] - turns : 0} 
+                        time={(confirmValue) ? props.gameCounters[`totalRemainingTime`] : (props.level.limitations[stageNo][`time`])? props.level.limitations[stageNo][`time`] - time : 0} 
+                        start={() => {/* setTestValue(!testValue); */ Router.push('/preview')}} next={props.level.changeComponent} restart={() => { restartLevel();   /* Router.push('/preview/[id]', `/preview/${props.level.id}`) */}}
+                        variables={props.level.variables}
                     />
                 )}
 
-                {(props.cords === 'gg') && ( 
+                {(props.level.cords === 'gg') && ( 
                     <div className='confirmation-w'>
-                        {<ConfirmWin level={level} highscore={highscore} start={props.preview} />}
+                        {<ConfirmWin level={level} highscore={highscore} start={props.level.preview} />}
                     </div>
                 )}
             </div>
