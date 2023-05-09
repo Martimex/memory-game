@@ -39,6 +39,7 @@ model Level {
   score              Json
   win                Json
   variables          Json?
+  star_conditions    Json?
   Created_By         User?      @relation(fields: [creatorUserId], references: [id])
   Serie              Serie?     @relation(fields: [serieId], references: [id])
   creatorUserId      String?

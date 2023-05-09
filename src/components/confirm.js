@@ -51,8 +51,8 @@ function Confirm(props) {
 
         // also import stars condition file
         if(props.value) {
-            const star_conditions = await import(`../levels/${props.newSerie}/level_${props.level_no}/starConditions.js`)
-            const stars_full_count = checkGottenStars(star_conditions);
+            //const star_conditions = await import(`../levels/${props.newSerie}/level_${props.level_no}/starConditions.js`)
+            const stars_full_count = checkGottenStars(props.starConditions);
             console.warn(`props.time: ${props.time}   props.turns: ${props.turns}  || stars gotten:  `,stars_full_count);
             makeStars(stars_full_count);
         }
@@ -278,8 +278,9 @@ function Confirm(props) {
         // 1. We can assume that each level has 3 stars, therefore star_conditions array of object is length of 3
         // 2. It also should be noted, that each sooner star have more severe obtain conditions than the previous one
         console.error(props.variables);
+        //console.log('OLD STARS CONDITIONS: ', star_conditions);
         for(let star_no = 0; star_no < 3; star_no++) {
-            let areConditionsMet = checkStarCondition(star_conditions[`starConditions`][star_no]);
+            let areConditionsMet = checkStarCondition(star_conditions[star_no] /* star_conditions[`starConditions`][star_no] - it is old-style way */ );
             if(!areConditionsMet) return star_no; 
         }
 
@@ -295,7 +296,7 @@ function Confirm(props) {
             //  could be a result of other variables values, which are previously checked inside other level specific functions. Fe: if some variables have
             //  desired values, we can set the property (fe. secret_solved) to true, and based on that provide a star at the end level.
             let index = 0;
-            console.warn(conditionSet);
+            console.warn('condition set is: ', conditionSet);
             for(let key in conditionSet) {
                 console.log(props[key], key, Object.keys(conditionSet[key]), Object.values(conditionSet[key]));
 
@@ -320,11 +321,61 @@ function Confirm(props) {
         setAllStars(stars);
     }
 
+    function calculateFailureProgress() {
+        const allLevelPoints = props.level.win.reduce((accumVariable, currentWinObj) => accumVariable + currentWinObj.value, 0);
+        const receivedLevelPoints = props.level.win.filter((el, ind) => ind < props.stageNo).reduce((accumVariable, currentWinObj) => accumVariable + currentWinObj.value, 0);
+        const progressOnFailedStage = props.pointsInStage;
+        return parseFloat((100 / allLevelPoints) * (receivedLevelPoints + progressOnFailedStage).toFixed(2));
+    }
+
+    function checkAnyProgress(oldValues, newValues) {
+        // We assume here that both arguments are NUMBER[] and their length is exact same (and also corresponding categories are set inside a specific index)
+        return oldValues.some((el, ind) => el < newValues[ind])
+    }
+
+    async function checkLevelProgress([new_progress, new_highscore, new_stars]) {
+        const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
+        // 1. Check if user made any progress on this level (compare current Progress record with highscore, stars and completion %)
+        // 2. If at all criterias user did not make any progress, return the function and DO NOT UPDATE ANYTHING
+        // 3. If any given criteria get better, let's update current Progress record but only update those fields, where the progress was made
+        console.log('CURRENT PROGRESS: ', props.currentProgress.lv_progress, ' || CURRENT HIGHSCORE: ', props.currentProgress.highscore, ' || CURRENT STARS: ', props.currentProgress.stars);
+        console.log('NEW PROGRESS: ', new_progress, ' || NEW HIGHSCORE: ', new_highscore, ' || NEW STARS: ', new_stars);
+        const oldProgressValues = [props.currentProgress.lv_progress, props.currentProgress.highscore, props.currentProgress.stars];
+        const newProgressValues = [new_progress, new_highscore, new_stars];
+        
+        const isAnyProgress = checkAnyProgress(oldProgressValues, newProgressValues);
+        if(isAnyProgress) { 
+            // Now we know player did some progress, so update the Progress record with higher values ONLY !
+            const body = { 
+                progress: (props.currentProgress.lv_progress < new_progress)? new_progress : props.currentProgress.lv_progress,
+                highscore: (props.currentProgress.highscore < new_highscore)? new_highscore : props.currentProgress.highscore,
+                stars: (props.currentProgress.stars < new_stars)? new_stars : props.currentProgress.stars,
+            };
+
+            await fetch(`/api/progress/${props.currentProgress.id}`, {
+                method: 'PUT',
+                headers:  { 'Content-Type' : 'application/json' },
+                body: JSON.stringify(body)
+            })
+        }
+    }
+
+    function getLevelResult() {
+        const progress = (props.value)? 100 : calculateFailureProgress();
+        const highscore = (props.value)? props.time.reduce((accumVariable, curValue) => accumVariable + curValue , 0) * props.tsv + props.turns.reduce((accumVariable, curValue) => accumVariable + curValue , 0) * props.msv + props.score : 0;
+        const stars_full_count = (props.value)? checkGottenStars(props.starConditions) : 0;
+        console.log('NEW progress => ', progress,  ' || NEW highscore => ', highscore,  ' || NEW stars got => ', stars_full_count);
+        return [progress, highscore, stars_full_count];
+    }
+
     useEffect(() => {
+        const [new_progress, new_highscore, new_stars] = getLevelResult(); 
         let end = (props.value)? 'win' : 'lose';
         let rand = Math.floor(Math.random() * level_end_messages[`${end}`].length);
         setEndMessage(level_end_messages[`${end}`][rand]);
         callEndAnimation();
+        console.error('IT HAS TO HAPPEN JUST ONCE');
+        checkLevelProgress([new_progress, new_highscore, new_stars]);
     }, [])
 
     useLayoutEffect(() => {

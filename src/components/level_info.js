@@ -13,7 +13,7 @@ import * as Animation from 'animejs';
 const anime = Animation.default;
 
 function LevelInfo(props) {
-    console.log(props);
+    console.log('our props: ',  props);
     const bg_placeholder_ref = useRef(null);
     const levelInfoAll_ref = useRef(null);
     const levelBox_ref = useRef(null);
@@ -132,6 +132,32 @@ function LevelInfo(props) {
    /*  console.log(props, props.serie);
     console.log(props.level_details); */
 
+    const startLevel = async function(e) {
+        e.preventDefault();
+        //console.log('submitting ...', props.user_progresses.map(el => el.levelId).find(props.level_details.id), props.level_details.id);
+        const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
+
+        const user_id = DUMMY_USER_ID;
+        const level_id = props.level_details.id;
+        console.log('isLVFOUND: ', props.user_progresses.find(el => el.levelId === props.level_details.id));
+        try {
+            const body = { user_id, level_id };
+            if(Boolean(props.user_progresses.find(el => el.levelId === props.level_details.id)) === false) {
+                // Create new progress record ONLY IF the player have not played the level yet
+                await fetch('api/progress', {
+                    method: 'POST',
+                    headers:  { 'Content-Type' : 'application/json' },
+                    body: JSON.stringify(body)
+                });
+            }
+            else { console.warn('User already played the level, no need to duplicate records @')};
+            await Router.push('/preview/[id]', `/preview/${props.level_details.id}`); // Uncomment after finishing try block
+        }
+        catch(err) { console.error(err); }
+    }
+
+    //console.log('LEVEL INFO PROPS:  ', props);
+
     return (
         <div className={styles['level-info-blurred']} ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
             <div className={styles['level-info-box']} ref={levelBox_ref}>
@@ -184,12 +210,15 @@ function LevelInfo(props) {
                                 <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
                             </div>
                         </div> */}
-                        <div className={styles['play']} onClick={() => { blockClicking(); /* props.proceed(); */ Router.push('/preview/[id]', `/preview/${props.level_details.id}`) } } >
-                            {/* Once play button is clicked, do not forget to temporarily block click events during level load time */}
-                            <div className={styles['play-level']}> 
-                                <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
-                            </div>
-                        </div>
+                        <form onSubmit={startLevel}>
+                            <button className={styles['play']} type="submit" value="Create" onClick={() => { blockClicking(); /* props.proceed(); */ /* COMMENTED OUT, BECAUSE WE WANT TO WORK APPLYING PROGRESS TO A DB Router.push('/preview/[id]', `/preview/${props.level_details.id}`) */ } } >
+                                {/* Once play button is clicked, do not forget to temporarily block click events during level load time */}
+                                
+                                    <div className={styles['play-level' ]} > 
+                                        <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
+                                    </div>
+                            </button>
+                        </form>
                     </div>
 
                     <div className={styles['level-info-box-content-item']} datatype='stars'>

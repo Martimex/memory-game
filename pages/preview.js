@@ -19,6 +19,12 @@ export const getStaticProps = async () => {
     // Data object is available under /preview (for example: http://localhost:3000/preview)
     // Note that by adding getStaticProps, loading http://localhost:3000/preview will give us 2 level instances from the Database, 
     // while going for http://localhost:3000/ (our 'old' no-route implementation) gives us props which we passed from index.js file
+    const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
+
+    const user_progresses = await prisma.progress.findMany({
+        where: { userId: DUMMY_USER_ID },
+    })
+
     const data = await prisma.serie.findMany({
         /* where: { index: true }, */
         take: 5,
@@ -31,14 +37,14 @@ export const getStaticProps = async () => {
     });
     //console.log(data);
     return {
-        props: { data },
+        props: { data: data, user_progresses: user_progresses },
         /* revalidate: 10, */
     };
 };
 
 function Preview( props ) {
     // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
-    //console.warn(props.data, all_levels);
+    console.warn(props.user_progresses);
     const anime = Animation.default;
 
     const [[levelChoose, lv_index, serie_abbr, serie_name, serie_desc], setLevelChoose] = useState([null, null, null, null, null]);
@@ -165,7 +171,7 @@ function Preview( props ) {
 
             { levelChoose && (
                 <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} serie_desc={serie_desc} level_details={levelChoose} lv_index={lv_index} closeLevelInfo={setLevelChoose} 
-                    changeComponent={props.changeComponent}
+                    changeComponent={props.changeComponent} user_progresses={props.user_progresses}
                 />
             )}
         </div>

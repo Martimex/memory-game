@@ -11,7 +11,7 @@ import * as Animation from "animejs"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import { fas } from '@fortawesome/free-solid-svg-icons';
+import { faParagraph, fas } from '@fortawesome/free-solid-svg-icons';
 
 import GameInfo from '../../src/components/game_info.js';
 import Confirm from '../../src/components/confirm.js';
@@ -146,7 +146,9 @@ const anime = Animation.default;
 }
  */
 export const getServerSideProps = async({ params }) => {
-    console.log(params);
+    const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
+
+    console.log('SERVER SIDE PARAMS ARE: ', params);
     const level = await prisma.level.findUnique({
         where: { id: String(params.id) },
         include: {
@@ -156,6 +158,16 @@ export const getServerSideProps = async({ params }) => {
         }
     });
 
+    const user_progresses = await prisma.progress.findMany({
+        where: { userId: DUMMY_USER_ID },
+    });
+
+    console.log('PROGRESS RECORD IS: ', user_progresses);
+
+    const level_progress = user_progresses.find(progress_record => progress_record.levelId === String(params.id));
+
+    console.log('LEVEL PROGRESS RECORD IS: ', level_progress);
+
     const allGameCounters = {
         cardsOpened: [],
         spreeCount: 0,
@@ -163,9 +175,17 @@ export const getServerSideProps = async({ params }) => {
         totalRemainingTurns: [],
     }
 
+    const currentProgress = {
+        id: level_progress.id,
+        stars: level_progress.stars_got,
+        lv_progress: level_progress.lv_progress,
+        highscore: level_progress.highscore
+    }
+
     let sampleObj = {};
 
     for(let key in JSON.parse(JSON.stringify(level))) {
+        //console.log(level[key]);
         if(level[key] instanceof Object && Boolean(level[key][key])) {
             // Level specific settings (such as win conditions, animation times, limitation, tile sizings FALL HERE BELOW) :
             sampleObj[key] = JSON.parse(level[key][key].replace(/'/ig, `"`).replace(/(\w+:)|(\w+ :)/g, function(matchedStr) {  // convert String({} with own properties) to an array
@@ -182,10 +202,12 @@ export const getServerSideProps = async({ params }) => {
         throw new Error(`Rewriting object properties left new object version with less than expected properties. Old version had ${Object.keys(level).length} properties, while new version has ${Object.keys(sampleObj).length} properties included.`);
     }
 
+    if(!level_progress) { throw new Error(`The queried level progress record is missing (could not be found). It should be already created before reaching this point !`) }
+
     //sampleObj['someArr'] = [];
 
     return {
-        props: { level: sampleObj, gameCounters: allGameCounters} //JSON.parse(JSON.stringify(level))
+        props: { level: sampleObj, gameCounters: allGameCounters, progress: currentProgress} //JSON.parse(JSON.stringify(level))
     };
 };
 
@@ -587,10 +609,10 @@ function Game(props) {
 
     function resetAllGameCounters(allGameCounters) {
         for(let key in allGameCounters) {
-            if(allGameCounters[key] instanceof String) { allGameCounters[key] = ''}
-            else if(allGameCounters[key] instanceof Number) { allGameCounters[key] = 0}
+            if(typeof(allGameCounters[key]) === 'string') { allGameCounters[key] = ''}
+            else if(typeof(allGameCounters[key]) === 'number') { allGameCounters[key] = 0}
             else if(allGameCounters[key] instanceof Array) { allGameCounters[key] = []}
-            else { console.error(`DETECTED UNSUPPORTED KEY TYPE WHEN RESETTING COUNTER VALUES. FOUND TYPE: ${typeof(key)}`) };
+            else { console.error(`DETECTED UNSUPPORTED KEY TYPE WHEN RESETTING COUNTER VALUES. FOUND TYPE: ${typeof(key)} for counter: ${key} with value of: ${allGameCounters[key]} `) };
         }
     }
 
@@ -680,7 +702,7 @@ function Game(props) {
                         turns={(confirmValue)? props.gameCounters[`totalRemainingTurns`] : (props.level.limitations[stageNo][`turns`])? props.level.limitations[stageNo][`turns`] - turns : 0} 
                         time={(confirmValue) ? props.gameCounters[`totalRemainingTime`] : (props.level.limitations[stageNo][`time`])? props.level.limitations[stageNo][`time`] - time : 0} 
                         start={() => {/* setTestValue(!testValue); */ Router.push('/preview')}} next={props.level.changeComponent} restart={() => { restartLevel();   /* Router.push('/preview/[id]', `/preview/${props.level.id}`) */}}
-                        variables={props.level.variables}
+                        variables={props.level.variables} currentProgress={props.progress} starConditions={props.level.star_conditions} pointsInStage={pointsInStage} stageNo={stageNo}
                     />
                 )}
 
