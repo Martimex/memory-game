@@ -3,7 +3,7 @@ import styles from '../styles/level_info.module.css';
 import styles_diffcolors from '../styles/variables/difficulty_colors.module.css';
 import { series_abbr } from '../global/series_abbr.js';
 import { background_gradients } from '../global/exceptions/background_gradients.js';
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { faStar as star_full, faCheck as check, faFileAlt as notes, faChartBar as stats, faPlay as play } from '@fortawesome/free-solid-svg-icons';
 import { faStar as star_empty} from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,9 +11,13 @@ import * as Animation from 'animejs';
 
 // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
 const anime = Animation.default;
+let progressRecord = ''; // We will update this variable with initial useEffect call
 
 function LevelInfo(props) {
     console.log('our props: ',  props);
+    console.log(`We look for ${props.level_details.id} inside this object: ${props.user_progresses} (consider each value of levelId key)`);
+    console.log('user_progress array: ', props.user_progresses);
+    const [viewRepaint, setViewRepaint] = useState(false);
     const bg_placeholder_ref = useRef(null);
     const levelInfoAll_ref = useRef(null);
     const levelBox_ref = useRef(null);
@@ -99,8 +103,16 @@ function LevelInfo(props) {
         document.body.style.pointerEvents = 'none';
     }
 
+    function getProgressRecord() {
+        if(!props.user_progresses.length) return;
+        return props.user_progresses.find((record, ind) => props.level_details.id === record.levelId)
+    }
+
     useEffect(() => {
         document.body.style.overflowY = 'hidden';
+        progressRecord = getProgressRecord();
+        setViewRepaint(!viewRepaint);
+        console.warn('This is the progress record: ', progressRecord)
         setLevelBoxPosition(levelInfoAll_ref.current);
         applyDifficultyTextColors(props.level_details.difficulty)
        const img_url = `bgs/${props.serie_abbr}/bg-${props.level_details.number}.svg`;
@@ -183,7 +195,8 @@ function LevelInfo(props) {
                         </div>
                         <div className={styles['content-item-verification']}>
                             <div className={styles['content-item-verification-circle']}>
-                                <FontAwesomeIcon icon={check} className={styles['icon-check']}></FontAwesomeIcon>
+                                {progressRecord? `${progressRecord.lv_progress}%` : `0%` }
+                                {/* <FontAwesomeIcon icon={check} className={styles['icon-check']}></FontAwesomeIcon> */}
                             </div>
                         </div>
                     </div>
@@ -199,7 +212,7 @@ function LevelInfo(props) {
                             <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Turns: {props.level_details.limitations['turns'] || '-'}  </div>
                             <div className={`${styles['content-item-time']} ${styles['dynamic-text']}`}> Tiles: {props.level_details.tiles} </div> */}
                             <div className={`${styles['content-item-level_name']} ${styles['dynamic-text']}`}>  {props.level_details.name} </div>
-{/*                             <div className={`${styles['content-item-level_difficulty']} ${styles['dynamic-text']}`}> {props.level_details.creatorUserId} </div> */}
+                            <div className={`${styles['content-item-level_difficulty']} ${styles['dynamic-text']}`}> Highscore: {progressRecord? progressRecord.highscore : 0} </div>
                             <div className={`${styles['content-item-level_id']} ${styles['dynamic-text']}`}>  id: [#{props.level_details.number}]  Diff: {props.level_details.difficulty} </div>
                             {/*<div className={styles['content-item-score']}> Score: 1200 </div>
                             <div className={styles['content-item-trials']}> Trials: 225 </div> */}
@@ -214,7 +227,7 @@ function LevelInfo(props) {
                             <button className={styles['play']} type="submit" value="Create" onClick={() => { blockClicking(); /* props.proceed(); */ /* COMMENTED OUT, BECAUSE WE WANT TO WORK APPLYING PROGRESS TO A DB Router.push('/preview/[id]', `/preview/${props.level_details.id}`) */ } } >
                                 {/* Once play button is clicked, do not forget to temporarily block click events during level load time */}
                                 
-                                    <div className={styles['play-level' ]} > 
+                                    <div className={styles['play-level']} > 
                                         <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
                                     </div>
                             </button>
@@ -222,9 +235,21 @@ function LevelInfo(props) {
                     </div>
 
                     <div className={styles['level-info-box-content-item']} datatype='stars'>
-                        <FontAwesomeIcon icon={star_full} className={styles['icon-star_full']}></FontAwesomeIcon>
+                        {  progressRecord? 
+                                (Array.from(new Array(3)).map((el, ind) => {
+                                    return (progressRecord.stars_got > ind)?
+                                        <FontAwesomeIcon icon={star_full} className={styles['icon-star_full']}></FontAwesomeIcon>
+                                        :
+                                        <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon> 
+                                }))
+                                :
+                                (Array.from(new Array(3)).map((el, ind) => {
+                                    return <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon>
+                                }))
+                        }
+{/*                         <FontAwesomeIcon icon={star_full} className={styles['icon-star_full']}></FontAwesomeIcon>
                         <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon>
-                        <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon> */}
                     </div>
 
                     <div className={styles['bg-placeholder']} ref={bg_placeholder_ref} ></div>

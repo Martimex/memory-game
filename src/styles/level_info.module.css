@@ -125,13 +125,17 @@
 }
 
 .content-item-verification-circle {
-    padding: 0.9em;
-    border: 0.15em solid hsla(45, 67%, 60%, 0.8);
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: hsla(45, 67%, 60%, 0.8);
+    padding: 0.9rem;
+    /* border: 0.15rem solid hsla(45, 67%, 60%, 0.8); */
+    border-top: 0.15rem solid hsla(45, 67%, 60%, 0.8);
+    border-bottom: 0.15rem solid hsla(45, 67%, 60%, 0.8);
     border-radius: 50%;
 }
 
 .icon-check {
-    font-size: 2.4rem;
     color: hsla(45, 67%, 60%, 0.8);
 }
 

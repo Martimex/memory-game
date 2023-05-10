@@ -325,7 +325,7 @@ function Confirm(props) {
         const allLevelPoints = props.level.win.reduce((accumVariable, currentWinObj) => accumVariable + currentWinObj.value, 0);
         const receivedLevelPoints = props.level.win.filter((el, ind) => ind < props.stageNo).reduce((accumVariable, currentWinObj) => accumVariable + currentWinObj.value, 0);
         const progressOnFailedStage = props.pointsInStage;
-        return parseFloat((100 / allLevelPoints) * (receivedLevelPoints + progressOnFailedStage).toFixed(2));
+        return parseFloat((100 / allLevelPoints) * (receivedLevelPoints + progressOnFailedStage).toFixed());
     }
 
     function checkAnyProgress(oldValues, newValues) {
