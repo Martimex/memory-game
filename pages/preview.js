@@ -51,6 +51,11 @@ function Preview( props ) {
     const [chosenSerie, setChosenSerie] = useState(null);
     const [chosenSerieName, setChosenSerieName] = useState(null);
     const [isLevelStart, setLevelStart] = useState(false);
+    
+    // State to share with main Memory_game component
+    const [levelData, setLevelData] = useState(null);
+    const [levelProgressRecord, setLevelProgressRecord] = useState(null);
+    const [gameCounters, setGameCounters] = useState(null);
 
     const currSerie = useRef(null);
     const topBarRef = useRef(null);
@@ -73,6 +78,10 @@ function Preview( props ) {
         }
 
     }, [levelChoose]);
+
+    useEffect(() => {
+        if(levelData) { console.log(levelData, levelProgressRecord, gameCounters )  }
+    }, [levelData])
 
     useEffect(() => {
         async function fade() {
@@ -171,7 +180,8 @@ function Preview( props ) {
 
             { levelChoose && (
                 <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} serie_desc={serie_desc} level_details={levelChoose} lv_index={lv_index} closeLevelInfo={setLevelChoose} 
-                    changeComponent={props.changeComponent} user_progresses={props.user_progresses}
+                    changeComponent={props.changeComponent} user_progresses={props.user_progresses} 
+                    setLvData={setLevelData} setLevelProgressRecord={setLevelProgressRecord} setGameCounters={setGameCounters}
                 />
             )}
         </div>

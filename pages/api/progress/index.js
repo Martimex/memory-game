@@ -4,7 +4,7 @@ import prisma from "../../../lib/prisma";
 export default async function handle(req, res) {
     const { user_id, level_id } = req.body;
     //const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
-
+    console.log(req.body);
     // We want also to await getSesstion;
     const result = await prisma.progress.create({
         data: {

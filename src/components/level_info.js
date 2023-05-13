@@ -153,6 +153,63 @@ function LevelInfo(props) {
         const level_id = props.level_details.id;
         console.log('isLVFOUND: ', props.user_progresses.find(el => el.levelId === props.level_details.id));
         try {
+
+            // WE CAN ALSO FETCH A LEVEL FROM HERE
+            const level = await fetch(`api/level/${level_id}`, {
+                method: 'GET',
+                headers: { 'Content-Type' : 'application/json' },
+            })
+                .then((res) => res.body)
+                .then(rb => {
+                    const reader = rb.getReader();
+
+                    return new ReadableStream({
+                        start(controller) {
+
+                            function push() {
+                                reader.read().then(({ done, value }) => {
+                                    if(done)  {
+                                        //console.log('done: ', done);
+                                        controller.close();
+                                        return;
+                                    }
+
+                                    controller.enqueue(value);
+                                    //console.log(done, value);
+                                    push();
+                                })
+                            }
+
+                            push();
+                        },
+                    });
+                })
+                .then(stream => new Response(stream, { headers: { "Content-Type": "text/html" } }).text())
+                .then((result) => JSON.parse(result) );
+            
+            console.log('OUR LEVEL IS ! : ');
+            console.dir(level);
+
+            let sampleObj = {};
+
+            for(let key in level) {
+                //console.log(level[key]);
+                if(level[key] instanceof Object && Boolean(level[key][key])) {
+                    // Level specific settings (such as win conditions, animation times, limitation, tile sizings FALL HERE BELOW) :
+                    sampleObj[key] = JSON.parse(level[key][key].replace(/'/ig, `"`).replace(/(\w+:)|(\w+ :)/g, function(matchedStr) {  // convert String({} with own properties) to an array
+                        return '"' + matchedStr.substring(0, matchedStr.length - 1) + '":';
+                    }))
+                }
+                else if(level[key] instanceof Number || String) {
+                    // All the props that are used to identify the level from others
+                    sampleObj[key] = level[key];
+                }
+            }
+
+            if(Boolean(Object.keys(level).length === Object.keys(sampleObj).length) === false) {
+                throw new Error(`Rewriting object properties left new object version with less than expected properties. Old version had ${Object.keys(level).length} properties, while new version has ${Object.keys(sampleObj).length} properties included.`);
+            }
+
             const body = { user_id, level_id };
             if(Boolean(props.user_progresses.find(el => el.levelId === props.level_details.id)) === false) {
                 // Create new progress record ONLY IF the player have not played the level yet
@@ -163,7 +220,63 @@ function LevelInfo(props) {
                 });
             }
             else { console.warn('User already played the level, no need to duplicate records @')};
-            await Router.push('/preview/[id]', `/preview/${props.level_details.id}`); // Uncomment after finishing try block
+
+            console.log(level_id)
+            const lv_progress = await fetch(`api/progress/${level_id}`, {
+                method: 'GET',
+                headers:  { 'Content-Type' : 'application/json' },
+            })
+                .then((res) => res.body)
+                .then(rb => {
+                    const reader = rb.getReader();
+
+                    return new ReadableStream({
+                        start(controller) {
+
+                            function push() {
+                                reader.read().then(({ done, value }) => {
+                                    if(done)  {
+                                        //console.log('done: ', done);
+                                        controller.close();
+                                        return;
+                                    }
+
+                                    controller.enqueue(value);
+                                    //console.log(done, value);
+                                    push();
+                                })
+                            }
+
+                            push();
+                        },
+                    });
+                })
+                .then(stream => new Response(stream, { headers: { "Content-Type": "text/html" } }).text())
+                .then((result) => JSON.parse(result) );
+
+            console.log('FINALLY OUR PROGRESS RECORD IS: ', lv_progress);
+            
+            const currentProgress = {
+                id: lv_progress.id,
+                stars: lv_progress.stars_got,
+                lv_progress: lv_progress.lv_progress,
+                highscore: lv_progress.highscore
+            }
+
+            const allGameCounters = {
+                cardsOpened: [],
+                spreeCount: 0,
+                totalRemainingTime: [],
+                totalRemainingTurns: [],
+            }
+
+            props.setLevelProgressRecord(currentProgress);
+            props.setGameCounters(allGameCounters);
+
+            //await Router.push('/preview/[id]', `/preview/${props.level_details.id}`); // Uncomment after finishing try block
+
+            // Push the level data as props and this way initialize the Game Component
+            props.setLvData(sampleObj);
         }
         catch(err) { console.error(err); }
     }
@@ -238,13 +351,13 @@ function LevelInfo(props) {
                         {  progressRecord? 
                                 (Array.from(new Array(3)).map((el, ind) => {
                                     return (progressRecord.stars_got > ind)?
-                                        <FontAwesomeIcon icon={star_full} className={styles['icon-star_full']}></FontAwesomeIcon>
+                                        <FontAwesomeIcon key={ind.toString()} icon={star_full} className={styles['icon-star_full']}></FontAwesomeIcon>
                                         :
-                                        <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon> 
+                                        <FontAwesomeIcon key={ind.toString()} icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon> 
                                 }))
                                 :
                                 (Array.from(new Array(3)).map((el, ind) => {
-                                    return <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon>
+                                    return <FontAwesomeIcon key={ind.toString()} icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon>
                                 }))
                         }
 {/*                         <FontAwesomeIcon icon={star_full} className={styles['icon-star_full']}></FontAwesomeIcon>
