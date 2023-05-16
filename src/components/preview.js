@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styles from '../styles/preview.module.css';
 import * as Animation from 'animejs';
+import { useSession } from 'next-auth/react';
 //import anime from 'animejs/lib/anime.es.js';
 //import anime from "animejs/lib/anime.es.js"
 
@@ -22,6 +23,8 @@ function Preview( props ) {
     const [chosenSerie, setChosenSerie] = useState(null);
     const [chosenSerieName, setChosenSerieName] = useState(null);
     const [isLevelStart, setLevelStart] = useState(false);
+
+    const { data: session, status } = useSession();
     
     // State to share with main Memory_game component
     /*     const [levelData, setLevelData] = useState(null);
@@ -145,6 +148,7 @@ function Preview( props ) {
                     
                 </div>
 
+                <h1 style={{color: 'white'}}> {session && session.user.name} </h1>
                 <div className={styles['showcase-block']}>
                     {levels_showcase}
                 </div>

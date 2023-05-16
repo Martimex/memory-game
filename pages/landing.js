@@ -12,6 +12,8 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 
+import { useSession, signIn, signOut } from "next-auth/react";
+
 // 2.0 Import stuff
 import { all_levels } from '../src/global/all_levels.js';
 //console.log(all_levels);
@@ -61,6 +63,8 @@ let allTiles;
 function Landing(props) {
     // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
     const anime = Animation.default;
+
+    const { data, status } = useSession();
 
     // We use this hook to apply icon coloring animation (see useLayoutEffect below)
     const [render, setRender] = useState(false);
@@ -181,6 +185,16 @@ function Landing(props) {
         }) */
     }
 
+    function checkUserSession() {
+        if(status === 'authenticated') {
+            Router.push("/play");
+        } else {
+            // Not authenticated yet, need to sign in with Google
+            signIn('google');
+        }
+    }
+
+    if(status === 'loading') { return <h1> Loading, please wait ... </h1>}
     return( 
         <div className={styles['landing-all']}>
             <div className={styles['layer']}>
@@ -197,7 +211,7 @@ function Landing(props) {
                 <div className={styles['content-action']}>
                     <div className={styles['from-author']}> The hardest memory game You would ever play...</div>
                     {/* <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button> */}
-                    <button className={styles['start']} onClick={() => {Router.push("/play")}}> Play </button>
+                    <button className={styles['start']} onClick={() => {checkUserSession()}}> Play </button>
                 </div>
             </div>       
         </div>
