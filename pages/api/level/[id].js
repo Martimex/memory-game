@@ -11,6 +11,11 @@ export default async function handle(req, res) {
     if(req.method === 'GET') {
         const getLevel = await prisma.level.findUnique({
             where: { id: levelId},
+            include: {
+                Serie: {
+                    select: { name_abbr: true }
+                }
+            }
         });
         console.log('PRISMA FOUND THIS LEVEL: ', getLevel);
         const res_data = await res.json(getLevel);

@@ -1,8 +1,9 @@
 //import '../src/App.css'; temporarily commented out, You can uncomment and test if you feel like it
 import Landing from './landing.js';
 //import Game from './components/game.js';
-import Game from './preview/[id].js';
-import Preview from './preview.js';
+/* import Game from './preview/[id].js';
+import Preview from './preview.js'; */
+import Play from './play.js';
 import React, { useState, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -80,13 +81,13 @@ function App() {
         <Landing changeComponent={triggerChangeComponentToPreview} tileCodes={tileCodes} state={state} />
       )}
 
-      {state === 'preview' && (
-        <Preview changeComponent={triggerChangeComponentDelayed} proceed={proceed} backToHome={triggerStartDelayed} timing={timing} level={level} nextLV={() => {setLevel(level + 1)}} />
+      {state === 'play' && (
+        <Play changeComponent={triggerChangeComponentDelayed} proceed={proceed} backToHome={triggerStartDelayed} timing={timing} level={level} nextLV={() => {setLevel(level + 1)}} />
       )}
 
-      {state === 'game' && (
+{/*       {state === 'game' && (
         <Game changeComponent={triggerChangeComponentToPreview} proceed={proceed} restartGame={triggerChangeComponent} confirmComponent={triggerChangeComponentToConfirm} preview={triggerChangeComponentToPreview} tileCodes={tileCodes} level={level} newLevel={newLevel} newSerie={newSerie}  />
-      )}
+      )} */}
 
     </div>
   );

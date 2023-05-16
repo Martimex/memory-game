@@ -276,7 +276,7 @@ function LevelInfo(props) {
             //await Router.push('/preview/[id]', `/preview/${props.level_details.id}`); // Uncomment after finishing try block
 
             // Push the level data as props and this way initialize the Game Component
-            props.setLvData(sampleObj);
+            props.setLevelData(sampleObj);
         }
         catch(err) { console.error(err); }
     }

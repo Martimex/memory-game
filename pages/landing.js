@@ -197,7 +197,7 @@ function Landing(props) {
                 <div className={styles['content-action']}>
                     <div className={styles['from-author']}> The hardest memory game You would ever play...</div>
                     {/* <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button> */}
-                    <button className={styles['start']} onClick={() => {Router.push("/preview")}}> Play </button>
+                    <button className={styles['start']} onClick={() => {Router.push("/play")}}> Play </button>
                 </div>
             </div>       
         </div>

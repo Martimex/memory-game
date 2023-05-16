@@ -1,46 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
-import styles from '../src/styles/preview.module.css';
+import styles from '../styles/preview.module.css';
 import * as Animation from 'animejs';
 //import anime from 'animejs/lib/anime.es.js';
 //import anime from "animejs/lib/anime.es.js"
 
-import { LevelInfo } from '../src/components/level_info.js';
-import { SerieBox } from '../src/components/serie_box.js';
-import  { all_levels } from '../src/global/all_levels.js';
+import { LevelInfo } from './level_info.js';
+import { SerieBox } from './serie_box.js';
+//import  { all_levels } from './global/all_levels.js'; NOT NEEDED SINCE V2 REWORK
 
 import { faGithub as github} from '@fortawesome/free-brands-svg-icons';
 import { faHome as home} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import prisma from '../lib/prisma';
-/* import { getStaticProps } from 'next'; */
-
-export const getStaticProps = async () => {
-    // Data object is available under /preview (for example: http://localhost:3000/preview)
-    // Note that by adding getStaticProps, loading http://localhost:3000/preview will give us 2 level instances from the Database, 
-    // while going for http://localhost:3000/ (our 'old' no-route implementation) gives us props which we passed from index.js file
-    const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
-
-    const user_progresses = await prisma.progress.findMany({
-        where: { userId: DUMMY_USER_ID },
-    })
-
-    const data = await prisma.serie.findMany({
-        /* where: { index: true }, */
-        take: 5,
-        include: {
-            Levels: {
-                select: { id: true, name: true, number: true, stages: true, difficulty: true, creatorUserId: true, }
-            },
-        },
-    
-    });
-    //console.log(data);
-    return {
-        props: { data: data, user_progresses: user_progresses },
-        /* revalidate: 10, */
-    };
-};
 
 function Preview( props ) {
     // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
@@ -53,9 +24,9 @@ function Preview( props ) {
     const [isLevelStart, setLevelStart] = useState(false);
     
     // State to share with main Memory_game component
-    const [levelData, setLevelData] = useState(null);
+    /*     const [levelData, setLevelData] = useState(null);
     const [levelProgressRecord, setLevelProgressRecord] = useState(null);
-    const [gameCounters, setGameCounters] = useState(null);
+    const [gameCounters, setGameCounters] = useState(null); - ALL 3 MOVED TO THE PLAY COMPONENT */ 
 
     const currSerie = useRef(null);
     const topBarRef = useRef(null);
@@ -68,7 +39,7 @@ function Preview( props ) {
 
     const levels_showcase = props.data.map((serie, index) => 
         <SerieBox serie={serie} setSerieName={setChosenSerie} setLevelChoose={setLevelChoose} key={serie.index.toString() + serie.name} />
-    )   
+    ) 
 
     useEffect(() => {
         if(levelChoose !== null) {
@@ -79,9 +50,12 @@ function Preview( props ) {
 
     }, [levelChoose]);
 
-    useEffect(() => {
-        if(levelData) { console.log(levelData, levelProgressRecord, gameCounters )  }
-    }, [levelData])
+/*     useEffect(() => {
+        if(levelData) { 
+            console.log(levelData, levelProgressRecord, gameCounters ) 
+            props.changeComponent('game');
+        }
+    }, [levelData]) */
 
     useEffect(() => {
         async function fade() {
@@ -181,10 +155,11 @@ function Preview( props ) {
             { levelChoose && (
                 <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} serie_desc={serie_desc} level_details={levelChoose} lv_index={lv_index} closeLevelInfo={setLevelChoose} 
                     changeComponent={props.changeComponent} user_progresses={props.user_progresses} 
-                    setLvData={setLevelData} setLevelProgressRecord={setLevelProgressRecord} setGameCounters={setGameCounters}
+                    setLevelData={props.setLevelData} setLevelProgressRecord={props.setLevelProgressRecord} setGameCounters={props.setGameCounters}
                 />
             )}
         </div>
+        
     )
 
 }

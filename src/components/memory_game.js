@@ -23,9 +23,9 @@ import ConfirmWin from '../../src/components/confirm_win';
 import {uncoverPatterns} from '../../src/global/predefined/uncover_patterns.js';
 import {scoreExtras} from '../../src/global/predefined/score_extras.js';
 
-import { setIcon, icon_Sets } from '../landing.js';
+import { setIcon, icon_Sets } from '../../pages/landing.js';
 
-import prisma from '../../lib/prisma';
+//import prisma from '../../lib/prisma';
 
 library.add(fab, fas);
 
@@ -145,7 +145,8 @@ const anime = Animation.default;
     };
 }
  */
-export const getServerSideProps = async({ params }) => {
+
+/* export const getServerSideProps = async({ params }) => {
     const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
 
     console.log('SERVER SIDE PARAMS ARE: ', params);
@@ -209,7 +210,7 @@ export const getServerSideProps = async({ params }) => {
     return {
         props: { level: sampleObj, gameCounters: allGameCounters, progress: currentProgress} //JSON.parse(JSON.stringify(level))
     };
-};
+}; */
 
 
 
@@ -701,7 +702,7 @@ function Game(props) {
                     <Confirm value={confirmValue} level={level} level_no={props.level.number} newSerie={props.level.Serie.name_abbr} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
                         turns={(confirmValue)? props.gameCounters[`totalRemainingTurns`] : (props.level.limitations[stageNo][`turns`])? props.level.limitations[stageNo][`turns`] - turns : 0} 
                         time={(confirmValue) ? props.gameCounters[`totalRemainingTime`] : (props.level.limitations[stageNo][`time`])? props.level.limitations[stageNo][`time`] - time : 0} 
-                        start={() => {/* setTestValue(!testValue); */ Router.push('/preview')}} next={props.level.changeComponent} restart={() => { restartLevel();   /* Router.push('/preview/[id]', `/preview/${props.level.id}`) */}}
+                        start={() => {props.changeComponent('preview') /* Router.push('/preview') */}} /* next={props.level.changeComponent} */ restart={() => { restartLevel();   /* Router.push('/preview/[id]', `/preview/${props.level.id}`) */}}
                         variables={props.level.variables} currentProgress={props.progress} starConditions={props.level.star_conditions} pointsInStage={pointsInStage} stageNo={stageNo}
                     />
                 )}
