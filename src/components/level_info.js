@@ -147,9 +147,9 @@ function LevelInfo(props) {
     const startLevel = async function(e) {
         e.preventDefault();
         //console.log('submitting ...', props.user_progresses.map(el => el.levelId).find(props.level_details.id), props.level_details.id);
-        const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
+        //const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
 
-        const user_id = DUMMY_USER_ID;
+        const user_id = props.playerId;  //DUMMY_USER_ID;
         const level_id = props.level_details.id;
         console.log('isLVFOUND: ', props.user_progresses.find(el => el.levelId === props.level_details.id));
         try {
@@ -222,7 +222,8 @@ function LevelInfo(props) {
             else { console.warn('User already played the level, no need to duplicate records @')};
 
             console.log(level_id)
-            const lv_progress = await fetch(`api/progress/${level_id}`, {
+            //const progress_credentials = level_id + '&player=' + props.playerId
+            const lv_progress = await fetch(`api/progress/${level_id}/${props.playerId}`, {
                 method: 'GET',
                 headers:  { 'Content-Type' : 'application/json' },
             })

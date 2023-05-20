@@ -277,7 +277,7 @@ function Confirm(props) {
     function checkGottenStars(star_conditions) {
         // 1. We can assume that each level has 3 stars, therefore star_conditions array of object is length of 3
         // 2. It also should be noted, that each sooner star have more severe obtain conditions than the previous one
-        console.error(props.variables);
+        console.error('THIS LEVEL VARIAVLES: ', props.variables);
         //console.log('OLD STARS CONDITIONS: ', star_conditions);
         for(let star_no = 0; star_no < 3; star_no++) {
             let areConditionsMet = checkStarCondition(star_conditions[star_no] /* star_conditions[`starConditions`][star_no] - it is old-style way */ );
@@ -334,10 +334,11 @@ function Confirm(props) {
     }
 
     async function checkLevelProgress([new_progress, new_highscore, new_stars]) {
-        const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
+        //const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
         // 1. Check if user made any progress on this level (compare current Progress record with highscore, stars and completion %)
         // 2. If at all criterias user did not make any progress, return the function and DO NOT UPDATE ANYTHING
         // 3. If any given criteria get better, let's update current Progress record but only update those fields, where the progress was made
+        console.log('current progress object is: ', props.currentProgress);
         console.log('CURRENT PROGRESS: ', props.currentProgress.lv_progress, ' || CURRENT HIGHSCORE: ', props.currentProgress.highscore, ' || CURRENT STARS: ', props.currentProgress.stars);
         console.log('NEW PROGRESS: ', new_progress, ' || NEW HIGHSCORE: ', new_highscore, ' || NEW STARS: ', new_stars);
         const oldProgressValues = [props.currentProgress.lv_progress, props.currentProgress.highscore, props.currentProgress.stars];
@@ -346,16 +347,18 @@ function Confirm(props) {
         const isAnyProgress = checkAnyProgress(oldProgressValues, newProgressValues);
         if(isAnyProgress) { 
             // Now we know player did some progress, so update the Progress record with higher values ONLY !
-            const body = { 
-                progress: (props.currentProgress.lv_progress < new_progress)? new_progress : props.currentProgress.lv_progress,
+            const progressCompared = {
+                lv_progress: (props.currentProgress.lv_progress < new_progress)? new_progress : props.currentProgress.lv_progress,
                 highscore: (props.currentProgress.highscore < new_highscore)? new_highscore : props.currentProgress.highscore,
                 stars: (props.currentProgress.stars < new_stars)? new_stars : props.currentProgress.stars,
-            };
+            }
 
-            await fetch(`/api/progress/${props.currentProgress.id}`, {
+            props.setCurrentProgress(progressCompared);
+
+            await fetch(`/api/progress/${props.progressRecordId}`, {
                 method: 'PUT',
                 headers:  { 'Content-Type' : 'application/json' },
-                body: JSON.stringify(body)
+                body: JSON.stringify(progressCompared)
             })
         }
     }

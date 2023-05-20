@@ -1,8 +1,12 @@
 // Here we are going to update current progresses records (BUT NEVER DELETE !)
 import prisma from "../../../lib/prisma";
+//import { getSession } from "next-auth/react";
 
-// PUT /api/progress/:id
+// (GET || PUT) /api/progress/:id
 export default async function handle(req, res) {
+
+   /*  const session = await getSession({ req });
+    console.log('THE USER: +', session, req.query);
 
     const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
 
@@ -22,17 +26,17 @@ export default async function handle(req, res) {
         const res_data = await res.json(level_progress);
         //console.log(res_data);
         return res_data;
-    }
+    } */
 
     if(req.method === 'PUT') {
         // For PUT request we have user progress record ID, so we can update it immediately
         const progressId = req.query.id;
-        const { progress, highscore, stars } = req.body;
+        const { lv_progress, highscore, stars } = req.body;
 
         const updateProgress = await prisma.progress.update({
             where: { id: progressId},
             data: {
-                lv_progress: progress,
+                lv_progress: lv_progress,
                 highscore: highscore,
                 stars_got: stars,
             }

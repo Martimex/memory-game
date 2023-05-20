@@ -216,7 +216,7 @@ const anime = Animation.default;
 
 function Game(props) {
     // !!!  comments means that we HAVE TO uncomment the code pieces after some development is done for the component
-    console.warn(props);
+    //console.warn(props);
 /*     const allKeys = Object.keys(props);
     console.log(allKeys); */
     /* for(let key in props) {
@@ -268,6 +268,8 @@ function Game(props) {
     const [clickNo, setClickNo] = useState(0); // use to calculate click number (mostly for xClick script)
     const [stageNo, setStageNo] = useState(0); // use to switch stages (if level has few stages)
     const [boardState, setBoardState] = useState(null);
+    // Below prevents from overriding 'better progress record' with worse one, in cases when player uses 'Retry button' instead of 'Back' when saving progress on 'level lose' scenario 
+    const [progressData, setProgressData] = useState({highscore: props['progress']['highscore'], lv_progress: props['progress']['lv_progress'], stars: props['progress']['stars']}); 
 
     const all = useRef(null);
     const bg = useRef(null);
@@ -703,7 +705,7 @@ function Game(props) {
                         turns={(confirmValue)? props.gameCounters[`totalRemainingTurns`] : (props.level.limitations[stageNo][`turns`])? props.level.limitations[stageNo][`turns`] - turns : 0} 
                         time={(confirmValue) ? props.gameCounters[`totalRemainingTime`] : (props.level.limitations[stageNo][`time`])? props.level.limitations[stageNo][`time`] - time : 0} 
                         start={() => {props.changeComponent('preview') /* Router.push('/preview') */}} /* next={props.level.changeComponent} */ restart={() => { restartLevel();   /* Router.push('/preview/[id]', `/preview/${props.level.id}`) */}}
-                        variables={props.level.variables} currentProgress={props.progress} starConditions={props.level.star_conditions} pointsInStage={pointsInStage} stageNo={stageNo}
+                        variables={props.level.variables} progressRecordId={props.progress.id} currentProgress={progressData} setCurrentProgress={setProgressData} starConditions={props.level.star_conditions} pointsInStage={pointsInStage} stageNo={stageNo}
                     />
                 )}
 

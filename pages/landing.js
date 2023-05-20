@@ -66,6 +66,8 @@ function Landing(props) {
 
     const { data, status } = useSession();
 
+    console.log(data);
+
     // We use this hook to apply icon coloring animation (see useLayoutEffect below)
     const [render, setRender] = useState(false);
 
@@ -203,13 +205,15 @@ function Landing(props) {
                 </div>
             </div>
 
+            {status === 'authenticated' && <button className={styles['start']} onClick={() => {signOut()}}> Sign Out </button> }
+
             <div className={styles['content']}>
                 <div className={styles['content-section']}>
                     <div className={styles["game-title"]}>FLASH</div>
                     <div className={styles['game-subtitle']}>The Ultimate Memory Game</div>
                 </div>
                 <div className={styles['content-action']}>
-                    <div className={styles['from-author']}> The hardest memory game You would ever play...</div>
+                    <div className={styles['from-author']}> The hardest memory game You would ever play... {status === 'authenticated' && <span>Hi {data.user.name}</span>}</div>
                     {/* <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button> */}
                     <button className={styles['start']} onClick={() => {checkUserSession()}}> Play </button>
                 </div>

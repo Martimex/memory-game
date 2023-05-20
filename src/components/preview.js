@@ -158,7 +158,7 @@ function Preview( props ) {
 
             { levelChoose && (
                 <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} serie_desc={serie_desc} level_details={levelChoose} lv_index={lv_index} closeLevelInfo={setLevelChoose} 
-                    changeComponent={props.changeComponent} user_progresses={props.user_progresses} 
+                    changeComponent={props.changeComponent} user_progresses={props.user_progresses} playerId={props.playerId}
                     setLevelData={props.setLevelData} setLevelProgressRecord={props.setLevelProgressRecord} setGameCounters={props.setGameCounters}
                 />
             )}
