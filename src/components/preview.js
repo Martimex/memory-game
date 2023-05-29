@@ -2,14 +2,17 @@ import React, { useEffect, useState, useRef } from 'react';
 import styles from '../styles/preview.module.css';
 import * as Animation from 'animejs';
 import { useSession } from 'next-auth/react';
+import Router from "next/router";
 //import anime from 'animejs/lib/anime.es.js';
 //import anime from "animejs/lib/anime.es.js"
 
 import { LevelInfo } from './level_info.js';
 import { SerieBox } from './serie_box.js';
+import UserTab from './user_tab.js';
 //import  { all_levels } from './global/all_levels.js'; NOT NEEDED SINCE V2 REWORK
 
-import { faGithub as github} from '@fortawesome/free-brands-svg-icons';
+/* import { faGithub as github} from '@fortawesome/free-brands-svg-icons'; */
+import { faUserCircle as user} from '@fortawesome/free-solid-svg-icons';
 import { faHome as home} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -23,6 +26,7 @@ function Preview( props ) {
     const [chosenSerie, setChosenSerie] = useState(null);
     const [chosenSerieName, setChosenSerieName] = useState(null);
     const [isLevelStart, setLevelStart] = useState(false);
+    const [isUserTabOpen, setUserTabOpen] = useState(false);
 
     const { data: session, status } = useSession();
     
@@ -131,7 +135,7 @@ function Preview( props ) {
             <div className={styles['seizure-flexbox']}>
                 <div className={styles['top-bar']} ref={topBarRef}>
                     <div className={styles['top-bar__return']}>
-                        <button className={styles['return-back']} onClick={() => {props.backToHome(); props.proceed();}}> 
+                        <button className={styles['return-back']} onClick={() => {Router.push('/')/* props.backToHome(); props.proceed(); */}}> 
                             <FontAwesomeIcon icon={home} className={styles["icon-home"]} />
                         </button>
                     </div>
@@ -141,11 +145,11 @@ function Preview( props ) {
                     </div>
 
                     <div className={styles['top-bar__follow']}>
-                        <div className={styles['follow-me']} onClick={() => console.log(props)}>
-                            <FontAwesomeIcon icon={github} className={styles["icon-github"]} />
+                        <div className={styles['follow-me']} onClick={() => /* console.log(props) */ setUserTabOpen(true)}>
+                            <FontAwesomeIcon icon={user} className={styles["icon-user"]} />
                         </div>    
                     </div>
-                    
+
                 </div>
 
                 <h1 style={{color: 'white'}}> {session && session.user.name} </h1>
@@ -156,9 +160,13 @@ function Preview( props ) {
 
             </div>
 
+            { isUserTabOpen && (
+                <UserTab player={props.player} levelsCount={props.levelsCount} />
+            )}   
+
             { levelChoose && (
                 <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} serie_desc={serie_desc} level_details={levelChoose} lv_index={lv_index} closeLevelInfo={setLevelChoose} 
-                    changeComponent={props.changeComponent} user_progresses={props.user_progresses} playerId={props.playerId}
+                    changeComponent={props.changeComponent} user_progresses={props.user_progresses} playerId={props.player.id}
                     setLevelData={props.setLevelData} setLevelProgressRecord={props.setLevelProgressRecord} setGameCounters={props.setGameCounters}
                 />
             )}

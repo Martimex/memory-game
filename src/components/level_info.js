@@ -151,6 +151,7 @@ function LevelInfo(props) {
 
         const user_id = props.playerId;  //DUMMY_USER_ID;
         const level_id = props.level_details.id;
+        const level_difficulty = props.level_details.difficulty;
         console.log('isLVFOUND: ', props.user_progresses.find(el => el.levelId === props.level_details.id));
         try {
 
@@ -210,7 +211,7 @@ function LevelInfo(props) {
                 throw new Error(`Rewriting object properties left new object version with less than expected properties. Old version had ${Object.keys(level).length} properties, while new version has ${Object.keys(sampleObj).length} properties included.`);
             }
 
-            const body = { user_id, level_id };
+            const body = { user_id, level_id, level_difficulty };
             if(Boolean(props.user_progresses.find(el => el.levelId === props.level_details.id)) === false) {
                 // Create new progress record ONLY IF the player have not played the level yet
                 await fetch('api/progress', {

@@ -93,11 +93,12 @@
     font-size: 2.8em;
 }
 
-.top-bar .top-bar__follow .icon-github {
+.top-bar .top-bar__follow .icon-user {
+    font-size: 3.6rem;
     color: #ddd;
-    box-shadow: 0em -0.1em 0.8em #ddd, inset 0em 0em 0.8em #666;
+    box-shadow: 0em -0.1em 0.8em #ddd, inset 0em 0em 0.8em #ddd;
     border-radius: 50%;
-    padding: 0.1em;
+    padding: 0.2em;
 }
 
 .showcase-block {

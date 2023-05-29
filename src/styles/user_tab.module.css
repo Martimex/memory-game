@@ -1,0 +1,168 @@
+/* *, *::after, *::before {
+    border: 1px solid black;
+    box-sizing: border-box;
+} */
+
+.user-tab {
+    position: absolute;
+    min-height: 100vh;
+    height: 100%;
+    top: 0;
+    left: 40%;
+    width: 60%;
+    z-index: 200;
+    background: #0000;
+    pointer-events: none;
+}
+
+    .user-tab__box {
+        font-size: 1rem;
+        position: sticky;
+        top: 0;
+        /* min-height: 10rem; */
+        background: #222;
+        color: #ddd;
+        padding: 2em 0;
+
+        display: grid;
+        grid-template-columns: 80% 20%;
+        grid-template-rows: 1fr;
+        border-radius: 0 0 0 3%;
+        box-shadow: 0 0 .4em .3em #000, inset 0 0 .4em .3em #111;
+        pointer-events: auto;
+    }
+
+.box__user-profile {
+    /* display: flex; */
+    font-size: 1rem;
+}
+
+.box__user-info {
+    font-size: 1rem;
+    display: grid;
+    grid-template-columns: 35% 65%;
+    grid-template-rows: 1fr;
+    margin-bottom: 2em;
+}
+
+    .user-info__image-box {
+        place-self: center;
+        font-size: 1rem;
+        width: 6.2em;
+        height: 6.2em;
+        border-radius: 50%;
+        /* border: .1px solid black; */
+        background-image: image-set("https://lh3.googleusercontent.com/a/AGNmyxYdHxpTrqnk-muASXR1wLNGS1O5BwXD6UOoVWxW=s96-c");
+        background-position: center;
+        box-shadow: 0 0 .2em .3em #7776, 0 0 .4em .5em #2226/* , 0 0 .15em .2em #2229 */;
+    }
+
+        .image-box__image {
+            font-size: 1rem;
+        }
+
+    .user-info__data {
+        font-size: 1rem;
+    }
+
+    .data__text {
+        margin: 0;
+        padding-bottom: .1em;
+    }
+
+    .data__text--large {
+        font-size: 1.8rem;
+        font-weight: 650;
+    }
+
+    .data__text--medium {
+        font-size: 1.25rem;
+    }
+
+    .data__text--small {
+        font-size: 1rem;
+    }
+
+.box__user-stats {
+    display: grid;
+    grid-template-columns: 12% 76% 12%;
+    grid-template-rows: 1fr;
+}
+    .user-stats__switch-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .switch-btn-left, .switch-btn-right {
+        font-size: 4rem;
+        color: #ddd;
+    }
+
+    .user-stats__stats-table {
+        font-size: 1rem;
+/*         display: flex;
+        align-items: center;
+        justify-content: center; */
+/*         padding: 2em; */
+        background: #333;
+        background: linear-gradient(135deg, #3335, #222);
+        border-radius: 5%;
+        box-shadow: inset .08em .08em .08em .15em #444, .03em .03em .1em .25em #333;
+    }
+
+/*  SECOND, ACTION BUTTONS SECTION */
+
+.box__action-buttons {
+    font-size: 1rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: space-evenly;
+    border-left: .25em dashed #444;
+}
+    .action-buttons__btn-item {
+        font-size: 1rem;
+    }
+
+        .btn-item__icon {
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .icon--btn {
+                font-size: 2.4rem;
+            }
+
+        .icon-info, .icon-logout, .icon-hide {
+            padding: .34rem;
+            border-radius: 50%;
+            color: #aaa;
+        }
+
+        .icon-hide {
+            box-shadow: inset -1rem -1rem .4rem -.4rem #666, .06rem .06rem .12rem .06rem hsla(111, 53%, 77%, 0.93);
+            color: hsla(111, 63%, 80%, 0.93);
+        }
+
+        .icon-info {
+            box-shadow: inset -1rem -1rem .4rem -.4rem #666, .06rem .06rem .12rem .06rem hsla(204, 53%, 77%, 0.93);
+            color: hsla(204, 63%, 80%, 0.93);
+        }
+
+        .icon-logout {
+            box-shadow: inset -1rem -1rem .4rem -.4rem #666, .06rem .06rem .12rem .06rem hsla(11, 53%, 77%, 0.93);
+            color: hsla(11, 63%, 80%, 0.93);
+        }
+
+        .btn-item__text {
+            font-size: 1rem;
+            margin-top: .3rem;
+            display: block;
+            width: 100%;
+            text-align: center;
+            font-weight: 650;
+        }

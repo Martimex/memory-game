@@ -29,8 +29,8 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
     })
 
     const data = await prisma.serie.findMany({
-        /* where: { index: true }, */
-        take: 5,
+/*         where: { index: true },
+        take: 5, */
         include: {
             Levels: {
                 select: { id: true, name: true, number: true, stages: true, difficulty: true, creatorUserId: true, }
@@ -38,9 +38,22 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
         },
     
     });
+
+    const levelsByDifficulty = {all: {}, user_completed: {}, user_stars: 0};
+    data.forEach(serie => {
+        serie.Levels.map(lv => (levelsByDifficulty.all.hasOwnProperty(lv.difficulty)? levelsByDifficulty.all[lv.difficulty] += 1 : levelsByDifficulty.all[lv.difficulty] = 1));
+    });
+    const progressesArr = user_progresses.filter(lv => lv.lv_progress === 100)
+    progressesArr.map(lv => levelsByDifficulty.user_completed.hasOwnProperty(lv.lv_difficulty)? levelsByDifficulty.user_completed[lv.lv_difficulty] += 1 : levelsByDifficulty.user_completed[lv.lv_difficulty] = 1)
+    progressesArr.map(lv => levelsByDifficulty.user_stars += lv.stars_got);
+
+    // Now add last fields to indicate all the levels, and also number of levels which p;ayer won (lv_progress is 100)
+    levelsByDifficulty.levelsAmount = {inGame: Object.values(levelsByDifficulty.all).length? Object.values(levelsByDifficulty.all).reduce((a, b) => +a + +b) : 0, userWin: Object.values(levelsByDifficulty.user_completed).length? Object.values(levelsByDifficulty.user_completed).reduce((a, b) => +a + +b) : 0};
+    levelsByDifficulty.user_exp = 125; // CHANGE THIS LATER ONCE EXP GAIN MECHANISM IS IMPLEMENTED
+
     //console.log(data);
     return {
-        props: { data: data, user_progresses: user_progresses, session_user: session_user.id },
+        props: { data: data, user_progresses: user_progresses, session_user: session_user, levelsCount: levelsByDifficulty },
     };
 };
 
@@ -70,7 +83,7 @@ function Play(props) {
     return(
         <div>
             {component === 'preview' && (
-                <Preview data={props.data} user_progresses={props.user_progresses} playerId={props.session_user}
+                <Preview data={props.data} user_progresses={props.user_progresses} player={props.session_user} levelsCount={props.levelsCount}
                     /* changeComponent={setComponent}  */setLevelData={setLevelData} setLevelProgressRecord={setLevelProgressRecord} setGameCounters={setGameCounters}
                 />
             )}

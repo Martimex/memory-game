@@ -102,12 +102,13 @@ model Serie {
 }
 
 model Progress {
-  id          String @id @default(cuid())
-  stars_got   Int
-  lv_progress Int
-  highscore   Int
-  User        User   @relation(fields: [userId], references: [id])
-  Level       Level  @relation(fields: [levelId], references: [id])
-  userId      String
-  levelId     String
+  id              String @id @default(cuid())
+  stars_got       Int
+  lv_progress     Int
+  lv_difficulty   String
+  highscore       Int
+  User            User   @relation(fields: [userId], references: [id])
+  Level           Level  @relation(fields: [levelId], references: [id])
+  userId          String
+  levelId         String
 }
