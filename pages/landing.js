@@ -1,11 +1,13 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Router from "next/router";
 import styles from '../src/styles/landing.module.css';
+import styles_preview from '../src/styles/preview.module.css';
 import '../src/animations/animeLanding.js';
 //import anime from 'animejs/lib/anime.es.js';
 import * as Animation from "animejs";
 import { colors, tileCodes } from '../src/vars.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser as user } from '@fortawesome/free-solid-svg-icons';
 
 import { library, config } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -13,6 +15,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 
 import { useSession, signIn, signOut } from "next-auth/react";
+
+import UserTab from '../src/components/user_tab';
 
 // 2.0 Import stuff
 import { all_levels } from '../src/global/all_levels.js';
@@ -70,6 +74,8 @@ function Landing(props) {
 
     // We use this hook to apply icon coloring animation (see useLayoutEffect below)
     const [render, setRender] = useState(false);
+    const [isUserTabOpen, setUserTabOpen] = useState(false);
+    const [isAnimationRunning, setAnimationRunning] = useState(false);
 
     useEffect(() => {
         // This useEffect happens only once - that is mandatory here !s
@@ -199,6 +205,7 @@ function Landing(props) {
     if(status === 'loading') { return <h1> Loading, please wait ... </h1>}
     return( 
         <div className={styles['landing-all']}>
+
             <div className={styles['layer']}>
                 <div className={styles['theme']} ref={gameBoard}>
                     {allTiles}
@@ -217,8 +224,17 @@ function Landing(props) {
                     {/* <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button> */}
                     <button className={styles['start']} onClick={() => {checkUserSession()}}> Play </button>
                 </div>
-            </div>       
+            </div>     
+
+            <div className={styles['setup-container']}>
+                <div className={styles_preview['follow-me']} onClick={() => { setUserTabOpen(true);/* setAnimationRunning(true); */ /* animateTransition(); */}}>
+                    <FontAwesomeIcon icon={user} className={styles_preview["icon-user"]} />
+                </div>    
+            </div>  
+
+            {isUserTabOpen && <UserTab includeUserStats={false} setAnimationRunning={setAnimationRunning} setUserTabOpen={setUserTabOpen} player={data.user} /* player={props.player} levelsCount={props.levelsCount} */ />}
         </div>
+        
     )
 }
 

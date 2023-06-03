@@ -89,7 +89,7 @@ function SerieBox(props) {
     
         section_content.classList.remove(styles['invisible']);
        
-        section_content_tiles.forEach(lv_tile => lv_tile.style.pointerEvents = 'auto');
+        /* section_content_tiles.forEach(lv_tile => lv_tile.style.pointerEvents = 'auto'); */
     
         async function animationChain() {
             await fadeText()
@@ -156,7 +156,7 @@ function SerieBox(props) {
             const section_content_old = recentShowUpBox.querySelector(`.${styles['serie-content']}`);
             const section_content_tiles_old = section_content_old.querySelectorAll(`.${styles[dynamic_classes.level_borders]}`);
 
-            section_content_tiles_old.forEach(lv_tile => lv_tile.style.pointerEvents = 'none');
+            /* section_content_tiles_old.forEach(lv_tile => lv_tile.style.pointerEvents = 'none'); */
 
             async function animationChain() {
                 section_title_old.classList.remove(styles['invisible']);
@@ -211,7 +211,7 @@ function SerieBox(props) {
             <div className={`${styles['serie-content']} ${styles['invisible']}`}>
                 {[].concat([...props.serie.Levels]).sort((a, b) => a.number - b.number).map((lv, index) =>
                     <div className={styles[`${dynamic_classes.level_borders}`]} key={lv.name.toString() + lv.number.toString()}
-                        onClick={() => {props.setLevelChoose([lv, index+1, props.serie.name_abbr, props.serie.name, props.serie.description])}}
+                        onClick={() => {props.isAnimationRunning === false && props.setLevelChoose([lv, index+1, props.serie.name_abbr, props.serie.name, props.serie.description])}}
                     >
                         <div className={styles['bg-layer']}>
                             <div className={styles[`${dynamic_classes.level_tile_main}`]}>

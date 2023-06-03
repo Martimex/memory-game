@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import styles from "../styles/player_stats.module.css";
 import player_stats_pages from "../global/player_stats_pages";
 
+
 function PlayerStats(props) {
 
     const pagesLimit = props.pageLastIndex + 1;

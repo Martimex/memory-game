@@ -16,6 +16,8 @@ import { faUserCircle as user} from '@fortawesome/free-solid-svg-icons';
 import { faHome as home} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+// We need to make sure it is a non-mutable value. We are going to use it for TopBar showUp animation, and we have to have reference 100% value
+let topBarHeight;
 
 function Preview( props ) {
     // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
@@ -26,7 +28,8 @@ function Preview( props ) {
     const [chosenSerie, setChosenSerie] = useState(null);
     const [chosenSerieName, setChosenSerieName] = useState(null);
     const [isLevelStart, setLevelStart] = useState(false);
-    const [isUserTabOpen, setUserTabOpen] = useState(false);
+    const [isUserTabOpen, setUserTabOpen] = useState(null);
+    const [isAnimationRunning, setAnimationRunning] = useState(true);
 
     const { data: session, status } = useSession();
     
@@ -45,7 +48,7 @@ function Preview( props ) {
     //props.data.map((serie, index) => console.log(serie.name));
 
     const levels_showcase = props.data.map((serie, index) => 
-        <SerieBox serie={serie} setSerieName={setChosenSerie} setLevelChoose={setLevelChoose} key={serie.index.toString() + serie.name} />
+        <SerieBox serie={serie} setSerieName={setChosenSerie} setLevelChoose={setLevelChoose} isAnimationRunning={isAnimationRunning} key={serie.index.toString() + serie.name} />
     ) 
 
     useEffect(() => {
@@ -103,6 +106,7 @@ function Preview( props ) {
     });
 
     function checkStickyBar() {
+        if(!topBarRef.current) {return;} // Solves weird bug when using "home button", which later indicates that topBarRef.current.classList is not defined
         const isSticky_before = topBarRef.current.classList.contains(styles['sticky']);
         topBarRef.current.classList.toggle(styles['sticky'], window.scrollY > 0);
         const isSticky_after = topBarRef.current.classList.contains(styles['sticky']);
@@ -130,12 +134,41 @@ function Preview( props ) {
         }
     }
 
+    useEffect(() => {
+        if(isUserTabOpen === false) {
+            const topBar = document.querySelector(`.${styles['top-bar']}`);
+            anime({
+                targets: topBar,
+                height: {value: +topBarHeight, duration: 500, easing: 'easeInCubic'},
+                opacity: {value: 1, duration: 550, easing: 'linear'},
+            }).finished;
+            setAnimationRunning(false);
+        }
+    }, [isUserTabOpen]);
+
+    useEffect(() => {
+        setAnimationRunning(false);
+    }, [])
+
+    async function animateTransition() {
+        const topBar = document.querySelector(`.${styles['top-bar']}`);
+/*         const previewMain = document.querySelector(`.${styles['bg-main']}`); // Going to use it to temporarily block click events;
+        previewMain.style.pointerEvents = 'none'; */
+        topBarHeight = (topBarHeight)? topBarHeight : topBar.offsetHeight; // Prevents from a bug that a bar grows 2px every animation cycle
+        await anime({
+            targets: topBar,
+            height: {value: 0, duration: 500, easing: 'easeInCubic'},
+            opacity: {value: 0, duration: 550, easing: 'linear'},
+        }).finished;
+        setUserTabOpen(true);
+    }
+
     return (
         <div className={styles['bg-main']}>
             <div className={styles['seizure-flexbox']}>
                 <div className={styles['top-bar']} ref={topBarRef}>
                     <div className={styles['top-bar__return']}>
-                        <button className={styles['return-back']} onClick={() => {Router.push('/')/* props.backToHome(); props.proceed(); */}}> 
+                        <button className={styles['return-back']} onClick={() => {setAnimationRunning(true); Router.push('/')/* props.backToHome(); props.proceed(); */}}> 
                             <FontAwesomeIcon icon={home} className={styles["icon-home"]} />
                         </button>
                     </div>
@@ -145,14 +178,14 @@ function Preview( props ) {
                     </div>
 
                     <div className={styles['top-bar__follow']}>
-                        <div className={styles['follow-me']} onClick={() => /* console.log(props) */ setUserTabOpen(true)}>
+                        <div className={styles['follow-me']} onClick={() => {setAnimationRunning(true); animateTransition();}}>
                             <FontAwesomeIcon icon={user} className={styles["icon-user"]} />
                         </div>    
                     </div>
 
                 </div>
 
-                <h1 style={{color: 'white'}}> {session && session.user.name} </h1>
+                {/* <h1 style={{color: 'white'}}> {session && session.user.name} </h1> */}
                 <div className={styles['showcase-block']}>
                     {levels_showcase}
                 </div>
@@ -161,7 +194,7 @@ function Preview( props ) {
             </div>
 
             { isUserTabOpen && (
-                <UserTab player={props.player} levelsCount={props.levelsCount} />
+                <UserTab includeUserStats={true} player={props.player} levelsCount={props.levelsCount} setUserTabOpen={setUserTabOpen} setAnimationRunning={setAnimationRunning} />
             )}   
 
             { levelChoose && (

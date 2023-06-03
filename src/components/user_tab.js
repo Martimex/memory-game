@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styles from '../styles/user_tab.module.css';
+import barStyles from '../styles/player_stats.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
         faCaretLeft as arrow_left,
@@ -9,58 +10,197 @@ import {
         faTimesCircle as logout_circ
         } from '@fortawesome/free-solid-svg-icons';
 import PlayerStats from "./player_stats";
+import {pages_titles} from "../global/player_stats_pages";
+import * as Animation from 'animejs';
+import { signOut } from "next-auth/react";
+
 
 function UserTab(props) {
 
-    const [[pageNo, pageMaxIndex], setPageNo] = useState([2, 2]);
+    const anime = Animation.default;
+    const [[pageNo, pageMaxIndex, prevPageNo], setPageNo] = useState([0, 2, 0]);
+
+    async function handleLogout() {
+/*         const logOut = await signOut();
+        logOut.then(() => Router.push('/')) */
+        props.setAnimationRunning(false);
+        signOut({callbackUrl: '/'})
+    }
+
+    useEffect(() => {
+        console.log('Previous page no: ', prevPageNo, '  and current page no is: ', pageNo)
+    }, [pageNo])
+
+    useEffect(() => {
+        const getImageBox = document.querySelector(`.${styles["user-info__image-box"]}`);
+        //console.log('IMAGE BOX IS: ', getImageBox);
+        if(getImageBox) {
+            //console.log('image box ??  Our props are: ', props);
+            getImageBox.src = "https://lh3.googleusercontent.com/a/AGNmyxYdHxpTrqnk-muASXR1wLNGS1O5BwXD6UOoVWxW=s96-c";
+        }
+        fireUserTabAnimation('show');
+    }, [])
+
+    async function handleStatsChange(newPageNo) {
+        const allProgressBars = document.querySelectorAll(`.${barStyles['stats-item']}`);
+        console.log(newPageNo, ' and progress bars: ', allProgressBars);
+        await anime({
+            targets: allProgressBars,
+            translateY: {value: '20%', delay: anime.stagger(100), duration: 350, easing: 'linear'},
+            opacity: {value: [1, 0], delay: anime.stagger(100), duration: 350, easing: 'linear'}
+        }).finished;
+        setPageNo([newPageNo, pageMaxIndex, pageNo])
+    }
+
+    useEffect(() => {
+        progressBarShowUp();
+    }, [pageNo])
+
+    async function progressBarShowUp() {
+        const allProgressBars = document.querySelectorAll(`.${barStyles['stats-item']}`);
+        await anime({
+            targets: allProgressBars,
+            translateY: {value: '0%', duration: 0, easing: 'linear'},
+            opacity: {value: [0, 1], duration: 200, delay: anime.stagger(80), easing: 'linear'},
+        }).finished;
+    }
+
+    async function fireUserTabAnimation(animation_type) {
+        if(animation_type !== 'hide' && animation_type !== 'show') { throw new Error("Invalid animation type value ! Type is neither 'hide' nor 'show'")}
+        const userTabAll = document.querySelector(`.${styles['user-tab']}`);
+        const userTabBox = document.querySelector(`.${styles['user-tab__box']}`);
+        const [tabBox__profile, tabBox__buttons] = [document.querySelector(`.${styles['box__user-profile']}`), document.querySelector(`.${styles['box__action-buttons']}`)];
+        const [profile_info, profile_stats] = [tabBox__profile.querySelector(`.${styles['box__user-info']}`), tabBox__profile.querySelector(`.${styles['box__user-stats']}`)];
+        //const userTabHeight = userTab.offsetHeight;
+        //console.log('userTab offsetHeight is: ', userTabHeight);
+        const userTabBoxHeight = window.getComputedStyle(userTabBox).getPropertyValue('height');
+        console.log('userTab computed height is: ', userTabBoxHeight, profile_info, profile_stats);
+        
+        if(animation_type === 'show') { await animateUserTab(); await animateTabBox2()}
+        else if(animation_type === 'hide') {await animateTabBox()}
+
+        async function animateUserTab() {
+            await anime({
+                targets: userTabAll,
+                duration: 500,
+                opacity: [0, 1],
+                easing: 'easeInSine',
+            }).finished;
+        }
+
+        async function animateTabBox2() {
+            const a1 = anime({
+                targets: userTabBox,
+                height: {value: ['0px', `${userTabBoxHeight}px`], duration: 600, easing: 'easeOutQuad'},
+                opacity: {value: 1, duration: 450, easing: 'linear'},
+            }).finished;
+
+            const a2 = anime({
+                targets: profile_info,
+                opacity: {value: [0, 1], duration: 500, easing: 'linear'},
+                translateY: {value: ['-20%', '0%'], duration: 400, easing: 'easeOutSine'},
+            }).finished;
+
+            const a3 = anime({
+                targets: profile_stats,
+                opacity: {value: [0, 1], duration: 500, easing: 'linear'},
+                translateY: {value: ['20%', '0%'], duration: 400, easing: 'easeOutSine'},
+            }).finished;
+
+            const a4 = anime({
+                targets: tabBox__buttons,
+                opacity: {value: [0, 1], duration: 500, easing: 'linear'},
+                translateX: {value: ['-20%', '0%'], duration: 400, easing: 'easeOutSine'},
+            }).finished;
+
+            const a5 = anime({
+                targets: tabBox__profile,
+                duration: 500,
+                opacity: [0, 1],
+                easing: 'linear',
+            }).finished;
+
+            await Promise.all([a1, a2, a3, a4, a5]);
+        }
+
+        async function animateTabBox() {
+            const a1 = anime({
+                targets: userTabBox,
+                height: {value: [`${userTabBoxHeight}px`, '0px'], duration: 600, easing: 'easeInQuad'},
+                opacity: {value: 0, duration: 450, easing: 'linear'},
+            }).finished;
+
+            const a2 = anime({
+                targets: [tabBox__profile, tabBox__buttons],
+                duration: 400,
+                opacity: 0,
+                translateY: '-20%',
+                easing: 'easeInSine',
+            }).finished;
+
+            await Promise.all([a1, a2]);
+        }
+
+    }
+
+    async function handleUserTabHide() {
+        await fireUserTabAnimation('hide');
+        props.setUserTabOpen(false)
+    }
 
     return(
-        <div className={styles['user-tab']}>
-            <div className={styles['user-tab__box']}>
+        <div className={styles['main-layer']} onClick={(e) => {e.target.classList.contains(`${styles['main-layer']}`) && handleUserTabHide()}}>
+            <div className={styles['user-tab']}>
+                <div className={styles['user-tab__box']}>
+                    <div className={styles['box__user-profile']}>
+                        <div className={styles['box__user-info']}> 
+                            <div className={styles['user-info__image-box']}>
+                                <img className={styles['image-box__image']} src={props.player.image} />
+                            </div>
+                            <div className={styles['user-info__data']}>
+                                <p className={`${styles["data__text"]} ${styles["data__text--large"]}`}> {props.player.name} </p>
+                                <p className={`${styles["data__text"]} ${styles["data__text--medium"]}`}> Level 20 (85%) </p>
+                                <p className={`${styles["data__text"]} ${styles["data__text--small"]}`}> Member since: 05/06/2023 </p>
+                            </div>
+                        </div>
+                        <div className={styles['box__user-stats']}> 
+                            <div className={`${styles["user-stats__switch-btn"]} ${styles["switch-btn-left"]}`} onClick={() => {handleStatsChange((pageNo > 0)? pageNo - 1 : pageMaxIndex); /* setPageNo([pageNo - 1, pageMaxIndex, pageNo]) */}}> 
+                                <FontAwesomeIcon icon={arrow_left} className={`${styles["icon-arrow"]} ${styles["icon-arrow-left"]}`} />
+                            </div>
+                            <div className={styles['user-stats__stats-table']}> 
+                                {/* Here we will use conditional component, having multiple page controllable by switch buttons */}
+                                <div className={styles['user-stats__stats-title-box']}>
+                                    <p className={styles['user-stats__stats-title']}> {pages_titles[pageNo]} </p>
+                                </div>
+                                {props.includeUserStats === true && <PlayerStats pageNo={pageNo} pageLastIndex={pageMaxIndex} levelsCount={props.levelsCount} />}
+                            </div>
+                            <div className={`${styles["user-stats__switch-btn"]} ${styles["switch-btn-right"]}`} onClick={() => {handleStatsChange((pageNo !== pageMaxIndex)? pageNo + 1 : 0); /* setPageNo([pageNo + 1, pageMaxIndex, pageNo]) */}}> 
+                                <FontAwesomeIcon icon={arrow_right} className={`${styles["icon-arrow"]} ${styles["icon-arrow-right"]}`} />
+                            </div>
+                        </div>
+                    </div>
 
-                <div className={styles['box__user-profile']}>
-                    <div className={styles['box__user-info']}> 
-                        <div className={styles['user-info__image-box']}>
-                            <div className={styles['image-box__image']}> </div>
+                    <div className={styles['box__action-buttons']}>
+                        <div className={styles['action-buttons__btn-item']}> 
+                            <div className={styles['btn-item__icon']} onClick={() => {handleUserTabHide()/* props.setUserTabOpen(false) */}}>
+                                <FontAwesomeIcon icon={hide_circ} className={`${styles["icon--btn"]} ${styles["icon-hide"]}`} />
+                            </div>
+                            <span className={styles['btn-item__text']}>Hide</span>
                         </div>
-                        <div className={styles['user-info__data']}>
-                            <p className={`${styles["data__text"]} ${styles["data__text--large"]}`}> {props.player.name} </p>
-                            <p className={`${styles["data__text"]} ${styles["data__text--medium"]}`}> Level 20 (85%) </p>
-                            <p className={`${styles["data__text"]} ${styles["data__text--small"]}`}> Member since: 05/06/2023 </p>
+                        <div className={styles['action-buttons__item']}>
+                            <div className={styles['btn-item__icon']}>
+                                <a href="https://github.com/Martimex/memory-game" target="_blank">
+                                    <FontAwesomeIcon icon={info_circ} className={`${styles["icon--btn"]} ${styles["icon-info"]}`} />
+                                </a>
+                            </div>
+                            <span className={styles['btn-item__text']}>Info</span>
                         </div>
-                    </div>
-                    <div className={styles['box__user-stats']}> 
-                        <div className={`${styles["user-stats__switch-btn"]} ${styles["switch-btn-left"]}`} onClick={() => {(pageNo > 0) && setPageNo([pageNo - 1, pageMaxIndex])}}> 
-                            <FontAwesomeIcon icon={arrow_left} className={`${styles["icon-arrow"]} ${styles["icon-arrow-left"]}`} />
+                        <div className={styles['action-buttons__item']}>
+                            <div className={styles['btn-item__icon']} onClick={() => {handleLogout()}}>
+                                <FontAwesomeIcon icon={logout_circ} className={`${styles["icon--btn"]} ${styles["icon-logout"]}`} />
+                            </div>
+                            <span className={styles['btn-item__text']}>Log out</span>
                         </div>
-                        <div className={styles['user-stats__stats-table']}> 
-                            {/* Here we will use conditional component, having multiple page controllable by switch buttons */}
-                            <PlayerStats pageNo={pageNo} pageLastIndex={pageMaxIndex} levelsCount={props.levelsCount} />
-                        </div>
-                        <div className={`${styles["user-stats__switch-btn"]} ${styles["switch-btn-right"]}`} onClick={() => {(pageNo !== pageMaxIndex) && setPageNo([pageNo + 1, pageMaxIndex])}}> 
-                            <FontAwesomeIcon icon={arrow_right} className={`${styles["icon-arrow"]} ${styles["icon-arrow-right"]}`} />
-                        </div>
-                    </div>
-                </div>
-
-                <div className={styles['box__action-buttons']}>
-                    <div className={styles['action-buttons__btn-item']}> 
-                        <div className={styles['btn-item__icon']}>
-                            <FontAwesomeIcon icon={hide_circ} className={`${styles["icon--btn"]} ${styles["icon-hide"]}`} />
-                        </div>
-                        <span className={styles['btn-item__text']}>Hide</span>
-                    </div>
-                    <div className={styles['action-buttons__item']}> 
-                        <div className={styles['btn-item__icon']}>
-                            <FontAwesomeIcon icon={info_circ} className={`${styles["icon--btn"]} ${styles["icon-info"]}`} />
-                        </div>
-                        <span className={styles['btn-item__text']}>Info</span>
-                    </div>
-                    <div className={styles['action-buttons__item']}>
-                        <div className={styles['btn-item__icon']}>
-                            <FontAwesomeIcon icon={logout_circ} className={`${styles["icon--btn"]} ${styles["icon-logout"]}`} />
-                        </div>
-                        <span className={styles['btn-item__text']}>Log out</span>
                     </div>
                 </div>
             </div>

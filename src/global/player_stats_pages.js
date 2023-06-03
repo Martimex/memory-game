@@ -22,4 +22,7 @@ const player_stats_pages = [
     ],
 ];
 
+const pages_titles = ['General info', 'Completed (1/2)', 'Completed (2/2)'];
+
+export  { pages_titles };
 export default player_stats_pages;

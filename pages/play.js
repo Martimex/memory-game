@@ -51,9 +51,9 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
     levelsByDifficulty.levelsAmount = {inGame: Object.values(levelsByDifficulty.all).length? Object.values(levelsByDifficulty.all).reduce((a, b) => +a + +b) : 0, userWin: Object.values(levelsByDifficulty.user_completed).length? Object.values(levelsByDifficulty.user_completed).reduce((a, b) => +a + +b) : 0};
     levelsByDifficulty.user_exp = 125; // CHANGE THIS LATER ONCE EXP GAIN MECHANISM IS IMPLEMENTED
 
-    //console.log(data);
+    console.log('DATA IS:: + ', data);
     return {
-        props: { data: data, user_progresses: user_progresses, session_user: session_user, levelsCount: levelsByDifficulty },
+        props: { data: [...data].sort((a, b) => a.index - b.index), user_progresses: user_progresses, session_user: session_user, levelsCount: levelsByDifficulty },
     };
 };
 

@@ -3,7 +3,7 @@
     display: flex;
     flex-flow: column;
     /* box-shadow: inset .2em .2em .1em .25em #444, .1em .1em .1em .25em #222; */
-    padding: 2em;
+    /* padding: 2em; */
 }
 
 .stats-item {
