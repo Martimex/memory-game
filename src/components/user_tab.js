@@ -1,16 +1,12 @@
 import React, {useState, useEffect} from "react";
 import styles from '../styles/user_tab.module.css';
-import barStyles from '../styles/player_stats.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-        faCaretLeft as arrow_left,
-        faCaretRight as arrow_right,
-        faDotCircle as hide_circ, 
-        faInfoCircle as info_circ, 
-        faTimesCircle as logout_circ
-        } from '@fortawesome/free-solid-svg-icons';
+    faDotCircle as hide_circ, 
+    faInfoCircle as info_circ, 
+    faTimesCircle as logout_circ
+    } from '@fortawesome/free-solid-svg-icons';
 import PlayerStats from "./player_stats";
-import {pages_titles} from "../global/player_stats_pages";
 import * as Animation from 'animejs';
 import { signOut } from "next-auth/react";
 
@@ -18,7 +14,6 @@ import { signOut } from "next-auth/react";
 function UserTab(props) {
 
     const anime = Animation.default;
-    const [[pageNo, pageMaxIndex, prevPageNo], setPageNo] = useState([0, 2, 0]);
 
     async function handleLogout() {
 /*         const logOut = await signOut();
@@ -26,10 +21,6 @@ function UserTab(props) {
         props.setAnimationRunning(false);
         signOut({callbackUrl: '/'})
     }
-
-    useEffect(() => {
-        console.log('Previous page no: ', prevPageNo, '  and current page no is: ', pageNo)
-    }, [pageNo])
 
     useEffect(() => {
         const getImageBox = document.querySelector(`.${styles["user-info__image-box"]}`);
@@ -40,30 +31,6 @@ function UserTab(props) {
         }
         fireUserTabAnimation('show');
     }, [])
-
-    async function handleStatsChange(newPageNo) {
-        const allProgressBars = document.querySelectorAll(`.${barStyles['stats-item']}`);
-        console.log(newPageNo, ' and progress bars: ', allProgressBars);
-        await anime({
-            targets: allProgressBars,
-            translateY: {value: '20%', delay: anime.stagger(100), duration: 350, easing: 'linear'},
-            opacity: {value: [1, 0], delay: anime.stagger(100), duration: 350, easing: 'linear'}
-        }).finished;
-        setPageNo([newPageNo, pageMaxIndex, pageNo])
-    }
-
-    useEffect(() => {
-        progressBarShowUp();
-    }, [pageNo])
-
-    async function progressBarShowUp() {
-        const allProgressBars = document.querySelectorAll(`.${barStyles['stats-item']}`);
-        await anime({
-            targets: allProgressBars,
-            translateY: {value: '0%', duration: 0, easing: 'linear'},
-            opacity: {value: [0, 1], duration: 200, delay: anime.stagger(80), easing: 'linear'},
-        }).finished;
-    }
 
     async function fireUserTabAnimation(animation_type) {
         if(animation_type !== 'hide' && animation_type !== 'show') { throw new Error("Invalid animation type value ! Type is neither 'hide' nor 'show'")}
@@ -152,8 +119,8 @@ function UserTab(props) {
         <div className={styles['main-layer']} onClick={(e) => {e.target.classList.contains(`${styles['main-layer']}`) && handleUserTabHide()}}>
             <div className={styles['user-tab']}>
                 <div className={styles['user-tab__box']}>
-                    <div className={styles['box__user-profile']}>
-                        <div className={styles['box__user-info']}> 
+                    <div className={`${styles['box__user-profile']} ${(props.includeUserStats !== true && styles['user-profile--adjusted'])}`}>
+                        <div className={`${styles['box__user-info']} ${(props.includeUserStats !== true && styles['user-info--adjusted'])}`}> 
                             <div className={styles['user-info__image-box']}>
                                 <img className={styles['image-box__image']} src={props.player.image} />
                             </div>
@@ -163,24 +130,10 @@ function UserTab(props) {
                                 <p className={`${styles["data__text"]} ${styles["data__text--small"]}`}> Member since: 05/06/2023 </p>
                             </div>
                         </div>
-                        <div className={styles['box__user-stats']}> 
-                            <div className={`${styles["user-stats__switch-btn"]} ${styles["switch-btn-left"]}`} onClick={() => {handleStatsChange((pageNo > 0)? pageNo - 1 : pageMaxIndex); /* setPageNo([pageNo - 1, pageMaxIndex, pageNo]) */}}> 
-                                <FontAwesomeIcon icon={arrow_left} className={`${styles["icon-arrow"]} ${styles["icon-arrow-left"]}`} />
-                            </div>
-                            <div className={styles['user-stats__stats-table']}> 
-                                {/* Here we will use conditional component, having multiple page controllable by switch buttons */}
-                                <div className={styles['user-stats__stats-title-box']}>
-                                    <p className={styles['user-stats__stats-title']}> {pages_titles[pageNo]} </p>
-                                </div>
-                                {props.includeUserStats === true && <PlayerStats pageNo={pageNo} pageLastIndex={pageMaxIndex} levelsCount={props.levelsCount} />}
-                            </div>
-                            <div className={`${styles["user-stats__switch-btn"]} ${styles["switch-btn-right"]}`} onClick={() => {handleStatsChange((pageNo !== pageMaxIndex)? pageNo + 1 : 0); /* setPageNo([pageNo + 1, pageMaxIndex, pageNo]) */}}> 
-                                <FontAwesomeIcon icon={arrow_right} className={`${styles["icon-arrow"]} ${styles["icon-arrow-right"]}`} />
-                            </div>
-                        </div>
+                        {props.includeUserStats === true && <PlayerStats /* pageNo={pageNo} pageLastIndex={pageMaxIndex} */ levelsCount={props.levelsCount} />}
                     </div>
 
-                    <div className={styles['box__action-buttons']}>
+                    <div className={`${styles['box__action-buttons']} ${(props.includeUserStats !== true && styles['box__action-buttons--adjusted'])}`}>
                         <div className={styles['action-buttons__btn-item']}> 
                             <div className={styles['btn-item__icon']} onClick={() => {handleUserTabHide()/* props.setUserTabOpen(false) */}}>
                                 <FontAwesomeIcon icon={hide_circ} className={`${styles["icon--btn"]} ${styles["icon-hide"]}`} />

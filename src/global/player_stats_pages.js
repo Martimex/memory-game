@@ -1,9 +1,3 @@
-const player_stats_pages2 = [
-    [{entry_name: 'EXP', entry_data_name: '2'}, {entry_name: 'STARS', entry_data_name: '2'}, {entry_name: 'LEVELS', entry_data_name: '2'}],
-    [{entry_name: 'EASY', entry_data_name: '2'}, {entry_name: 'MEDIUM', entry_data_name: '2'}, {entry_name: 'HARD', entry_data_name: '2'}],
-    [{entry_name: 'INSANE', entry_data_name: '2'}, {entry_name: 'EXTREME', entry_data_name: '2'}, {entry_name: 'LEGEND', entry_data_name: '2'}],
-];
-
 const player_stats_pages = [
     [
         {stat_name: 'EXP', connect_name: 'main-exp', color_bar_class: 'bar--exp', getValues: function(paramName) {return paramName}},

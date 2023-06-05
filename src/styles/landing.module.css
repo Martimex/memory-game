@@ -181,16 +181,25 @@
  */
 
 .setup-container {
-    font-size: 2em;
+    box-sizing: border-box;
+    font-size: 2rem;
     position: absolute;
     top: 0;
-    left: calc(100% - 5vw);
-    background: pink;
+    left: calc(100% - 3em);
+    background: #ddd;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    width: 5vw;
+    width: 3em;
+    height: 3em;
+    box-shadow: inset 0 0 .3em .5em #bbb;
+    color: #888;
+    border: .2em solid #999;
+    border-left: none;
+    border-right: none;
+    margin-left: -.5em;
+    margin-top: .5em;
 }
 
 .start {

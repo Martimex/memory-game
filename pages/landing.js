@@ -226,11 +226,14 @@ function Landing(props) {
                 </div>
             </div>     
 
-            <div className={styles['setup-container']}>
-                <div className={styles_preview['follow-me']} onClick={() => { setUserTabOpen(true);/* setAnimationRunning(true); */ /* animateTransition(); */}}>
-                    <FontAwesomeIcon icon={user} className={styles_preview["icon-user"]} />
-                </div>    
-            </div>  
+            {status === 'authenticated' && (
+                <div className={styles['setup-container']} onClick={() => { setUserTabOpen(true);/* setAnimationRunning(true); */ /* animateTransition(); */}}>
+                    <div className={styles_preview['follow-me']} >
+                        <FontAwesomeIcon icon={user} className={styles_preview["icon-user"]} />
+                    </div>    
+                </div>  
+            )}
+
 
             {isUserTabOpen && <UserTab includeUserStats={false} setAnimationRunning={setAnimationRunning} setUserTabOpen={setUserTabOpen} player={data.user} /* player={props.player} levelsCount={props.levelsCount} */ />}
         </div>

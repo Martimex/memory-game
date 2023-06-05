@@ -98,3 +98,54 @@
     color: #eee;
     font-weight: 600;
 }
+
+.box__user-stats {
+    display: grid;
+    grid-template-columns: 12% 76% 12%;
+    grid-template-rows: 1fr;
+}
+
+.user-stats__switch-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch-btn-left, .switch-btn-right {
+    font-size: 5.2rem;
+    color: #ddd;
+}
+
+.user-stats__stats-table {
+    font-size: 1rem;
+    padding: 1.4em;
+    display: flex;
+    flex-flow: column;
+/*         display: flex;
+    align-items: center;
+    justify-content: center; */
+/*         padding: 2em; */
+    background: #333;
+    background: linear-gradient(135deg, #3335, #222);
+    border-radius: 5%;
+    box-shadow: inset .08em .08em .08em .15em #444, .03em .03em .1em .25em #333;
+}
+
+.user-stats__stats-title-box {
+    font-size: 1rem;
+}
+
+.user-stats__stats-title{
+    font-size: 1.05rem;
+    text-align: center;
+    vertical-align: center;
+    padding: 0;
+    margin: 0;
+    font-weight: 550;
+    margin-bottom: .6em;
+    letter-spacing: .075em;
+}
+
+.icon-arrow:hover {
+    cursor: pointer;
+}

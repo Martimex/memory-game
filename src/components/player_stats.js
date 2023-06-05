@@ -1,80 +1,88 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styles from "../styles/player_stats.module.css";
 import player_stats_pages from "../global/player_stats_pages";
+import * as Animation from 'animejs';
+import {pages_titles} from "../global/player_stats_pages";
+import barStyles from '../styles/player_stats.module.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faCaretLeft as arrow_left,
+    faCaretRight as arrow_right,
+} from '@fortawesome/free-solid-svg-icons';
 
+let isAnimationRunning = false;
 
 function PlayerStats(props) {
 
-    const pagesLimit = props.pageLastIndex + 1;
+    const anime = Animation.default;
+    const [[pageNo, pageMaxIndex, prevPageNo], setPageNo] = useState([0, 2, 0]);
+
+    async function handleStatsChange(newPageNo) {
+        if(isAnimationRunning) { return; }
+        isAnimationRunning = true;
+        const allProgressBars = document.querySelectorAll(`.${barStyles['stats-item']}`);
+        console.log(newPageNo, ' and progress bars: ', allProgressBars);
+        await anime({
+            targets: allProgressBars,
+            translateY: {value: '20%', delay: anime.stagger(100), duration: 350, easing: 'linear'},
+            opacity: {value: 0, delay: anime.stagger(100), duration: 350, easing: 'linear'}
+        }).finished;
+        setPageNo([newPageNo, pageMaxIndex, pageNo]);
+    }
+
+    useEffect(() => {
+        progressBarShowUp();
+    }, [pageNo])
+
+    async function progressBarShowUp() {
+        const allProgressBars = document.querySelectorAll(`.${barStyles['stats-item']}`);
+        await anime({
+            targets: allProgressBars,
+            translateY: {value: '0%', duration: 0, easing: 'linear'},
+            opacity: {value: 1, duration: 200, delay: anime.stagger(80), easing: 'linear'},
+        }).finished;
+        isAnimationRunning = false;
+    }
+
+    const pagesLimit = pageMaxIndex + 1;
     const statsRows = Array.from(new Array(pagesLimit)).map((el, ind) => {
-        const [userStat, gameStat] = connectObj(props.levelsCount, player_stats_pages[props.pageNo][ind].connect_name);
+        const [userStat, gameStat] = connectObj(props.levelsCount, player_stats_pages[pageNo][ind].connect_name);
         /* console.error(props); */
         const getPercentageValue = Math.floor((100 / (gameStat || 1 /* AVOIDING POSSIBLE DIVISION BY 0 */)) * userStat);
         return(
             <div key={ind.toString()} className={styles['stats-item']}> 
                 <div className={styles['stats-item-box']}> 
-                    <p className={styles['item-box__text']}> {player_stats_pages[props.pageNo][ind].stat_name}: </p>
+                    <p className={styles['item-box__text']}> {player_stats_pages[pageNo][ind].stat_name}: </p>
                 </div>
                 <div className={styles['stats-item-box']}> 
                     <div className={styles['item-box__bar--outer']}>
-                        <div className={styles['item-box__bar-text']}> {getPercentageValue}% {/* {(Boolean(props.levelsCount.user_completed['insane']) && Boolean(props.levelsCount.all['insane']))? ((100 / props.levelsCount.all['insane']) / props.levelsCount.user_completed['insane']).toFixed() : 0} */}</div>
-                        <div className={`${styles['item-box__bar--inner']} ${styles[player_stats_pages[props.pageNo][ind].color_bar_class]}`} style={{'width': `${getPercentageValue}%`}} >  </div>
+                        <div className={styles['item-box__bar-text']}> {getPercentageValue}% </div>
+                        <div className={`${styles['item-box__bar--inner']} ${styles[player_stats_pages[pageNo][ind].color_bar_class]}`} style={{'width': `${getPercentageValue}%`}} >  </div>
                     </div>
                 </div>
                 <div className={styles['stats-item-box']}> 
-                    <p className={styles['item-box__text']}> {userStat} / {gameStat} {/* {Boolean(props.levelsCount.user_completed['insane'])? props.levelsCount.user_completed['insane'] : 0} */} </p>
+                    <p className={styles['item-box__text']}> {userStat} / {gameStat} </p>
                 </div>
             </div>
         );
     })
 
     return (
-        <div className={styles['stats-table']}>
-            {statsRows}
-            {/* <div className={styles['stats-item']}> 
-                <div className={styles['stats-item-box']}> 
-                    <p className={styles['item-box__text']}> {player_stats_pages[props.pageNo][0].stat_name}: </p>
+        <div className={styles['box__user-stats']}> 
+            <div className={`${styles["user-stats__switch-btn"]} ${styles["switch-btn-left"]}`} onClick={() => {handleStatsChange((pageNo > 0)? pageNo - 1 : pageMaxIndex);}}> 
+                <FontAwesomeIcon icon={arrow_left} className={`${styles["icon-arrow"]} ${styles["icon-arrow-left"]}`} />
+            </div>
+            <div className={styles['user-stats__stats-table']}> 
+                <div className={styles['user-stats__stats-title-box']}>
+                    <p className={styles['user-stats__stats-title']}> {pages_titles[pageNo]} </p>
                 </div>
-                <div className={styles['stats-item-box']}> 
-                    <div className={styles['item-box__bar--outer']}>
-                        <div className={styles['item-box__bar-text']}> {(Boolean(props.levelsCount.user_completed['insane']) && Boolean(props.levelsCount.all['insane']))? ((100 / props.levelsCount.all['insane']) / props.levelsCount.user_completed['insane']).toFixed() : 0}% </div>
-                        <div className={styles['item-box__bar--inner']}>  </div>
-                    </div>
-                </div>
-                <div className={styles['stats-item-box']}> 
-                    <p className={styles['item-box__text']}> {Boolean(props.levelsCount.user_completed['insane'])? props.levelsCount.user_completed['insane'] : 0} </p>
+                <div className={styles['stats-table']}>
+                    {statsRows}
                 </div>
             </div>
-
-            <div className={styles['stats-item']}> 
-                <div className={styles['stats-item-box']}> 
-                    <p className={styles['item-box__text']}> {player_stats_pages[props.pageNo][1].stat_name}: </p>
-                </div>
-                <div className={styles['stats-item-box']}> 
-                    <div className={styles['item-box__bar--outer']}> 
-                        <div className={styles['item-box__bar-text']}> 100% </div>
-                        <div className={styles['item-box__bar--inner']}> </div>
-                    </div>
-                </div>
-                <div className={styles['stats-item-box']}> 
-                    <p className={styles['item-box__text']}> 73 </p>
-                </div>
+            <div className={`${styles["user-stats__switch-btn"]} ${styles["switch-btn-right"]}`} onClick={() => {handleStatsChange((pageNo !== pageMaxIndex)? pageNo + 1 : 0);}}> 
+                <FontAwesomeIcon icon={arrow_right} className={`${styles["icon-arrow"]} ${styles["icon-arrow-right"]}`} />
             </div>
-
-            <div className={styles['stats-item']}> 
-                <div className={styles['stats-item-box']}> 
-                    <p className={styles['item-box__text']}>{player_stats_pages[props.pageNo][2].stat_name}: </p>
-                </div>
-                <div className={styles['stats-item-box']}> 
-                    <div className={styles['item-box__bar--outer']}>
-                        <div className={styles['item-box__bar-text']}> 7% </div>
-                        <div className={styles['item-box__bar--inner']}>  </div>
-                    </div>
-                </div>
-                <div className={styles['stats-item-box']}> 
-                    <p className={styles['item-box__text']}> 45 </p>
-                </div>
-            </div> */}
         </div>
     )
 }
