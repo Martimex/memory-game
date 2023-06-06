@@ -76,7 +76,31 @@
         /* border: .1px solid black; */
         /* background-image: image-set("https://lh3.googleusercontent.com/a/AGNmyxYdHxpTrqnk-muASXR1wLNGS1O5BwXD6UOoVWxW=s96-c"); */
         background-position: center;
-        box-shadow: 0 0 .2em .3em #cccc, 0 0 .4em .5em #2226/* , 0 0 .15em .2em #2229 */;
+        /* , 0 0 .15em .2em #2229 */;
+    }
+
+    .image-box--beginner {
+        box-shadow: 0 0 .2em .3em #cccc, 0 0 .4em .5em #2226;
+    }
+
+    .image-box--adventurer {
+        box-shadow: 0 0 .2em .3em hsla(111, 53%, 77%, 0.93), 0 0 .4em .5em #2226;
+    }
+
+    .image-box--explorer {
+        box-shadow: 0 0 .2em .35em hsla(177, 53%, 77%, 0.93), 0 0 .4em .5em #2226;
+    }
+
+    .image-box--guardian {
+        box-shadow: 0 0 .2em .35em hsla(267, 53%, 77%, 0.93), 0 0 .4em .5em #2226;
+    }
+
+    .image-box--archmaster {
+        box-shadow: 0 0 .2em .4em hsla(3, 53%, 77%, 0.93), 0 0 .4em .5em #2226;
+    }
+
+    .image-box--challenger {
+        box-shadow: 0 0 .2em .4em hsla(66, 53%, 77%, 0.93), 0 0 .4em .6em #2226;
     }
 
         .image-box__image {

@@ -19,15 +19,20 @@
     --color_extreme_main: hsla(307, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
     --color_extreme_sec: hsla(262, var(--color-hue), var(--color-lightness), var(--color-opacity_sec) );
 
+    --color_legend_main: hsla(19, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
+    --color_legend_sec: hsla(38, var(--color-hue), var(--color-lightness), var(--color-opacity_sec) );
+
     --border-color_easy: var(--color_easy_sec);
     --border-color_medium: var(--color_medium_sec);
     --border-color_hard: var(--color_hard_sec);
     --border-color_insane: var(--color_insane_sec);
     --border-color_extreme: var(--color_extreme_sec);
+    --border-color_legend: var(--color_legend_sec);
 
     --playIcon-color_easy: var(--color_easy_sec);
     --playIcon-color_medium: var(--color_medium_sec);
     --playIcon-color_hard: var(--color_hard_sec);
     --playIcon-color_insane: var(--color_insane_sec);
     --playIcon-color_extreme: var(--color_extreme_sec);
+    --playIcon-color_legend: var(--color_legend_sec);
 }

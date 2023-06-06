@@ -15,6 +15,7 @@ model User {
   name           String?    @unique
   email          String?    @unique
   role           String     @default("player")
+  exp            Int?       @default(0)     
   progressLevels Progress[]
   createdLevels  Level[]
   // NEXT AUTH STUFF

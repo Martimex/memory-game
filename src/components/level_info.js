@@ -67,10 +67,11 @@ function LevelInfo(props) {
             const styles = getComputedStyle(difficulty_Dynamic_Elems[x]);
             const main_diff_col = styles.getPropertyValue(`--color_${difficulty}_main`);
             const sec_diff_col = styles.getPropertyValue(`--color_${difficulty}_sec`);
+            console.log(difficulty,main_diff_col, sec_diff_col);
        
             difficulty_Dynamic_Elems[x].style.backgroundImage  = `-webkit-linear-gradient(135deg, ${main_diff_col}, ${sec_diff_col})`;
             difficulty_Dynamic_Elems[x].style.backgroundClip = `text`;
-            difficulty_Dynamic_Elems[x].style.textShadow = `.15rem .15rem .15rem ${sec_diff_col}`;
+            difficulty_Dynamic_Elems[x].style.textShadow = `.15rem .15rem .2rem ${sec_diff_col}`;
         }
 
         // For level round border

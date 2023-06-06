@@ -64,6 +64,9 @@ function setIcon(usedIcons) {
 // We need to declare this variable outside of function component, to prevent it from being re-rendered and causing SVG path mismatch between SSR and CSR
 let allTiles;
 
+// We are going to store user data just for UserTab (Landing Page one) to display specific data properly
+let loggedPlayer = {};
+
 function Landing(props) {
     // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
     const anime = Animation.default;
@@ -202,6 +205,51 @@ function Landing(props) {
         }
     }
 
+    async function getUserData() {
+        // We need to fetch it all the time user requests for it, as EXP field may change when user wins a level and goes back for landing page
+        // to check UserTab Component back again
+        const loggedUser = await fetch(`api/user/${data.user.email}`, {
+            method: 'GET',
+            headers: { 'Content-Type' : 'application/json' },
+        })
+            .then((res) => res.body)
+            .then(rb => {
+                const reader = rb.getReader();
+
+                return new ReadableStream({
+                    start(controller) {
+
+                        function push() {
+                            reader.read().then(({ done, value }) => {
+                                if(done)  {
+                                    //console.log('done: ', done);
+                                    controller.close();
+                                    return;
+                                }
+
+                                controller.enqueue(value);
+                                //console.log(done, value);
+                                push();
+                            })
+                        }
+
+                        push();
+                    },
+                });
+            })
+            .then(stream => new Response(stream, { headers: { "Content-Type": "text/html" } }).text())
+            .then((result) => JSON.parse(result) );
+        
+        console.log('Logged user is 210: ', loggedUser);
+        loggedPlayer = {
+            name: loggedUser.name,
+            image: loggedUser.image,
+            exp: loggedUser.exp,
+        }
+
+        setUserTabOpen(true);
+    }
+
     if(status === 'loading') { return <h1> Loading, please wait ... </h1>}
     return( 
         <div className={styles['landing-all']}>
@@ -227,7 +275,7 @@ function Landing(props) {
             </div>     
 
             {status === 'authenticated' && (
-                <div className={styles['setup-container']} onClick={() => { setUserTabOpen(true);/* setAnimationRunning(true); */ /* animateTransition(); */}}>
+                <div className={styles['setup-container']} onClick={() => { getUserData();/* setAnimationRunning(true); */ /* animateTransition(); */}}>
                     <div className={styles_preview['follow-me']} >
                         <FontAwesomeIcon icon={user} className={styles_preview["icon-user"]} />
                     </div>    
@@ -235,7 +283,7 @@ function Landing(props) {
             )}
 
 
-            {isUserTabOpen && <UserTab includeUserStats={false} setAnimationRunning={setAnimationRunning} setUserTabOpen={setUserTabOpen} player={data.user} /* player={props.player} levelsCount={props.levelsCount} */ />}
+            {isUserTabOpen && <UserTab includeUserStats={false} setAnimationRunning={setAnimationRunning} setUserTabOpen={setUserTabOpen} player={loggedPlayer} /* player={props.player} levelsCount={props.levelsCount} */ />}
         </div>
         
     )

@@ -7,6 +7,7 @@ import { faStar as star_full} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 //import { set } from 'animejs';
 import { equation } from '../global/predefined/stars_equation.js';
+import { exp_for_level, exp_for_difficulty } from '../global/predefined/exp_to_level';
 
 const anime = Animation.default;
 
@@ -338,6 +339,7 @@ function Confirm(props) {
         // 1. Check if user made any progress on this level (compare current Progress record with highscore, stars and completion %)
         // 2. If at all criterias user did not make any progress, return the function and DO NOT UPDATE ANYTHING
         // 3. If any given criteria get better, let's update current Progress record but only update those fields, where the progress was made
+        console.warn('ALL OF OUR PROPS WE HAVE ACCESS TO: ', props);
         console.log('current progress object is: ', props.currentProgress);
         console.log('CURRENT PROGRESS: ', props.currentProgress.lv_progress, ' || CURRENT HIGHSCORE: ', props.currentProgress.highscore, ' || CURRENT STARS: ', props.currentProgress.stars);
         console.log('NEW PROGRESS: ', new_progress, ' || NEW HIGHSCORE: ', new_highscore, ' || NEW STARS: ', new_stars);
@@ -359,6 +361,23 @@ function Confirm(props) {
                 method: 'PUT',
                 headers:  { 'Content-Type' : 'application/json' },
                 body: JSON.stringify(progressCompared)
+            })
+        }
+
+        // Check if player Won level (if so, he will be rewarded with some extra EXP); 
+        //console.error('PLEAYER ID IS: ', props.playerId);
+
+        if(new_progress >= 100) {
+            // it is
+            const expObj = {
+                oldExp: props.playerExp,
+                exp_to_add: (props.currentProgress.lv_progress < 100)? exp_for_difficulty[props.level.difficulty].firstVictory : exp_for_difficulty[props.level.difficulty].win
+            } 
+
+            await fetch(`/api/user/${props.playerId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(expObj)
             })
         }
     }

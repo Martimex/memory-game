@@ -9,6 +9,7 @@ import {
     faCaretLeft as arrow_left,
     faCaretRight as arrow_right,
 } from '@fortawesome/free-solid-svg-icons';
+import { getLevelsCount } from "../global/predefined/exp_to_level";
 
 let isAnimationRunning = false;
 
@@ -89,11 +90,8 @@ function PlayerStats(props) {
 
 function connectObj(obj, connect) { // WE WILL INVOKE THIS FUNCTION LIKE THAT:  connectObj(props.levelsCount) - below connector variable assumes that;
 
-    const CHANGETHISEXPVALUELATER_ = 11;
-    const CHANGETHISEXPVALUELATER = 40;
-
     const connector = {
-        'main-exp':  [CHANGETHISEXPVALUELATER_, CHANGETHISEXPVALUELATER],
+        'main-exp':  [obj.user_exp, getLevelsCount()],
         'main-stars': [obj.user_stars, +obj.levelsAmount['inGame'] * 3],
         'main-levels': [obj.levelsAmount['userWin'], obj.levelsAmount['inGame']],
         'diff-easy': [obj.user_completed['easy'], obj.all['easy']],

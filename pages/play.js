@@ -6,7 +6,7 @@ import Router from "next/router";
 // Components
 import Preview from "../src/components/preview";
 import Game from "../src/components/memory_game";
-
+import { getPlayerLevel } from "../src/global/predefined/exp_to_level";
 
 export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
     // Data object is available under /play (for example: http://localhost:3000/play)
@@ -49,7 +49,7 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
 
     // Now add last fields to indicate all the levels, and also number of levels which p;ayer won (lv_progress is 100)
     levelsByDifficulty.levelsAmount = {inGame: Object.values(levelsByDifficulty.all).length? Object.values(levelsByDifficulty.all).reduce((a, b) => +a + +b) : 0, userWin: Object.values(levelsByDifficulty.user_completed).length? Object.values(levelsByDifficulty.user_completed).reduce((a, b) => +a + +b) : 0};
-    levelsByDifficulty.user_exp = 125; // CHANGE THIS LATER ONCE EXP GAIN MECHANISM IS IMPLEMENTED
+    levelsByDifficulty.user_exp = getPlayerLevel(session_user.exp); // CHANGE THIS LATER ONCE EXP GAIN MECHANISM IS IMPLEMENTED
 
     console.log('DATA IS:: + ', data);
     return {
@@ -88,7 +88,7 @@ function Play(props) {
                 />
             )}
             {component === 'game' && (
-                <Game level={levelData} progress={levelProgressRecord} gameCounters={gameCounters} changeComponent={setComponent} />
+                <Game level={levelData} playerId={props.session_user.id} playerExp={props.session_user.exp} progress={levelProgressRecord} gameCounters={gameCounters} changeComponent={setComponent} />
             )}
         </div>
     );

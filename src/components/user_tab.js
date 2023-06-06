@@ -9,11 +9,12 @@ import {
 import PlayerStats from "./player_stats";
 import * as Animation from 'animejs';
 import { signOut } from "next-auth/react";
-
+import { getPlayerLevel, getLevelProgress, getFrameColor } from "../global/predefined/exp_to_level";
 
 function UserTab(props) {
 
     const anime = Animation.default;
+    console.warn('THE PLAYER IS: ', props.player);
 
     async function handleLogout() {
 /*         const logOut = await signOut();
@@ -115,18 +116,20 @@ function UserTab(props) {
         props.setUserTabOpen(false)
     }
 
+    console.log('PROPS PLAYER IN LANDING COMPONENT : ', props.player);
+
     return(
         <div className={styles['main-layer']} onClick={(e) => {e.target.classList.contains(`${styles['main-layer']}`) && handleUserTabHide()}}>
             <div className={styles['user-tab']}>
                 <div className={styles['user-tab__box']}>
                     <div className={`${styles['box__user-profile']} ${(props.includeUserStats !== true && styles['user-profile--adjusted'])}`}>
                         <div className={`${styles['box__user-info']} ${(props.includeUserStats !== true && styles['user-info--adjusted'])}`}> 
-                            <div className={styles['user-info__image-box']}>
+                            <div className={`${styles['user-info__image-box']} ${styles[`image-box--${getFrameColor(props.player.exp)}`]}`}>
                                 <img className={styles['image-box__image']} src={props.player.image} />
                             </div>
                             <div className={styles['user-info__data']}>
                                 <p className={`${styles["data__text"]} ${styles["data__text--large"]}`}> {props.player.name} </p>
-                                <p className={`${styles["data__text"]} ${styles["data__text--medium"]}`}> Level 20 (85%) </p>
+                                <p className={`${styles["data__text"]} ${styles["data__text--medium"]}`}> Level {getPlayerLevel(props.player.exp)} ({getLevelProgress(props.player.exp)}%) </p>
                                 <p className={`${styles["data__text"]} ${styles["data__text--small"]}`}> Member since: 05/06/2023 </p>
                             </div>
                         </div>
