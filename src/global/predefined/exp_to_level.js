@@ -87,10 +87,10 @@ const getFrameColor = (exp) => {
     const playerLevel = getPlayerLevel(exp);
     const frame_levels_sorted = [...Object.keys(frames_for_level)].sort((a, b) => a - b);
     const next_frame = frame_levels_sorted.find((lv_for_frame, ind) => lv_for_frame > playerLevel);
-    console.log('frame levels sorted: ', frame_levels_sorted, ' and NEXT FRAME: ',  next_frame);
+    //console.log('frame levels sorted: ', frame_levels_sorted, ' and NEXT FRAME: ',  next_frame);
     if(!next_frame) { return frames_for_level[frame_levels_sorted[frame_levels_sorted.length - 1]]}
     const currentFrame = frames_for_level[frame_levels_sorted[frame_levels_sorted.findIndex((el) => el.toString() === next_frame.toString()) - 1]];
-    console.log('CURRENT FRAME: ', currentFrame);
+    //console.log('CURRENT FRAME: ', currentFrame);
     return currentFrame;
 }
 

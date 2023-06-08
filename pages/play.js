@@ -53,7 +53,7 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
 
     console.log('DATA IS:: + ', data);
     return {
-        props: { data: [...data].sort((a, b) => a.index - b.index), user_progresses: user_progresses, session_user: session_user, levelsCount: levelsByDifficulty },
+        props: { data: [...data].sort((a, b) => a.index - b.index), user_progresses: user_progresses, session_user: JSON.parse(JSON.stringify(session_user)), levelsCount: levelsByDifficulty },
     };
 };
 

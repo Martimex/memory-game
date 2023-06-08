@@ -15,7 +15,8 @@ model User {
   name           String?    @unique
   email          String?    @unique
   role           String     @default("player")
-  exp            Int?       @default(0)     
+  exp            Int?       @default(0)
+  registeredAt   DateTime   @default(dbgenerated("NOW()")) 
   progressLevels Progress[]
   createdLevels  Level[]
   // NEXT AUTH STUFF
@@ -72,20 +73,18 @@ model Level {
   difficulty         String
   stages             Int
   tiles              Json
-  rows               Json
-  columns            Json
-  coords             Json?
-  tile_size          Json
-  icon_set           Json
+  board              Json
   limitations        Json
   starting_animation Json
   tile_animation     Json
-  compare_time       Json
   uncover            Json
   score              Json
   win                Json
+  fade               Json
+  star_conditions    Json
   variables          Json?
-  star_conditions    Json?
+  others             Json?
+  createdAt          DateTime   @default(dbgenerated("NOW()"))
   Created_By         User?      @relation(fields: [creatorUserId], references: [id])
   Serie              Serie?     @relation(fields: [serieId], references: [id])
   creatorUserId      String?

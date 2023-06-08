@@ -245,6 +245,7 @@ function Landing(props) {
             name: loggedUser.name,
             image: loggedUser.image,
             exp: loggedUser.exp,
+            registeredAt: loggedUser.registeredAt,
         }
 
         setUserTabOpen(true);

@@ -56,7 +56,7 @@ const scorePerPair = 100;  // Don't modify this varible; let it be with this val
 const moveScoreValue = 150; // Don't momdify aswell - it calculates score for every remaining move after you've succeded
 const timeScoreValue = 50; // Don't momdify aswell - it calculates score for every remaining second after you've succeded, it's calculated twice, so add '/2' value
 
-const stageUpdateTime = 800;
+const stageUpdateTime = 800; // probably not needed now
 
 const classes = {
     firstPlan: styles_global['firstPlanContainer'],
@@ -349,11 +349,11 @@ function Game(props) {
             }
         }
     
-        for(let i=0; i<props.level.tiles[stageNo]; i++) {
+        for(let i=0; i<props.level.tiles[stageNo]['count']; i++) {
             arr.push('');
         };
 
-        randomizedIconsArray = setRandomIcons(icon_Sets[`${props.level.icon_set[stageNo]}`], props.level.tiles[stageNo], props.level.uncover[stageNo][`pattern`]);
+        randomizedIconsArray = setRandomIcons(icon_Sets[`${props.level.tiles[stageNo]['icon_set']}`], props.level.tiles[stageNo]['count'], props.level.uncover[stageNo][`pattern`]);
 
         allTiles =  arr.map((tile, index) =>  {
             return <div className={`${styles_global['tile']} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={cssModules.main && cssModules.main[`fa-icon_custom`]}/>}</div></div>
@@ -369,7 +369,7 @@ function Game(props) {
 
     // Add proper styling based on device used by end user
 
-    let boardGridParams = {gridTemplateColumns: `repeat(${props.level.columns[stageNo]}, ${(props.level.tile_size[stageNo])/10}rem)`, gridTemplateRows: `repeat(${props.level.rows[stageNo]}, ${(props.level.tile_size[stageNo])/10}rem)`};
+    let boardGridParams = {gridTemplateColumns: `repeat(${props.level.board[stageNo]['columns']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[stageNo]['rows']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`};
     
     /* if(isDesktop) {  UNCOMMENT AND MAKE A DEVELOPMENT LATER WHEN WORKING WITH MEDIA QUERIES !!!
         boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns}, ${(props.newLevel.tile_size)/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows}, ${(props.newLevel.tile_size)/10}rem)`};
@@ -382,7 +382,7 @@ function Game(props) {
         async function openUp() {
             const a1 = anime({
                 targets: e.target,
-                duration: props.level.tile_animation[stageNo][`time`],
+                duration: props.level.tile_animation[stageNo][`duration`],
                 transitionProperty: 'all',
                 easing: props.level.tile_animation[stageNo][`easing`],
                 rotateY: 180,
@@ -445,12 +445,12 @@ function Game(props) {
                 async function fade() {
                     const a1 = anime({
                         targets: cardsOpened_parentNodes,
-                        duration: props.level.tile_animation[stageNo][`time`],
+                        duration: props.level.tile_animation[stageNo][`duration`],
                         easing: props.level.tile_animation[stageNo][`easing`],
                         opacity: 0,
                     }).finished;
 
-                   await Promise.all([a1]);
+                    await Promise.all([a1]);
                 }
 
                 fade().then(() => {
@@ -487,7 +487,7 @@ function Game(props) {
                 async function flipBack(cardsOpened_parentNodes) {
                     const a1 = anime({
                         targets: cardsOpened_parentNodes,
-                        duration: props.level.tile_animation[stageNo][`time`],
+                        duration: props.level.tile_animation[stageNo][`duration`],
                         rotateY: [180, 0],
                         easing: props.level.tile_animation[stageNo][`easing`],
                     }).finished;
@@ -499,7 +499,7 @@ function Game(props) {
 
             checkLosingConditions();
 
-        }, props.level.compare_time[stageNo])
+        }, props.level.tile_animation[stageNo]['compareTime'])
 
     }
 
@@ -587,7 +587,7 @@ function Game(props) {
         if(boardState) {
             async function run() {
                 let loadStart = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/scripts/start.js`);
-                loadStart.level_start(stageNo, props.level.starting_animation[stageNo][`time`], props.level.starting_animation[stageNo][`tileShowTime`])
+                loadStart.level_start(stageNo, props.level.starting_animation[stageNo][`duration`], props.level.starting_animation[stageNo][`tileShowTime`])
                     .then(() => {
                         // After animation is completed...
                         setTime(1);
@@ -637,8 +637,8 @@ function Game(props) {
         const a1 = anime({
             targets: [gameboard.current, gameinfo_ref.current],
             opacity: [0, 1],
-            duration: stageUpdateTime,
-            easing: 'easeOutCubic',
+            duration: props.level.fade[stageNo]['duration'],
+            easing: props.level.fade[stageNo]['easing'],
         }).finished;
 
         await Promise.all([a1]);
@@ -648,8 +648,8 @@ function Game(props) {
         const a1 = anime({
             targets: [gameboard.current, gameinfo_ref.current],
             opacity: [1, 0],
-            duration: stageUpdateTime,
-            easing: 'easeOutCubic',
+            duration: props.level.fade[stageNo]['duration'],
+            easing: props.level.fade[stageNo]['easing'],
         }).finished;
         
         await Promise.all([a1]);

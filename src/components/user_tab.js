@@ -130,7 +130,7 @@ function UserTab(props) {
                             <div className={styles['user-info__data']}>
                                 <p className={`${styles["data__text"]} ${styles["data__text--large"]}`}> {props.player.name} </p>
                                 <p className={`${styles["data__text"]} ${styles["data__text--medium"]}`}> Level {getPlayerLevel(props.player.exp)} ({getLevelProgress(props.player.exp)}%) </p>
-                                <p className={`${styles["data__text"]} ${styles["data__text--small"]}`}> Member since: 05/06/2023 </p>
+                                <p className={`${styles["data__text"]} ${styles["data__text--small"]}`}> Member since: {props.player.registeredAt.split('T')[0].split('-').reverse().join('/')} </p>
                             </div>
                         </div>
                         {props.includeUserStats === true && <PlayerStats /* pageNo={pageNo} pageLastIndex={pageMaxIndex} */ levelsCount={props.levelsCount} />}
