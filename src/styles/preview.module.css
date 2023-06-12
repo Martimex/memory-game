@@ -94,6 +94,10 @@
     font-size: 2.8em;
 }
 
+.top-bar .top-bar__follow .follow-me:hover {
+    cursor: pointer;
+}
+
 .top-bar .top-bar__follow .icon-user {
     font-size: 3.6rem;
     color: #ddd;

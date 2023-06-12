@@ -163,12 +163,23 @@ function Preview( props ) {
         setUserTabOpen(true);
     }
 
+    async function animateReturn() {
+        await anime({
+            targets: 'body',
+            duration: 400,
+            opacity: [1, 0],
+            easing: 'linear',
+        }).finished;
+
+        Router.push('/');
+    }
+
     return (
         <div className={styles['bg-main']}>
             <div className={styles['seizure-flexbox']}>
                 <div className={styles['top-bar']} ref={topBarRef}>
                     <div className={styles['top-bar__return']}>
-                        <button className={styles['return-back']} onClick={() => {setAnimationRunning(true); Router.push('/')/* props.backToHome(); props.proceed(); */}}> 
+                        <button className={styles['return-back']} onClick={() => {setAnimationRunning(true); animateReturn(); /* props.backToHome(); props.proceed(); */}}> 
                             <FontAwesomeIcon icon={home} className={styles["icon-home"]} />
                         </button>
                     </div>

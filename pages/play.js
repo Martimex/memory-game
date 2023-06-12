@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import prisma from '../lib/prisma';
-import { getSession } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import Router from "next/router";
 
 // Components
@@ -14,7 +14,8 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
     // while going for http://localhost:3000/ (our 'old' no-route implementation) gives us props which we passed from index.js file
     //const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
 
-    const session = await getSession({ req })
+    const session = await getSession({ req });
+    if(!session) { return { props: {noSession: true}}; } // noSession will indicate if we have unauthenticated access to /play route
     console.log('PLAY SSR REQ: ', session);
     //const session = await getSession({ req });
     //console.log('CURRENT SESSION IS: ', session, '  -- and status is: ', status);
@@ -65,8 +66,6 @@ function Play(props) {
     const [levelProgressRecord, setLevelProgressRecord] = useState(null);
     const [gameCounters, setGameCounters] = useState(null);
 
-
-
     useEffect(() => {
         if(levelData) { 
             console.log(levelData, levelProgressRecord, gameCounters ) 
@@ -75,19 +74,20 @@ function Play(props) {
     }, [levelData])
 
     useEffect(() => {
-        if(component === 'preview') {
+        if(props.noSession === true) { signIn('google'); }
+        else if(component === 'preview') {
             Router.push('/play'); // performs an artificial refresh so that if user make any progress on the level, it is not necessry to refresh the game manually
         }
     }, [component])
 
     return(
-        <div>
-            {component === 'preview' && (
+        <div style={{background: 'white', width: '100%', minHeight: '100vh'}}>
+            {(props.noSession !== true && component === 'preview') && (
                 <Preview data={props.data} user_progresses={props.user_progresses} player={props.session_user} levelsCount={props.levelsCount}
                     /* changeComponent={setComponent}  */setLevelData={setLevelData} setLevelProgressRecord={setLevelProgressRecord} setGameCounters={setGameCounters}
                 />
             )}
-            {component === 'game' && (
+            {(props.noSession !== true && component === 'game') && (
                 <Game level={levelData} playerId={props.session_user.id} playerExp={props.session_user.exp} progress={levelProgressRecord} gameCounters={gameCounters} changeComponent={setComponent} />
             )}
         </div>

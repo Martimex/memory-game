@@ -40,11 +40,15 @@ const tileCodes1 = [
     't14', 't15', 't15', 't16', 't16', 't17', 't17', 't16', 't16', 't15', 't15', 't14', 't14', 't13', 't13', 't12', 't12', 't11', 't11', 't11', 't11' //10
   ];
 
-  const tileCodes = [
+/*   const tileCodes = [
     't11', 't13', 't15', 't17', 't17', 't15', 't13', 't11',
     't13', 't15', 't15', 't17', 't17', 't15', 't15', 't13',
     't13', 't15', 't15', 't17', 't17', 't15', 't15', 't13', 
     't11', 't13', 't15', 't17', 't17', 't15', 't13', 't11'
-  ];
+  ]; */
+
+  /* V2 */
+
+  const tileCodes = Array.from(new Array(64));
 
 export { colors, tileCodes };

@@ -61,8 +61,14 @@ function setIcon(usedIcons) {
     return chosenIcon;
 }
 
+function getBaseColor() {
+    return Math.floor(Math.random() * baseColors.length) + 1; // returns 1 to 5
+}
+
+const baseColors = [ 'color-1', 'color-2', 'color-3', 'color-4', 'color-5'];
+
 // We need to declare this variable outside of function component, to prevent it from being re-rendered and causing SVG path mismatch between SSR and CSR
-let allTiles;
+let allIcons;
 
 // We are going to store user data just for UserTab (Landing Page one) to display specific data properly
 let loggedPlayer = {};
@@ -83,6 +89,20 @@ function Landing(props) {
     useEffect(() => {
         // This useEffect happens only once - that is mandatory here !s
         getRandomIcons(icon_Sets[`fas`], usedIcons, randomizedIcons);
+        allIcons = Array.from(new Array(16)).map((elem, index) => {
+            return ( 
+                <div key={'moverow_' + index.toString()} className={styles['move-box__row']}>
+                    <div className={styles['move-box__trigger']}>
+                        {Array.from(new Array(20)).map((el, ind) => {
+                            return (
+                                <FontAwesomeIcon  key={'move_' + ind.toString()} icon={randomizedIcons[Math.floor(Math.random() * randomizedIcons.length)]} className={`${styles_preview["icon-user"]} ${styles["fancy-icon"]} ${styles[`fancy-color-${getBaseColor()}`]}`} />
+                            )
+                        })}
+                    </div>
+                </div>
+            )
+        })
+        fadeAnimation(); // Runs in between remain actions
         setRender(true);
     }, []);
 
@@ -92,7 +112,7 @@ function Landing(props) {
 
     /* BELOW USED FOR TILES BORDER COLOR MANIPULATION */
 
-    const animationRef4 = React.useRef(null);
+/*     const animationRef4 = React.useRef(null);
     const animationRef5 = React.useRef(null);
     const animationRef6 = React.useRef(null);
     const animationRef7 = React.useRef(null);
@@ -179,22 +199,31 @@ function Landing(props) {
             loop: true,
         })
 
-    }, [render]);
+    }, [render]); */
 
-    allTiles = tileCodes.map((code, index) => 
+/*     allTiles = tileCodes.map((code, index) => 
         <div className={`${styles[`card`]} ${code}`} key={index.toString()}><div className={styles['card-front']}></div> <div className={styles['card-back']}> {randomizedIcons.length && <FontAwesomeIcon icon={`${randomizedIcons[index]}`} className={`${styles[`fa-icon`]} ${code}`}/>} </div></div>
-    );
+    ); */
 
     /* const changeScreen = React.useRef(null); */
 
     function fadeAnimation() {
-/*         changeScreen.current = anime({
+        anime({
             targets: 'body',
             duration: 1000,
             opacity: [0, 1],
             easing: 'linear',
-        }) */
+        }) 
     }
+
+    function isStopAnimation(value) {
+        // NOT WORKING AS EXPECTED (at all)
+        const moveBox = document.querySelector(`.${styles['move-box']}`)
+        if(!moveBox) { return; }
+        const bg_icons = document.querySelectorAll(`.${styles["fancy-icon"]}`);
+        if(value === true) { moveBox.style.animationPlayState = 'paused'; bg_icons.forEach(icon => icon.style.animationPlayState = 'paused'); }
+        else {moveBox.style.animationPlayState = 'running'; bg_icons.forEach(icon => icon.style.animationPlayState = 'running'); }
+    } 
 
     function checkUserSession() {
         if(status === 'authenticated') {
@@ -253,27 +282,30 @@ function Landing(props) {
 
     if(status === 'loading') { return <h1> Loading, please wait ... </h1>}
     return( 
-        <div className={styles['landing-all']}>
+        <div className={styles['landing-all']} style={{overflow: 'hidden'}}>
 
-            <div className={styles['layer']}>
+{/*             <div className={styles['layer']}>
                 <div className={styles['theme']} ref={gameBoard}>
                     {allTiles}
                 </div>
+            </div> */}
+
+            <div className={styles['icons-main']}>
+                <div className={styles['content']}>
+                    <div className={styles['content-section']}>
+                        <div className={styles["game-title"]}>FLASH</div>
+                        {/* <div className={styles['game-subtitle']}>The Ultimate Memory Game</div> */}
+                    </div>
+                    <div className={styles['content-action']}>
+                        <div className={styles['from-author']}> {status === 'authenticated'?  <span> Welcome back again, {data.user.name} </span> : <span> The hardest memory game you will ever play ... </span>} </div>
+                        {/* <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button> */}
+                        <button className={styles['start']} onClick={() => {checkUserSession()}}> Play </button>
+                    </div>
+                </div>    
+                <div className={styles['move-box']} onFocus={() => isStopAnimation(false)} onBlur={() => isStopAnimation(true)}>
+                    {allIcons}
+                </div>
             </div>
-
-            {status === 'authenticated' && <button className={styles['start']} onClick={() => {signOut()}}> Sign Out </button> }
-
-            <div className={styles['content']}>
-                <div className={styles['content-section']}>
-                    <div className={styles["game-title"]}>FLASH</div>
-                    <div className={styles['game-subtitle']}>The Ultimate Memory Game</div>
-                </div>
-                <div className={styles['content-action']}>
-                    <div className={styles['from-author']}> The hardest memory game You would ever play... {status === 'authenticated' && <span>Hi {data.user.name}</span>}</div>
-                    {/* <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button> */}
-                    <button className={styles['start']} onClick={() => {checkUserSession()}}> Play </button>
-                </div>
-            </div>     
 
             {status === 'authenticated' && (
                 <div className={styles['setup-container']} onClick={() => { getUserData();/* setAnimationRunning(true); */ /* animateTransition(); */}}>
