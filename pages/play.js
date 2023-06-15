@@ -34,7 +34,7 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
         take: 5, */
         include: {
             Levels: {
-                select: { id: true, name: true, number: true, stages: true, difficulty: true, creatorUserId: true, }
+                select: { id: true, name: true, number: true, stages: true, difficulty: true, creatorUserId: true, createdAt: true, Created_By: { select: { name: true } } }
             },
         },
     
@@ -54,7 +54,7 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
 
     console.log('DATA IS:: + ', data);
     return {
-        props: { data: [...data].sort((a, b) => a.index - b.index), user_progresses: user_progresses, session_user: JSON.parse(JSON.stringify(session_user)), levelsCount: levelsByDifficulty },
+        props: { data: [...JSON.parse(JSON.stringify(data))].sort((a, b) => a.index - b.index), user_progresses: user_progresses, session_user: JSON.parse(JSON.stringify(session_user)), levelsCount: levelsByDifficulty },
     };
 };
 

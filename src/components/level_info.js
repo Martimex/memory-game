@@ -4,7 +4,7 @@ import styles_diffcolors from '../styles/variables/difficulty_colors.module.css'
 import { series_abbr } from '../global/series_abbr.js';
 import { background_gradients } from '../global/exceptions/background_gradients.js';
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { faStar as star_full, faCheck as check, faFileAlt as notes, faChartBar as stats, faPlay as play } from '@fortawesome/free-solid-svg-icons';
+import { faStar as star_full, faCheck as check, faPlus as icon_plus, faMinus as icon_minus, faPlay as play } from '@fortawesome/free-solid-svg-icons';
 import { faStar as star_empty} from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Animation from 'animejs';
@@ -74,11 +74,11 @@ function LevelInfo(props) {
             difficulty_Dynamic_Elems[x].style.textShadow = `.15rem .15rem .2rem ${sec_diff_col}`;
         }
 
-        // For level round border
+/*         UNCOMMENT LATER // For level round border
         const level_tab = document.querySelector(`.${styles['content-item-level']}`);
         const level_tab_styles = getComputedStyle(level_tab);
         const border_col = level_tab_styles.getPropertyValue(`--border-color_${difficulty}`);
-        level_tab.style.borderColor = border_col;
+        level_tab.style.borderColor = border_col; */
 
         // For play button border
         const play_btn = document.querySelector(`.${styles['play']}`);
@@ -110,24 +110,33 @@ function LevelInfo(props) {
     }
 
     useEffect(() => {
+        //if(1) {return} // DELETE THIS SINGLE LINE AFTER DEVELOPING STYLES FOR V2 LEVEL_INFO
         document.body.style.overflowY = 'hidden';
         progressRecord = getProgressRecord();
         setViewRepaint(!viewRepaint);
         console.warn('This is the progress record: ', progressRecord)
         setLevelBoxPosition(levelInfoAll_ref.current);
         applyDifficultyTextColors(props.level_details.difficulty)
-       const img_url = `bgs/${props.serie_abbr}/bg-${props.level_details.number}.svg`;
+        const img_url = `bgs/${props.serie_abbr}/bg-${props.level_details.number}.svg`;
         loadBackground_preview(img_url)
             .then(() => {
                 bg_placeholder_ref.current.style.backgroundImage = `url(${img_url})`;
                 anime({
                     targets: bg_placeholder_ref.current,
-                    duration: 500,
+                    duration: 350,
                     opacity: [0, 1],
                     easing: 'linear',
                 })
             })
             .catch((error) => { console.log(error); 
+
+                anime({
+                    targets: bg_placeholder_ref.current,
+                    duration: 350,
+                    opacity: [0, 1],
+                    easing: 'linear',
+                })
+
                 // + Handle exceptions for TF serie levels (1 to 6), because they only have default SVG backgrounds, but CSS gradients
                 if((props.serie_abbr === 'tf_1') && (parseInt(props.level_details.number) <= 6)) {
                     bg_placeholder_ref.current.style.backgroundImage = background_gradients[props.serie_abbr][props.level_details.number];
@@ -287,8 +296,110 @@ function LevelInfo(props) {
     //console.log('LEVEL INFO PROPS:  ', props);
 
     return (
+        <div className={styles["level-info-blurred"]} ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
+            <div className={styles["level-info-box"]} ref={levelBox_ref}>
+                <div className={styles["box__background"]} ref={bg_placeholder_ref} >
+                    <div className={styles["box__content"]} >
+                        <div className={styles["content__serie"]}>
+                            <div className={styles["serie__title-box"]}>
+                                <span className={styles["serie__title-box-text"]}> SERIE </span>
+                            </div>
+                            <div className={styles["serie__info-box"]}>
+                                <div className={styles["serie__info-box__about"]}>
+                                    <div className={styles["info-box__about-box"]}>
+                                        <span className={styles["info-box__about-box-main"]}>The Flash</span>
+                                    </div>
+                                    <span className={styles["info-box__about-text"]}>ID: #tf_1</span>
+                                    <span className={styles["info-box__about-text"]}>Levels: 5</span>
+                                </div>
+                                <div className={styles["serie__info-box__desc"]}>
+                                    <span className={styles["info-box__desc-text"]}>
+                                        Welcome to the origins of Flash Memo project... Dedicated to all new players
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles["content__level"]}>
+                            <div className={styles["level__title-box"]}>
+                                <span className={`${styles["level__title-box-text"]} ${styles['dynamic-text']}`}> Lost in the dark </span>
+                            </div>
+                            <div className={styles["level__info-box"]}>
+                                <div className={styles["level__info-box__about"]}>
+                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>ID: #1</span>
+                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>Author: Mystix</span>
+                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>Difficulty: legend</span>
+                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>Released: 14/06/2023</span>
+                                </div>
+                                <div className={styles["level__info-box__play"]}>
+                                    <form onSubmit={startLevel}>
+                                        <button className={styles['play']} type="submit" value="Create" onClick={() => { blockClicking(); } } >
+                                                <div className={styles['play-level']} > 
+                                                    <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
+                                                </div>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles["content__progress"]}>
+                            <div className={styles["progress__title-box"]}>
+                                <span className={styles["progress__title-box-text"]}> PROGRESS </span>
+                            </div>
+                            <div className={styles["progress__info-box"]}>
+                                <div className={styles["progress__info-box__about"]}>
+                                    <div className={styles["info-box__about-box-2"]}>
+                                        <span className={styles["info-box__about-box-2-main"]}> Henryk Kowalski</span>
+                                    </div>
+                                    <span className={styles["info-box__about-text"]}>Best run: 100% </span>
+                                    <span className={styles["info-box__about-text"]}>Score: 7654</span>
+                                </div>
+                                <div className={styles["progress__info-box__stats"]}>
+                                    {/* <div className={styles["info-box__stats-item"]}>
+                                        <span className={styles["info-box__stats-item-text"]}> Best run : </span>
+                                        <div className={styles["info-box__stats-item-bar"]}>
+                                            <span className={styles["info-box__stats-item-bar-text"]}> 100% </span>
+                                        </div>
+                                    </div>
+                                    <div className={styles["info-box__stats-item"]}>
+                                        <span className={styles["info-box__stats-item-text"]}> Highscore : </span>
+                                        <div className={styles["info-box__stats-item-bar"]}>
+                                            <span className={styles["info-box__stats-item-bar-text"]}> 7654 </span>
+                                        </div>
+                                    </div> */}
+                                    <div className={styles["info-box__stats-item"]}>
+                                        {/* <span className={styles["info-box__stats-item-text"]}> Stars </span> */}
+                                        <div className={styles["info-box__stats-item-bar"]}>
+                                            {  progressRecord? 
+                                                (Array.from(new Array(3)).map((el, ind) => {
+                                                    return (progressRecord.stars_got > ind)?
+                                                        <FontAwesomeIcon key={ind.toString()} icon={star_full} className={styles['icon-star_full']}></FontAwesomeIcon>
+                                                        :
+                                                        <FontAwesomeIcon key={ind.toString()} icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon> 
+                                                }))
+                                                :
+                                                (Array.from(new Array(3)).map((el, ind) => {
+                                                    return <FontAwesomeIcon key={ind.toString()} icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon>
+                                                }))
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className={styles["bg-placeholder"]} >
+
+            </div>
+        </div>
+    )
+
+    return (
         <div className={styles['level-info-blurred']} ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
             <div className={styles['level-info-box']} ref={levelBox_ref}>
+{/*               <div className={styles['level-info-box__button']}></div>
+                <div className={styles['level-info-box__button2']}></div> */}
                 <div className={styles['level-info-box-content']} >
                     <div className={styles['level-info-box-content-item']} datatype="info">
                         <div className={styles['content-item-part']}>
@@ -368,7 +479,16 @@ function LevelInfo(props) {
                         <FontAwesomeIcon icon={star_empty} className={styles['icon-star_empty']}></FontAwesomeIcon> */}
                     </div>
 
-                    <div className={styles['bg-placeholder']} ref={bg_placeholder_ref} ></div>
+                    <div className={styles['bg-placeholder']} ref={bg_placeholder_ref} >
+                        <div className={styles['level-button-box']}>
+                            <div className={styles['level-button-box__item']}>
+                                <FontAwesomeIcon  icon={icon_plus} className={styles['icon-plus']}></FontAwesomeIcon>
+                            </div>
+                            <div className={styles['level-button-box__item']}>
+                                <FontAwesomeIcon icon={icon_minus} className={styles['icon-minus']}></FontAwesomeIcon>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
