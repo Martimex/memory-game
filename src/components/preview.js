@@ -21,7 +21,7 @@ let topBarHeight;
 
 function Preview( props ) {
     // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
-    console.warn(props.user_progresses);
+    console.warn('PREVIEW PROPS, ', props);
     const anime = Animation.default;
 
     const [[levelChoose, lv_index, serie_abbr, serie_name, serie_desc], setLevelChoose] = useState([null, null, null, null, null]);
@@ -210,8 +210,9 @@ function Preview( props ) {
 
             { levelChoose && (
                 <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} serie_desc={serie_desc} level_details={levelChoose} lv_index={lv_index} closeLevelInfo={setLevelChoose} 
-                    changeComponent={props.changeComponent} user_progresses={props.user_progresses} playerId={props.player.id}
-                    setLevelData={props.setLevelData} setLevelProgressRecord={props.setLevelProgressRecord} setGameCounters={props.setGameCounters}
+                    changeComponent={props.changeComponent} user_progresses={props.user_progresses} playerId={props.player.id} playerName={props.player.name}
+                    setLevelData={props.setLevelData} setLevelProgressRecord={props.setLevelProgressRecord} setGameCounters={props.setGameCounters} 
+                    serieInfo={props.data.find((lv) => chosenSerieName === lv.name)}
                 />
             )}
         </div>

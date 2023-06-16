@@ -293,7 +293,7 @@ function LevelInfo(props) {
         catch(err) { console.error(err); }
     }
 
-    //console.log('LEVEL INFO PROPS:  ', props);
+    console.log('LEVEL INFO PROPS:  ', props);
 
     return (
         <div className={styles["level-info-blurred"]} ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
@@ -307,28 +307,28 @@ function LevelInfo(props) {
                             <div className={styles["serie__info-box"]}>
                                 <div className={styles["serie__info-box__about"]}>
                                     <div className={styles["info-box__about-box"]}>
-                                        <span className={styles["info-box__about-box-main"]}>The Flash</span>
+                                        <span className={styles["info-box__about-box-main"]}>{props.serie_name}</span>
                                     </div>
-                                    <span className={styles["info-box__about-text"]}>ID: #tf_1</span>
-                                    <span className={styles["info-box__about-text"]}>Levels: 5</span>
+                                    <span className={styles["info-box__about-text"]}>Ref: {props.serie_abbr}</span>
+                                    <span className={styles["info-box__about-text"]}>Levels: {props.serieInfo.Levels.length}</span>
                                 </div>
                                 <div className={styles["serie__info-box__desc"]}>
                                     <span className={styles["info-box__desc-text"]}>
-                                        Welcome to the origins of Flash Memo project... Dedicated to all new players
+                                        {props.serie_desc}
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div className={styles["content__level"]}>
                             <div className={styles["level__title-box"]}>
-                                <span className={`${styles["level__title-box-text"]} ${styles['dynamic-text']}`}> Lost in the dark </span>
+                                <span className={`${styles["level__title-box-text"]} ${styles['dynamic-text']}`}> {props.level_details.name} </span>
                             </div>
                             <div className={styles["level__info-box"]}>
                                 <div className={styles["level__info-box__about"]}>
-                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>ID: #1</span>
-                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>Author: Mystix</span>
-                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>Difficulty: legend</span>
-                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>Released: 14/06/2023</span>
+                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>ID: #{props.level_details.number}</span>
+                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>Author: {props.level_details.Created_By.name}</span>
+                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>Difficulty: {props.level_details.difficulty}</span>
+                                    <span className={`${styles["info-box__about-text-2"]} ${styles['dynamic-text']}`}>Released: {props.level_details.createdAt.split('T')[0].split('-').reverse().join('/')}</span>
                                 </div>
                                 <div className={styles["level__info-box__play"]}>
                                     <form onSubmit={startLevel}>
@@ -348,10 +348,10 @@ function LevelInfo(props) {
                             <div className={styles["progress__info-box"]}>
                                 <div className={styles["progress__info-box__about"]}>
                                     <div className={styles["info-box__about-box-2"]}>
-                                        <span className={styles["info-box__about-box-2-main"]}> Henryk Kowalski</span>
+                                        <span className={styles["info-box__about-box-2-main"]}> {props.playerName} </span>
                                     </div>
-                                    <span className={styles["info-box__about-text"]}>Best run: 100% </span>
-                                    <span className={styles["info-box__about-text"]}>Score: 7654</span>
+                                    <span className={styles["info-box__about-text"]}>Best run: {progressRecord? `${progressRecord.lv_progress}%` : `0%` } </span>
+                                    <span className={styles["info-box__about-text"]}>Score: {progressRecord? progressRecord.highscore : 0}</span>
                                 </div>
                                 <div className={styles["progress__info-box__stats"]}>
                                     {/* <div className={styles["info-box__stats-item"]}>

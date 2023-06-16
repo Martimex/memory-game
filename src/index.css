@@ -30,7 +30,7 @@
   /* ALTERNATIVES: 18 */
   /* TOTAL COLORS: 24 */
 
-  --color-hue: 70%;
+  --color-hue: 75%;
   --color-lightness: 44%;
   --color-opacity_main: .58;
   --color-opacity_sec: .68;
@@ -41,13 +41,13 @@
   --color_medium_main: hsla(76, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
   --color_medium_sec: hsla(51, var(--color-hue), var(--color-lightness), var(--color-opacity_sec) );
 
-  --color_hard_main: hsla(300, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
-  --color_hard_sec: hsla(1, var(--color-hue), var(--color-lightness), var(--color-opacity_sec) );
+  --color_hard_main: hsla(4, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
+  --color_hard_sec: hsla(350, var(--color-hue), var(--color-lightness), var(--color-opacity_sec) );
 
-  --color_insane_main: hsla(182, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
-  --color_insane_sec: hsla(221, var(--color-hue), var(--color-lightness), var(--color-opacity_sec) );
+  --color_insane_main: hsla(202, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
+  --color_insane_sec: hsla(231, var(--color-hue), var(--color-lightness), var(--color-opacity_sec) );
 
-  --color_extreme_main: hsla(307, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
+  --color_extreme_main: hsla(292, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
   --color_extreme_sec: hsla(262, var(--color-hue), var(--color-lightness), var(--color-opacity_sec) );
 
   --color_legend_main: hsla(35, var(--color-hue), var(--color-lightness), var(--color-opacity_main) );
