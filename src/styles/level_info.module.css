@@ -32,18 +32,66 @@
 }
 
 .level-button-box__item {
-    font-size: 1.2rem;
-    padding: 1.5em;
+    font-size: 1rem;
+    padding: 1.2em;
     /* background: radial-gradient(#222, #333); */
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(11px) saturate(100%) grayscale(90%);
+    filter: brightness(70%) saturate(110%);
     /* border-radius: 50%; */
     /* box-shadow: 0 0 .2em .3em #222c; */
     z-index: 100;
-    border-radius: 50%;
-    background: #364;
+    /* border-radius: 50%; */
+
+   /*  border: .12em ridge #2226; */
+    /* background: radial-gradient(#ccc, #222); */
+    background: radial-gradient(#666 10%,#2227);
+    box-shadow: 0 0 0.3em .1em #ccc;
+    position: relative;
+    transition: 1.5s;
+}
+
+.level-button-box__item:hover {
+    cursor: pointer;
+    filter: brightness(100%);
+    scale: 1.05;
+}
+
+.level-button-box__item:first-child {
+    border-top-left-radius: 10%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+/*     background: radial-gradient(#ccc 5%, hsl(111, 50%, 70%) 20%, #222);
+ */    border-top: .4em double hsl(111, 50%, 67%);
+    border-bottom: .4em double hsl(111, 50%, 67%);
+    border-left: .4em double hsl(111, 50%, 67%);
+    border-right: .4em double hsl(111, 50%, 67%);
+    box-shadow: 0 0 .8em .2em hsl(111, 77%, 60%),
+        inset 0 0 1.2em .2em #0004,
+        inset 0 0 .4em .2em #333
+    ;
+    color: hsl(111, 70%, 67%);
+}
+
+.level-button-box__item:last-child {
+    border-top-right-radius: 10%;
+    border-top-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+/*     background: radial-gradient(#ccc 5%, hsl(350, 50%, 70%) 20%, #222);
+ */    border-top: .4em double hsl(350, 50%, 67%);
+    border-bottom: .4em double hsl(350, 50%, 67%);
+    border-left: .4em double hsl(350, 50%, 67%);
+    border-right: .4em double hsl(350, 50%, 67%);
+    box-shadow: 0 0 .8em .2em hsl(350, 77%, 60%),
+        inset 0 0 1.2em .2em #0004,
+        inset 0 0 .4em .2em #333
+    ;
+    color: hsl(350, 70%, 67%);
 }
 
 .icon-plus, .icon-minus {
+    pointer-events: none;
     z-index: 100;
     font-size: 1.5rem;
     min-width: .5em;
@@ -61,7 +109,7 @@
     filter: saturate(90%);
     border-radius: 5%;
     /* background-image: linear-gradient(110deg, #333, #222, #111); */
-    padding: 2.5em;
+    padding: 2.5em; /* HAS TO BE THE SAME VALUE AS FOR LV_DESCRIPTION BOX CALCULATIONS FOR HEIGHT AND WIDTH*/
     display: grid;
     grid-template-columns: 30% 40% 30%;
     grid-template-rows: auto;
@@ -706,6 +754,61 @@
 }
 
 .dynamic-text {
+    text-align: center;
+}
+
+/* Finally, the Level Description extra section */
+
+.lv-description__box {
+    font-size: 1rem;
+    position: absolute;
+    top: 1.25em;
+    left: 1.25em;
+    width: calc(100% - 1.25em * 2);  /* Substraction value has to be a value of .lv-description__box  PADDING property */
+    height: calc(100% - 1.25em * 2);
+    background: #222;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    border-radius: 5%;
+    box-shadow: 0 0 .8em .5em #000c,
+        inset 0 0 .8em .5em #111
+    ;
+}
+
+.lv-description__box::-webkit-scrollbar {
+    font-size: 1rem;
+    border-radius: 777px;
+    padding: 0;
+    width: 1em;
+    background-color: #555; /* or add it to the track */
+}
+
+.lv-description__box::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 777px;
+}
+
+/* .lv-description__box::-webkit-scrollbar-track {
+    width: 100%;
+    transform: rotate(45deg);
+    padding: .2rem;
+    background: green;
+} */
+
+.lv-description__text {
+    font-size: 1rem;
+    color: whitesmoke;
+/*     margin: 2em;
+    padding: 2em; */
+
+}
+
+.lv-description__text-intro {
+    font-size: 1.75rem;
+    color: whitesmoke;
+    font-weight: 650;
     text-align: center;
 }
 

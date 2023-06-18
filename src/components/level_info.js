@@ -3,8 +3,9 @@ import styles from '../styles/level_info.module.css';
 import styles_diffcolors from '../styles/variables/difficulty_colors.module.css';
 import { series_abbr } from '../global/series_abbr.js';
 import { background_gradients } from '../global/exceptions/background_gradients.js';
+import LevelDescription from "./level_description";
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { faStar as star_full, faCheck as check, faPlus as icon_plus, faMinus as icon_minus, faPlay as play } from '@fortawesome/free-solid-svg-icons';
+import { faStar as star_full, faPlus as icon_plus, faMinus as icon_minus, faPlay as play } from '@fortawesome/free-solid-svg-icons';
 import { faStar as star_empty} from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Animation from 'animejs';
@@ -18,33 +19,37 @@ function LevelInfo(props) {
     console.log(`We look for ${props.level_details.id} inside this object: ${props.user_progresses} (consider each value of levelId key)`);
     console.log('user_progress array: ', props.user_progresses);
     const [viewRepaint, setViewRepaint] = useState(false);
+    const [isLevelDescOpened, setLevelDescOpened] = useState(false);
     const bg_placeholder_ref = useRef(null);
     const levelInfoAll_ref = useRef(null);
     const levelBox_ref = useRef(null);
 
     function checkCloseCondition(e) {
         if(e.target.classList.contains(`${styles['level-info-box']}`)) {
-            document.body.style.overflow = 'auto';
-
-            async function init() {
-                await animation()
-                await props.closeLevelInfo([null, null]);
-            }
-
-            async function animation() {
-                const a1 = anime({
-                    targets: levelBox_ref.current,
-                    duration: 500,
-                    opacity: [1, 0],
-                    translateX: '-=8%',
-                    easing: 'linear',
-                }).finished;
-                await Promise.all([a1]);
-            }
-
-           init();
-
+            closeLevelInfo();
         }
+    }
+
+    function closeLevelInfo() {
+        document.body.style.overflow = 'auto';
+
+        async function init() {
+            await animation()
+            await props.closeLevelInfo([null, null]);
+        }
+
+        async function animation() {
+            const a1 = anime({
+                targets: levelBox_ref.current,
+                duration: 500,
+                opacity: [1, 0],
+                translateX: '-=8%',
+                easing: 'linear',
+            }).finished;
+            await Promise.all([a1]);
+        }
+
+        init();
     }
 
     function loadBackground_preview(url) {
@@ -299,6 +304,14 @@ function LevelInfo(props) {
         <div className={styles["level-info-blurred"]} ref={levelInfoAll_ref} onClick={(e) => checkCloseCondition(e)} >
             <div className={styles["level-info-box"]} ref={levelBox_ref}>
                 <div className={styles["box__background"]} ref={bg_placeholder_ref} >
+                    <div className={styles['level-button-box']}>
+                        <div className={styles['level-button-box__item']} onClick={() => setLevelDescOpened(!isLevelDescOpened)}>
+                            <FontAwesomeIcon  icon={icon_plus} className={styles['icon-plus']}></FontAwesomeIcon>
+                        </div>
+                        <div className={styles['level-button-box__item']} onClick={() => closeLevelInfo()}>
+                            <FontAwesomeIcon icon={icon_minus} className={styles['icon-minus']}></FontAwesomeIcon>
+                        </div>
+                    </div>
                     <div className={styles["box__content"]} >
                         <div className={styles["content__serie"]}>
                             <div className={styles["serie__title-box"]}>
@@ -387,6 +400,16 @@ function LevelInfo(props) {
                             </div>
                         </div>
                     </div>
+                    {isLevelDescOpened && (
+                        <div>
+                            <div className={styles["lv-description__box"]} >
+                                <div className={styles["lv-description__text"]}>
+                                    <p className={styles["lv-description__text-intro"]}> [#{props.level_details.number}] - {props.level_details.name} </p>
+                                    <LevelDescription serie_abbr={props.serie_abbr} lv_id={props.level_details.number} />
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className={styles["bg-placeholder"]} >
