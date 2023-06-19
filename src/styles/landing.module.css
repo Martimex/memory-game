@@ -462,10 +462,10 @@
 
 @keyframes changeHue {
     0% {
-        filter: hue-rotate(0deg);
+        background: #000;
     }
     100% {
-        filter: hue-rotate(360deg);
+        background: #444;
     }
 }
 
@@ -490,7 +490,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: changeHue 32s linear infinite alternate;
+    /* animation: changeHue 16s linear infinite alternate; */
 }
 
 .move-box__row {
@@ -514,14 +514,19 @@
     color: hsla(0, 0%, 0%, 0.5);
     /* background-image: radial-gradient(#fff1, #5551); */
     border-radius: 777px;
-    filter: hue-rotate(60deg);
+    filter: hue-rotate(60deg) brightness(120%);
     /* padding: 25%; */
     padding: initial .3em;
     transition: 1.25s;
     user-select: none;
     cursor: default;
     /* filter: brightness(140%); */
+   /*  animation: colorUp2 36s linear infinite alternate; */
 }
+
+/* .fancy-icon:nth-child(2n) {
+    animation-delay: 18s;
+} */
 
 .fancy-icon:hover {
     filter: drop-shadow(3px 5px 2px #ccc);
@@ -536,28 +541,28 @@
 }
 
 .fancy-color-1 {
-    filter: drop-shadow(3px 5px 8px #0ff4);
-    animation: colorUp2 12s linear infinite alternate;
+    filter: drop-shadow(3px 5px 8px #0ffa);
+    /* animation: colorUp2 12s linear infinite alternate; */
 }
 
 .fancy-color-2 {
-    filter: drop-shadow(3px 5px 8px #ff04);
-    animation: colorUp3 16s linear infinite alternate;
+    filter: drop-shadow(3px 5px 8px #ff0a);
+    /* animation: colorUp3 16s linear infinite alternate; */
 }
 
 .fancy-color-3 {
-    filter: drop-shadow(3px 5px 8px #0f04);
-    animation: colorUp 10s linear infinite alternate;
+    filter: drop-shadow(3px 5px 8px #0f0a);
+    /* animation: colorUp 10s linear infinite alternate; */
 }
 
 .fancy-color-4 {
-    filter: drop-shadow(3px 5px 8px #f0f4);
-    animation: colorUp4 12s linear infinite alternate;
+    filter: drop-shadow(3px 5px 8px #f0fa);
+    /* animation: colorUp4 12s linear infinite alternate; */
 }
 
 .fancy-color-5 {
-    filter: drop-shadow(3px 5px 8px #f004);
-    animation: colorUp5 10s linear infinite alternate;
+    filter: drop-shadow(3px 5px 8px #f00a);
+    /* animation: colorUp5 10s linear infinite alternate; */
 }
 
 @keyframes colorUp5 {
@@ -582,10 +587,10 @@
 
 @keyframes colorUp2 {
     0% {
-        filter: drop-shadow(3px 5px 8px #0ff4);
+        filter: drop-shadow(3px 5px 8px #0ff4) hue-rotate(0deg);
     }
     100% {
-        filter: drop-shadow(3px 5px 11px #0ff);
+        filter: drop-shadow(3px 5px 11px #0ff) hue-rotate(360deg);
         scale: 1.15;
     }
 }

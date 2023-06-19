@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useLayoutEffect} from "react";
 import prisma from '../lib/prisma';
 import { getSession, signIn } from "next-auth/react";
 import Router from "next/router";
+import * as Animation from 'animejs';
 
 // Components
 import Preview from "../src/components/preview";
@@ -59,12 +60,24 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
 };
 
 function Play(props) {
+
+    const anime = Animation.default;
+
     console.warn('PLAY PROPS: ', props);
     const [component, setComponent] = useState('preview');
     // State to share with main Memory_game component
     const [levelData, setLevelData] = useState(null);
     const [levelProgressRecord, setLevelProgressRecord] = useState(null);
     const [gameCounters, setGameCounters] = useState(null);
+
+    async function showUpAnimation() {
+        await anime({
+            targets: 'body',
+            duration: 400,
+            opacity: [0, 1],
+            easing: 'linear',
+        }).finished;
+    }
 
     useEffect(() => {
         if(levelData) { 
@@ -73,9 +86,10 @@ function Play(props) {
         }
     }, [levelData])
 
-    useEffect(() => {
+    useLayoutEffect(() => { // Using LayoutEffect, because of flickering issue when switching between Landing and Play(Preview) Components
         if(props.noSession === true) { signIn('google'); }
         else if(component === 'preview') {
+            showUpAnimation();
             Router.push('/play'); // performs an artificial refresh so that if user make any progress on the level, it is not necessry to refresh the game manually
         }
     }, [component])

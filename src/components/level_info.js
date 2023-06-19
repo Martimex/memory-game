@@ -39,14 +39,16 @@ function LevelInfo(props) {
         }
 
         async function animation() {
+            document.body.style.pointerEvents = 'none';
             const a1 = anime({
                 targets: levelBox_ref.current,
-                duration: 500,
+                duration: 400,
                 opacity: [1, 0],
-                translateX: '-=8%',
+                translateX: '-=6%',
                 easing: 'linear',
             }).finished;
             await Promise.all([a1]);
+            document.body.style.pointerEvents = 'auto';
         }
 
         init();
@@ -105,6 +107,25 @@ function LevelInfo(props) {
         levelBox_ref.current.style.opacity = 1; // That prevents form initial flickering (combined with CSS style for opacity: 0)
     }
 
+    async function fadeScreenAnimation() {
+        const screen = document.querySelector(`.${styles['level-info-blurred']}`); 
+        const level_info_box = document.querySelector(`.${styles['level-info-box']}`);
+
+        const a1 = anime({
+            targets: screen,
+            duration: 450,
+            background: '#111',
+            easing: 'linear',
+        }).finished;
+        const a2 = anime({
+            targets: level_info_box,
+            duration: 450,
+            opacity: 0,
+            easing: 'linear',
+        }).finished;
+        await Promise.all([a1, a2]);
+    }
+
     function blockClicking() {
         document.body.style.pointerEvents = 'none';
     }
@@ -155,6 +176,52 @@ function LevelInfo(props) {
                 }
             })
     }, [])
+
+    async function handleLevelDesc() {
+        if(isLevelDescOpened) {
+            await asyncDescriptionShowUp(false);
+            setLevelDescOpened(!isLevelDescOpened)
+        }
+        else {
+            setLevelDescOpened(!isLevelDescOpened)
+        }
+    }
+
+    useEffect(() => {
+        if(isLevelDescOpened) {
+            asyncDescriptionShowUp(true);
+        }
+    }, [isLevelDescOpened])
+
+    async function asyncDescriptionShowUp(shouldBeShown) {
+        // DONT FORGET TO BLOCK CLICK EVENTS
+        document.body.style.pointerEvents = 'none';
+        const description__box = document.querySelector(`.${styles['lv-description__box']}`);
+        const description__text = document.querySelector(`.${styles['lv-description__text']}`);
+        const box_content = document.querySelector(`.${styles['box__content']}`);
+        /* console.error(description__text); */
+        const a1 = anime({
+            targets: description__box,
+            duration: shouldBeShown? 450 : 600,
+            opacity: shouldBeShown? 1 : 0,
+            easing: shouldBeShown? 'linear' : 'easeInQuad',
+        }).finished;
+        const a2 = anime({
+            targets: box_content,
+            duration: shouldBeShown? 600 : 450,
+            opacity: shouldBeShown? 0 : 1,
+            easing: shouldBeShown? 'easeInQuad' : 'linear',
+        }).finished;
+        const a3 = anime({
+            targets: description__text,
+            duration: shouldBeShown? 650 : 350,
+            opacity: shouldBeShown? [0, 1] : 0,
+            easing: shouldBeShown? 'linear' : 'linear',
+        }).finished;
+        await Promise.all([a1, a2, a3]);
+        // AND TO UNBLOCK THEM AFTERWARDS
+        document.body.style.pointerEvents = 'auto';
+    }
 
    /*  console.log(props, props.serie);
     console.log(props.level_details); */
@@ -293,6 +360,7 @@ function LevelInfo(props) {
             //await Router.push('/preview/[id]', `/preview/${props.level_details.id}`); // Uncomment after finishing try block
 
             // Push the level data as props and this way initialize the Game Component
+            await fadeScreenAnimation();
             props.setLevelData(sampleObj);
         }
         catch(err) { console.error(err); }
@@ -305,7 +373,7 @@ function LevelInfo(props) {
             <div className={styles["level-info-box"]} ref={levelBox_ref}>
                 <div className={styles["box__background"]} ref={bg_placeholder_ref} >
                     <div className={styles['level-button-box']}>
-                        <div className={styles['level-button-box__item']} onClick={() => setLevelDescOpened(!isLevelDescOpened)}>
+                        <div className={styles['level-button-box__item']} onClick={() => handleLevelDesc()}>
                             <FontAwesomeIcon  icon={icon_plus} className={styles['icon-plus']}></FontAwesomeIcon>
                         </div>
                         <div className={styles['level-button-box__item']} onClick={() => closeLevelInfo()}>
@@ -345,7 +413,7 @@ function LevelInfo(props) {
                                 </div>
                                 <div className={styles["level__info-box__play"]}>
                                     <form onSubmit={startLevel}>
-                                        <button className={styles['play']} type="submit" value="Create" onClick={() => { blockClicking(); } } >
+                                        <button className={styles['play']} type="submit" value="Create" onClick={() => { blockClicking(); fadeScreenAnimation(); } } >
                                                 <div className={styles['play-level']} > 
                                                     <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
                                                 </div>
@@ -401,15 +469,14 @@ function LevelInfo(props) {
                         </div>
                     </div>
                     {isLevelDescOpened && (
-                        <div>
                             <div className={styles["lv-description__box"]} >
                                 <div className={styles["lv-description__text"]}>
                                     <p className={styles["lv-description__text-intro"]}> [#{props.level_details.number}] - {props.level_details.name} </p>
                                     <LevelDescription serie_abbr={props.serie_abbr} lv_id={props.level_details.number} />
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )
+                    }
                 </div>
             </div>
             <div className={styles["bg-placeholder"]} >

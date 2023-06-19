@@ -147,8 +147,18 @@ function Preview( props ) {
     }, [isUserTabOpen]);
 
     useEffect(() => {
-        setAnimationRunning(false);
+        showUpAnimation();
     }, [])
+
+    async function showUpAnimation() {
+/*         await anime({
+            targets: 'body',
+            duration: 400,
+            opacity: [0, 1],
+            easing: 'linear',
+        }).finished; */
+        setAnimationRunning(false);
+    }
 
     async function animateTransition() {
         const topBar = document.querySelector(`.${styles['top-bar']}`);

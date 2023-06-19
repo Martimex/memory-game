@@ -775,6 +775,7 @@
     box-shadow: 0 0 .8em .5em #000c,
         inset 0 0 .8em .5em #111
     ;
+    opacity: 0; /* We will animate it back to 1*/
 }
 
 .lv-description__box::-webkit-scrollbar {

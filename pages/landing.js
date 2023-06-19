@@ -225,8 +225,15 @@ function Landing(props) {
         else {moveBox.style.animationPlayState = 'running'; bg_icons.forEach(icon => icon.style.animationPlayState = 'running'); }
     } 
 
-    function checkUserSession() {
+    async function checkUserSession() {
         if(status === 'authenticated') {
+            const screen = document.querySelector(`.${styles['landing-all']}`);
+            await anime({
+                targets: screen,
+                duration: 500,
+                opacity: 0,
+                easing: 'linear',
+            }).finished;
             Router.push("/play");
         } else {
             // Not authenticated yet, need to sign in with Google

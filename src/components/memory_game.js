@@ -666,6 +666,12 @@ function Game(props) {
 
     useEffect(() => {
         document.body.style.overflowY = 'auto';
+        anime({
+            targets: document.body,
+            duration: 500,
+            opacity: [0, 1],
+            easing: 'linear',
+        })
         setBoardState(null);
         //loadStyles();
         appendPlansElems();
