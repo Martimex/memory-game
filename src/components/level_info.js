@@ -114,7 +114,7 @@ function LevelInfo(props) {
         const a1 = anime({
             targets: screen,
             duration: 450,
-            background: '#111',
+            background: '#000',
             easing: 'linear',
         }).finished;
         const a2 = anime({

@@ -1,4 +1,4 @@
-import  React, { useState, useEffect, useRef } from 'react';
+import  React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import Router from "next/router";
 import '../../src/styles/game.module.css';
 
@@ -664,14 +664,26 @@ function Game(props) {
         }
     }, [clickNo])
 
-    useEffect(() => {
-        document.body.style.overflowY = 'auto';
+    useLayoutEffect(() => {
+        // Prevents from initial screen flickering when a couple of frames were suddenly showing a level, interrupted by the fadeIn animation (below one)
         anime({
             targets: document.body,
-            duration: 500,
+            duration: 1200,
             opacity: [0, 1],
             easing: 'linear',
         })
+    }, []);
+
+    useEffect(() => {
+        document.body.style.overflowY = 'auto';
+        const all = document.querySelector(`.${styles_global['all']}`);
+        console.log('INIT MEMORY_GAME SHOWUP : ', all);
+/*         anime({
+            targets: document.body,
+            duration: 1200,
+            opacity: [0, 1],
+            easing: 'linear',
+        }) */
         setBoardState(null);
         //loadStyles();
         appendPlansElems();

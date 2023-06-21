@@ -71,6 +71,7 @@ function Play(props) {
     const [gameCounters, setGameCounters] = useState(null);
 
     async function showUpAnimation() {
+        console.log(`SHOW UP ANIMATION RUNNING ...  ---`)
         await anime({
             targets: 'body',
             duration: 400,

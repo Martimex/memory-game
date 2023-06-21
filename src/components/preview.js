@@ -151,12 +151,12 @@ function Preview( props ) {
     }, [])
 
     async function showUpAnimation() {
-/*         await anime({
+        await anime({
             targets: 'body',
             duration: 400,
             opacity: [0, 1],
             easing: 'linear',
-        }).finished; */
+        }).finished;
         setAnimationRunning(false);
     }
 

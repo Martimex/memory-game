@@ -61,7 +61,7 @@ function Confirm(props) {
     }
 
     function fireEndAnimation() {
-
+        //
         const valuesArr = [props.time, props.turns, [props.score]]; // props.score is within array because is the only numeric value (and we need to ensure each param is type of array)
         const allParamNames = document.querySelectorAll(`.${static_classes[`param_name`]}`);
         const allParamValues = document.querySelectorAll(`.${static_classes[`param_value`]}`)
@@ -143,9 +143,9 @@ function Confirm(props) {
             async function showHighscore() {
                 const a5 = anime({
                     targets: `.${static_classes['highscore']}`,
-                    duration: 350,
+                    duration: 450,
                     opacity: [0, 1],
-                    easing: 'easeInQuad',
+                    easing: 'easeInSine',
                 }).finished;
                 await Promise.all([a5]);
             }
@@ -184,8 +184,11 @@ function Confirm(props) {
                     duration: 1200,
                     delay: anime.stagger(600),
                     scale: ['0%', '100%'],
+                    translateX: ['-2rem', '0rem'],
+                    translateY: ['-2rem', '0rem'],
+                    rotate: ['45deg', '0deg'],
                     opacity: [0, 1],
-                    easing: 'easeInOutElastic',
+                    easing: 'easeInOutBounce',
                 }).finished;
                 await Promise.all([a8]);
             }
@@ -193,10 +196,10 @@ function Confirm(props) {
             async function showWinButton() {
                 const a9 = anime({
                     targets: `.${static_classes['win_btn']}`,
-                    duration: 900,
+                    duration: 600,
                     opacity: [0, 1],
                     scale: ['0%', '100%'],
-                    easing: 'easeInOutQuint',
+                    easing: 'easeInSine',
                 }).finished;
                 await Promise.all([a9]);
             }
@@ -419,7 +422,7 @@ function Confirm(props) {
     function fadeAnimation() {
         anime({
             targets: 'body',
-            duration: 1000,
+            duration: 1200,
             opacity: [0, 1],
             easing: 'linear',
         })
@@ -434,28 +437,29 @@ function Confirm(props) {
                             {endMessage}
                         </div>
 
-                        <div className={`${static_classes['param']}`}>
-                            <div className={`${static_classes['param_name']}`}> Time: </div>
-                            <div className={`${static_classes['param_value']}`}> {(props.value) ? 0 :  props.time}</div>
-                        </div>
+                        <div className={`${styles_confirm['param-box']}`}>
+                            <div className={`${static_classes['param']}`}>
+                                <div className={`${static_classes['param_name']}`}> Time: </div>
+                                <div className={`${static_classes['param_value']}`}> {(props.value) ? 0 :  props.time}</div>
+                            </div>
 
-                        <div className={`${static_classes['param']}`}>
-                            <div className={`${static_classes['param_name']}`}> Turns: </div>
-                            <div className={`${static_classes['param_value']}`}> {(props.value) ? 0 : props.turns} </div>
-                        </div>
+                            <div className={`${static_classes['param']}`}>
+                                <div className={`${static_classes['param_name']}`}> Turns: </div>
+                                <div className={`${static_classes['param_value']}`}> {(props.value) ? 0 : props.turns} </div>
+                            </div>
 
-                        <div className={`${static_classes['param']}`}>
-                            <div className={`${static_classes['param_name']}`}> Score: </div>
-                            <div className={`${static_classes['param_value']}`}> {(props.value) ? 0 : props.score} </div>
+                            <div className={`${static_classes['param']}`}>
+                                <div className={`${static_classes['param_name']}`}> Score: </div>
+                                <div className={`${static_classes['param_value']}`}> {(props.value) ? 0 : props.score} </div>
+                            </div>
                         </div>
 
                         {(props.value) && (
-                            <div className='win-summary'>
+                            <div className={`${styles_confirm['win-summary']}`}>
                                 <div className={`${static_classes['highscore']}`}>
-                                    <div className='highscore-name'> Highscore: </div>
+                                    <div className={`${styles_confirm['highscore-name']}`}> Highscore: </div>
                                     <div className={`${static_classes['highscore_value']}`}> 0 </div>
                                 </div> 
-    
                                 <div className={`${static_classes['star_box']}`}>
                                     {allStars}
                                 </div>
@@ -466,16 +470,16 @@ function Confirm(props) {
 
                 </div>
 
-                <div className='action'>
+                <div className={`${styles_confirm['action']}`}>
                     <div className={`${static_classes['action_container']}`} ref={actionBox_ref}>
                         {(props.value) ?
-                            <div className={'action_container--win'} ref={table} >
-                                <div className={`${static_classes[`win_btn`]}`}  onClick={() => {props.start(); fadeAnimation()}} ref={confBtn} > Go to menu </div>
+                            <div className={`${styles_confirm['action_container--win']}`} ref={table} >
+                                <div className={`${static_classes[`win_btn`]}`}  onClick={() => {props.start(); /* fadeAnimation() */}} ref={confBtn} > Go to menu </div>
                             </div>
                             :
-                            <div className={'action_container--lost'} ref={table} >
-                                <div className={`${static_classes[`lost_btn`]}`} onClick={() => {props.restart(); fadeAnimation()}} ref={confBtn} > Retry </div>
-                                <div className={`${static_classes[`lost_btn`]}`} onClick={() => {props.start(); fadeAnimation()}} ref={confBtn} > Back </div>
+                            <div className={`${styles_confirm['action_container--lost']}`} ref={table} >
+                                <div className={`${static_classes[`lost_btn`]}`} onClick={() => {props.restart(); fadeAnimation() }} ref={confBtn} > Retry </div>
+                                <div className={`${static_classes[`lost_btn`]}`} onClick={() => {props.start(); /* fadeAnimation() */}} ref={confBtn} > Back </div>
                             </div>
                         }
                     </div>

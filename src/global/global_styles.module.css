@@ -21,6 +21,10 @@
     cursor: pointer;
 }
 
+.all {
+    background-color: #111;
+}
+
 .background {
     position: absolute;
     top: 0;
