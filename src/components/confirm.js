@@ -60,6 +60,17 @@ function Confirm(props) {
         fireEndAnimation();
     }
 
+    async function fadeScreen() {
+        const cb = document.querySelector(`.${styles_confirm[`confirmation-bg`]}`);
+        console.error(cb);
+        await anime({
+            targets: `.${styles_confirm[`confirmation-bg`]}`,
+            duration: 1000,
+            opacity: [0, 1],
+            easing: 'linear',
+        }).finished;
+    }
+
     function fireEndAnimation() {
         //
         const valuesArr = [props.time, props.turns, [props.score]]; // props.score is within array because is the only numeric value (and we need to ensure each param is type of array)
@@ -70,6 +81,7 @@ function Confirm(props) {
 
             // Win animation
             async function winAnimation() {
+                await fadeScreen()
                 await showTitle()
                 for(let arr_ind=0; arr_ind<valuesArr.length; arr_ind++) {
                     await showParams(arr_ind)
@@ -184,9 +196,9 @@ function Confirm(props) {
                     duration: 1200,
                     delay: anime.stagger(600),
                     scale: ['0%', '100%'],
-                    translateX: ['-2rem', '0rem'],
-                    translateY: ['-2rem', '0rem'],
-                    rotate: ['45deg', '0deg'],
+                    /* translateX: ['-2rem', '0rem'], */
+                    /* translateY: ['-2rem', '0rem'], */
+                    rotate: ['180deg', '0deg'],
                     opacity: [0, 1],
                     easing: 'easeInOutBounce',
                 }).finished;
@@ -213,6 +225,7 @@ function Confirm(props) {
             // Lost animation
 
             async function lostAnimation() {
+                await fadeScreen()
                 await showLostTitle()
                 for(let arr_ind=0; arr_ind<valuesArr.length; arr_ind++) {
                     await showParams(arr_ind)
