@@ -12,8 +12,8 @@ import UserTab from './user_tab.js';
 //import  { all_levels } from './global/all_levels.js'; NOT NEEDED SINCE V2 REWORK
 
 /* import { faGithub as github} from '@fortawesome/free-brands-svg-icons'; */
-import { faUserCircle as user} from '@fortawesome/free-solid-svg-icons';
-import { faHome as home} from '@fortawesome/free-solid-svg-icons';
+import { faUserCircle as user, faChevronCircleLeft as home} from '@fortawesome/free-solid-svg-icons';
+import { faHome as homeaaa} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // We need to make sure it is a non-mutable value. We are going to use it for TopBar showUp animation, and we have to have reference 100% value
@@ -189,9 +189,9 @@ function Preview( props ) {
             <div className={styles['seizure-flexbox']}>
                 <div className={styles['top-bar']} ref={topBarRef}>
                     <div className={styles['top-bar__return']}>
-                        <button className={styles['return-back']} onClick={() => {setAnimationRunning(true); animateReturn(); /* props.backToHome(); props.proceed(); */}}> 
+                        <div className={styles['return-back']} onClick={() => {setAnimationRunning(true); animateReturn(); /* props.backToHome(); props.proceed(); */}}> 
                             <FontAwesomeIcon icon={home} className={styles["icon-home"]} />
-                        </button>
+                        </div>
                     </div>
 
                     <div className={styles['top-bar__title']}>

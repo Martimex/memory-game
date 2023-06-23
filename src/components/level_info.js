@@ -42,12 +42,17 @@ function LevelInfo(props) {
             document.body.style.pointerEvents = 'none';
             const a1 = anime({
                 targets: levelBox_ref.current,
-                duration: 400,
+                duration: 600,
+                opacity: { value: [1, 0], easing: 'easeInOutCubic' },
+                translateX: { value: '-=1.5%', duration: 150, easing: 'linear' },
+            }).finished;
+            const a2 = anime({
+                /* targets: levelInfoAll_ref.current, */
+                duration: 600,
                 opacity: [1, 0],
-                translateX: '-=6%',
                 easing: 'linear',
             }).finished;
-            await Promise.all([a1]);
+            await Promise.all([a1, a2]);
             document.body.style.pointerEvents = 'auto';
         }
 

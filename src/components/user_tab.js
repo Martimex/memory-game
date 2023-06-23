@@ -44,8 +44,15 @@ function UserTab(props) {
         const userTabBoxHeight = window.getComputedStyle(userTabBox).getPropertyValue('height');
         console.log('userTab computed height is: ', userTabBoxHeight, profile_info, profile_stats);
         
+        /* document.querySelector(`.${styles['main-layer']}`).style.pointerEvents = 'none'; */
+
+        document.querySelector(`.${styles['box__action-buttons']}`).style.pointerEvents = 'none';
+
         if(animation_type === 'show') { await animateUserTab(); await animateTabBox2()}
         else if(animation_type === 'hide') {await animateTabBox()}
+
+        // After animations end, unblock click events for action buttons within User Tab
+        document.querySelector(`.${styles['box__action-buttons']}`).style.pointerEvents = 'auto';
 
         async function animateUserTab() {
             await anime({

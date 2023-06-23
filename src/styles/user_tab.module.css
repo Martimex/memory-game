@@ -176,6 +176,13 @@
             padding: .34rem;
             border-radius: 50%;
             color: #aaa;
+
+            transition-duration: 5s;
+            -webkit-transition: all 1s ease;
+            -moz-transition: all 1s ease;
+            -o-transition: all 1s ease;
+            -ms-transition: all 1s ease;
+            transition: all 1s ease;
         }
 
         .icon-hide {
@@ -191,6 +198,31 @@
         .icon-logout {
             box-shadow: inset -1rem -1rem .4rem -.4rem #666, .06rem .06rem .12rem .06rem hsla(11, 53%, 77%, 0.93);
             color: hsla(11, 63%, 80%, 0.93);
+        }
+
+        .icon-hide:hover {
+            box-shadow: inset 1rem 1rem .4rem -.4rem #555, -.06rem -.06rem .12rem .06rem hsla(111, 53%, 77%, 0.93);
+            color: hsla(111, 63%, 70%, 0.93);
+        }
+
+        .icon-info:hover {
+            box-shadow: inset 1rem 1rem .4rem -.4rem #555, -.06rem -.06rem .12rem .06rem hsla(204, 53%, 77%, 0.93);
+            color: hsla(204, 63%, 70%, 0.93);
+        }
+
+        .icon-logout:hover {
+            box-shadow: inset 1rem 1rem .4rem -.4rem #555, -.06rem -.06rem .18rem .09rem hsla(11, 53%, 77%, 0.93);
+            color: hsla(11, 63%, 70%, 0.93);
+        }
+
+        @keyframes go {
+            0% {
+                box-shadow: inset -1rem -1rem .4rem -.4rem #666, .06rem .06rem .12rem .06rem hsla(11, 53%, 77%, 0.93);
+                color: hsla(11, 63%, 80%, 0.93);
+            } 100% {             
+            box-shadow: inset 1rem 1rem .4rem -.4rem #555, -.06rem -.06rem .18rem .09rem hsla(11, 53%, 77%, 0.93);
+            color: hsla(11, 63%, 70%, 0.93);
+            }
         }
 
         .btn-item__text {
