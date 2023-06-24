@@ -7,6 +7,7 @@ import * as Animation from 'animejs';
 // Components
 import Preview from "../src/components/preview";
 import Game from "../src/components/memory_game";
+import UserBanned from "../src/components/user_banned";
 import { getPlayerLevel } from "../src/global/predefined/exp_to_level";
 
 export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
@@ -64,7 +65,7 @@ function Play(props) {
     const anime = Animation.default;
 
     console.warn('PLAY PROPS: ', props);
-    const [component, setComponent] = useState('preview');
+    const [component, setComponent] = useState(props.session_user.isBanned? 'banned' : 'preview');
     // State to share with main Memory_game component
     const [levelData, setLevelData] = useState(null);
     const [levelProgressRecord, setLevelProgressRecord] = useState(null);
@@ -89,14 +90,18 @@ function Play(props) {
 
     useLayoutEffect(() => { // Using LayoutEffect, because of flickering issue when switching between Landing and Play(Preview) Components
         if(props.noSession === true) { signIn('google'); }
-        else if(component === 'preview') {
+        else if(component === 'preview' && !props.session_user.isBanned) {
             showUpAnimation();
             Router.push('/play'); // performs an artificial refresh so that if user make any progress on the level, it is not necessry to refresh the game manually
+        }
+        else if(props.session_user.isBanned) {
+            //alert(`${props.session_user.name} , you are banned :( `);
+            setComponent('banned')
         }
     }, [component])
 
     return(
-        <div style={{background: 'white', width: '100%', minHeight: '100vh'}}>
+        <div style={{background: '#111', width: '100%', minHeight: '100vh'}}>
             {(props.noSession !== true && component === 'preview') && (
                 <Preview data={props.data} user_progresses={props.user_progresses} player={props.session_user} levelsCount={props.levelsCount}
                     /* changeComponent={setComponent}  */setLevelData={setLevelData} setLevelProgressRecord={setLevelProgressRecord} setGameCounters={setGameCounters}
@@ -104,6 +109,9 @@ function Play(props) {
             )}
             {(props.noSession !== true && component === 'game') && (
                 <Game level={levelData} playerId={props.session_user.id} playerExp={props.session_user.exp} progress={levelProgressRecord} gameCounters={gameCounters} changeComponent={setComponent} />
+            )}
+            {(props.noSession !== true && component === 'banned') && (
+                <UserBanned userName={props.session_user.name} />
             )}
         </div>
     );
