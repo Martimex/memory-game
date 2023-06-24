@@ -16,6 +16,7 @@ model User {
   email          String?    @unique
   role           String     @default("player")
   exp            Int?       @default(0)
+  isBanned       Boolean?   @default(false)
   registeredAt   DateTime   @default(dbgenerated("NOW()")) 
   progressLevels Progress[]
   createdLevels  Level[]

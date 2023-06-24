@@ -25,8 +25,8 @@ function PlayerStats(props) {
         console.log(newPageNo, ' and progress bars: ', allProgressBars);
         await anime({
             targets: allProgressBars,
-            translateY: {value: '20%', delay: anime.stagger(100), duration: 350, easing: 'linear'},
-            opacity: {value: 0, delay: anime.stagger(100), duration: 350, easing: 'linear'}
+            translateY: {value: '20%', delay: anime.stagger(90), duration: 150, easing: 'linear'},
+            opacity: {value: 0, delay: anime.stagger(90), duration: 150, easing: 'linear'}
         }).finished;
         setPageNo([newPageNo, pageMaxIndex, pageNo]);
     }
@@ -40,7 +40,7 @@ function PlayerStats(props) {
         await anime({
             targets: allProgressBars,
             translateY: {value: '0%', duration: 0, easing: 'linear'},
-            opacity: {value: 1, duration: 200, delay: anime.stagger(80), easing: 'linear'},
+            opacity: {value: 1, duration: 150, delay: anime.stagger(90), easing: 'linear'},
         }).finished;
         isAnimationRunning = false;
     }

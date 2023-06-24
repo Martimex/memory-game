@@ -31,7 +31,6 @@ function LevelInfo(props) {
     }
 
     function closeLevelInfo() {
-        document.body.style.overflow = 'auto';
 
         async function init() {
             await animation()
@@ -40,20 +39,29 @@ function LevelInfo(props) {
 
         async function animation() {
             document.body.style.pointerEvents = 'none';
+            await anime({
+                targets: levelBox_ref.current,
+               /*  opacity: { value: [1, 0], easing: 'easeInCubic', duration: 300 }, */
+                translateX: { value: '-=1.5%', duration: 150, easing: 'easeInSine' },
+                opacity: {value: [1, .9], duration: 150, easing: 'easeInSine'},
+            }).finished;
             const a1 = anime({
                 targets: levelBox_ref.current,
-                duration: 600,
-                opacity: { value: [1, 0], easing: 'easeInOutCubic' },
-                translateX: { value: '-=1.5%', duration: 150, easing: 'linear' },
+                duration: 400,
+                opacity: 0,
+                easing: 'easeInSine',
             }).finished;
+
             const a2 = anime({
-                /* targets: levelInfoAll_ref.current, */
-                duration: 600,
+                targets: levelInfoAll_ref.current,
+                duration: 400,
                 opacity: [1, 0],
-                easing: 'linear',
+                easing: 'easeInSine',
             }).finished;
+
             await Promise.all([a1, a2]);
             document.body.style.pointerEvents = 'auto';
+            document.body.style.overflowY = 'auto';
         }
 
         init();
@@ -118,14 +126,14 @@ function LevelInfo(props) {
 
         const a1 = anime({
             targets: screen,
-            duration: 450,
+            duration: 350,
             background: '#000',
             easing: 'linear',
         }).finished;
         const a2 = anime({
             targets: level_info_box,
-            duration: 450,
-            opacity: 0,
+            duration: 350,
+            opacity: [1, 0],
             easing: 'linear',
         }).finished;
         await Promise.all([a1, a2]);
@@ -418,7 +426,7 @@ function LevelInfo(props) {
                                 </div>
                                 <div className={styles["level__info-box__play"]}>
                                     <form onSubmit={startLevel}>
-                                        <button className={styles['play']} type="submit" value="Create" onClick={() => { blockClicking(); fadeScreenAnimation(); } } >
+                                        <button className={styles['play']} type="submit" value="Create" onClick={() => { blockClicking(); /* fadeScreenAnimation(); */ } } >
                                                 <div className={styles['play-level']} > 
                                                     <FontAwesomeIcon icon={play} className={styles['icon-play']}> </FontAwesomeIcon>
                                                 </div>

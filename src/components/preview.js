@@ -134,15 +134,23 @@ function Preview( props ) {
         }
     }
 
+    async function asyncTopBarReturn() {
+        const topBar = document.querySelector(`.${styles['top-bar']}`);
+        topBar.style.height = `${topBarHeight}px`;
+        await anime({
+            targets: topBar,
+            /* height: {value: +topBarHeight, duration: 400, easing: 'easeInCubic'}, */
+            // We need to keep this animation for around 500 ms to prevent from possible bug when user exits UserTab and immediately starts clicking a level square (w/ colorful borders)
+            opacity: {value: 1, duration: 500, easing: 'easeInCubic'}, 
+        }).finished;
+        
+        console.error('ANIMATIONS FINISHED !!! ', topBarHeight);
+        setAnimationRunning(false); 
+    } 
+
     useEffect(() => {
         if(isUserTabOpen === false) {
-            const topBar = document.querySelector(`.${styles['top-bar']}`);
-            anime({
-                targets: topBar,
-                height: {value: +topBarHeight, duration: 500, easing: 'easeInCubic'},
-                opacity: {value: 1, duration: 550, easing: 'linear'},
-            }).finished;
-            setAnimationRunning(false);
+            asyncTopBarReturn();
         }
     }, [isUserTabOpen]);
 
@@ -167,9 +175,10 @@ function Preview( props ) {
         topBarHeight = (topBarHeight)? topBarHeight : topBar.offsetHeight; // Prevents from a bug that a bar grows 2px every animation cycle
         await anime({
             targets: topBar,
-            height: {value: 0, duration: 500, easing: 'easeInCubic'},
-            opacity: {value: 0, duration: 550, easing: 'linear'},
+            height: {value: 0, duration: 400, easing: 'easeOutCubic'},
+            opacity: {value: 0, duration: 300, easing: 'easeOutCubic'},
         }).finished;
+        setAnimationRunning(true);
         setUserTabOpen(true);
     }
 
@@ -215,10 +224,10 @@ function Preview( props ) {
             </div>
 
             { isUserTabOpen && (
-                <UserTab includeUserStats={true} player={props.player} levelsCount={props.levelsCount} setUserTabOpen={setUserTabOpen} setAnimationRunning={setAnimationRunning} />
+                <UserTab includeUserStats={true} player={props.player} levelsCount={props.levelsCount} setUserTabOpen={setUserTabOpen} setAnimationRunning={setAnimationRunning} isAnimationRunning={isAnimationRunning} />
             )}   
 
-            { levelChoose && (
+            { (levelChoose && !isAnimationRunning) && (
                 <LevelInfo serie_name={serie_name} serie_abbr={serie_abbr} serie_desc={serie_desc} level_details={levelChoose} lv_index={lv_index} closeLevelInfo={setLevelChoose} 
                     changeComponent={props.changeComponent} user_progresses={props.user_progresses} playerId={props.player.id} playerName={props.player.name}
                     setLevelData={props.setLevelData} setLevelProgressRecord={props.setLevelProgressRecord} setGameCounters={props.setGameCounters} 

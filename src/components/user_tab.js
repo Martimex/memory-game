@@ -47,52 +47,58 @@ function UserTab(props) {
         /* document.querySelector(`.${styles['main-layer']}`).style.pointerEvents = 'none'; */
 
         document.querySelector(`.${styles['box__action-buttons']}`).style.pointerEvents = 'none';
+/*         document.querySelector(`.${styles['main-layer']}`).style.pointerEvents = 'none';
+ */
 
-        if(animation_type === 'show') { await animateUserTab(); await animateTabBox2()}
+        
+        if(animation_type === 'show') { await animateUserTab(); await animateTabBox2(); props.setAnimationRunning(false); }
         else if(animation_type === 'hide') {await animateTabBox()}
 
         // After animations end, unblock click events for action buttons within User Tab
-        document.querySelector(`.${styles['box__action-buttons']}`).style.pointerEvents = 'auto';
+        const btnBox = document.querySelector(`.${styles['box__action-buttons']}`);
+        if(btnBox) {btnBox.style.pointerEvents = 'auto';}
+/*         document.querySelector(`.${styles['main-layer']}`).style.pointerEvents = 'none';
+ */        /* document.body.style.pointerEvents = 'auto'; */
 
         async function animateUserTab() {
             await anime({
                 targets: userTabAll,
-                duration: 500,
+                duration: 200,
                 opacity: [0, 1],
-                easing: 'easeInSine',
+                easing: 'easeOutSine',
             }).finished;
         }
 
         async function animateTabBox2() {
             const a1 = anime({
                 targets: userTabBox,
-                height: {value: ['0px', `${userTabBoxHeight}px`], duration: 600, easing: 'easeOutQuad'},
-                opacity: {value: 1, duration: 450, easing: 'linear'},
+                height: {value: ['0px', `${userTabBoxHeight}px`], duration: 300, easing: 'easeOutQuad'},
+                opacity: {value: 1, duration: 300, easing: 'linear'},
             }).finished;
 
             const a2 = anime({
                 targets: profile_info,
-                opacity: {value: [0, 1], duration: 500, easing: 'linear'},
-                translateY: {value: ['-20%', '0%'], duration: 400, easing: 'easeOutSine'},
+                opacity: {value: [0, 1], duration: 300, easing: 'linear'},
+                translateY: {value: ['-20%', '0%'], duration: 300, easing: 'easeOutSine'},
             }).finished;
 
             const a3 = anime({
                 targets: profile_stats,
-                opacity: {value: [0, 1], duration: 500, easing: 'linear'},
-                translateY: {value: ['20%', '0%'], duration: 400, easing: 'easeOutSine'},
+                opacity: {value: [0, 1], duration: 300, easing: 'linear'},
+                translateY: {value: ['20%', '0%'], duration: 300, easing: 'easeOutSine'},
             }).finished;
 
             const a4 = anime({
                 targets: tabBox__buttons,
-                opacity: {value: [0, 1], duration: 500, easing: 'linear'},
-                translateX: {value: ['-20%', '0%'], duration: 400, easing: 'easeOutSine'},
+                opacity: {value: [0, 1], duration: 300, easing: 'linear'},
+                translateX: {value: ['-20%', '0%'], duration: 300, easing: 'easeOutSine'},
             }).finished;
 
             const a5 = anime({
                 targets: tabBox__profile,
-                duration: 500,
+                duration: 300,
                 opacity: [0, 1],
-                easing: 'linear',
+                easing: 'easeOutSine',
             }).finished;
 
             await Promise.all([a1, a2, a3, a4, a5]);
@@ -101,8 +107,8 @@ function UserTab(props) {
         async function animateTabBox() {
             const a1 = anime({
                 targets: userTabBox,
-                height: {value: [`${userTabBoxHeight}px`, '0px'], duration: 600, easing: 'easeInQuad'},
-                opacity: {value: 0, duration: 450, easing: 'linear'},
+                height: {value: [`${userTabBoxHeight}px`, '0px'], duration: 400, easing: 'easeInQuad'},
+                opacity: {value: 0, duration: 400, easing: 'easeInSine'},
             }).finished;
 
             const a2 = anime({
@@ -119,6 +125,7 @@ function UserTab(props) {
     }
 
     async function handleUserTabHide() {
+        props.setAnimationRunning(true);
         await fireUserTabAnimation('hide');
         props.setUserTabOpen(false)
     }
@@ -126,7 +133,7 @@ function UserTab(props) {
     console.log('PROPS PLAYER IN LANDING COMPONENT : ', props.player);
 
     return(
-        <div className={styles['main-layer']} onClick={(e) => {e.target.classList.contains(`${styles['main-layer']}`) && handleUserTabHide()}}>
+        <div className={styles['main-layer']} onClick={(e) => {(e.target.classList.contains(`${styles['main-layer']}`) && !props.isAnimationRunning) && handleUserTabHide()}}>
             <div className={styles['user-tab']}>
                 <div className={styles['user-tab__box']}>
                     <div className={`${styles['box__user-profile']} ${(props.includeUserStats !== true && styles['user-profile--adjusted'])}`}>

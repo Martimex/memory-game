@@ -103,7 +103,7 @@ function SerieBox(props) {
         }
     
         async function fadeText() {
-            const timing = 650;
+            const timing = 520;
             const a1 = anime({
                 targets: section_title,
                 duration: timing,
@@ -124,8 +124,8 @@ function SerieBox(props) {
         }
     
         async function showUpLevels() {
-            const timing = 500;
-            const staggering = 120;
+            const timing = 400;
+            const staggering = 96;
             const total_stagger = timing + (staggering * section_content_tiles.length);
             const a2 = anime({
                 targets: section_content_tiles,
@@ -171,8 +171,8 @@ function SerieBox(props) {
             async function hideLevels() {
                 const a1 = anime({
                     targets: section_content_tiles_old,
-                    duration: 500,
-                    delay: anime.stagger(120, {from: 'last'}),
+                    duration: 400,
+                    delay: anime.stagger(96, {from: 'last'}),
                     opacity: 0,
                     easing: 'easeOutCubic',
                 }).finished;
@@ -182,7 +182,7 @@ function SerieBox(props) {
             async function showText() {
                 const a2 = anime({
                     targets: section_title_old,
-                    duration: 650,
+                    duration: 520,
                     translateX: 0,
                     filter: 'sepia(0%)',
                     opacity: 1,
