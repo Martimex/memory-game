@@ -19,7 +19,7 @@ function descriptionStorage() {
             <hr style={{marginBottom: '1em'}}/>
             <span style={{fontWeight: 650, color: "lightgreen", fontSize: '1.15rem'}}> OG level note </span>
             <span style={{fontWeight: 500, color: "lightslategray"}}>
-                This level was originally published in old-style version of Flash MG. 'First level' was created on August 22th, 2021 - and it 
+                This level was originally published in old-style version of Flash MG. 'First level' was created on August 22nd, 2021 - and it 
                 is truly the very first level EVER. Despite the slight change to lotus decoration added in the background, and the second stage being included,
                 other level parts remain unchanged, keeping old-style look *almost* untouched. 
             </span>

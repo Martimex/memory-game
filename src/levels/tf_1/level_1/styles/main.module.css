@@ -22,7 +22,7 @@
     font-size: 1.4rem;
 }
 
-.level-1::after, .counter-1::after, .score-1::after {
+.gd-level_custom::after, .gd-turns_custom::after, .gd-time_custom::after, .gd-score_custom::after {
     content: "";
     display: block;
     width: 100%;
@@ -30,14 +30,14 @@
     border: solid 0.1rem hsl(4, 87%, 62%);
 }
 
-.level-1 {
+.gd-level_custom {
     color: hsl(4, 87%, 84%);
 }
 
-.counter-1 {
+.gd-turns_custom, .gd-time_custom {
     color: hsl(4, 87%, 84%);
 }
 
-.score-1 {
+.gd-score_custom {
     color: hsl(4, 87%, 84%);
 }

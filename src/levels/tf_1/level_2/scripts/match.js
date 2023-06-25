@@ -1,14 +1,15 @@
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs"
+import * as Animation from "animejs"
+
+const anime = Animation.default;
+
 async function match(isMatch, cardsOpened_parentNodes, stageNo) {
     // Fire some animations when we found / do not found a match
     const targets = document.querySelectorAll('.target');
 
     async function matchAnimation() {
         if(isMatch) {
-            console.warn(cardsOpened_parentNodes);
             const a1 = anime({
-                targets: [targets],
+                targets: cardsOpened_parentNodes, // targets: [targets],
                 duration: 750,
                 borderRadius: '30%',
                 saturate: 1.5,

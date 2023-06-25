@@ -1,10 +1,11 @@
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs"
+import * as Animation from "animejs";
+import mainStyles from "../styles/main.module.css";
+const anime = Animation.default;
 
 async function xclick(click_no, target, stageNo, levelObj) {
 
     async function waterTile() {
-        target.classList.toggle('dark-bubble');
+        target.classList.toggle(mainStyles['dark-bubble']);
 
         const a1 = anime({
             targets: target,
@@ -17,7 +18,7 @@ async function xclick(click_no, target, stageNo, levelObj) {
 
     async function unWaterTile() {
         const targets = document.querySelectorAll('.target');
-  
+
         const a2 = anime({
             targets: targets,
             duration: 2000,

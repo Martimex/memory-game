@@ -1,17 +1,20 @@
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs"
+import * as Animation from "animejs"
+import firstPlanStyles from '../styles/firstPlan.module.css';
+const anime = Animation.default;
+
+let styles_global = '';
 
 async function level_start(stageNo, time, tileShowTime) {
-    //console.warn(time, tileShowTime);
 
     async function startAnimation() {
+        styles_global = await import('../../../../global/global_styles.module.css')
         await showTiles()
         await hideTiles()
     }
 
     async function showTiles() {
         const a1 = anime({
-            targets: '.tile',
+            targets: `.${styles_global['tile']}`,
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
@@ -24,7 +27,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function hideTiles() {
         const a2 = anime({
-            targets: '.tile',
+            targets: `.${styles_global['tile']}`,
             delay: tileShowTime,
             duration: time,
             transitionProperty: 'all',
@@ -38,7 +41,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function createFlood() {
         const b1 = anime({
-            targets: '.flood-elem',
+            targets: `.${firstPlanStyles['flood-elem']}`, //targets: '.flood-elem',
             duration: 400,
             delay: anime.stagger(1000, {from: 'last'}),
             opacity: [0, .4],

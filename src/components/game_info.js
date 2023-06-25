@@ -15,10 +15,10 @@ function GameInfo(props) {
 
     return (
         <div className={`${styles_global['game-details']}`}>
-            <div className={`${styles_main && styles_main[`level-${props.level}`]} ${styles_global['details-item']}`}> Level: {props.level}</div>  
-            {(props.moves >= -1) &&  (<div className={`${styles_main && styles_main[`counter-${props.level}`]} ${styles_global['details-item']}`}> Turns: {parseInt(props.moves)} </div>) }
-            {(props.time >= -1) &&  (<div className={`${styles_main && styles_main[`counter-${props.level}`]} ${styles_global['details-item']}`}> Time:  {parseInt(props.time)} s </div>) }
-            <div className={`${styles_main && styles_main[`score-${props.level}`]} ${styles_global['details-item']}`}> Score: {props.score} </div>
+            <div className={`${styles_main && styles_main[`gd-level_custom`]} ${styles_global['details-item']}`}> Level: {props.level}</div>  
+            {(props.moves >= -1) &&  (<div className={`${styles_main && styles_main[`gd-turns_custom`]} ${styles_global['details-item']}`}> Turns: {parseInt(props.moves)} </div>) }
+            {(props.time >= -1) &&  (<div className={`${styles_main && styles_main[`gd-time_custom`]} ${styles_global['details-item']}`}> Time:  {parseInt(props.time)} s </div>) }
+            <div className={`${styles_main && styles_main[`gd-score_custom`]} ${styles_global['details-item']}`}> Score: {props.score} </div>
         </div>
     )
 }

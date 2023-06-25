@@ -361,7 +361,7 @@ function Game(props) {
 
         setBoardState(allTiles);
         //setTestValue(!testValue);
-
+        appendPlansElems()
         //loadStyles()
         loadDynamic()
 
@@ -601,6 +601,7 @@ function Game(props) {
 
     function restartLevel() {
         gameboard.current.dataset.animation = 'off'; // prevents from bug happening when player opens 2 tiles, which are not closed again before time runs out
+        resetPlanItems();
         resetAllGameCounters(props.gameCounters);
         setTestValue(!testValue);
         setBoardState(null);
@@ -608,6 +609,17 @@ function Game(props) {
         setStageNo(0);
         setScore(0); // reset score value to 0 after lose
         setConfirmValue(null);
+    }
+
+    function resetPlanItems() {
+        const [getFirstPlan, getSecondPlan, getAnimationPlan] = 
+            [   document.querySelector(`.${classes[`firstPlan`]}`),
+                document.querySelector(`.${classes[`secondPlan`]}`),
+                document.querySelector(`.${classes[`animationPlan`]}`),
+            ];
+        getFirstPlan.replaceChildren();
+        getSecondPlan.replaceChildren();
+        getAnimationPlan.replaceChildren();
     }
 
     function resetAllGameCounters(allGameCounters) {
@@ -686,7 +698,7 @@ function Game(props) {
         }) */
         setBoardState(null);
         //loadStyles();
-        appendPlansElems();
+        /* appendPlansElems(); */
     }, []);
 
     async function loadStyles() {
