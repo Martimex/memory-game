@@ -102,7 +102,7 @@ function Landing(props) {
                 </div>
             )
         })
-        fadeAnimation(); // Runs in between remain actions
+        /* fadeAnimation(); */ // Runs in between remain actions
         setRender(true);
     }, []);
 
@@ -207,10 +207,16 @@ function Landing(props) {
 
     /* const changeScreen = React.useRef(null); */
 
+    useLayoutEffect(() => {
+        fadeAnimation();
+    }, []);
+
     function fadeAnimation() {
+/*         const screen = document.querySelector(`.${styles['landing-all']}`);
+        console.error() */
         anime({
             targets: 'body',
-            duration: 1000,
+            duration: 800,
             opacity: [0, 1],
             easing: 'linear',
         }) 
@@ -309,7 +315,7 @@ function Landing(props) {
                         <button className={styles['start']} onClick={() => {checkUserSession()}}> Play </button>
                     </div>
                 </div>    
-                <div className={styles['move-box']} onFocus={() => isStopAnimation(false)} onBlur={() => isStopAnimation(true)}>
+                <div className={styles['move-box']} /* onFocus={() => isStopAnimation(false)} onBlur={() => isStopAnimation(true)} */>
                     {allIcons}
                 </div>
             </div>
