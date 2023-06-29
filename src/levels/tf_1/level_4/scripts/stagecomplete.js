@@ -1,9 +1,10 @@
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs"
+import bgStyles from '../styles/bg.module.css';
+import * as Animation from "animejs";
+const anime = Animation.default;
 
 async function stagecomplete(stageNo) {
 
-    let game = document.querySelector('.background');
+    let game = document.querySelector(`.${bgStyles['background_custom']}`);
 
     async function init() {
         await fadeScreen()

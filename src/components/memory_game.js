@@ -267,6 +267,8 @@ function Game(props) {
     const [clickNo, setClickNo] = useState(0); // use to calculate click number (mostly for xClick script)
     const [stageNo, setStageNo] = useState(0); // use to switch stages (if level has few stages)
     const [boardState, setBoardState] = useState(null);
+    const [boardGridParams, setBoardGridParams] = useState(null);
+    const [levelVariables, setLevelVariables] = useState({...props.level.variables});
     // Below prevents from overriding 'better progress record' with worse one, in cases when player uses 'Retry button' instead of 'Back' when saving progress on 'level lose' scenario 
     const [progressData, setProgressData] = useState({highscore: props['progress']['highscore'], lv_progress: props['progress']['lv_progress'], stars: props['progress']['stars']}); 
 
@@ -332,8 +334,11 @@ function Game(props) {
         //console.log(cardsOpened);
         //console.log('Resetting....', cardsOpened);
         
+        // FIRES AFTER EVERY STAGE CHANGE
+
         // 0. Reset all gameCounters - we will use it now for props.gameCounters*
         resetGameCounters();
+        setBoardGridParams({gridTemplateColumns: `repeat(${props.level.board[stageNo]['columns']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[stageNo]['rows']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`})
 
         // 1. Reset turns / time / stageScore variables first
         setTime(0);
@@ -368,7 +373,7 @@ function Game(props) {
 
     // Add proper styling based on device used by end user
 
-    let boardGridParams = {gridTemplateColumns: `repeat(${props.level.board[stageNo]['columns']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[stageNo]['rows']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`};
+    //let boardGridParams = {gridTemplateColumns: `repeat(${props.level.board[stageNo]['columns']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[stageNo]['rows']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`};
     
     /* if(isDesktop) {  UNCOMMENT AND MAKE A DEVELOPMENT LATER WHEN WORKING WITH MEDIA QUERIES !!!
         boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns}, ${(props.newLevel.tile_size)/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows}, ${(props.newLevel.tile_size)/10}rem)`};
@@ -405,7 +410,7 @@ function Game(props) {
         
             openUp()
                 .then(() => {
-                    otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props.level/* props.newLevel */) // doesMatch determines whether player meets required condition to remove tiles
+                    otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props.level, levelVariables/* props.newLevel */) // doesMatch determines whether player meets required condition to remove tiles
                         .then(() => {
                             doCardsMatch(doesMatch, props.gameCounters.cardsOpened)
                         })
@@ -537,7 +542,7 @@ function Game(props) {
             if(stageNo + 1 === props.level.stages) {
                 // Level completed !
                 async function finishGame() {
-                    await otherModules[`stagecomplete`].stagecomplete(stageNo, true, props.level)
+                    await otherModules[`stagecomplete`].stagecomplete(stageNo, true, props.level, levelVariables)
                 }
                 finishGame()
                     .then(() => setConfirmValue(true));
@@ -551,7 +556,7 @@ function Game(props) {
     }
 
     async function nextStageTransition() {
-        await otherModules[`stagecomplete`].stagecomplete(stageNo, false, props.level);
+        await otherModules[`stagecomplete`].stagecomplete(stageNo, false, props.level, levelVariables);
         await newStageFadeOut()
             .then(() => {
                 newStageFadeIn()
@@ -586,7 +591,7 @@ function Game(props) {
         if(boardState) {
             async function run() {
                 let loadStart = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/scripts/start.js`);
-                loadStart.level_start(stageNo, props.level.starting_animation[stageNo][`duration`], props.level.starting_animation[stageNo][`tileShowTime`], props.level)
+                loadStart.level_start(stageNo, props.level.starting_animation[stageNo][`duration`], props.level.starting_animation[stageNo][`tileShowTime`], props.level, levelVariables)
                     .then(() => {
                         // After animation is completed...
                         setTime(1);
@@ -609,15 +614,29 @@ function Game(props) {
         setStageNo(0);
         setScore(0); // reset score value to 0 after lose
         setConfirmValue(null);
+        setLevelVariables({...props.level.variables})
+        //props.level.variables = {...levelVariables};
+        //console.log('AFTER CHANGE :::: RESTART LEVEL OBJ VARIABLES : ', props.level.variables, '  --  while useState levelVariables : ', levelVariables);
+        //setBoardGridParams({gridTemplateColumns: `repeat(${props.level.board[0]['columns']}, ${(props.level.tiles[0]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[0]['rows']}, ${(props.level.tiles[0]['size'])/10}rem)`})
     }
+
+/*     useEffect(() => {
+        console.warn('RESTART LEVEL OBJ VARIABLES : ', props.level.variables, '  --  while useState levelVariables : ', levelVariables);
+    }, [levelVariables]); */
 
     function resetInlineStyles() {
         // Clear inline styles when user restarts the level (to maintain its' basic state correctly)
-        document.querySelector(`.${styles_global[`background`]}`).style = '';
-        document.querySelector(`.${styles_global['game-info']}`).style = '';
-        document.querySelector(`.${classes[`firstPlan`]}`).style = '';
-        document.querySelector(`.${classes[`secondPlan`]}`).style = '';
-        document.querySelector(`.${classes[`animationPlan`]}`).style = '';
+        anime.remove(document.querySelector(`.${styles_global[`background`]}`));
+        anime.remove(document.querySelector(`.${styles_global['game-info']}`));
+        anime.remove(document.querySelector(`.${styles_global[`board`]}`));
+        // DO NOT RESET STYLES FOR styles_global[`board`] , BECAUSE TILES BOARD DISPLAY RELIES ON THIS
+        setBoardGridParams({}); // don't remove this declaration, as this helps trigerring things properly
+        document.querySelector(`.${styles_global[`board`]}`).removeAttribute('style');
+        document.querySelector(`.${styles_global[`background`]}`).removeAttribute('style');
+        document.querySelector(`.${styles_global['game-info']}`).removeAttribute('style');
+        document.querySelector(`.${classes[`firstPlan`]}`).removeAttribute('style');
+        document.querySelector(`.${classes[`secondPlan`]}`).removeAttribute('style');
+        document.querySelector(`.${classes[`animationPlan`]}`).removeAttribute('style');
     }
 
     function resetPlanItems() {
@@ -679,7 +698,7 @@ function Game(props) {
 
     useEffect(() => {
         if(clickNo > 0) {
-            otherModules[`xclick`].xclick(clickNo, props.gameCounters.cardsOpened[props.gameCounters.cardsOpened.length - 1].parentNode, stageNo, props.level/* props.newLevel */);
+            otherModules[`xclick`].xclick(clickNo, props.gameCounters.cardsOpened[props.gameCounters.cardsOpened.length - 1].parentNode, stageNo, props.level, levelVariables/* props.newLevel */);
         } else {
             //
             //console.error('X Click event is not fired ... ClickNo is: ', clickNo);
@@ -707,6 +726,7 @@ function Game(props) {
             easing: 'linear',
         }) */
         setBoardState(null);
+        //setBoardGridParams({gridTemplateColumns: `repeat(${props.level.board[stageNo]['columns']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[stageNo]['rows']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`})
         //loadStyles();
         /* appendPlansElems(); */
     }, []);

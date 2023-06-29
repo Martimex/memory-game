@@ -1,5 +1,5 @@
-// params are classes that provide access to plans (where decoration object can be placed)
-// recommended: divide into 2 functions: first plan and second plan, each responsible for its' own object plan.
+import styles_firstPlan from './styles/firstPlan.module.css';
+import styles_main from './styles/main.module.css';
 
 function generateItems(fpClass, spClass) {
     generateFirstPlanItems(fpClass);
@@ -10,15 +10,15 @@ function generateFirstPlanItems(fpClass) {
     const firstPlan = document.querySelector(`.${fpClass}`);
 
     const secret_container = document.createElement('div');
-    secret_container.classList.add('secret-container', 't-4');
+    secret_container.classList.add(styles_firstPlan['secret-container'], styles_main['tile_custom_alt']);
 
     const secret_container_block = document.createElement('div');
-    secret_container_block.classList.add('secret-container__block');
+    secret_container_block.classList.add(styles_firstPlan['secret-container__block']);
 
     const secret_counter = document.createElement('div');
     secret_counter.textContent = 0;
 
-    secret_counter.classList.add('secret-container__counter');
+    secret_counter.classList.add(styles_firstPlan['secret-container__counter']);
 
     secret_container.appendChild(secret_container_block);
     secret_container_block.appendChild(secret_counter);

@@ -1,9 +1,12 @@
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs"
+import bgStyles from '../styles/bg.module.css';
+import mainStyles from '../styles/main.module.css';
+import * as Animation from "animejs";
+const anime = Animation.default;
 
 async function level_start(stageNo, time, tileShowTime) {
 
-    document.querySelector(`.board`).classList.add('floor-bg');
+    const board = document.querySelector(`.${bgStyles['board_custom']}`);
+    board.classList.add(mainStyles['floor-bg']);
 
     async function startAnimation() {
         await blockAnimation()
@@ -12,7 +15,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function blockAnimation() {
         const a1 = anime({
-            targets: '.tile',
+            targets: `.${mainStyles['tile_custom']}`,
             duration: 3200,
             delay: anime.stagger(85, {from: 'center'}),
             keyframes: [
@@ -28,7 +31,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function hideTiles() {
         const a2 = anime({
-            targets: '.tile',
+            targets: `.${mainStyles['tile_custom']}`,
             duration: time,
             delay: tileShowTime,
             transitionProperty: 'all',
