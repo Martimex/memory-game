@@ -213,7 +213,6 @@ const anime = Animation.default;
 }; */
 
 
-
 function Game(props) {
     // !!!  comments means that we HAVE TO uncomment the code pieces after some development is done for the component
     //console.warn(props);
@@ -538,7 +537,7 @@ function Game(props) {
             if(stageNo + 1 === props.level.stages) {
                 // Level completed !
                 async function finishGame() {
-                    await otherModules[`stagecomplete`].stagecomplete(stageNo, true)
+                    await otherModules[`stagecomplete`].stagecomplete(stageNo, true, props.level)
                 }
                 finishGame()
                     .then(() => setConfirmValue(true));
@@ -552,7 +551,7 @@ function Game(props) {
     }
 
     async function nextStageTransition() {
-        await otherModules[`stagecomplete`].stagecomplete(stageNo, false);
+        await otherModules[`stagecomplete`].stagecomplete(stageNo, false, props.level);
         await newStageFadeOut()
             .then(() => {
                 newStageFadeIn()
@@ -587,7 +586,7 @@ function Game(props) {
         if(boardState) {
             async function run() {
                 let loadStart = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/scripts/start.js`);
-                loadStart.level_start(stageNo, props.level.starting_animation[stageNo][`duration`], props.level.starting_animation[stageNo][`tileShowTime`])
+                loadStart.level_start(stageNo, props.level.starting_animation[stageNo][`duration`], props.level.starting_animation[stageNo][`tileShowTime`], props.level)
                     .then(() => {
                         // After animation is completed...
                         setTime(1);
@@ -602,6 +601,7 @@ function Game(props) {
     function restartLevel() {
         gameboard.current.dataset.animation = 'off'; // prevents from bug happening when player opens 2 tiles, which are not closed again before time runs out
         resetPlanItems();
+        resetInlineStyles();
         resetAllGameCounters(props.gameCounters);
         setTestValue(!testValue);
         setBoardState(null);
@@ -609,6 +609,15 @@ function Game(props) {
         setStageNo(0);
         setScore(0); // reset score value to 0 after lose
         setConfirmValue(null);
+    }
+
+    function resetInlineStyles() {
+        // Clear inline styles when user restarts the level (to maintain its' basic state correctly)
+        document.querySelector(`.${styles_global[`background`]}`).style = '';
+        document.querySelector(`.${styles_global['game-info']}`).style = '';
+        document.querySelector(`.${classes[`firstPlan`]}`).style = '';
+        document.querySelector(`.${classes[`secondPlan`]}`).style = '';
+        document.querySelector(`.${classes[`animationPlan`]}`).style = '';
     }
 
     function resetPlanItems() {
@@ -673,6 +682,7 @@ function Game(props) {
             otherModules[`xclick`].xclick(clickNo, props.gameCounters.cardsOpened[props.gameCounters.cardsOpened.length - 1].parentNode, stageNo, props.level/* props.newLevel */);
         } else {
             //
+            //console.error('X Click event is not fired ... ClickNo is: ', clickNo);
         }
     }, [clickNo])
 
@@ -716,7 +726,7 @@ function Game(props) {
     return(
         <div className={styles_global['all']} ref={all}>
             <div className={`${styles_global[`background`]} ${cssModules.bg && cssModules.bg[`background_custom`]}`} ref={bg}>
-                <div className='game-info' ref={gameinfo_ref} >
+                <div className={styles_global['game-info']} ref={gameinfo_ref} >
                     <GameInfo newSerie={props.level.Serie.name_abbr} level={props.level.number} moves={props.level.limitations[stageNo]['turns'] - turns} time={props.level.limitations[stageNo]['time'] - time} score={score}  />
                 </div>
 
@@ -730,15 +740,7 @@ function Game(props) {
                 <div className={`${classes[`secondPlan`]} ${cssModules.secondPlan && cssModules.secondPlan[`secondPlan_custom`]}`}> </div>
                 <div className={`${classes[`animationPlan`]} ${cssModules.main && cssModules.main[`aContainer_custom`]}`} ref={animationBox}></div>
 
-                {confirmValue !== null && (
-                    <Confirm value={confirmValue} level={level} level_no={props.level.number} newSerie={props.level.Serie.name_abbr} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
-                        turns={(confirmValue)? props.gameCounters[`totalRemainingTurns`] : (props.level.limitations[stageNo][`turns`])? props.level.limitations[stageNo][`turns`] - turns : 0} 
-                        time={(confirmValue) ? props.gameCounters[`totalRemainingTime`] : (props.level.limitations[stageNo][`time`])? props.level.limitations[stageNo][`time`] - time : 0} 
-                        start={() => {props.changeComponent('preview') /* Router.push('/preview') */}} /* next={props.level.changeComponent} */ restart={() => { restartLevel();   /* Router.push('/preview/[id]', `/preview/${props.level.id}`) */}}
-                        variables={props.level.variables} progressRecordId={props.progress.id} currentProgress={progressData} setCurrentProgress={setProgressData} starConditions={props.level.star_conditions} pointsInStage={pointsInStage} stageNo={stageNo}
-                        playerId={props.playerId} playerExp={props.playerExp}
-                    />
-                )}
+                {/* CONFIRM CALL WAS HERE PREVIOUSLY */}
 
                 {(props.level.cords === 'gg') && ( 
                     <div className='confirmation-w'>
@@ -746,6 +748,16 @@ function Game(props) {
                     </div>
                 )}
             </div>
+
+            {confirmValue !== null && (
+                <Confirm value={confirmValue} level={level} level_no={props.level.number} newSerie={props.level.Serie.name_abbr} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
+                    turns={(confirmValue)? props.gameCounters[`totalRemainingTurns`] : (props.level.limitations[stageNo][`turns`])? props.level.limitations[stageNo][`turns`] - turns : 0} 
+                    time={(confirmValue) ? props.gameCounters[`totalRemainingTime`] : (props.level.limitations[stageNo][`time`])? props.level.limitations[stageNo][`time`] - time : 0} 
+                    start={() => {props.changeComponent('preview') /* Router.push('/preview') */}} /* next={props.level.changeComponent} */ restart={() => { restartLevel();   /* Router.push('/preview/[id]', `/preview/${props.level.id}`) */}}
+                    variables={props.level.variables} progressRecordId={props.progress.id} currentProgress={progressData} setCurrentProgress={setProgressData} starConditions={props.level.star_conditions} pointsInStage={pointsInStage} stageNo={stageNo}
+                    playerId={props.playerId} playerExp={props.playerExp}
+                />
+            )}
         </div>
     )
 } 

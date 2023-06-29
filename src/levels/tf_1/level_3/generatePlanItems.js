@@ -1,5 +1,4 @@
-// params are classes that provide access to plans (where decoration object can be placed)
-// recommended: divide into 2 functions: first plan and second plan, each responsible for its' own object plan.
+import styles_firstPlan from './styles/firstPlan.module.css';
 
 function generateItems(fpClass, spClass) {
     generateFirstPlanItems(fpClass);
@@ -12,12 +11,12 @@ function generateFirstPlanItems(fpClass) {
     for(let i=0; i<2; i++) {
 
         let lantern = document.createElement('div');
-        lantern.classList.add(`lantern`, `lantern-${i + 1}`);
+        lantern.classList.add(styles_firstPlan[`lantern`], styles_firstPlan[`lantern-${i + 1}`]);
         firstPlan.appendChild(lantern);
 
         for(let j=0; j<3; j++) {
             let d = document.createElement('div');
-            d.classList.add('powerball', `powerball-${(i * 3) + (j + 1)}`);
+            d.classList.add(styles_firstPlan['powerball'], styles_firstPlan[`powerball-${(i * 3) + (j + 1)}`]);
             firstPlan.appendChild(d);
         }
     }

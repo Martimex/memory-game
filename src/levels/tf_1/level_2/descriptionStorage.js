@@ -9,7 +9,7 @@ function descriptionStorage() {
                 not be denied that something bad is going to happen soon... The flood is about to start !"
             </span>
             <hr style={{marginBottom: '1em', padding: '.3em', background: 'linear-gradient(lightblue, #222)', border: 0}}/>
-            <span style={{fontWeight: 650, color: "lightblue", fontSize: '1.25rem', fontWeight: '650'}}> Water is a limit </span>
+            <span style={{fontWeight: 650, color: "lightblue", fontSize: '1.25rem', fontWeight: '650'}}> Water is the limit </span>
             <span style={{fontWeight: 500, fontSize: '1.1rem', color: "#dddc"}}>
                 The only thing that keeps you above the surface is the water itself. Don't let it raise by too much as you may find yourself in a 
                 real trouble...

@@ -93,6 +93,10 @@
 }
 
 /* GAME DETAILS - UPPER LABEL AT THE TOP OF EVERY LEVEL */
+.game-info {
+    box-sizing: border-box;
+}
+
 .game-details {
     display: flex;
     align-items: center;
