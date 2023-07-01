@@ -1,5 +1,8 @@
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs"
+import bgStyles from '../styles/bg.module.css';
+import mainStyles from '../styles/main.module.css';
+import firstPlanStyles from '../styles/firstPlan.module.css';
+import * as Animation from "animejs";
+const anime = Animation.default;
 
 async function level_start(stageNo, time, tileShowTime) {
 
@@ -11,11 +14,10 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function showTiles() {
         const a1 = anime({
-            targets: '.tile',
+            targets: `.${mainStyles['tile_custom']}`,
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
-            //borderColor: ['hsl(4, 87%, 62%)', 'hsl(45, 50%, 80%)'],
             easing: 'linear',
             loop: false,
         }).finished;
@@ -25,17 +27,16 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function hideTilesAndShowTornados() {
         const a2 = anime({
-            targets: '.tile',
+            targets: `.${mainStyles['tile_custom']}`,
             duration: time,
             delay: tileShowTime,
             transitionProperty: 'all',
             rotateY: '0deg',
-            //borderColor: ['hsl(45, 50%, 80%)', 'hsl(4, 87%, 62%)'],
             easing: 'linear',
             loop: false,
         }).finished;
 
-        const allTornados = document.querySelectorAll(`.tornado`);
+        const allTornados = document.querySelectorAll(`.${firstPlanStyles['tornado']}`);
 
         const a3 = anime({
             targets: allTornados,
@@ -50,7 +51,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     function rotateTornados() {
         anime({
-            targets: `.tornado-1`,
+            targets: `.${firstPlanStyles['tornado-1']}`,
             duration: 4800,
             rotate: 360,
             easing: 'linear',
@@ -59,7 +60,7 @@ async function level_start(stageNo, time, tileShowTime) {
         })
 
         anime({
-            targets: `.tornado-2`,
+            targets: `.${firstPlanStyles['tornado-2']}`,
             duration: 6200,
             rotate: -360,
             easing: 'linear',
@@ -68,7 +69,7 @@ async function level_start(stageNo, time, tileShowTime) {
         })
 
         anime({
-            targets: `.tornado-3`,
+            targets: `.${firstPlanStyles['tornado-3']}`,
             duration: 6200,
             rotate: -360,
             easing: 'linear',
@@ -77,7 +78,7 @@ async function level_start(stageNo, time, tileShowTime) {
         })
 
         anime({
-            targets: `.tornado-4`,
+            targets: `.${firstPlanStyles['tornado-4']}`,
             duration: 4800,
             rotate: 360,
             easing: 'linear',
@@ -87,17 +88,17 @@ async function level_start(stageNo, time, tileShowTime) {
     }
 
     function rotateBoard() {
-        let game = document.querySelector('.game-6');
-        let board = document.querySelector('.board-6');
-        let spinningBox = document.createElement('div');
-        spinningBox.classList.add('spinning');
-        game.appendChild(spinningBox);
-        spinningBox.appendChild(board);
+        //let game = document.querySelector(`.${bgStyles['game_custom']}`);
+        let board = document.querySelector(`.${bgStyles['board_custom']}`);
+        //let spinningBox = document.createElement('div');
+        //spinningBox.classList.add('spinning'); // Check if this works !
+        //game.appendChild(spinningBox);
+        //spinningBox.appendChild(board);
         anime({
-            targets: spinningBox,
+            targets: board,
             duration: 12000,
             keyframes:[
-                {rotate: [0, 90], easing: 'easeOutExpo'},
+                {rotate: [0, 90], easing: 'easeOutExpo', delay: 500},
                 {rotate: [90, 180], easing: 'easeInExpo'},
                 {rotate: [180, 270], easing: 'easeOutExpo'},
                 {rotate: [270, 360], easing: 'easeInExpo'},
@@ -108,13 +109,14 @@ async function level_start(stageNo, time, tileShowTime) {
     }
 
     function glowTiles() {
-        const allTiles = document.querySelectorAll(`.tile`);
+        const allTiles = document.querySelectorAll(`.${mainStyles['tile_custom']}`);
         
-        anime({
+/*         anime({
             targets: allTiles,
             duration: 1400,
-            boxShadow: ['0 0 .2rem .2rem hsl(262, 60%, 60%), 0 0 .4rem .4rem hsl(55, 60%, 60%)'],
-        })
+            boxShadow: ['0 0 .2rem .2rem hsl(266, 60%, 60%), 0 0 .4rem .4rem #222'],
+            easing: 'linear',
+        }) */
     }
 
     // Init

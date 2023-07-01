@@ -1,9 +1,8 @@
-// params are classes that provide access to plans (where decoration object can be placed)
-// recommended: divide into 2 functions: first plan and second plan, each responsible for its' own object plan.
+import styles_firstPlan from './styles/firstPlan.module.css';
 
-function generateItems(fpClass, spClass) {
-    generateFirstPlanItems(fpClass);
-    generateSecondPlanItems(spClass);
+function generateItems(fpClass, spClass, stageNo) {
+    generateFirstPlanItems(fpClass, stageNo);
+    generateSecondPlanItems(spClass, stageNo);
 }
 
 function generateFirstPlanItems(fpClass) {
@@ -11,16 +10,16 @@ function generateFirstPlanItems(fpClass) {
 
     for(let i=0; i<4; i++) {
         let tornado = document.createElement('div');
-        tornado.classList.add('tornado', `tornado-${i+1}`);
+        tornado.classList.add(`${styles_firstPlan['tornado']}`, `${styles_firstPlan[`tornado-${i+1}`]}`);
         firstPlan.appendChild(tornado);
         for(let x=0; x<9; x++) {
             let tornadoElem = document.createElement('div');
-            tornadoElem.classList.add('tornado-elem');
+            tornadoElem.classList.add(`${styles_firstPlan['tornado-elem']}`);
             tornado.appendChild(tornadoElem);
         }
     }
 
-    console.log('loaded generator');
+    //console.log('loaded generator');
 }
 
 function generateSecondPlanItems(spClass) {

@@ -1,16 +1,20 @@
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs"
+import * as Animation from "animejs";
+const anime = Animation.default;
 
 async function xclick(click_no, target, stageNo, levelObj) {
 
-    async function whiteBorders() {
-        const a1 = anime({
+    function animateTarget() {
+        anime({
             targets: target,
-            duration: 400,
-            //borderColor: ['hsl(45, 50%, 80%)'],
-        }).finished;
-
-        await Promise.all([a1]);
+            duration: 5000,
+            keyframes: [
+                {backgroundImage: ['radial-gradient(hsl(29, 80%, 60%) 20%, hsl(52, 80%, 60%) 45%, hsl(282, 80%, 40%))', 'radial-gradient(hsl(29, 80%, 60%) 20%, hsl(52, 80%, 60%) 45%, hsl(282, 80%, 40%))']},
+                {backgroundImage: 'radial-gradient(hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%))'},
+                {backgroundImage: 'radial-gradient(hsl(29, 80%, 60%) 20%, hsl(52, 80%, 60%) 45%, hsl(282, 80%, 40%))'},
+                {backgroundImage: 'radial-gradient(hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%))'},
+            ],
+            easing: 'linear',
+        })
     }
 
     async function whiteBordersFade() {
@@ -19,7 +23,7 @@ async function xclick(click_no, target, stageNo, levelObj) {
         const a2 = anime({
             targets: targets,
             duration: 1200,
-            //borderColor: 'hsl(4, 87%, 62%)',
+            borderColor: 'hsl(4, 87%, 62%)',
             easing: 'easeOutExpo',
         }).finished;
 
@@ -29,18 +33,19 @@ async function xclick(click_no, target, stageNo, levelObj) {
     async function runXClick() {
         switch(click_no) {
             case 1: {
-                whiteBorders();
+                animateTarget();
                 break;
             }
     
             case 2: {
-    
-                async function chain() {
+                animateTarget();
+                /*async function chain() {
+                    animateTarget();
                     await whiteBorders()
                     await whiteBordersFade();
                 }
     
-                chain();
+                chain(); */
                 break;
             }
         }
