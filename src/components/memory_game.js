@@ -365,7 +365,7 @@ function Game(props) {
 
         setBoardState(allTiles);
         //setTestValue(!testValue);
-        appendPlansElems()
+        appendPlansElems(stageNo)
         //loadStyles()
         loadDynamic()
 
@@ -676,7 +676,7 @@ function Game(props) {
     async function newStageFadeIn() {
         const a1 = anime({
             targets: [gameboard.current, gameinfo_ref.current],
-            opacity: [0, 1],
+            opacity: 1,
             duration: props.level.fade[stageNo]['duration'],
             easing: props.level.fade[stageNo]['easing'],
         }).finished;
@@ -687,7 +687,7 @@ function Game(props) {
     async function newStageFadeOut() {
         const a1 = anime({
             targets: [gameboard.current, gameinfo_ref.current],
-            opacity: [1, 0],
+            opacity:  0,
             duration: props.level.fade[stageNo]['duration'],
             easing: props.level.fade[stageNo]['easing'],
         }).finished;
@@ -738,9 +738,9 @@ function Game(props) {
         cssModules.bg =  await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/styles/bg.module.css`); // for adding background to the level
     }
 
-    async function appendPlansElems() {
+    async function appendPlansElems(stageNo) {
         const plansElems = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/generatePlanItems.js`);
-        plansElems.generateItems(classes[`firstPlan`], classes[`secondPlan`]);
+        plansElems.generateItems(classes[`firstPlan`], classes[`secondPlan`], stageNo);
     }
 
     return(

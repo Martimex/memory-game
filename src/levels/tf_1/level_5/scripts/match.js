@@ -1,16 +1,17 @@
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs"
+import bgStyles from '../styles/bg.module.css';
+import * as Animation from "animejs";
+const anime = Animation.default;
 
-async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject) {
+async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, levelVariables) {
     // Fire some animations when we found / do not found a match
 
 
     if(isMatch) {
-        levelObject.variables[`wasMatch`] = true;
+        levelVariables[`wasMatch`] = true;
 
         if(stageNo === 1) {
             // If we are inside second stage of the gameplay
-            const background = document.querySelector('.background');
+            const background = document.querySelector(`.${bgStyles['background_custom']}`);
             
             // sync
             anime({
@@ -23,11 +24,11 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject) {
         }
     }
     else {
-        levelObject.variables[`wasMatch`] = false;
+        levelVariables[`wasMatch`] = false;
 
         if(stageNo === 1) {
             // If we are inside second stage of the gameplay
-            const background = document.querySelector('.background');
+            const background = document.querySelector(`.${bgStyles['background_custom']}`);
             
             // sync
             anime({

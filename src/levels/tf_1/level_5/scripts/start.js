@@ -1,5 +1,6 @@
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs"
+import mainStyles from '../styles/main.module.css';
+import * as Animation from "animejs";
+const anime = Animation.default;
 
 async function level_start(stageNo, time, tileShowTime) {
     
@@ -12,7 +13,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function showTiles() {
         const a1 = anime({
-            targets: '.tileType2',
+            targets: `.${mainStyles['tileType2']}`,
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
@@ -25,7 +26,7 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function hideTiles() {
         const a2 = anime({
-            targets: '.tileType2',
+            targets: `.${mainStyles['tileType2']}`,
             duration: time,
             delay: tileShowTime,
             transitionProperty: 'all',
@@ -39,14 +40,14 @@ async function level_start(stageNo, time, tileShowTime) {
 
     async function changeTileTypesOpacity() {
         const showTileType1 = anime({
-            targets: '.tileType1',
+            targets: `.${mainStyles['tileType1']}`,
             duration: 1200,
             easing: 'linear',
             opacity: [0, 1],
         }).finished;
 
         const hideTileType2 = anime({
-            targets: ['.tileType2', '.tileType2 svg'],
+            targets: [`.${mainStyles['tileType2']}`, `.${mainStyles['tileType2']} svg`],
             duration: 1200,
             easing: 'linear',
             opacity: [1, 0],
@@ -63,31 +64,31 @@ async function level_start(stageNo, time, tileShowTime) {
 function prepareGame() {
     addTileIdentifiers();
     resetIcons();
-    const firstType = document.querySelectorAll('.tileType1');
+    const firstType = document.querySelectorAll(`.${mainStyles['tileType1']}`);
     firstType.forEach(tile => tile.style.opacity = 0);
-    const secondType = document.querySelectorAll('.tileType2');
+    const secondType = document.querySelectorAll(`.${mainStyles['tileType2']}`);
     secondType.forEach(tile => tile.style.pointerEvents = 'none');
 }
 
 function addTileIdentifiers() {
-    let allTiles = document.querySelectorAll('.tile');
+    let allTiles = document.querySelectorAll(`.${mainStyles['tile_custom']}`);
     for(let i=0; i<allTiles.length/2; i++) {
-        allTiles[i].classList.add('tileType1');
+        allTiles[i].classList.add(`${mainStyles['tileType1']}`);
     }
     for(let j=(allTiles.length/2); j<allTiles.length; j++) {
-        allTiles[j].classList.add('tileType2');
+        allTiles[j].classList.add(`${mainStyles['tileType2']}`);
     } 
 }
 
 function resetIcons() {
-    const allTiles = document.querySelectorAll('.tile');
+    const allTiles = document.querySelectorAll(`.${mainStyles['tile_custom']}`);
     let iconsArr = [];
     let tileTypeArr1 = [];
     let tileTypeArr2 = [];
     let randomizedElems1 = [];
     let randomizedElems2 = [];
     for(let a=0; a<allTiles.length; a++) {
-        let back = allTiles[a].querySelector('.tile-back');
+        let back = allTiles[a].querySelector(`.${mainStyles['tile-back_custom']}`);
         iconsArr.push(back.childNodes[0]);
     }
     function sortSvgs(array) {
@@ -121,8 +122,8 @@ function resetIcons() {
         } else { tileTypeArr2.push(sortediconsArr[b]); }
     }
 
-    const tileType1 = document.querySelectorAll('.tileType1');
-    const tileType2 = document.querySelectorAll('.tileType2');
+    const tileType1 = document.querySelectorAll(`.${mainStyles['tileType1']}`);
+    const tileType2 = document.querySelectorAll(`.${mainStyles['tileType2']}`);
 
     for(let c=0; c<(allTiles.length/2); c++) {
         let rand = Math.floor(Math.random() * tileTypeArr1.length);
