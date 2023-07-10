@@ -2,7 +2,7 @@ import * as Animation from "animejs"
 
 const anime = Animation.default;
 
-async function xclick(click_no, target, stageNo, levelObj) {
+async function xclick(click_no, target, stageNo, levelObject, levelVariables) {
 
     async function whiteBorders() {
         const a1 = anime({

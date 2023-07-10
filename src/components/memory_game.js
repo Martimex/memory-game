@@ -21,6 +21,7 @@ import ConfirmWin from '../../src/components/confirm_win';
 
 // Level based stuff
 import {uncoverPatterns} from '../../src/global/predefined/uncover_patterns.js';
+import { checkForLevelModifiers, applyLevelModifier } from '../../src/global/predefined/level_modifiers.js';
 import {scoreExtras} from '../../src/global/predefined/score_extras.js';
 
 import { setIcon, icon_Sets } from '../../pages/landing.js';
@@ -215,7 +216,7 @@ const anime = Animation.default;
 
 function Game(props) {
     // !!!  comments means that we HAVE TO uncomment the code pieces after some development is done for the component
-    //console.warn(props);
+    //console.warn('GAME PROPS: ', props);
 /*     const allKeys = Object.keys(props);
     console.log(allKeys); */
     /* for(let key in props) {
@@ -268,7 +269,7 @@ function Game(props) {
     const [stageNo, setStageNo] = useState(0); // use to switch stages (if level has few stages)
     const [boardState, setBoardState] = useState(null);
     const [boardGridParams, setBoardGridParams] = useState(null);
-    const [levelVariables, setLevelVariables] = useState({...props.level.variables});
+    const [levelVariables, setLevelVariables] = useState(JSON.parse(JSON.stringify(props.level.variables))/* {...props.level.variables} */);
     // Below prevents from overriding 'better progress record' with worse one, in cases when player uses 'Retry button' instead of 'Back' when saving progress on 'level lose' scenario 
     const [progressData, setProgressData] = useState({highscore: props['progress']['highscore'], lv_progress: props['progress']['lv_progress'], stars: props['progress']['stars']}); 
 
@@ -381,7 +382,7 @@ function Game(props) {
         boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns}, ${(props.newLevel.tile_size_mobile)/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows}, ${(props.newLevel.tile_size_mobile)/10}rem)`};
     } */
 
-    function keepCardOpen(e) {
+    async function keepCardOpen(e) {
         // Open up the tile
         async function openUp() {
             const a1 = anime({
@@ -403,24 +404,23 @@ function Game(props) {
             iter.pauseCondition = false;
 
             const doesMatch = uncoverPatterns[props.level.uncover[stageNo][`pattern`]](props.gameCounters.cardsOpened);
+            // doesMatch can be either TRUE or FALSE (it follows basic uncover pattern for levels)
 
             const cardsOpened_parentNodes = setParentNodes(props.gameCounters.cardsOpened);
 
             //otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo); // doesMatch determines whether player meets required condition to remove tiles
         
-            openUp()
-                .then(() => {
-                    otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props.level, levelVariables/* props.newLevel */) // doesMatch determines whether player meets required condition to remove tiles
-                        .then(() => {
-                            doCardsMatch(doesMatch, props.gameCounters.cardsOpened)
-                        })
-                })
+            await openUp()
+            await otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props.level, levelVariables/* props.newLevel */) // doesMatch determines whether player meets required condition to remove tiles
+            doCardsMatch(checkForLevelModifiers(props.level.others, levelVariables)? applyLevelModifier('DOESMATCH_MODIFIER', levelVariables) : doesMatch, props.gameCounters.cardsOpened);
+            //console.log(`FINAL VAL: , ${levelVariables.STATIC.DOESMATCH_MODIFIER}`);
         } else {
-            openUp();
+            await openUp();
         }
     }
 
     function doCardsMatch(doesMatch, cardsOpened) {
+        console.log('DOES MATCH: ', doesMatch);
         // Block the click listener for a brief checkout duration
         isChecking = true;
 
@@ -614,7 +614,7 @@ function Game(props) {
         setStageNo(0);
         setScore(0); // reset score value to 0 after lose
         setConfirmValue(null);
-        setLevelVariables({...props.level.variables})
+        setLevelVariables(JSON.parse(JSON.stringify(props.level.variables)))
         //props.level.variables = {...levelVariables};
         //console.log('AFTER CHANGE :::: RESTART LEVEL OBJ VARIABLES : ', props.level.variables, '  --  while useState levelVariables : ', levelVariables);
         //setBoardGridParams({gridTemplateColumns: `repeat(${props.level.board[0]['columns']}, ${(props.level.tiles[0]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[0]['rows']}, ${(props.level.tiles[0]['size'])/10}rem)`})

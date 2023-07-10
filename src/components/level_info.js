@@ -156,7 +156,11 @@ function LevelInfo(props) {
         console.warn('This is the progress record: ', progressRecord)
         setLevelBoxPosition(levelInfoAll_ref.current);
         applyDifficultyTextColors(props.level_details.difficulty)
-        const img_url = `bgs/${props.serie_abbr}/bg-${props.level_details.number}.svg`;
+        //const img_url = `bgs/${props.serie_abbr}/bg-${props.level_details.number}.svg`;
+        //const img_url = `bgs/tf/bg-7.svg`;
+        console.log('PROPS FOR IMG URL: ', props.serie_abbr, props.level_details.number)
+        const img_url = `bgs/${props.serie_abbr}/bg-${props.level_details.number}.svg`
+        //const img_url = `../levels/${props.serie_abbr}/level_${props.lv_index}/resources/background.svg`;
         loadBackground_preview(img_url)
             .then(() => {
                 bg_placeholder_ref.current.style.backgroundImage = `url(${img_url})`;
@@ -167,7 +171,7 @@ function LevelInfo(props) {
                     easing: 'linear',
                 })
             })
-            .catch((error) => { console.log(error); 
+            .catch((error) => { /* console.log(error); */ 
 
                 anime({
                     targets: bg_placeholder_ref.current,

@@ -3,7 +3,7 @@ import * as Animation from "animejs"
 const anime = Animation.default;
 
 
-async function stagecomplete(stageNo) {
+async function stagecomplete(stageNo, isLevelWin, levelObject, levelVariables) {
 
     let game = document.querySelector(`.${bgStyles['background_custom']}`);
 

@@ -4,7 +4,7 @@ import * as Animation from "animejs"
 const anime = Animation.default;
 let styles_global = '';
 
-async function level_start(stageNo, time, tileShowTime) {
+async function level_start(stageNo, time, tileShowTime, levelObject, levelVariables) {
 
     async function startAnimation() {
         styles_global = await import('../../../../global/global_styles.module.css')
