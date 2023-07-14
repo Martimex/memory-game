@@ -1,4 +1,4 @@
-export const checkForLevelModifiers = (othersObj, levelVariables) => {
+export const checkForLevelModifiers = (othersObj, levelVariables, modifier_name) => {
     // Check if this level uses any Variable based modifiers for the level
     if(othersObj) {
         // othersObject is not equal NULL
@@ -7,8 +7,13 @@ export const checkForLevelModifiers = (othersObj, levelVariables) => {
             if(levelVariables) {
                 // Level variables are not equal NULL
                 if(levelVariables.STATIC) {
-                    // Everything is set up correctly - we can apply modifiers !
-                    return true;
+                    // Everything is set up correctly - check of a given property is used inside STATIC object
+                    if(levelVariables.STATIC.hasOwnProperty(modifier_name)) {
+                        // Requested property exists - we can apply modifiers !
+                        return true;
+                    }
+                    // The property might not exist in STATIC OBJECT. Most likely there's other one included in there
+                    return false;
                 }
                 throw new Error(`ERROR: Enabled static variables, but not provided the STATIC keyname to a levelVariables object. Either include the STATIC keyname with some key modifiers or disable static variables directly from othersObj property.`);
             }
@@ -26,7 +31,9 @@ export const checkForLevelModifiers = (othersObj, levelVariables) => {
 }
 
 export const applyLevelModifier = (modifier_name, levelVariables) => {
+    console.warn('TURNS MODIFIER IS: ', levelVariables.STATIC[modifier_name])
     switch(modifier_name) {
+        case 'EXTRATURNS_MODIFIER' : { return levelVariables.STATIC[modifier_name] }
         case 'DOESMATCH_MODIFIER' : { return levelVariables.STATIC[modifier_name] }
         default: { throw new Error(`Modifier ${modifier_name} was not found inside levelVariables property.`)}
     }

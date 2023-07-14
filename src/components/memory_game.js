@@ -400,7 +400,7 @@ function Game(props) {
 
         if(props.gameCounters.cardsOpened.length === props.level.uncover[stageNo][`count`]) {
             gameboard.current.dataset.animation = 'on';
-            turns = turns + 1;
+/*             turns = turns + (checkForLevelModifiers(props.level.others, levelVariables, 'EXTRATURNS_MODIFIER')? applyLevelModifier('EXTRATURNS_MODIFIER', levelVariables) : 1); */
             iter.pauseCondition = false;
 
             const doesMatch = uncoverPatterns[props.level.uncover[stageNo][`pattern`]](props.gameCounters.cardsOpened);
@@ -412,7 +412,8 @@ function Game(props) {
         
             await openUp()
             await otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props.level, levelVariables/* props.newLevel */) // doesMatch determines whether player meets required condition to remove tiles
-            doCardsMatch(checkForLevelModifiers(props.level.others, levelVariables)? applyLevelModifier('DOESMATCH_MODIFIER', levelVariables) : doesMatch, props.gameCounters.cardsOpened);
+            turns = turns + (checkForLevelModifiers(props.level.others, levelVariables, 'EXTRATURNS_MODIFIER')? applyLevelModifier('EXTRATURNS_MODIFIER', levelVariables) : 1);
+            doCardsMatch(checkForLevelModifiers(props.level.others, levelVariables, 'DOESMATCH_MODIFIER')? applyLevelModifier('DOESMATCH_MODIFIER', levelVariables) : doesMatch, props.gameCounters.cardsOpened);
             //console.log(`FINAL VAL: , ${levelVariables.STATIC.DOESMATCH_MODIFIER}`);
         } else {
             await openUp();
