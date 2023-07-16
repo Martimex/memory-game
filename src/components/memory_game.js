@@ -741,7 +741,7 @@ function Game(props) {
 
     async function appendPlansElems(stageNo) {
         const plansElems = await import(`../../src/levels/${props.level.Serie.name_abbr}/level_${props.level.number}/generatePlanItems.js`);
-        plansElems.generateItems(classes[`firstPlan`], classes[`secondPlan`], stageNo);
+        plansElems.generateItems(classes[`firstPlan`], classes[`secondPlan`], stageNo, props.level);
     }
 
     return(
