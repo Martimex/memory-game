@@ -1,0 +1,19 @@
+.background_custom {
+    background-image: url('../resources/background.svg');
+    background-size: cover;
+    /* background-origin: border-box; */
+    /* background-position: center; */
+    background-repeat: no-repeat;
+    /* -webkit-background-composite: border; */
+    /*background-color: hsl(0, 0%, 20%); 
+    background-size: cover;
+    box-shadow: inset 0 0 min(3vh, 3vw) min(2vh, 2vw) #333; */
+}
+
+.game_custom {
+    box-sizing: border-box;
+}
+
+.board_custom  {
+    box-sizing: border-box;
+}

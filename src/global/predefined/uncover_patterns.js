@@ -13,6 +13,16 @@ const uncoverPatterns = {
         }  return false;
     },
 
+    triplets: function(targetedTiles) {
+        const targetToBeCompared = targetedTiles[0].childNodes[0].classList[1];
+        for(let no=1; no<targetedTiles.length; no++) {
+            if(targetToBeCompared !== targetedTiles[no].childNodes[0].classList[1]) {
+                return false;
+            }
+        }
+        return true;
+    },
+
     quads: function(targetedTiles) {
         const targetToBeCompared = targetedTiles[0].childNodes[0].classList[1];
         for(let no=1; no<targetedTiles.length; no++) {

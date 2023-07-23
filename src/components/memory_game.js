@@ -361,8 +361,7 @@ function Game(props) {
         randomizedIconsArray = setRandomIcons(icon_Sets[`${props.level.tiles[stageNo]['icon_set']}`], props.level.tiles[stageNo]['count'], props.level.uncover[stageNo][`pattern`]);
 
         allTiles =  arr.map((tile, index) =>  {
-            return <div className={`${styles_global['tile']} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={cssModules.main && cssModules.main[`fa-icon_custom`]}/>}</div></div>
-        });
+            return <div data-get={'tile'} className={`${styles_global['tile']} ${stageNo >= 0 && cssModules.main[`tile_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${stageNo >= 0 && cssModules.main[`tile-front_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${stageNo >= 0 && cssModules.main[`tile-back_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={`${stageNo >= 0 && cssModules.main[`fa-icon_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`fa-icon_custom`]}`}/>}</div></div>        });
 
         setBoardState(allTiles);
         //setTestValue(!testValue);
@@ -579,10 +578,10 @@ function Game(props) {
         await loadStyles();
         // 1. Init icons 
         allTiles = arr.map((tile, index) =>  {
-            return <div data-get={'tile'} className={`${styles_global['tile']} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={cssModules.main && cssModules.main[`fa-icon_custom`]}/>}</div></div>
+            return <div data-get={'tile'} className={`${styles_global['tile']} ${stageNo >= 0 && cssModules.main[`tile_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${stageNo >= 0 && cssModules.main[`tile-front_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${stageNo >= 0 && cssModules.main[`tile-back_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={`${stageNo >= 0 && cssModules.main[`fa-icon_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`fa-icon_custom`]}`}/>}</div></div>
         });
         // 2. Now perform DOM repaint by fire useState hook
-        console.log('ALLTILES: ', allTiles);
+        console.log('ALLTILES: ', allTiles, ' and STAGE NO IS: ', stageNo);
         setBoardState(allTiles);
         // 3. Execute start script, launch animation, etc.
         

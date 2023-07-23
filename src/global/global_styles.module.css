@@ -92,6 +92,11 @@
     transform: rotateY(180deg);
 }
 
+.svg-inline--fa {
+    /* Refers to all Font Awesome Icons */
+    overflow: hidden !important; /* Not working lol, because FA gives an inline styling for overflow: visible */
+}
+
 /* GAME DETAILS - UPPER LABEL AT THE TOP OF EVERY LEVEL */
 .game-info {
     box-sizing: border-box;
