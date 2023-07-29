@@ -31,7 +31,37 @@ const uncoverPatterns = {
             }
         }
         return true;
-    }
+    },
+
+    sixes: function(targetedTiles) {
+        const targetToBeCompared = targetedTiles[0].childNodes[0].classList[1];
+        for(let no=1; no<targetedTiles.length; no++) {
+            if(targetToBeCompared !== targetedTiles[no].childNodes[0].classList[1]) {
+                return false;
+            }
+        }
+        return true;
+    },
+
+    eights: function(targetedTiles) {
+        const targetToBeCompared = targetedTiles[0].childNodes[0].classList[1];
+        for(let no=1; no<targetedTiles.length; no++) {
+            if(targetToBeCompared !== targetedTiles[no].childNodes[0].classList[1]) {
+                return false;
+            }
+        }
+        return true;
+    },
+
+    nines: function(targetedTiles) {
+        const targetToBeCompared = targetedTiles[0].childNodes[0].classList[1];
+        for(let no=1; no<targetedTiles.length; no++) {
+            if(targetToBeCompared !== targetedTiles[no].childNodes[0].classList[1]) {
+                return false;
+            }
+        }
+        return true;
+    },
 
 
 }

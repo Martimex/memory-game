@@ -69,6 +69,9 @@ const duplicateIcons = {
     pairs: 2,
     triplets: 3,
     quads: 4,
+    sixes: 6,
+    eights: 8,
+    nines: 9,
 }
 
 /* const inGameCounters = {
@@ -543,9 +546,10 @@ function Game(props) {
                 // Level completed !
                 async function finishGame() {
                     await otherModules[`stagecomplete`].stagecomplete(stageNo, true, props.level, levelVariables)
+                    setConfirmValue(true);
                 }
                 finishGame()
-                    .then(() => setConfirmValue(true));
+                /*     .then(() => setConfirmValue(true)); */
             } 
             else if(stageNo + 1 !== props.level.stages) {
                 // Move to the new stage + block pointer events just during new stage animations
