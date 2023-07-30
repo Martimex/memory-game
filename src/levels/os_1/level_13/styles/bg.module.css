@@ -1,0 +1,18 @@
+.background_custom {
+    /* background-image: url('../resources/background.svg'); */
+    background-size: cover;
+    background-color: #000;
+    /* filter: brightness(50%) saturate(50%); */
+}
+
+.game_custom {
+    font-style: normal;
+}
+
+.board_custom {
+    font-style: normal;
+    gap: .4rem;
+/*     padding: -1rem;
+    border-radius: 10%;
+    padding: 2.5rem 2.5rem; */
+}
