@@ -98,6 +98,7 @@ model Serie {
   index            Int     @default(autoincrement())
   name             String  @unique
   name_abbr        String  @unique
+  isReleased       Boolean?
   description      String?
   Levels           Level[]
 }

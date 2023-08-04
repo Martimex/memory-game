@@ -26,31 +26,20 @@ const exp_for_level = {
     23: 108000,
     24: 128000,
     25: 150000,
-    26: 180000,
-    27: 220000,
-    28: 280000,
-    29: 350000,
-    30: 440000,
-    31: 550000,
-    32: 680000,
-    33: 850000,
-    34: 1050000,
-    35: 1300000,
-    36: 1700000,
-    37: 2300000,
-    38: 3000000,
-    39: 3900000,
-    40: 5000000,
+    26: 190000,
+    27: 250000,
+    28: 320000,
+    29: 400000,
+    30: 500000,
 };
 
 const frames_for_level = {
     1: 'beginner',
-    5: 'adventurer',
-    10: 'explorer',
-    16: 'guardian',
-    23: 'emperor',
-    31: 'archmaster',
-    40: 'challenger'
+    4: 'adventurer',
+    9: 'explorer',
+    15: 'guardian',
+    22: 'archmaster',
+    30: 'challenger'
 }
 
 const exp_for_difficulty = {

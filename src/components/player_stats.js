@@ -57,7 +57,7 @@ function PlayerStats(props) {
                 </div>
                 <div className={styles['stats-item-box']}> 
                     <div className={styles['item-box__bar--outer']}>
-                        <div className={styles['item-box__bar-text']}> {getPercentageValue}% </div>
+                        <div className={styles['item-box__bar-text']}> {(getPercentageValue > 100)? 100 : getPercentageValue}% </div>
                         <div className={`${styles['item-box__bar--inner']} ${styles[player_stats_pages[pageNo][ind].color_bar_class]}`} style={{'width': `${getPercentageValue}%`}} >  </div>
                     </div>
                 </div>

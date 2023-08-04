@@ -31,9 +31,15 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
         where: { userId: session_user.id },
     })
 
+    const DEV_ONLY_includeUnreleasedLevels = false; // In production it ALWAYS should be set to FALSE. In dev, it can temporarily be set to TRUE to develop unreleased level(s)
+
     const data = await prisma.serie.findMany({
-/*         where: { index: true },
-        take: 5, */
+        where: { 
+            isReleased: { 
+                equals: (DEV_ONLY_includeUnreleasedLevels)? false : true, 
+            },
+        },
+        /* take: 5, */
         include: {
             Levels: {
                 select: { id: true, name: true, number: true, stages: true, difficulty: true, creatorUserId: true, createdAt: true, Created_By: { select: { name: true } } }
@@ -42,11 +48,36 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
     
     });
 
+    // Each time we request a full data, we need to update User Progress difficulties ! (useful in cases when the level has the difficulty changed, so we also have to updated progress records for it)
+    const all_levels = [].concat.apply([], [...data.map(el => [...el.Levels])].flat());
+
+    console.log('USER PROGRESSES: ', user_progresses, '  AND ALL LEVELS: ', all_levels);
+
+    user_progresses.forEach((user_progress, ind) => {
+        const levelForProgress = all_levels.find((lv) => lv.id === user_progress.levelId);
+        if(levelForProgress) {
+            if(levelForProgress.difficulty !== user_progress.lv_difficulty) {
+                console.log(`A MISMATCH BETWEEN:: `, levelForProgress,  '  and::  ', user_progress);
+                updateOutdatedProgressRecord(user_progress.id, levelForProgress.difficulty);
+            }
+        }
+    })
+
+    async function updateOutdatedProgressRecord(progressRecordId, updatedDifficulty) {
+        await prisma.progress.update({
+            where: { id: progressRecordId},
+            data: {
+                lv_difficulty: updatedDifficulty,
+            }
+        });
+    }
+
     const levelsByDifficulty = {all: {}, user_completed: {}, user_stars: 0};
     data.forEach(serie => {
         serie.Levels.map(lv => (levelsByDifficulty.all.hasOwnProperty(lv.difficulty)? levelsByDifficulty.all[lv.difficulty] += 1 : levelsByDifficulty.all[lv.difficulty] = 1));
     });
     const progressesArr = user_progresses.filter(lv => lv.lv_progress === 100)
+    //console.log('PROGRESS ARR NO 1: ', progressesArr[0]);
     progressesArr.map(lv => levelsByDifficulty.user_completed.hasOwnProperty(lv.lv_difficulty)? levelsByDifficulty.user_completed[lv.lv_difficulty] += 1 : levelsByDifficulty.user_completed[lv.lv_difficulty] = 1)
     progressesArr.map(lv => levelsByDifficulty.user_stars += lv.stars_got);
 
@@ -65,7 +96,7 @@ function Play(props) {
     const anime = Animation.default;
 
     console.warn('PLAY PROPS: ', props);
-    const [component, setComponent] = useState(props.session_user.isBanned? 'banned' : 'preview');
+    const [component, setComponent] = useState(props.session_user && props.session_user.isBanned? 'banned' : 'preview');
     // State to share with main Memory_game component
     const [levelData, setLevelData] = useState(null);
     const [levelProgressRecord, setLevelProgressRecord] = useState(null);

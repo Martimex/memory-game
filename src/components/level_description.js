@@ -9,7 +9,7 @@ export default function LevelDescription(props) {
 
     async function loadLevelDescription(serie_abbr, lv_id) {
         const text = await import(`../levels/${serie_abbr}/level_${lv_id}/descriptionStorage.js`);
-        console.log(text);
+        
         setLevelText(text.descriptionStorage()); 
     }
 

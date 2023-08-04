@@ -103,7 +103,7 @@ function SerieBox(props) {
         }
     
         async function fadeText() {
-            const timing = 520;
+            const timing = 400; // was 520
             const a1 = anime({
                 targets: section_title,
                 duration: timing,
@@ -124,8 +124,8 @@ function SerieBox(props) {
         }
     
         async function showUpLevels() {
-            const timing = 400;
-            const staggering = 96;
+            const timing = 300; // was 400
+            const staggering = 72; // was 96
             const total_stagger = timing + (staggering * section_content_tiles.length);
             const a2 = anime({
                 targets: section_content_tiles,
@@ -205,13 +205,15 @@ function SerieBox(props) {
         }
     }
 
+    console.warn('SERIE LEVELS: ', props.serie.Levels);
+
     return(
         <div className={styles[`${dynamic_classes.serie_block}`]} onClick={(e) => {checkSerieNameChange(); openUpFire(e); } } >
             <div className={styles['serie-title']}> {props.serie.name} </div> 
             <div className={`${styles['serie-content']} ${styles['invisible']}`}>
-                {[].concat([...props.serie.Levels]).sort((a, b) => a.number - b.number).map((lv, index) =>
+                {[].concat([...props.serie.Levels])/* .filter((lv) => ) */.sort((a, b) => a.number - b.number).map((lv, index) =>
                     <div className={styles[`${dynamic_classes.level_borders}`]} key={lv.name.toString() + lv.number.toString()}
-                        onClick={() => {props.isAnimationRunning === false && props.setLevelChoose([lv, index+1, props.serie.name_abbr, props.serie.name, props.serie.description])}}
+                        onClick={() => {(props.isAnimationRunning === false && animationFinishController[`first`] && animationFinishController[`second`]) && props.setLevelChoose([lv, index+1, props.serie.name_abbr, props.serie.name, props.serie.description])}}
                     >
                         <div className={styles['bg-layer']}>
                             <div className={styles[`${dynamic_classes.level_tile_main}`]}>
