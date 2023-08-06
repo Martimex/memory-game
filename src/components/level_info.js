@@ -170,10 +170,22 @@ function LevelInfo(props) {
                     opacity: [0, 1],
                     easing: 'linear',
                 })
+
+                // A tiny workaround for the levels 1 - 6 (The Flash serie), since they are based on linear-gradients rather than on SVG images
+                if((props.serie_abbr === 'tf_1') && (parseInt(props.level_details.number) <= 6)) {
+                    bg_placeholder_ref.current.style.backgroundImage = background_gradients[props.serie_abbr][props.level_details.number];
+                    
+                    anime({
+                        targets: bg_placeholder_ref.current,
+                        duration: 500,
+                        opacity: [0, 1],
+                        easing: 'linear',
+                    })
+                }
             })
             .catch((error) => { /* console.log(error); */ 
-
-                anime({
+                throw new Error(error);
+                /* anime({
                     targets: bg_placeholder_ref.current,
                     duration: 350,
                     opacity: [0, 1],
@@ -190,8 +202,8 @@ function LevelInfo(props) {
                         opacity: [0, 1],
                         easing: 'linear',
                     })
-                }
-            })
+                } */
+            }) 
     }, [])
 
     async function handleLevelDesc() {
