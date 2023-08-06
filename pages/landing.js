@@ -5,9 +5,10 @@ import styles_preview from '../src/styles/preview.module.css';
 import '../src/animations/animeLanding.js';
 //import anime from 'animejs/lib/anime.es.js';
 import * as Animation from "animejs";
+import ConsentBox from '../src/components/consent_box';
 import { colors, tileCodes } from '../src/vars.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser as user } from '@fortawesome/free-solid-svg-icons';
+import { faUser as user} from '@fortawesome/free-solid-svg-icons';
 
 import { library, config } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -85,6 +86,7 @@ function Landing(props) {
     const [render, setRender] = useState(false);
     const [isUserTabOpen, setUserTabOpen] = useState(false);
     const [isAnimationRunning, setAnimationRunning] = useState(false);
+    const [isConsentAccepted, setConsentAccepted] = useState(false);
 
     useEffect(() => {
         // This useEffect happens only once - that is mandatory here !s
@@ -207,6 +209,10 @@ function Landing(props) {
 
     /* const changeScreen = React.useRef(null); */
 
+    useEffect(() => {
+        console.log('TERMS ACCEPTED?  ', isConsentAccepted);
+    }, [isConsentAccepted]);
+
     useLayoutEffect(() => {
         fadeAnimation();
     }, []);
@@ -220,6 +226,12 @@ function Landing(props) {
             opacity: [0, 1],
             easing: 'linear',
         }) 
+    }
+
+    function checkConsentStauts() {
+        // Here we have to check if user accepted the Terms and Conditions (only for users that has not been registered yet)
+        if(status === 'authenticated') { return true; /* User has agreed with the TaC */ }
+        else return isConsentAccepted;
     }
 
     function isStopAnimation(value) {
@@ -310,9 +322,12 @@ function Landing(props) {
                         {/* <div className={styles['game-subtitle']}>The Ultimate Memory Game</div> */}
                     </div>
                     <div className={styles['content-action']}>
-                        <div className={styles['from-author']}> {status === 'authenticated'?  <span> Welcome back again, {data.user.name} </span> : <span> The hardest memory game you will ever play ... </span>} </div>
+                        <div className={styles['from-author']}>
+                            <div className={styles['from-author-section']}> {status === 'authenticated'?  <span> Welcome back again, {data.user.name} </span> : <span> The hardest memory game you will ever play... </span>} </div>
+                            <div className={styles['from-author-section']}> {status === 'authenticated'?  <span> Check out the recent updates <a className={styles['redirect-link']} target="_blank" href="https://github.com/Martimex/memory-game"> here </a> </span> : <ConsentBox setConsentAccepted={setConsentAccepted} isConsentAccepted={isConsentAccepted} />} </div>
+                        </div>
                         {/* <button className={styles['start']} onClick={() => {props.changeComponent(); fadeAnimation();}}> Play </button> */}
-                        <button className={styles['start']} onClick={() => {checkUserSession()}}> Play </button>
+                        <button className={`${styles['start']} ${checkConsentStauts()? styles['start-active'] : styles['start-inactive']} `} onClick={() => {checkConsentStauts() && checkUserSession()}}> Play </button>
                     </div>
                 </div>    
                 <div className={styles['move-box']} /* onFocus={() => isStopAnimation(false)} onBlur={() => isStopAnimation(true)} */>
@@ -321,13 +336,12 @@ function Landing(props) {
             </div>
 
             {status === 'authenticated' && (
-                <div className={styles['setup-container']} onClick={() => { getUserData();/* setAnimationRunning(true); */ /* animateTransition(); */}}>
+                <div className={`${styles['setup-container']}`} onClick={() => { getUserData();/* setAnimationRunning(true); */ /* animateTransition(); */}}>
                     <div className={styles_preview['follow-me']} >
                         <FontAwesomeIcon icon={user} className={styles_preview["icon-user"]} />
                     </div>    
                 </div>  
             )}
-
 
             {isUserTabOpen && <UserTab includeUserStats={false} setAnimationRunning={setAnimationRunning} setUserTabOpen={setUserTabOpen} player={loggedPlayer} /* player={props.player} levelsCount={props.levelsCount} */ />}
         </div>
