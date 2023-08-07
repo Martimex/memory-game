@@ -1,12 +1,10 @@
 import mainStyles from '../styles/main.module.css';
-import firstPlanStyles from '../styles/firstPlan.module.css';
 import * as Animation from "animejs";
 
 const anime = Animation.default;
 
 async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, levelVariables) {
     // Fire some animations when we found / do not found a match
-    console.log('isMATCH: ', isMatch);
     if(isMatch) {
         anime({
             targets: cardsOpened_parentNodes,
@@ -42,8 +40,6 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
                 :
                 [...cardsOpened_parentNodes].map((tile, ind) => levelVariables.targetedTilesTable_no2[+tile.dataset['tileRef']])
             ;
-                
-            /* console.warn('TURNS TO SPEND: ', levelVariables.STATIC.EXTRATURNS_MODIFIER, ' and cardsOpened are: ', cardsOpened_parentNodes, ' and turnsPERTile are: ', turnsPerTile); */
             
             for(let i=0; i<turnsPerTile.length; i++) {
                 const decreaseBox = document.createElement('div');

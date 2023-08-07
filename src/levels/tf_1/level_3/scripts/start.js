@@ -4,19 +4,16 @@ import firstPlanStyles from '../styles/firstPlan.module.css';
 import * as Animation from "animejs"
 const anime = Animation.default;
 
-let styles_global = '';
-
 async function level_start(stageNo, time, tileShowTime, levelObj) {
 
     async function startAnimation() {
-        styles_global = await import('../../../../global/global_styles.module.css')
         await showTiles()
         await hideTiles()
     }
 
     async function showTiles() {
         const a1 = anime({
-            targets: `.${styles_global['tile']}`,
+            targets: `.${mainStyles['tile_custom']}`,
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
@@ -29,7 +26,7 @@ async function level_start(stageNo, time, tileShowTime, levelObj) {
 
     async function hideTiles() {
         const a2 = anime({
-            targets: `.${styles_global['tile']}`,
+            targets: `.${mainStyles['tile_custom']}`,
             duration: time,
             delay: tileShowTime,
             transitionProperty: 'all',
@@ -107,22 +104,6 @@ async function level_start(stageNo, time, tileShowTime, levelObj) {
         direction: 'alternate',
         loop: true,
     })
-
-/*     anime({
-        targets: `.${firstPlanStyles['lantern-2']}`,
-        delay: 1800,
-        duration: 5500,
-        scale: [.4, 1],
-        opacity: [0, 1],
-        rotate: ['0deg', '90deg'],
-        borderColor: ['hsl(222, 40%, 50%)', 'hsl(252, 50%, 60%)'],
-        translateX: ['-5rem', '0rem'],
-        saturate: ['100%', '50%'],
-        easing: 'linear',
-        direction: 'alternate',
-        loop: true,
-    }) */
-    
 }
 
 export {level_start};

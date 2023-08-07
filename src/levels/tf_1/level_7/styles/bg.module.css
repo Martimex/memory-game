@@ -1,7 +1,6 @@
 .background_custom {
     background-image: url('../resources/background.svg');
     background-repeat: repeat;
-    /* background-blend-mode:hard-light; */
 }
 
 .game_custom {

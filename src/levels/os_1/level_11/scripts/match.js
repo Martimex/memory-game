@@ -1,5 +1,4 @@
 import * as Animation from "animejs"
-import bgStyles from '../styles/bg.module.css';
 import mainStyles from '../styles/main.module.css';
 import firstPlanStyles from '../styles/firstPlan.module.css';
 import { setBountyQuest } from './start';
@@ -9,14 +8,7 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
     // Fire some animations when we found / do not found a match
     if(isMatch) {
         levelVariables.foundTiles += levelObject.uncover[stageNo].count;
-        /* levelVariables.STATIC['EXTRATURNS_MODIFIER'] = -5; */
         checkBountyQuestState();
-            /* anime({
-            targets: cardsOpened_parentNodes,
-            duration: 1300,
-            backgroundColor: 'hsla(45, 50%, 60%, .2)',
-            easing: 'easeInExpo',
-        }) */
     }
     else {
        //
@@ -27,16 +19,9 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
         let targetBackSecond = document.querySelector(`.target-2 .${mainStyles['tile-back_custom']}`);
         let allSvgConts = document.querySelectorAll(`.${firstPlanStyles['svgContainer']}`);
 
-        console.log('SVG CONTAINERS: ', allSvgConts , ' and cardsOpened_parentNodes : ', cardsOpened_parentNodes);
-        // lets check if player found bountyQuest
+        removeWantedQuest(cardsOpened_parentNodes);
 
-        // Found another way to add extra turns when bounty quest is found
-        //iter.extraTurns = 1;
-
-        removeWantedQuest(cardsOpened_parentNodes/* cardsOpened, tiles, foundTiles, iter */); // Please do not remove it even it's not showin up in levels main obj
-        console.error('IS BOUNTY QUEST CLASS PRESENT:', cardsOpened_parentNodes[0].classList.contains(`${mainStyles['bounty-q']}`), cardsOpened_parentNodes[1].classList.contains(`${mainStyles['bounty-q']}`))
         if((cardsOpened_parentNodes[0].classList.contains(`${mainStyles['bounty-q']}`) || (cardsOpened_parentNodes[1].classList.contains(`${mainStyles['bounty-q']}`)))) {
-            //iter.extraTurns = -4; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn
     
             // Reward the player only when shown tile is targeted first !
             if(cardsOpened_parentNodes[0].classList.contains(`${mainStyles['bounty-q']}`)) {
@@ -52,7 +37,7 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
                 })
                 
                 levelVariables.STATIC['EXTRATURNS_MODIFIER'] = -3; // 2 extra  turns, since it takes 1 turn to find, and every pair consumes 1 extra turn
-                setWantedQuest(/* cardsOpened, tiles, foundTiles, iter */); // Please do not remove it even it's not showin up in levels main obj
+                setWantedQuest();
             }
 
             let foundBounty = document.querySelector(`.${mainStyles['bounty-q']}`);
@@ -198,7 +183,6 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
         let newSvg = wantedSvg.cloneNode(true);
 
         levelVariables.recentlyAddedWantedQuestClass = wantedSvg.classList[1];
-        /* console.warn(`TEST BUG#1 - ALREADY WANTED ICON: `, wantedSvg.classList[1], `and we could choose it one from: `, activeTiles.map((at) => at.children[1].children[0].classList[1])) */
 
         // Push new WANTED quests to container 
 
@@ -241,10 +225,6 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
                 easing: 'linear',
             }).finished;
         }
-
-        /* 
-          Rozważ, czy bounty quest może być tym samym co WANTED quest. Jeśli nie, zrób odpowiedni mechanizm blokujący taką sytuację
-        */
     }
 }
 

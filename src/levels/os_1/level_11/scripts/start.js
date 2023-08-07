@@ -73,7 +73,7 @@ async function level_start(stageNo, time, tileShowTime, levelObject, levelVariab
 
     async function showTiles() {
         const a1 = anime({
-            targets: `.${mainStyles['tile_custom']}` /* divs */,
+            targets: `.${mainStyles['tile_custom']}`,
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
@@ -86,7 +86,7 @@ async function level_start(stageNo, time, tileShowTime, levelObject, levelVariab
 
     async function hideTiles() {
         const a2 = anime({
-            targets: `.${mainStyles['tile_custom']}` /* divs */,
+            targets: `.${mainStyles['tile_custom']}`,
             duration: time,
             delay: tileShowTime,
             transitionProperty: 'all',
@@ -128,17 +128,12 @@ function setBountyQuest(levelObject, levelVariables, stageNo) {
     anime({
         targets: activeTiles[rand],
         duration: 800,
-        /* borderColor: 'hsla(138, 30%, 40%, .7)', */
         borderColor: ['#a7c', 'hsl(122, 30%, 30%)'],
         borderWidth: '.4rem',
         easing: 'linear',
     })
     
     activeTiles[rand].classList.add(`${mainStyles['bounty-q']}`); 
-
-/*     console.log(`TEST BUG#1 - New bounty quest is `, activeTiles[rand].querySelector(`.${mainStyles['tile-back_custom']} svg`).classList[1], `and was chosen from: `, activeTiles.map((at) => at.children[1].children[0].classList[1]),
-        `and current wanted classes are: `, [...svgCont].map((cont) => cont.children[0] && cont.children[0].classList[1])
-    ); */
 }
 
 export {level_start, setBountyQuest};

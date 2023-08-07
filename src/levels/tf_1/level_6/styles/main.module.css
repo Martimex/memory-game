@@ -5,9 +5,6 @@
 .fa-icon_custom {
     color: hsla(282, 80%, 40%, 0.8);
     font-size: 1.2rem;
-/*     text-overflow: clip;
-    white-space: nowrap;
-    overflow: hidden; */
 }
 
 .tile_custom {
@@ -17,10 +14,6 @@
     box-shadow: .1rem .1rem 1rem .6rem #1119;
     background-image: radial-gradient(hsl(52, 80%, 60%) 20%, hsl(29, 80%, 60%) 45%, hsl(282, 80%, 40%));
 }
-
-/* .tile_custom:nth-of-type(2) {
-    box-shadow: .1rem .1rem 1rem .6rem #eee9;
-} */
 
 .tile-back_custom {
     color: hsl(51, 94%, 53%);

@@ -8,15 +8,6 @@
     color: inherit;
     border: .1rem solid inherit;
     color: hsl(36, 80%, 90%);
-    /* box-shadow: 0 0 .2rem .4rem lime; */
-/*     background: -webkit-linear-gradient(55deg, yellow, lime);
-    filter: contrast(70%) saturate(120%); 
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 700;
-    text-shadow: 0 0 .5rem greenyellow; */
-    /* z-index: 20; */
 }
 
 .tile_custom { 
@@ -27,7 +18,6 @@
     border-style: double;
     margin: .475rem;
     position: relative;
-    /* border-radius: 20%; */
 }
 
 .tile-front_custom {
@@ -47,7 +37,6 @@
 } 
 
 .tile-back_custom {
-    /* margin: .4rem; */
     position: relative;
     color:black;
     border: 0rem solid #fff;
@@ -55,11 +44,7 @@
     background-clip: content-box;
     background-image: url('../resources/icons_skin.svg');
     filter: saturate(105%) brightness(110%);
-    /* backdrop-filter: blur(5px) grayscale(80%) saturate(125%); */
     background-color: #0000; /* completely transparent, this is Essential here ! */
-   /*  border-radius: 20%; */
-/*     border: .2rem dotted #2227;
-    margin: -.2rem; */
 }
 
 .tile-back_custom::before {
@@ -70,15 +55,8 @@
     left: calc(50% - 1.65rem / 2);
     width: 1.65rem;
     height: 1.65rem;
-    /* padding: 1em; */
-    /* background: radial-gradient(hsl(222, 50%, 65%), hsl(201, 60%, 50%)); */
     z-index: -50;
 }
-
-/* .board_custom div:nth-child(5n), .tile_custom:nth-of-type(2n) .tile-back_custom:nth-of-type(2n) {
-    filter: hue-rotate(70deg) saturate(115%) brightness(110%);
-} */
-
 
 .gd-level_custom, .gd-turns_custom, .gd-time_custom, .gd-score_custom {
     background: -webkit-linear-gradient(125deg, hsl(95, 60%, 50%), hsl(155, 60%, 70%));
@@ -134,7 +112,6 @@
 
 .message-text-1, .message-text-2 {    
     font-size: 2rem;
-    /* margin: .3em; */
     background: none;
     color: hsl(151, 60%, 50%);
     text-shadow: .1em .1em #444;
@@ -153,7 +130,6 @@
     box-sizing: border-box;
     min-height: 100vh;
     width: 100%;
-    /* border: .5rem solid #010; */
     box-shadow: inset 0 0 .6em .3em #010, inset 0 0 2em 1em  darkgreen, inset 0 0 3em 1.5em green;
 }
 
@@ -212,7 +188,6 @@
 .fa-icon_custom--stage-1 {
     font-size: 2rem;
     color: antiquewhite;
-    /* filter: saturate(90%) brightness(125%); */
 }
 
 /* END GAME SCREEN */

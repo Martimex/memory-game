@@ -9,7 +9,7 @@ async function level_start(stageNo, time, tileShowTime) {
     async function startAnimation() {
         await showTiles()
         await hideTilesAndShowTornados()
-            .then(() => { rotateTornados(); rotateBoard(); glowTiles(); })
+            .then(() => { rotateTornados(); rotateBoard(); })
     }
 
     async function showTiles() {
@@ -88,12 +88,9 @@ async function level_start(stageNo, time, tileShowTime) {
     }
 
     function rotateBoard() {
-        //let game = document.querySelector(`.${bgStyles['game_custom']}`);
+
         let board = document.querySelector(`.${bgStyles['board_custom']}`);
-        //let spinningBox = document.createElement('div');
-        //spinningBox.classList.add('spinning'); // Check if this works !
-        //game.appendChild(spinningBox);
-        //spinningBox.appendChild(board);
+
         anime({
             targets: board,
             duration: 12000,
@@ -106,17 +103,6 @@ async function level_start(stageNo, time, tileShowTime) {
             direction: 'alternate',
             loop: true,
         });
-    }
-
-    function glowTiles() {
-        const allTiles = document.querySelectorAll(`.${mainStyles['tile_custom']}`);
-        
-/*         anime({
-            targets: allTiles,
-            duration: 1400,
-            boxShadow: ['0 0 .2rem .2rem hsl(266, 60%, 60%), 0 0 .4rem .4rem #222'],
-            easing: 'linear',
-        }) */
     }
 
     // Init

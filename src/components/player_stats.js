@@ -48,7 +48,6 @@ function PlayerStats(props) {
     const pagesLimit = pageMaxIndex + 1;
     const statsRows = Array.from(new Array(pagesLimit)).map((el, ind) => {
         const [userStat, gameStat] = connectObj(props.levelsCount, player_stats_pages[pageNo][ind].connect_name);
-        /* console.error(props); */
         const getPercentageValue = Math.floor((100 / (gameStat || 1 /* AVOIDING POSSIBLE DIVISION BY 0 */)) * userStat);
         return(
             <div key={ind.toString()} className={styles['stats-item']}> 

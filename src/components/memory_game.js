@@ -1,23 +1,15 @@
 import  React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import Router from "next/router";
-import '../../src/styles/game.module.css';
-
 import styles_global from '../../src/global/global_styles.module.css';
-
-import  levels from '../../src/levels.js';
 import useMediaQuery from '../../src/virtual_hooks/useMediaQuery';
 
 import * as Animation from "animejs"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import { faParagraph, fas } from '@fortawesome/free-solid-svg-icons';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 
 import GameInfo from '../../src/components/game_info.js';
 import Confirm from '../../src/components/confirm.js';
-//import ConfirmPlay from './confirm_play'; -> can be removed later along with the Component
-import ConfirmWin from '../../src/components/confirm_win';
-//import Pause from './pause'; -> can be removed later along with the Component
 
 // Level based stuff
 import {uncoverPatterns} from '../../src/global/predefined/uncover_patterns.js';
@@ -26,38 +18,11 @@ import {scoreExtras} from '../../src/global/predefined/score_extras.js';
 
 import { setIcon, icon_Sets } from '../../pages/landing.js';
 
-//import prisma from '../../lib/prisma';
 
 library.add(fab, fas);
 
-let iter = {
-    // Add more keys if necessary
-    /* basic value*/ value: 0, 
-    /* value v2*/ amount: 0,
-    /* value v3*/ count: 0,
-    /*value in series*/ streak: 0,
-    /*value only for lvl 18*/ previousStep: 0,
-    /*turn addon/penalty*/ extraTurns: 0,
-    /*used ONLY for lvl 18 and prob 19 - it modifies your find tiles*/ fTilesModifier: 0, // if lower than 0, it lowers foundTiles count
-    /*used ONLY for lvl 20 time multiplying */ timeAddon: 0,
-    /*used for more advanced animation stuff*/ array: [],
-    /*additional array for lvl 17 purposes*/ nextArr: [],
-    /*determines whether its okay to do pause ATM*/ pauseCondition: true,
-};  // EXTRA VALUES FOR FLAG FUNCTIONS
-
-
-let cardsOpened = [];   // WE WILL NOT USE IT ANYMORE, BECAUSE WE STORE THIS VARIABLE IN PROPS GAINED BY SSR FUNCTION: getServerSideProps
-let handleCount = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag poprzez kliknięcie - dotyczy onFirstClick
-let handleCheck = 0;   // chroni przed wielokrotnym wywoływaniem funkcji-flag poprzez kliknięcie - dotyczy onSecondClick
-
-let scoreAddon = 0;
-
-let isChecking = false; // Prevents from using multiple turns during the cards checkout animation
-const scorePerPair = 100;  // Don't modify this varible; let it be with this value
 const moveScoreValue = 150; // Don't momdify aswell - it calculates score for every remaining move after you've succeded
 const timeScoreValue = 50; // Don't momdify aswell - it calculates score for every remaining second after you've succeded, it's calculated twice, so add '/2' value
-
-const stageUpdateTime = 800; // probably not needed now
 
 const classes = {
     firstPlan: styles_global['firstPlanContainer'],
@@ -73,12 +38,6 @@ const duplicateIcons = {
     eights: 8,
     nines: 9,
 }
-
-/* const inGameCounters = {
-    spreeCount: 0,
-    totalRemainingTime: [],
-    totalRemainingTurns: [],
-} */
 
 function setRandomIcons(iconSet, tiles, pattern) { 
 
@@ -112,14 +71,12 @@ async function loadOtherModules(serieName, levelNumber) {
     const xclick = await import(`../../src/levels/${serieName}/level_${levelNumber}/scripts/xclick.js`);
     const match = await import(`../../src/levels/${serieName}/level_${levelNumber}/scripts/match.js`);
     const stagecomplete = await import(`../../src/levels/${serieName}/level_${levelNumber}/scripts/stagecomplete.js`);
-    //const end = await import(`../levels/${serieName}/level_${levelNumber}/scripts/end.js`);
     
     return {
         start: start,
         xclick: xclick,
         match: match,
         stagecomplete: stagecomplete,
-        //end: end,
     }
 }
 
@@ -142,129 +99,13 @@ let allTiles;
 
 const anime = Animation.default;
 
-/* export async function getStaticPaths() {
-    return {
-        paths: [{ params: { id: 'clh515vi700009ss46njnn4s5' } }],
-        fallback: false, // can also be true or 'blocking'
-    };
-}
- */
-
-/* export const getServerSideProps = async({ params }) => {
-    const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
-
-    console.log('SERVER SIDE PARAMS ARE: ', params);
-    const level = await prisma.level.findUnique({
-        where: { id: String(params.id) },
-        include: {
-            Serie: {
-                select: { name_abbr: true }
-            }
-        }
-    });
-
-    const user_progresses = await prisma.progress.findMany({
-        where: { userId: DUMMY_USER_ID },
-    });
-
-    console.log('PROGRESS RECORD IS: ', user_progresses);
-
-    const level_progress = user_progresses.find(progress_record => progress_record.levelId === String(params.id));
-
-    console.log('LEVEL PROGRESS RECORD IS: ', level_progress);
-
-    const allGameCounters = {
-        cardsOpened: [],
-        spreeCount: 0,
-        totalRemainingTime: [],
-        totalRemainingTurns: [],
-    }
-
-    const currentProgress = {
-        id: level_progress.id,
-        stars: level_progress.stars_got,
-        lv_progress: level_progress.lv_progress,
-        highscore: level_progress.highscore
-    }
-
-    let sampleObj = {};
-
-    for(let key in JSON.parse(JSON.stringify(level))) {
-        //console.log(level[key]);
-        if(level[key] instanceof Object && Boolean(level[key][key])) {
-            // Level specific settings (such as win conditions, animation times, limitation, tile sizings FALL HERE BELOW) :
-            sampleObj[key] = JSON.parse(level[key][key].replace(/'/ig, `"`).replace(/(\w+:)|(\w+ :)/g, function(matchedStr) {  // convert String({} with own properties) to an array
-                return '"' + matchedStr.substring(0, matchedStr.length - 1) + '":';
-            }))
-        }
-        else if(level[key] instanceof Number || String) {
-            // All the props that are used to identify the level from others
-            sampleObj[key] = level[key];
-        }
-    }
-
-    if(Boolean(Object.keys(level).length === Object.keys(sampleObj).length) === false) {
-        throw new Error(`Rewriting object properties left new object version with less than expected properties. Old version had ${Object.keys(level).length} properties, while new version has ${Object.keys(sampleObj).length} properties included.`);
-    }
-
-    if(!level_progress) { throw new Error(`The queried level progress record is missing (could not be found). It should be already created before reaching this point !`) }
-
-    //sampleObj['someArr'] = [];
-
-    return {
-        props: { level: sampleObj, gameCounters: allGameCounters, progress: currentProgress} //JSON.parse(JSON.stringify(level))
-    };
-}; */
-
-
 function Game(props) {
-    // !!!  comments means that we HAVE TO uncomment the code pieces after some development is done for the component
-    //console.warn('GAME PROPS: ', props);
-/*     const allKeys = Object.keys(props);
-    console.log(allKeys); */
-    /* for(let key in props) {
-        if(props[key] instanceof Object && Boolean(props[key][key])) {
-            // Level specific settings (such as win conditions, animation times, limitation, tile sizings FALL HERE BELOW) :
-            sampleObj[key] = JSON.parse(props[key][key].replace(/'/ig, `"`).replace(/(\w+:)|(\w+ :)/g, function(matchedStr) {  // convert String({} with own properties) to an array
-                return '"' + matchedStr.substring(0, matchedStr.length - 1) + '":';
-            }))
-        }
-        else if(props[key] instanceof Number || String) {
-            sampleObj[key] = props[key];
-        }
-    }
-
-    console.log('Check if we save all the keys in our modified OBJ: ', Boolean(Object.keys(props).length === Object.keys(sampleObj).length))
-
-    console.log(sampleObj); */
-
-    //const z = JSON.parse(JSON.stringify(props.rows.rows)); console.log(typeof z, z); //z.forEach(el => console.log(el))
-
-    //console.warn(JSON.parse(props.rows.rows)) // convert String([] of Numbers) to an array
-    //console.warn(JSON.parse(props.icon_set.icon_set.replace(/'/ig, `"`))) // convert String([] of Strings) to an array
-/*     console.warn(JSON.parse(props.win.win.replace(/'/ig, `"`).replace(/(\w+:)|(\w+ :)/g, function(matchedStr) {  // convert String({} with own properties) to an array
-        return '"' + matchedStr.substring(0, matchedStr.length - 1) + '":';
-    }))); */
-    
-/*     obj = JSON.parse(jsonStr);
-    console.warn(obj); */
-
-    //console.warn(JSON.parse(props.win.win.replace(/'/ig, `"`)));
-
-    // This hooks exist because of switching to Next.js and thanks to it we can perform styles loading once player requests a given level (CSS provided the moment user sees the level screen)
-    const [renderStyleModules, setRenderStyleModules] = useState(false);
 
     const isDesktop = useMediaQuery('(min-width: 941px)');
 
     const [level, setLevel] = useState(props.level);
 
-    const [scoreMultiplier, setScoreMultiplier] = useState(1); // REMOVE AFTER TRANSFORMING OLD LEVELS INTO A NEW SYSTEM
-    const [highscore, setHighscore] = useState(0); // REMOVE AFTER TRANSFORMING OLD LEVELS INTO A NEW SYSTEM
-    const [moves, setMoves] = useState(0);   // REMOVE AFTER TRANSFORMING OLD LEVELS INTO A NEW SYSTEM
-    const [foundTiles, setFoundTiles] = useState(0); // REMOVE AFTER TRANSFORMING OLD LEVELS INTO A NEW SYSTEM
-
-
-    const [testValue, setTestValue] = useState(false); // REMOVE AFTER TESTING
+    const [testValue, setTestValue] = useState(false);
     const [confirmValue, setConfirmValue] = useState(null); // ALWAYS SET IT TO NULL (INITIAL) ||  true / false (is level fully Completed ?)
     const [score, setScore] = useState(0);
     const [time, setTime] = useState(0);
@@ -272,7 +113,7 @@ function Game(props) {
     const [stageNo, setStageNo] = useState(0); // use to switch stages (if level has few stages)
     const [boardState, setBoardState] = useState(null);
     const [boardGridParams, setBoardGridParams] = useState(null);
-    const [levelVariables, setLevelVariables] = useState(JSON.parse(JSON.stringify(props.level.variables))/* {...props.level.variables} */);
+    const [levelVariables, setLevelVariables] = useState(JSON.parse(JSON.stringify(props.level.variables)));
     // Below prevents from overriding 'better progress record' with worse one, in cases when player uses 'Retry button' instead of 'Back' when saving progress on 'level lose' scenario 
     const [progressData, setProgressData] = useState({highscore: props['progress']['highscore'], lv_progress: props['progress']['lv_progress'], stars: props['progress']['stars']}); 
 
@@ -313,12 +154,11 @@ function Game(props) {
 
         if(props.level.limitations[stageNo][`time`]) { 
             // Each level has to have time counting !!!
-
             if((time === 0) || (confirmValue !== null)) {return;} // We have a separate setTime call which sets time to 1 after initial animation finish 
 
             const stopwatch = setInterval(() => {
                 if(pointsInStage < props.level.win[stageNo][`value`]) {
-                    setTime((time + 1) - iter.timeAddon);
+                    setTime((time + 1));
                 }
             }, 1000);
     
@@ -329,15 +169,12 @@ function Game(props) {
     
             return () => clearInterval(stopwatch);
         } else {
-            console.error('TIME COUNTDOWN NOT ADDED TO THE LEVEL !');
+            throw new Error('TIME COUNTDOWN NOT ADDED TO THE LEVEL !');
         }
 
     }, [time]);
 
     useEffect(() => {
-        //console.log(cardsOpened);
-        //console.log('Resetting....', cardsOpened);
-        
         // FIRES AFTER EVERY STAGE CHANGE
 
         // 0. Reset all gameCounters - we will use it now for props.gameCounters*
@@ -349,7 +186,6 @@ function Game(props) {
         turns = 0;
         pointsInStage = 0;
         if(props.gameCounters.cardsOpened.length) { props.gameCounters.cardsOpened = [] };
-        console.log(props.gameCounters.cardsOpened);
 
         if(arr.length > 0) {
             while(arr.length > 0) {
@@ -364,19 +200,16 @@ function Game(props) {
         randomizedIconsArray = setRandomIcons(icon_Sets[`${props.level.tiles[stageNo]['icon_set']}`], props.level.tiles[stageNo]['count'], props.level.uncover[stageNo][`pattern`]);
 
         allTiles =  arr.map((tile, index) =>  {
-            return <div data-get={'tile'} className={`${styles_global['tile']} ${stageNo >= 0 && cssModules.main[`tile_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${stageNo >= 0 && cssModules.main[`tile-front_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${stageNo >= 0 && cssModules.main[`tile-back_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={`${stageNo >= 0 && cssModules.main[`fa-icon_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`fa-icon_custom`]}`}/>}</div></div>        });
+            return <div data-get={'tile'} className={`${styles_global['tile']} ${stageNo >= 0 && cssModules.main[`tile_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${stageNo >= 0 && cssModules.main[`tile-front_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${stageNo >= 0 && cssModules.main[`tile-back_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={`${stageNo >= 0 && cssModules.main[`fa-icon_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`fa-icon_custom`]}`}/>}</div></div>
+        });
 
         setBoardState(allTiles);
-        //setTestValue(!testValue);
-        appendPlansElems(stageNo)
-        //loadStyles()
-        loadDynamic()
+        appendPlansElems(stageNo);
+        loadDynamic();
 
     }, [stageNo, testValue])
 
     // Add proper styling based on device used by end user
-
-    //let boardGridParams = {gridTemplateColumns: `repeat(${props.level.board[stageNo]['columns']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[stageNo]['rows']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`};
     
     /* if(isDesktop) {  UNCOMMENT AND MAKE A DEVELOPMENT LATER WHEN WORKING WITH MEDIA QUERIES !!!
         boardGridParams = {gridTemplateColumns: `repeat(${props.newLevel.columns}, ${(props.newLevel.tile_size)/10}rem)`, gridTemplateRows: `repeat(${props.newLevel.rows}, ${(props.newLevel.tile_size)/10}rem)`};
@@ -402,33 +235,21 @@ function Game(props) {
 
         if(props.gameCounters.cardsOpened.length === props.level.uncover[stageNo][`count`]) {
             gameboard.current.dataset.animation = 'on';
-/*             turns = turns + (checkForLevelModifiers(props.level.others, levelVariables, 'EXTRATURNS_MODIFIER')? applyLevelModifier('EXTRATURNS_MODIFIER', levelVariables) : 1); */
-            iter.pauseCondition = false;
-
-            const doesMatch = uncoverPatterns[props.level.uncover[stageNo][`pattern`]](props.gameCounters.cardsOpened);
-            // doesMatch can be either TRUE or FALSE (it follows basic uncover pattern for levels)
-
+            const doesMatch = uncoverPatterns[props.level.uncover[stageNo][`pattern`]](props.gameCounters.cardsOpened);  // doesMatch can be either TRUE or FALSE (it follows basic uncover pattern for levels)
             const cardsOpened_parentNodes = setParentNodes(props.gameCounters.cardsOpened);
-
-            //otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo); // doesMatch determines whether player meets required condition to remove tiles
         
             await openUp()
-            await otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props.level, levelVariables/* props.newLevel */) // doesMatch determines whether player meets required condition to remove tiles
+            await otherModules[`match`].match(doesMatch, cardsOpened_parentNodes, stageNo, props.level, levelVariables) // doesMatch determines whether player meets required condition to remove tiles
             turns = turns + (checkForLevelModifiers(props.level.others, levelVariables, 'EXTRATURNS_MODIFIER')? applyLevelModifier('EXTRATURNS_MODIFIER', levelVariables) : 1);
             doCardsMatch(checkForLevelModifiers(props.level.others, levelVariables, 'DOESMATCH_MODIFIER')? applyLevelModifier('DOESMATCH_MODIFIER', levelVariables) : doesMatch, props.gameCounters.cardsOpened);
-            //console.log(`FINAL VAL: , ${levelVariables.STATIC.DOESMATCH_MODIFIER}`);
         } else {
             await openUp();
         }
     }
 
     function doCardsMatch(doesMatch, cardsOpened) {
-        console.log('DOES MATCH: ', doesMatch);
-        // Block the click listener for a brief checkout duration
-        isChecking = true;
 
         // EVERY cardsOpened statement here refers to props.gameCounters.cardsOpened
-
         manageValuesAndCounters(doesMatch);
 
         if(props.level.limitations[stageNo][`time`]) {
@@ -438,7 +259,7 @@ function Game(props) {
                 return;
             }
         }
-        console.log('totalRemainingTurns: ',  props.gameCounters[`totalRemainingTurns`], "  totalRemainingTime: ", props.gameCounters[`totalRemainingTime`])
+
         setTimeout(() => {
 
             const cardsOpened_parentNodes = setParentNodes(cardsOpened);
@@ -472,7 +293,6 @@ function Game(props) {
                     checkStageSuccess(pointsInStage);
 
                     setClickNo(0);
-                    isChecking = false;
                     gameboard.current.dataset.animation = 'off';
                 })
             }
@@ -489,7 +309,6 @@ function Game(props) {
                 setClickNo(0);
                 gameboard.current.dataset.animation = 'off';
                 flipBack(cardsOpened_parentNodes);
-                isChecking = false;
 
                 async function flipBack(cardsOpened_parentNodes) {
                     const a1 = anime({
@@ -507,12 +326,10 @@ function Game(props) {
             checkLosingConditions();
 
         }, props.level.tile_animation[stageNo]['compareTime'])
-
     }
 
     function manageValuesAndCounters(doesMatch) {
         // This function is used for managing all counters in one place (to make things cleaner)
-
         if(doesMatch) {
             pointsInStage += props.level.win[stageNo][`pointsPerMatch`];
             props.gameCounters['spree'] += 1;
@@ -548,8 +365,7 @@ function Game(props) {
                     await otherModules[`stagecomplete`].stagecomplete(stageNo, true, props.level, levelVariables)
                     setConfirmValue(true);
                 }
-                finishGame()
-                /*     .then(() => setConfirmValue(true)); */
+                finishGame();
             } 
             else if(stageNo + 1 !== props.level.stages) {
                 // Move to the new stage + block pointer events just during new stage animations
@@ -585,10 +401,7 @@ function Game(props) {
             return <div data-get={'tile'} className={`${styles_global['tile']} ${stageNo >= 0 && cssModules.main[`tile_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile_custom`]}`} key={`tile-s${stageNo}-${index.toString()}`}><div className={`${styles_global[`tile-front`]} ${stageNo >= 0 && cssModules.main[`tile-front_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-front_custom`]}`}></div> <div className={`${styles_global[`tile-back`]} ${stageNo >= 0 && cssModules.main[`tile-back_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`tile-back_custom`]}`}>{<FontAwesomeIcon icon={`${randomizedIconsArray[index]}`} className={`${stageNo >= 0 && cssModules.main[`fa-icon_custom--stage-${stageNo}`]} ${cssModules.main && cssModules.main[`fa-icon_custom`]}`}/>}</div></div>
         });
         // 2. Now perform DOM repaint by fire useState hook
-        console.log('ALLTILES: ', allTiles, ' and STAGE NO IS: ', stageNo);
         setBoardState(allTiles);
-        // 3. Execute start script, launch animation, etc.
-        
     }
 
     useEffect(() => {
@@ -599,7 +412,7 @@ function Game(props) {
                     .then(() => {
                         // After animation is completed...
                         setTime(1);
-                        document.body.style.pointerEvents = 'auto'; // unlock clicking (previously blocked in leve_info *play btn onClick*)
+                        document.body.style.pointerEvents = 'auto'; // unlock clicking (previously blocked in level_info *play btn onClick*)
                     })
                 otherModules = await loadOtherModules(props.level.Serie.name_abbr, props.level.number);    
             }
@@ -619,14 +432,7 @@ function Game(props) {
         setScore(0); // reset score value to 0 after lose
         setConfirmValue(null);
         setLevelVariables(JSON.parse(JSON.stringify(props.level.variables)))
-        //props.level.variables = {...levelVariables};
-        //console.log('AFTER CHANGE :::: RESTART LEVEL OBJ VARIABLES : ', props.level.variables, '  --  while useState levelVariables : ', levelVariables);
-        //setBoardGridParams({gridTemplateColumns: `repeat(${props.level.board[0]['columns']}, ${(props.level.tiles[0]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[0]['rows']}, ${(props.level.tiles[0]['size'])/10}rem)`})
     }
-
-/*     useEffect(() => {
-        console.warn('RESTART LEVEL OBJ VARIABLES : ', props.level.variables, '  --  while useState levelVariables : ', levelVariables);
-    }, [levelVariables]); */
 
     function resetInlineStyles() {
         // Clear inline styles when user restarts the level (to maintain its' basic state correctly)
@@ -659,23 +465,9 @@ function Game(props) {
             if(typeof(allGameCounters[key]) === 'string') { allGameCounters[key] = ''}
             else if(typeof(allGameCounters[key]) === 'number') { allGameCounters[key] = 0}
             else if(allGameCounters[key] instanceof Array) { allGameCounters[key] = []}
-            else { console.error(`DETECTED UNSUPPORTED KEY TYPE WHEN RESETTING COUNTER VALUES. FOUND TYPE: ${typeof(key)} for counter: ${key} with value of: ${allGameCounters[key]} `) };
+            else { throw new Error(`DETECTED UNSUPPORTED KEY TYPE WHEN RESETTING COUNTER VALUES. FOUND TYPE: ${typeof(key)} for counter: ${key} with value of: ${allGameCounters[key]} `) };
         }
     }
-
-/*     useEffect(() => {
-        async function runDynamic() {
-            let loadStart = await import(`../../src/levels/${props.Serie.name_abbr}/level_${props.number}/scripts/start.js`);
-            loadStart.level_start(stageNo, props.starting_animation[stageNo][`time`], props.starting_animation[stageNo][`tileShowTime`])
-            .then(() => {
-                // After animation is completed...
-                setTime(1);
-                document.body.style.pointerEvents = 'auto'; // unlock clicking (previously blocked in leve_info *play btn onClick*)
-            })
-            otherModules = await loadOtherModules(props.Serie.name_abbr, props.number);
-        }
-        runDynamic();
-    }, [boardState]) */
 
     async function newStageFadeIn() {
         const a1 = anime({
@@ -704,8 +496,7 @@ function Game(props) {
         if(clickNo > 0) {
             otherModules[`xclick`].xclick(clickNo, props.gameCounters.cardsOpened[props.gameCounters.cardsOpened.length - 1].parentNode, stageNo, props.level, levelVariables/* props.newLevel */);
         } else {
-            //
-            //console.error('X Click event is not fired ... ClickNo is: ', clickNo);
+            // X Click event is not fired ... ClickNo is: clickNo;
         }
     }, [clickNo])
 
@@ -721,18 +512,7 @@ function Game(props) {
 
     useEffect(() => {
         document.body.style.overflowY = 'auto';
-        const all = document.querySelector(`.${styles_global['all']}`);
-        console.log('INIT MEMORY_GAME SHOWUP : ', all);
-/*         anime({
-            targets: document.body,
-            duration: 1200,
-            opacity: [0, 1],
-            easing: 'linear',
-        }) */
         setBoardState(null);
-        //setBoardGridParams({gridTemplateColumns: `repeat(${props.level.board[stageNo]['columns']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`, gridTemplateRows: `repeat(${props.level.board[stageNo]['rows']}, ${(props.level.tiles[stageNo]['size'])/10}rem)`})
-        //loadStyles();
-        /* appendPlansElems(); */
     }, []);
 
     async function loadStyles() {
@@ -763,21 +543,13 @@ function Game(props) {
                 <div className={`${classes[`firstPlan`]} ${cssModules.firstPlan && cssModules.firstPlan[`firstPlan_custom`]}`}> </div>
                 <div className={`${classes[`secondPlan`]} ${cssModules.secondPlan && cssModules.secondPlan[`secondPlan_custom`]}`}> </div>
                 <div className={`${classes[`animationPlan`]} ${cssModules.main && cssModules.main[`aContainer_custom`]}`} ref={animationBox}></div>
-
-                {/* CONFIRM CALL WAS HERE PREVIOUSLY */}
-
-                {(props.level.cords === 'gg') && ( 
-                    <div className='confirmation-w'>
-                        {<ConfirmWin level={level} highscore={highscore} start={props.level.preview} />}
-                    </div>
-                )}
             </div>
 
             {confirmValue !== null && (
-                <Confirm value={confirmValue} level={level} level_no={props.level.number} newSerie={props.level.Serie.name_abbr} score={score} highscore={highscore} tsv={timeScoreValue} msv={moveScoreValue} 
+                <Confirm value={confirmValue} level={level} level_no={props.level.number} newSerie={props.level.Serie.name_abbr} score={score} tsv={timeScoreValue} msv={moveScoreValue} 
                     turns={(confirmValue)? props.gameCounters[`totalRemainingTurns`] : (props.level.limitations[stageNo][`turns`])? props.level.limitations[stageNo][`turns`] - turns : 0} 
                     time={(confirmValue) ? props.gameCounters[`totalRemainingTime`] : (props.level.limitations[stageNo][`time`])? props.level.limitations[stageNo][`time`] - time : 0} 
-                    start={() => {props.changeComponent('preview') /* Router.push('/preview') */}} /* next={props.level.changeComponent} */ restart={() => { restartLevel();   /* Router.push('/preview/[id]', `/preview/${props.level.id}`) */}}
+                    start={() => {props.changeComponent('preview') }}  restart={() => { restartLevel(); }}
                     variables={props.level.variables} progressRecordId={props.progress.id} currentProgress={progressData} setCurrentProgress={setProgressData} starConditions={props.level.star_conditions} pointsInStage={pointsInStage} stageNo={stageNo}
                     playerId={props.playerId} playerExp={props.playerExp}
                 />

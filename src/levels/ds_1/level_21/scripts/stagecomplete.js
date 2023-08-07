@@ -10,7 +10,6 @@ async function stagecomplete(stageNo, isLevelWin, levelObject, levelVariables) {
 
     async function init() {
         if(stageNo === 0) {
-           //console.warn('NEXT STAGE !');
             await fadeScreen()
             await createAndHideMessage()
             modifyBackgroundImagesForTiles();
@@ -36,7 +35,6 @@ async function stagecomplete(stageNo, isLevelWin, levelObject, levelVariables) {
             targets: endScreen,
             duration: 400,
             opacity: [0, 1],
-            /* scale: [.95, 1], */
             translateX: ['-2.2rem', '0rem'],
             easing: 'linear',
         }).finished;

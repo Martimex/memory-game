@@ -22,7 +22,7 @@ async function stagecomplete(stageNo) {
     }
 
     // Fire
-   await init();
+    await init();
 }
 
 export {stagecomplete};

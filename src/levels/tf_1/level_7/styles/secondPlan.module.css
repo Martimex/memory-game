@@ -1,5 +1,4 @@
 .secondPlan_custom {
-    /* position: relative; */
     box-sizing: border-box; /* We can use second plan field styling the way that it fits a given level best */
 }
 
@@ -7,7 +6,6 @@
     position: absolute;
     width: min(10vh, 10vw);
     height: min(10vh, 10vw);
-    /* z-index: -40; */
     border-radius: 10%;
     box-shadow:  0rem 0rem .12rem #ddd;
 }
@@ -16,7 +14,6 @@
     position: absolute;
     width: min(10vh, 10vw);
     height: min(10vh, 10vw);
-    /* z-index: -40; */
     border-radius: 10%;
     box-shadow:  0rem 0rem .12rem #ddd;
 }

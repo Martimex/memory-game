@@ -17,9 +17,7 @@ function generateFirstPlanItems(fpClass) {
             tornadoElem.classList.add(`${styles_firstPlan['tornado-elem']}`);
             tornado.appendChild(tornadoElem);
         }
-    }
-
-    //console.log('loaded generator');
+    };
 }
 
 function generateSecondPlanItems(spClass) {

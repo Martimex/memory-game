@@ -16,7 +16,6 @@ async function stagecomplete(stageNo) {
         const darkScreen = document.createElement('div');
         const textBox = document.createElement('div');
         const text = document.createElement('div');
-        //text.textContent = msg;
 
         for(let x=0; x<msg.length; x++) {
             let letter = document.createElement('div');
@@ -54,9 +53,6 @@ async function stagecomplete(stageNo) {
             duration: 1200,
             opacity: { value: [0, 1], easing: 'linear' },
             backgroundColor: { value: ['#000', '#0000'], easing: 'easeOutCubic' },
-            /* backgroundImage: 'radial-gradient(#abc, #cba)', */
-            /* scale: [1, .4], */
-            /* easing: 'linear', */
         }).finished;
 
         await Promise.all([a1, a1a]);
@@ -66,7 +62,6 @@ async function stagecomplete(stageNo) {
         const a2 = anime({
             targets: `.${mainStyles['letter']}`,
             duration: 150,
-            /* scale: [0, 1.1], */
             delay: anime.stagger(80),
             easing: 'linear',
             opacity:  1,
@@ -89,9 +84,8 @@ async function stagecomplete(stageNo) {
 
     async function hideMessage() {
         const a4 = anime({
-            targets: `.${mainStyles['message-box']}`,  //message-box  ||  letter
+            targets: `.${mainStyles['message-box']}`,
             duration: 1100,
-            //delay: anime.stagger(60, {from: 'last'}),
             easing: 'easeInExpo',
             translateY: ['0', '2rem'],
             opacity: 0,

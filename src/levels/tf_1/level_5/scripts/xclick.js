@@ -34,13 +34,10 @@ async function runXClickOne(click_no, halfToHide, halfToShow, target, levelObj, 
 
     const secondType = document.querySelectorAll(`.${mainStyles['tileType2']}`);
     const firstType = document.querySelectorAll(`.${mainStyles['tileType1']}`);
-    console.warn('xClick one TILE SECONDTYPE Q : ', secondType,  ' AND CLICK NO IS: ', click_no, ' and its type is: ', typeof(click_no));
 
     async function chain1() {
-        console.log('SOadinaid 2: ');
         await wait(halfToHide, halfToShow)
             .then(() => {
-                //console.log('SO ITS SECOND TYPE: ', secondType);
                 secondType.forEach(tile => {
                     tile.style.pointerEvents = 'auto';
                 })

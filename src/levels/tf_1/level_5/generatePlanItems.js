@@ -14,8 +14,6 @@ const glowingColors = [
 
 function generateFirstPlanItems(fpClass, stageNo) {
     const firstPlan = document.querySelector(`.${fpClass}`);
-    //console.log('GFPI stageNo : ', stageNo);
-    /* if(stageNo === 1) return; */
 
     if(stageNo === 0) {
         for(let i=0; i<60; i++) {

@@ -60,13 +60,6 @@
     color: hsl(62, 50%, 60%);
 }
 
-
-/* .tile_custom::before, .tile_custom::after {
-    content: '';
-    display: block;
-    position: absolute;
-} */
-
 .tile-back_custom { 
     border-radius: 20%;
 }

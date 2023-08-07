@@ -25,7 +25,7 @@ async function stagecomplete(stageNo, isLevelWin, levelObject, levelVariables) {
     }
 
     // Fire
-   await init();
+    await init();
 }
 
 export {stagecomplete};

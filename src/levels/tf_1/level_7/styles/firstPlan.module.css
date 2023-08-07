@@ -11,7 +11,6 @@
     position: absolute;
     bottom: 0%;
     border-radius: 25%;
-    /* background: green; */
 }
 
 .mic-1 {
@@ -27,10 +26,8 @@
     color: hsl(52, 66%, 62%);
     text-shadow: .1rem .1rem .45rem #111;
     font-weight: 750;
-    /* background: hsla(52, 66%, 62%, .5); */
     display: inline-block;
     text-align: center;
-    /* width: 100%; */
     margin: 0 2em;
 }
 
@@ -45,7 +42,6 @@
 .match-info-box {
     font-size: 1.2rem;
     display: grid;
-    /* place-content: center; */
     grid-template-columns: 100%;
     grid-template-rows: 70% 30%;
     row-gap: .5em;
@@ -71,15 +67,6 @@
     font-style: normal;
     background-size: cover; /* "contain" does not allow the image to be centered within the parent box*/
     background-repeat: no-repeat;
-/*     display: flex;
-    align-self: center;
-    justify-self: center; */
-/*     font-size: 2rem;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    color: white; */
-    /* background-color: aquamarine; */
 }
 
 .match-info-icon[data-match_type="colors_type"] {
@@ -92,12 +79,10 @@
 
 .mii-1 {
     font-style: normal;
-    /* background-image: url('../resources/match_mode_icons.svg'); */
 }
 
 .mii-2 {
     font-style: normal;
-    /* background-image: url('../resources/match_mode_colors.svg'); */
 }
 
 .match-info-description {

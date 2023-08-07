@@ -10,22 +10,14 @@ import Game from "../src/components/memory_game";
 import UserBanned from "../src/components/user_banned";
 import { getPlayerLevel } from "../src/global/predefined/exp_to_level";
 
-export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
-    // Data object is available under /play (for example: http://localhost:3000/play)
-    // Note that by adding getStaticProps, loading http://localhost:3000/play will give us 2 level instances from the Database, 
-    // while going for http://localhost:3000/ (our 'old' no-route implementation) gives us props which we passed from index.js file
-    //const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
+export const getServerSideProps = async ({ req, res }) => {
 
     const session = await getSession({ req });
     if(!session) { return { props: {noSession: true}}; } // noSession will indicate if we have unauthenticated access to /play route
-    console.log('PLAY SSR REQ: ', session);
-    //const session = await getSession({ req });
-    //console.log('CURRENT SESSION IS: ', session, '  -- and status is: ', status);
+
     const session_user = await prisma.user.findUnique({
         where: { email: session.user.email }
     })
-
-    console.log('OUR REAL USER: ', session_user);
 
     const user_progresses = await prisma.progress.findMany({
         where: { userId: session_user.id },
@@ -39,7 +31,6 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
                 equals: (DEV_ONLY_includeUnreleasedLevels)? false : true, 
             },
         },
-        /* take: 5, */
         include: {
             Levels: {
                 select: { id: true, name: true, number: true, stages: true, difficulty: true, creatorUserId: true, createdAt: true, Created_By: { select: { name: true } } }
@@ -51,13 +42,10 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
     // Each time we request a full data, we need to update User Progress difficulties ! (useful in cases when the level has the difficulty changed, so we also have to updated progress records for it)
     const all_levels = [].concat.apply([], [...data.map(el => [...el.Levels])].flat());
 
-    console.log('USER PROGRESSES: ', user_progresses, '  AND ALL LEVELS: ', all_levels);
-
     user_progresses.forEach((user_progress, ind) => {
         const levelForProgress = all_levels.find((lv) => lv.id === user_progress.levelId);
         if(levelForProgress) {
             if(levelForProgress.difficulty !== user_progress.lv_difficulty) {
-                console.log(`A MISMATCH BETWEEN:: `, levelForProgress,  '  and::  ', user_progress);
                 updateOutdatedProgressRecord(user_progress.id, levelForProgress.difficulty);
             }
         }
@@ -76,16 +64,14 @@ export const /* getStaticProps */ getServerSideProps = async ({ req, res }) => {
     data.forEach(serie => {
         serie.Levels.map(lv => (levelsByDifficulty.all.hasOwnProperty(lv.difficulty)? levelsByDifficulty.all[lv.difficulty] += 1 : levelsByDifficulty.all[lv.difficulty] = 1));
     });
-    const progressesArr = user_progresses.filter(lv => lv.lv_progress === 100)
-    //console.log('PROGRESS ARR NO 1: ', progressesArr[0]);
+    const progressesArr = user_progresses.filter(lv => lv.lv_progress === 100);
     progressesArr.map(lv => levelsByDifficulty.user_completed.hasOwnProperty(lv.lv_difficulty)? levelsByDifficulty.user_completed[lv.lv_difficulty] += 1 : levelsByDifficulty.user_completed[lv.lv_difficulty] = 1)
     progressesArr.map(lv => levelsByDifficulty.user_stars += lv.stars_got);
 
     // Now add last fields to indicate all the levels, and also number of levels which p;ayer won (lv_progress is 100)
     levelsByDifficulty.levelsAmount = {inGame: Object.values(levelsByDifficulty.all).length? Object.values(levelsByDifficulty.all).reduce((a, b) => +a + +b) : 0, userWin: Object.values(levelsByDifficulty.user_completed).length? Object.values(levelsByDifficulty.user_completed).reduce((a, b) => +a + +b) : 0};
-    levelsByDifficulty.user_exp = getPlayerLevel(session_user.exp); // CHANGE THIS LATER ONCE EXP GAIN MECHANISM IS IMPLEMENTED
+    levelsByDifficulty.user_exp = getPlayerLevel(session_user.exp);
 
-    console.log('DATA IS:: + ', data);
     return {
         props: { data: [...JSON.parse(JSON.stringify(data))].sort((a, b) => a.index - b.index), user_progresses: user_progresses, session_user: JSON.parse(JSON.stringify(session_user)), levelsCount: levelsByDifficulty },
     };
@@ -95,7 +81,6 @@ function Play(props) {
 
     const anime = Animation.default;
 
-    console.warn('PLAY PROPS: ', props);
     const [component, setComponent] = useState(props.session_user && props.session_user.isBanned? 'banned' : 'preview');
     // State to share with main Memory_game component
     const [levelData, setLevelData] = useState(null);
@@ -103,7 +88,6 @@ function Play(props) {
     const [gameCounters, setGameCounters] = useState(null);
 
     async function showUpAnimation() {
-        console.log(`SHOW UP ANIMATION RUNNING ...  ---`)
         await anime({
             targets: 'body',
             duration: 400,
@@ -114,7 +98,6 @@ function Play(props) {
 
     useEffect(() => {
         if(levelData) { 
-            console.log(levelData, levelProgressRecord, gameCounters ) 
             setComponent('game');
         }
     }, [levelData])
@@ -126,7 +109,6 @@ function Play(props) {
             Router.push('/play'); // performs an artificial refresh so that if user make any progress on the level, it is not necessry to refresh the game manually
         }
         else if(props.session_user.isBanned) {
-            //alert(`${props.session_user.name} , you are banned :( `);
             setComponent('banned')
         }
     }, [component])
@@ -135,7 +117,7 @@ function Play(props) {
         <div style={{background: '#111', width: '100%', minHeight: '100vh'}}>
             {(props.noSession !== true && component === 'preview') && (
                 <Preview data={props.data} user_progresses={props.user_progresses} player={props.session_user} levelsCount={props.levelsCount}
-                    /* changeComponent={setComponent}  */setLevelData={setLevelData} setLevelProgressRecord={setLevelProgressRecord} setGameCounters={setGameCounters}
+                    setLevelData={setLevelData} setLevelProgressRecord={setLevelProgressRecord} setGameCounters={setGameCounters}
                 />
             )}
             {(props.noSession !== true && component === 'game') && (

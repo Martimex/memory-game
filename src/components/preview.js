@@ -1,19 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styles from '../styles/preview.module.css';
 import * as Animation from 'animejs';
-import { useSession } from 'next-auth/react';
 import Router from "next/router";
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs/lib/anime.es.js"
 
 import { LevelInfo } from './level_info.js';
 import { SerieBox } from './serie_box.js';
 import UserTab from './user_tab.js';
-//import  { all_levels } from './global/all_levels.js'; NOT NEEDED SINCE V2 REWORK
 
-/* import { faGithub as github} from '@fortawesome/free-brands-svg-icons'; */
 import { faUserCircle as user, faChevronCircleLeft as home} from '@fortawesome/free-solid-svg-icons';
-import { faHome as homeaaa} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // We need to make sure it is a non-mutable value. We are going to use it for TopBar showUp animation, and we have to have reference 100% value
@@ -21,31 +15,16 @@ let topBarHeight;
 
 function Preview( props ) {
     // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
-    console.warn('PREVIEW PROPS, ', props);
     const anime = Animation.default;
 
     const [[levelChoose, lv_index, serie_abbr, serie_name, serie_desc], setLevelChoose] = useState([null, null, null, null, null]);
     const [chosenSerie, setChosenSerie] = useState(null);
     const [chosenSerieName, setChosenSerieName] = useState(null);
-    const [isLevelStart, setLevelStart] = useState(false);
     const [isUserTabOpen, setUserTabOpen] = useState(null);
     const [isAnimationRunning, setAnimationRunning] = useState(true);
 
-    const { data: session, status } = useSession();
-    
-    // State to share with main Memory_game component
-    /*     const [levelData, setLevelData] = useState(null);
-    const [levelProgressRecord, setLevelProgressRecord] = useState(null);
-    const [gameCounters, setGameCounters] = useState(null); - ALL 3 MOVED TO THE PLAY COMPONENT */ 
-
     const currSerie = useRef(null);
     const topBarRef = useRef(null);
-
-    /* const levels_showcase = Object.keys(all_levels).map((serie_name, index) => 
-        <SerieBox serie={serie_name} setSerieName={setChosenSerie} setLevelChoose={setLevelChoose} key={serie_name.toString()} />
-    ) */
-
-    //props.data.map((serie, index) => console.log(serie.name));
 
     const levels_showcase = props.data.map((serie, index) => 
         <SerieBox serie={serie} setSerieName={setChosenSerie} setLevelChoose={setLevelChoose} isAnimationRunning={isAnimationRunning} key={serie.index.toString() + serie.name} />
@@ -59,13 +38,6 @@ function Preview( props ) {
         }
 
     }, [levelChoose]);
-
-/*     useEffect(() => {
-        if(levelData) { 
-            console.log(levelData, levelProgressRecord, gameCounters ) 
-            props.changeComponent('game');
-        }
-    }, [levelData]) */
 
     useEffect(() => {
         async function fade() {
@@ -139,12 +111,9 @@ function Preview( props ) {
         topBar.style.height = `${topBarHeight}px`;
         await anime({
             targets: topBar,
-            /* height: {value: +topBarHeight, duration: 400, easing: 'easeInCubic'}, */
             // We need to keep this animation for around 500 ms to prevent from possible bug when user exits UserTab and immediately starts clicking a level square (w/ colorful borders)
             opacity: {value: 1, duration: 500, easing: 'easeInCubic'}, 
         }).finished;
-        
-        console.error('ANIMATIONS FINISHED !!! ', topBarHeight);
         setAnimationRunning(false); 
     } 
 
@@ -170,8 +139,6 @@ function Preview( props ) {
 
     async function animateTransition() {
         const topBar = document.querySelector(`.${styles['top-bar']}`);
-/*         const previewMain = document.querySelector(`.${styles['bg-main']}`); // Going to use it to temporarily block click events;
-        previewMain.style.pointerEvents = 'none'; */
         topBarHeight = (topBarHeight)? topBarHeight : topBar.offsetHeight; // Prevents from a bug that a bar grows 2px every animation cycle
         await anime({
             targets: topBar,
@@ -198,7 +165,7 @@ function Preview( props ) {
             <div className={styles['seizure-flexbox']}>
                 <div className={styles['top-bar']} ref={topBarRef}>
                     <div className={styles['top-bar__return']}>
-                        <div className={styles['return-back']} onClick={() => {setAnimationRunning(true); animateReturn(); /* props.backToHome(); props.proceed(); */}}> 
+                        <div className={styles['return-back']} onClick={() => {setAnimationRunning(true); animateReturn(); }}> 
                             <FontAwesomeIcon icon={home} className={styles["icon-home"]} />
                         </div>
                     </div>
@@ -215,7 +182,6 @@ function Preview( props ) {
 
                 </div>
 
-                {/* <h1 style={{color: 'white'}}> {session && session.user.name} </h1> */}
                 <div className={styles['showcase-block']}>
                     {levels_showcase}
                 </div>

@@ -98,7 +98,6 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
                 easing: 'linear',
                 backgroundImage: ['repeating-linear-gradient(190deg, hsl(22, 70%, 50%), hsl(35, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)', 'repeating-linear-gradient(190deg, hsl(117, 0%, 0%), hsl(188, 0%, 0%) 8%, hsl(55, 40%, 30%) 18%)'],
                 // this transition would be a secret for the level - unleashing the secret = a free star
-                //direction: 'alternate',
             }).finished;
 
             const b2 = anime({
@@ -142,7 +141,6 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
                 targets: `.${bgStyles['background_custom']}`,
                 duration: 1200,
                 easing: 'linear',
-                //backgroundImage: /* 'repeating-linear-gradient(190deg, hsl(41, 70%, 50%), hsl(50, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)',  */'repeating-linear-gradient(190deg, hsl(41, 70%, 50%), hsl(15, 70%, 50%) 8%, hsl(0, 0%, 10%) 12%)',
                 direction: 'alternate',
             }).finished;
 

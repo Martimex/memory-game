@@ -1,5 +1,4 @@
 import * as Animation from "animejs"
-import mainStyles from '../styles/main.module.css';
 
 const anime = Animation.default;
 
@@ -19,23 +18,6 @@ async function xclick(click_no, target, stageNo, levelObject, levelVariables) {
             easing: 'easeOutCubic',
         }).finished;
     }
-
-/*     async function scaleOut() {
-        const [target_1, target_2] = [
-            document.querySelector(`.${mainStyles[`tile_custom`]}[data-tile-ref="${+levelVariables.targetedTilesByRef[levelVariables.targetedTilesByRef.length - 2]}"]`),
-            document.querySelector(`.${mainStyles[`tile_custom`]}[data-tile-ref="${+levelVariables.targetedTilesByRef[levelVariables.targetedTilesByRef.length - 1]}"]`)
-        ];
-
-        console.log('testing targets: ', target_1, target_2);
-
-        await anime({
-            targets: [target_1, target_2],
-            duration: 600,
-            scale: 1,
-            easing: 'easeInExpo',
-            rotateY: ['0deg'],
-        }).finished;
-    } */
 
     async function runXClick() {
         switch(click_no) {

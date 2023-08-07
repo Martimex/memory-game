@@ -6,13 +6,9 @@ export default async function handle(req, res) {
     if(req.method === 'GET') {
         // For GET request, we are going to get user data just for UserTab (Landing Page one) to display specific data properly
         const playerEmail = req.query.id;
-
-        console.log('LINE 10. PLAYER EMAIL: ', playerEmail)
-
         const player = await prisma.user.findUnique({
             where:  {email: playerEmail}
         })
-        console.log('LINE 15. PLAYER: ', player)
         const res_data = await res.json(player);
         return res_data; 
     }
@@ -21,7 +17,6 @@ export default async function handle(req, res) {
         // For PUT request we have user progress record ID, so we can update EXP value
         const playerId = req.query.id;
         const { oldExp, exp_to_add } = req.body;
-
         const updatePlayerExp = await prisma.user.update({
             where: { id: playerId},
             data: {

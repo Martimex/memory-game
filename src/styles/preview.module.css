@@ -1,4 +1,3 @@
-/* Rework */
 #body { /* SELECTOR body IS NOT PURE (PURE SELECTORS MUST CONTAIN AT LEAST 1 CLASS OR ID) */
     margin: 0;
 }
@@ -8,15 +7,6 @@
     padding: 1em;
     gap: 0.5em;
 }
-
-/* .showcase-level-box {
-    width: 2em;
-    height: 2em;
-    background-color: hsl(128, 63%, 39%);
-    color: rgb(3, 59, 107);
-    font-size: 1.2rem;
-    border-radius: 10%;
-} */
 
 .bg-main {
     background: #111;
@@ -55,22 +45,11 @@
     width: 100%;
 }
 
-/* .top-bar__return {
-    margin: 1em 2em;
-}
- */
 .return-back {
     background: inherit;
     border-radius: 50%;
     border-color: rgba(0, 0, 0, 0);
 }
-
-/* .icon-home {
-    color: #ddd;
-    box-shadow: 0em -0.1em 0.8em #ddd, inset 0em 0em 0.8em #ddd;
-    border-radius: 50%;
-    padding: 0.1em;
-} */
 
 .top-bar .top-bar__title .title-name {
     background: -webkit-linear-gradient(135deg, rgba(221, 221, 221, 0.8666666667), rgba(221, 221, 221, 0.8666666667));
@@ -119,6 +98,7 @@
 }
 
 /* Sticky navigation onScroll */
+
 .sticky::before {
     content: "";
     z-index: -5;
@@ -127,9 +107,4 @@
     width: 100%;
     height: 100%;
     filter: saturate(50%);
-    /* border-bottom: 0.2em groove rgba(34, 34, 34, 0.6); */
-}
-
-.sticky + .showcase-block {
-    /* padding-top: 1rem; */
 }

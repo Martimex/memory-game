@@ -8,10 +8,6 @@ function generateItems(fpClass, spClass) {
 
 function generateFirstPlanItems(fpClass) {
     const firstPlan = document.querySelector(`.${fpClass}`);
-
-/*     const circle = document.createElement('div');
-    circle.classList.add(styles_firstPlan['lightning']);
-    firstPlan.appendChild(circle); */
 }
 
 function generateSecondPlanItems(spClass) {

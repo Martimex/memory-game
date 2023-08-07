@@ -5,11 +5,6 @@ import * as Animation from "animejs"
 const anime = Animation.default;
 //--------------------------------------
 
-/* const possibleIconColors = ["hotpink", "lightsalmon", "darkorchid", "orangered", "crimson", "aquamarine", "saddlebrown", "lightskyblue", "yellowgreen", "pink",
-    "khaki", "limegreen", "olive", "maroon", "mediumblue", "steelblue", "navajowhite", "midnightblue", "darkturquoise", "gold",
-    "orange", "rebeccapurple", "darkmagenta", "fuchsia", "teal", "springgreen", "darkgreen", "deepskyblue", "rosybrown", "burlywood"
-] */
-
 const possibleIconColors = ["hotpink", "lightsalmon", "orangered", "aquamarine", "saddlebrown", "lightskyblue", "yellowgreen", "thistle", "darkorchid", "olive",
     "maroon", "mediumblue", "navajowhite", "midnightblue", "gold", "darkorange", "darkmagenta", "springgreen", "darkgreen", "rosybrown"
 ];
@@ -42,7 +37,6 @@ async function level_start(stageNo, time, tileShowTime, levelObject, levelVariab
         document.querySelector(`.${firstPlanStyles['mii-2']}`).dataset['match_type'] = `${levelVariables.matchTypeHistory[levelVariables.matchTypeHistory.length - 1]}_type`;
         document.querySelector(`.${firstPlanStyles['mid-1']}`).textContent = levelVariables.matchTypeHistory[levelVariables.matchTypeHistory.length - 2];
         document.querySelector(`.${firstPlanStyles['mid-2']}`).textContent = levelVariables.matchTypeHistory[levelVariables.matchTypeHistory.length - 1];
-        /* document.querySelector(`.${firstPlanStyles['mii-1']}`).classList */
     }
 
     function addTilesIdentifiers() {
@@ -64,7 +58,6 @@ async function level_start(stageNo, time, tileShowTime, levelObject, levelVariab
             pickedColorsArray.splice(rand, 1);
         }
         
-        console.log('START COLORS :', levelVariables.iconsColoring['colorsTable']);
     }
 
     async function showTiles() {
@@ -73,7 +66,6 @@ async function level_start(stageNo, time, tileShowTime, levelObject, levelVariab
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
-            /* borderColor: ['hsl(4, 87%, 62%)', 'hsl(45, 50%, 80%)'], */
             easing: 'linear',
             loop: false,
         }).finished;
@@ -88,7 +80,6 @@ async function level_start(stageNo, time, tileShowTime, levelObject, levelVariab
             delay: tileShowTime,
             transitionProperty: 'all',
             rotateY: '0deg',
-            /* borderColor: ['hsl(45, 50%, 80%)', 'hsl(4, 87%, 62%)'], */
             easing: 'linear',
             loop: false,
         }).finished;

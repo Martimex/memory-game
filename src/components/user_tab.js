@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import styles from '../styles/user_tab.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,20 +14,15 @@ import { getPlayerLevel, getLevelProgress, getFrameColor } from "../global/prede
 function UserTab(props) {
 
     const anime = Animation.default;
-    console.warn('THE PLAYER IS: ', props.player);
 
     async function handleLogout() {
-/*         const logOut = await signOut();
-        logOut.then(() => Router.push('/')) */
         props.setAnimationRunning(false);
         signOut({callbackUrl: '/'})
     }
 
     useEffect(() => {
         const getImageBox = document.querySelector(`.${styles["user-info__image-box"]}`);
-        //console.log('IMAGE BOX IS: ', getImageBox);
         if(getImageBox) {
-            //console.log('image box ??  Our props are: ', props);
             getImageBox.src = "https://lh3.googleusercontent.com/a/AGNmyxYdHxpTrqnk-muASXR1wLNGS1O5BwXD6UOoVWxW=s96-c";
         }
         fireUserTabAnimation('show');
@@ -39,26 +34,16 @@ function UserTab(props) {
         const userTabBox = document.querySelector(`.${styles['user-tab__box']}`);
         const [tabBox__profile, tabBox__buttons] = [document.querySelector(`.${styles['box__user-profile']}`), document.querySelector(`.${styles['box__action-buttons']}`)];
         const [profile_info, profile_stats] = [tabBox__profile.querySelector(`.${styles['box__user-info']}`), tabBox__profile.querySelector(`.${styles['box__user-stats']}`)];
-        //const userTabHeight = userTab.offsetHeight;
-        //console.log('userTab offsetHeight is: ', userTabHeight);
         const userTabBoxHeight = window.getComputedStyle(userTabBox).getPropertyValue('height');
-        console.log('userTab computed height is: ', userTabBoxHeight, profile_info, profile_stats);
         
-        /* document.querySelector(`.${styles['main-layer']}`).style.pointerEvents = 'none'; */
-
         document.querySelector(`.${styles['box__action-buttons']}`).style.pointerEvents = 'none';
-/*         document.querySelector(`.${styles['main-layer']}`).style.pointerEvents = 'none';
- */
-
         
         if(animation_type === 'show') { await animateUserTab(); await animateTabBox2(); props.setAnimationRunning(false); }
         else if(animation_type === 'hide') {await animateTabBox()}
 
-        // After animations end, unblock click events for action buttons within User Tab
+        // After animations end, unblock click events for action buttons within UserTab
         const btnBox = document.querySelector(`.${styles['box__action-buttons']}`);
         if(btnBox) {btnBox.style.pointerEvents = 'auto';}
-/*         document.querySelector(`.${styles['main-layer']}`).style.pointerEvents = 'none';
- */        /* document.body.style.pointerEvents = 'auto'; */
 
         async function animateUserTab() {
             await anime({
@@ -130,8 +115,6 @@ function UserTab(props) {
         props.setUserTabOpen(false)
     }
 
-    console.log('PROPS PLAYER IN LANDING COMPONENT : ', props.player);
-
     return(
         <div className={styles['main-layer']} onClick={(e) => {(e.target.classList.contains(`${styles['main-layer']}`) && !props.isAnimationRunning) && handleUserTabHide()}}>
             <div className={styles['user-tab']}>
@@ -147,12 +130,12 @@ function UserTab(props) {
                                 <p className={`${styles["data__text"]} ${styles["data__text--small"]}`}> Member since: {props.player.registeredAt.split('T')[0].split('-').reverse().join('/')} </p>
                             </div>
                         </div>
-                        {props.includeUserStats === true && <PlayerStats /* pageNo={pageNo} pageLastIndex={pageMaxIndex} */ levelsCount={props.levelsCount} />}
+                        {props.includeUserStats === true && <PlayerStats levelsCount={props.levelsCount} />}
                     </div>
 
                     <div className={`${styles['box__action-buttons']} ${(props.includeUserStats !== true && styles['box__action-buttons--adjusted'])}`}>
                         <div className={styles['action-buttons__btn-item']}> 
-                            <div className={styles['btn-item__icon']} onClick={() => {handleUserTabHide()/* props.setUserTabOpen(false) */}}>
+                            <div className={styles['btn-item__icon']} onClick={() => { handleUserTabHide() }}>
                                 <FontAwesomeIcon icon={hide_circ} className={`${styles["icon--btn"]} ${styles["icon-hide"]}`} />
                             </div>
                             <span className={styles['btn-item__text']}>Hide</span>

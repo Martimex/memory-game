@@ -1,5 +1,4 @@
 const equation = function(player_value, star_requirement, equation_type) {
-    console.warn(player_value, star_requirement, equation_type);
     let eq = {value: null}
     switch(equation_type) {
         case 'lessThan': { eq.value = (player_value < star_requirement )? true : false;  break; }

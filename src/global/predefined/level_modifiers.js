@@ -31,7 +31,6 @@ export const checkForLevelModifiers = (othersObj, levelVariables, modifier_name)
 }
 
 export const applyLevelModifier = (modifier_name, levelVariables) => {
-    console.warn('TURNS MODIFIER IS: ', levelVariables.STATIC[modifier_name])
     switch(modifier_name) {
         case 'EXTRATURNS_MODIFIER' : { return levelVariables.STATIC[modifier_name] }
         case 'DOESMATCH_MODIFIER' : { return levelVariables.STATIC[modifier_name] }

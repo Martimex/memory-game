@@ -33,7 +33,6 @@
 
 .confirm-lost {
     color: hsl(11, 50%, 50%);
-    /* padding-bottom: 2em; */
     text-shadow: 0 0 .8em hsl(11, 0%, 0%);
     filter: saturate(120%) brightness(90%);
     -webkit-text-stroke: .02em hsl(11, 70%, 70%);
@@ -186,7 +185,6 @@
 
 .lost-btn {
     color: hsl(11, 40%, 50%);
-/*     text-shadow: 0 0 .4em hsl(11, 70%, 60%); */
     width: 50%;
     text-shadow: 0 0 .8em hsl(11, 0%, 0%);
 }

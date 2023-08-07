@@ -5,9 +5,8 @@ import {level_end_messages} from '../global/predefined/level_end_messages.js';
 import { faStar as star_empty} from '@fortawesome/free-regular-svg-icons';
 import { faStar as star_full} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { set } from 'animejs';
 import { equation } from '../global/predefined/stars_equation.js';
-import { exp_for_level, exp_for_difficulty } from '../global/predefined/exp_to_level';
+import { exp_for_difficulty } from '../global/predefined/exp_to_level';
 
 const anime = Animation.default;
 
@@ -49,20 +48,14 @@ function Confirm(props) {
     }
 
     async function callEndAnimation() {
-
-        // also import stars condition file
         if(props.value) {
-            //const star_conditions = await import(`../levels/${props.newSerie}/level_${props.level_no}/starConditions.js`)
             const stars_full_count = checkGottenStars(props.starConditions);
-            console.warn(`props.time: ${props.time}   props.turns: ${props.turns}  || stars gotten:  `,stars_full_count);
             makeStars(stars_full_count);
         }
         fireEndAnimation();
     }
 
     async function fadeScreen() {
-        const cb = document.querySelector(`.${styles_confirm[`confirmation-bg`]}`);
-        console.error(cb);
         await anime({
             targets: `.${styles_confirm[`confirmation-bg`]}`,
             duration: 1000,
@@ -72,7 +65,6 @@ function Confirm(props) {
     }
 
     function fireEndAnimation() {
-        //
         const valuesArr = [props.time, props.turns, [props.score]]; // props.score is within array because is the only numeric value (and we need to ensure each param is type of array)
         const allParamNames = document.querySelectorAll(`.${static_classes[`param_name`]}`);
         const allParamValues = document.querySelectorAll(`.${static_classes[`param_value`]}`)
@@ -196,8 +188,6 @@ function Confirm(props) {
                     duration: 1200,
                     delay: anime.stagger(600),
                     scale: ['0%', '100%'],
-                    /* translateX: ['-2rem', '0rem'], */
-                    /* translateY: ['-2rem', '0rem'], */
                     rotate: ['180deg', '0deg'],
                     opacity: [0, 1],
                     easing: 'easeInOutBounce',
@@ -294,10 +284,8 @@ function Confirm(props) {
     function checkGottenStars(star_conditions) {
         // 1. We can assume that each level has 3 stars, therefore star_conditions array of object is length of 3
         // 2. It also should be noted, that each sooner star have more severe obtain conditions than the previous one
-        console.error('THIS LEVEL VARIAVLES: ', props.variables);
-        //console.log('OLD STARS CONDITIONS: ', star_conditions);
         for(let star_no = 0; star_no < 3; star_no++) {
-            let areConditionsMet = checkStarCondition(star_conditions[star_no] /* star_conditions[`starConditions`][star_no] - it is old-style way */ );
+            let areConditionsMet = checkStarCondition(star_conditions[star_no]);
             if(!areConditionsMet) return star_no; 
         }
 
@@ -313,16 +301,12 @@ function Confirm(props) {
             //  could be a result of other variables values, which are previously checked inside other level specific functions. Fe: if some variables have
             //  desired values, we can set the property (fe. secret_solved) to true, and based on that provide a star at the end level.
             let index = 0;
-            console.warn('condition set is: ', conditionSet);
             for(let key in conditionSet) {
-                console.log(props[key], key, Object.keys(conditionSet[key]), Object.values(conditionSet[key]));
-
                 const checkConditionPass = (props[`${Object.keys(conditionSet)[index]}`] instanceof Array)?
                     equation(props[`${Object.keys(conditionSet)[index]}`].reduce((accumVariable, curValue) => accumVariable + curValue , 0), Object.values(conditionSet[key]), ...Object.keys(conditionSet[key]))
                     :
-                    equation(props[key][`${Object.keys(conditionSet[key])}`], ...Object.values(...Object.values(conditionSet[key])), ...Object.keys(...Object.values(conditionSet[key])),);
+                    equation(props[key][`${Object.keys(conditionSet[key])}`], ...Object.values(...Object.values(conditionSet[key])), ...Object.keys(...Object.values(conditionSet[key])));
                 index++;
-                console.log(checkConditionPass)
                 if(!checkConditionPass) { return false; }
             }
 
@@ -351,14 +335,9 @@ function Confirm(props) {
     }
 
     async function checkLevelProgress([new_progress, new_highscore, new_stars]) {
-        //const DUMMY_USER_ID = 'clhf5gk8800009sw4tx7ssxam'; // DUMMY USER IS:  Wóda cuda // REMOVE THIS AFTER GOING FOR AUTHENTICATION SERVICE (WE WILL MAKE US OF USESESSION OVER HERE)
         // 1. Check if user made any progress on this level (compare current Progress record with highscore, stars and completion %)
         // 2. If at all criterias user did not make any progress, return the function and DO NOT UPDATE ANYTHING
         // 3. If any given criteria get better, let's update current Progress record but only update those fields, where the progress was made
-        console.warn('ALL OF OUR PROPS WE HAVE ACCESS TO: ', props);
-        console.log('current progress object is: ', props.currentProgress);
-        console.log('CURRENT PROGRESS: ', props.currentProgress.lv_progress, ' || CURRENT HIGHSCORE: ', props.currentProgress.highscore, ' || CURRENT STARS: ', props.currentProgress.stars);
-        console.log('NEW PROGRESS: ', new_progress, ' || NEW HIGHSCORE: ', new_highscore, ' || NEW STARS: ', new_stars);
         const oldProgressValues = [props.currentProgress.lv_progress, props.currentProgress.highscore, props.currentProgress.stars];
         const newProgressValues = [new_progress, new_highscore, new_stars];
         
@@ -381,8 +360,6 @@ function Confirm(props) {
         }
 
         // Check if player Won level (if so, he will be rewarded with some extra EXP); 
-        //console.error('PLEAYER ID IS: ', props.playerId);
-
         if(new_progress >= 100) {
             // it is
             const expObj = {
@@ -402,7 +379,6 @@ function Confirm(props) {
         const progress = (props.value)? 100 : calculateFailureProgress();
         const highscore = (props.value)? props.time.reduce((accumVariable, curValue) => accumVariable + curValue , 0) * props.tsv + props.turns.reduce((accumVariable, curValue) => accumVariable + curValue , 0) * props.msv + props.score : 0;
         const stars_full_count = (props.value)? checkGottenStars(props.starConditions) : 0;
-        console.log('NEW progress => ', progress,  ' || NEW highscore => ', highscore,  ' || NEW stars got => ', stars_full_count);
         return [progress, highscore, stars_full_count];
     }
 
@@ -412,15 +388,12 @@ function Confirm(props) {
         let rand = Math.floor(Math.random() * level_end_messages[`${end}`].length);
         setEndMessage(level_end_messages[`${end}`][rand]);
         callEndAnimation();
-        console.error('IT HAS TO HAPPEN JUST ONCE');
         checkLevelProgress([new_progress, new_highscore, new_stars]);
     }, [])
 
     useLayoutEffect(() => {
         // Hide confirmbox elements
         document.querySelector(`.${static_classes['action_container']}`).style.pointerEvents = 'none';
-        //document.querySelectorAll(`.${static_classes['param_name']}`).forEach(el => el.style.opacity = 0);
-        //document.querySelectorAll(`.${static_classes['param_value']}`).forEach(el => el.style.opacity = 0);
         if(props.value) {
             document.querySelector(`.${static_classes['win_btn']}`).style.transform = 'scale(0%)';
             document.querySelector(`.${static_classes['highscore']}`).style.opacity = 0;
@@ -429,7 +402,6 @@ function Confirm(props) {
 
     useEffect(() => {
         document.querySelectorAll(`.${static_classes['star']}`).forEach(el => el.style.opacity = 0);
-        //if(props.value) { document.querySelector(`.${static_classes['star_box']}`).style.opacity = 1; }
     }, [allStars])
 
     function fadeAnimation() {
@@ -487,12 +459,12 @@ function Confirm(props) {
                     <div className={`${static_classes['action_container']}`} ref={actionBox_ref}>
                         {(props.value) ?
                             <div className={`${styles_confirm['action_container--win']}`} ref={table} >
-                                <div className={`${static_classes[`win_btn`]}`}  onClick={() => {props.start(); /* fadeAnimation() */}} ref={confBtn} > Go to menu </div>
+                                <div className={`${static_classes[`win_btn`]}`}  onClick={() => {props.start();}} ref={confBtn} > Go to menu </div>
                             </div>
                             :
                             <div className={`${styles_confirm['action_container--lost']}`} ref={table} >
                                 <div className={`${static_classes[`lost_btn`]}`} onClick={() => {props.restart(); fadeAnimation() }} ref={confBtn} > Retry </div>
-                                <div className={`${static_classes[`lost_btn`]}`} onClick={() => {props.start(); /* fadeAnimation() */}} ref={confBtn} > Back </div>
+                                <div className={`${static_classes[`lost_btn`]}`} onClick={() => {props.start();}} ref={confBtn} > Back </div>
                             </div>
                         }
                     </div>

@@ -1,11 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import { all_levels } from '../global/all_levels.js';
+import React from 'react';
 import styles from '../styles/serie_box.module.css';
-import { series_abbr } from '../global/series_abbr.js';
 import { rainbowColors } from '../global/rainbow_colors.js';
 
-//import anime from 'animejs/lib/anime.es.js';
-//import anime from "animejs";
 import * as Animation from 'animejs';
 
 // DEFINE GLOBAL ASSIGNMENT THAT WILL INDICATE WE WANT TO USE LEGACY anime({}) call exactly as it used to be
@@ -29,8 +25,8 @@ let recentShowUpBox = null;
 
 let animationFinishController = 
 {
-  first: true, 
-  second: true,
+    first: true, 
+    second: true,
 };
 
 
@@ -67,7 +63,7 @@ function SerieBox(props) {
                     `linear-gradient(135deg, ${ccb[ccb.length -1][3]}, ${ccb[ccb.length -1][0]}, ${ccb[ccb.length -1][1]}, ${ccb[ccb.length -1][2]} )`,
                 ],
                 hueRotate: [
-                   '0deg', '20deg', '40deg', '60deg', '40deg', '20deg', '0deg'
+                    '0deg', '20deg', '40deg', '60deg', '40deg', '20deg', '0deg'
                 ],
                 saturate: '140%',
                 loop: true,
@@ -84,12 +80,8 @@ function SerieBox(props) {
         animationFinishController['first'] = false;
         const section_title = e.target.querySelector(`.${styles['serie-title']}`);
         const section_content = e.target.querySelector(`.${styles['serie-content']}`);
-        //console.log(e, e.target, section_title, section_content);
         const section_content_tiles = section_content.querySelectorAll(`.${styles[dynamic_classes.level_borders]}`);
-    
         section_content.classList.remove(styles['invisible']);
-       
-        /* section_content_tiles.forEach(lv_tile => lv_tile.style.pointerEvents = 'auto'); */
     
         async function animationChain() {
             await fadeText()
@@ -103,7 +95,7 @@ function SerieBox(props) {
         }
     
         async function fadeText() {
-            const timing = 400; // was 520
+            const timing = 400;
             const a1 = anime({
                 targets: section_title,
                 duration: timing,
@@ -124,8 +116,8 @@ function SerieBox(props) {
         }
     
         async function showUpLevels() {
-            const timing = 300; // was 400
-            const staggering = 72; // was 96
+            const timing = 300;
+            const staggering = 72;
             const total_stagger = timing + (staggering * section_content_tiles.length);
             const a2 = anime({
                 targets: section_content_tiles,
@@ -155,8 +147,6 @@ function SerieBox(props) {
             const section_title_old = recentShowUpBox.querySelector(`.${styles['serie-title']}`);
             const section_content_old = recentShowUpBox.querySelector(`.${styles['serie-content']}`);
             const section_content_tiles_old = section_content_old.querySelectorAll(`.${styles[dynamic_classes.level_borders]}`);
-
-            /* section_content_tiles_old.forEach(lv_tile => lv_tile.style.pointerEvents = 'none'); */
 
             async function animationChain() {
                 section_title_old.classList.remove(styles['invisible']);
@@ -204,8 +194,6 @@ function SerieBox(props) {
             props.setSerieName(props.serie.name)
         }
     }
-
-    console.warn('SERIE LEVELS: ', props.serie.Levels);
 
     return(
         <div className={styles[`${dynamic_classes.serie_block}`]} onClick={(e) => {checkSerieNameChange(); openUpFire(e); } } >

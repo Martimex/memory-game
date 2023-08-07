@@ -3,11 +3,9 @@
 }
 
 .fa-icon_custom {
-    /* color: inherit; */
     font-size: 1.8rem;
     border: .1em solid inherit;
     color: hsl(122, 35%, 30%);
-    /* z-index: 20; */
 }
 
 .tile_custom {
@@ -20,12 +18,6 @@
     background-image: url('../resources/background.svg');
     background-size: contain;
 }
-
-/* .tile_custom::before, .tile_custom::after {
-    content: '';
-    display: block;
-    position: absolute;
-} */
 
 .tile-back_custom { 
     border-radius: 20%;

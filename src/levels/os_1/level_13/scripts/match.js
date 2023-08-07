@@ -52,7 +52,6 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
     else {
         // Player did not find a match. Increase notFoundStreak by 1 
         levelVariables.notFoundStreak += 1;
-        // levelVariables.notFoundAllowed
 
         if(levelVariables.notFoundStreak > levelVariables.notFoundAllowed) {
             

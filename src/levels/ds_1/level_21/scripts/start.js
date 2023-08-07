@@ -40,7 +40,7 @@ async function level_start(stageNo, time, tileShowTime, levelObject, levelVariab
 
     async function showTiles() {
         const a1 = anime({
-            targets: `.${mainStyles['tile_custom']}` /* divs */,
+            targets: `.${mainStyles['tile_custom']}`,
             duration: time,
             transitionProperty: 'all',
             rotateY: '180deg',
@@ -53,7 +53,7 @@ async function level_start(stageNo, time, tileShowTime, levelObject, levelVariab
 
     async function hideTiles() {
         const a2 = anime({
-            targets: `.${mainStyles['tile_custom']}` /* divs */,
+            targets: `.${mainStyles['tile_custom']}`,
             duration: time,
             delay: tileShowTime,
             transitionProperty: 'all',

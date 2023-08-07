@@ -1,5 +1,4 @@
 .background_custom {
-    /* z-index: -50; */
     background-color: hsl(122, 20%, 30%); 
     background-image: url('../resources/background.svg');
     background-size: cover;

@@ -1,5 +1,0 @@
-.bg-3 {
-  background-color: hsl(122, 35%, 70%);
-  background-image: repeating-linear-gradient(210deg, hsla(252, 50%, 40%, 0.8), hsla(142, 80%, 30%, 0.8), hsla(177, 50%, 40%, 0.8), hsla(142, 80%, 30%, 0.8), hsla(252, 50%, 40%, 0.8));
-  filter: contrast(80%) brightness(125%);
-}/*# sourceMappingURL=bg.css.map */

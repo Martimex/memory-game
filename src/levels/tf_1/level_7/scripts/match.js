@@ -14,8 +14,6 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
     prepareForNextTurn(checkRealMatch);
     levelVariables.STATIC.DOESMATCH_MODIFIER = checkRealMatch;
 
-    console.warn('colorBase stuff:', checkRealMatch);
-
     function checkForMatch() {
         // THIS FUNCTION SHOULD ALWAYS RETURN EITHER TRUE OR FALSE
         // Remeber that for levelVariables.matchTypeHistory the last index is actually the future match type (a.k.a. NEXT) 
@@ -34,7 +32,6 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
     }
 
     function prepareForNextTurn(isMatchFound) {
-        console.warn('colorBase stuff:', levelVariables, levelObject.uncover[stageNo].count);
         if(isMatchFound === true) {
             // Modify levelVariables.iconsColoring.colorsTable
             targets_tileRefs.map((tile_Ref) => levelVariables.iconsColoring.colorsTable[+tile_Ref] = '');
@@ -129,21 +126,17 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
         // 1. Test 'colors' match type
         const availableColorsInActiveTiles_arr = (levelVariables.iconsColoring.colorsTable.filter((color) => color !== ''));
         const possibleMatches_colors = availableColorsInActiveTiles_arr.length - new Set(availableColorsInActiveTiles_arr).size;
-        //console.log('colorBase stuff: possibleMatches_colors ', possibleMatches_colors);
+
         // 2. Test 'icons' match type
         const activeTileRefsArr = levelVariables.iconsColoring.colorsTable.reduce((acc, color, index) => (color !== '' && acc.push(index), acc), []);
         const availableIconsInActiveTiles_arr = activeTileRefsArr.map((tile_ref, ind) => document.querySelector(`.${mainStyles['tile_custom']}[data-tile-ref="${+tile_ref}"`).querySelector(`.${mainStyles['tile-back_custom']} svg`).classList[1]);
         const possibleMatches_icons = availableIconsInActiveTiles_arr.length - new Set(availableIconsInActiveTiles_arr).size;
-        //console.log('colorBase stuff: possibleMatches_icons ', possibleMatches_icons);
-
-        console.warn('possibleIconColors arr is: ', possibleIconColors, ' $$ Our map for lv: ', levelVariables.iconsColoring.colorsTable, 'and possible matches for colors: ', possibleMatches_colors, '  AND POSSIBLE MATCHES FOR ICONS: ', possibleMatches_icons);
 
         // 3. End game case, where there are no longer possible matches both for colors and icons
         if((possibleMatches_colors === 0 || possibleMatches_icons === 0) && levelVariables.iconsColoring.forceColorMatchType === false) {
             // Redefine levelVariables.iconsColoring.colorsTable for new color placements, run animation meanwhile and make ONLY color match possible for the rest of the level !!!
-            // TO DO ...
+            
             levelVariables.iconsColoring.forceColorMatchType = true;
-            console.error('No more matches possible ! Redefining matches to be only for colors !!! ');
             const activeTileRefsArr = levelVariables.iconsColoring.colorsTable.reduce((acc, color, index) => (color !== '' && acc.push(index), acc), []);
             const possibleIconColors_copy = [...possibleIconColors];
             const pickedColorsArray = [];
@@ -158,7 +151,6 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
                 levelVariables.iconsColoring.colorsTable[+activeTileRefsArr[tileNo]] = pickedColorsArray[rand];
                 pickedColorsArray.splice(rand, 1);
             }
-            console.error('NOW LEVEL VARIABLES ARR LOOKS LIKE THIS: ', levelVariables.iconsColoring.colorsTable)
 
             // Now we have recovered the gameplay, so each future match call will be for COLORS until the level finish
             runIconColorResetMessage();
@@ -168,11 +160,9 @@ async function match(isMatch, cardsOpened_parentNodes, stageNo, levelObject, lev
         const newScenarioRandNum = Math.floor(Math.random() * (possibleMatches_colors + possibleMatches_icons));
         levelVariables.matchTypeHistory.push(newScenarioRandNum >= possibleMatches_colors? 'icons' : 'colors');
         if(levelVariables.iconsColoring.forceColorMatchType === true) {
-            console.error('Going only for COLOR MATCH TYPE UNTIL THE END OF THE LEVEL');
             levelVariables.matchTypeHistory[levelVariables.matchTypeHistory.length - 2] = 'colors';
             levelVariables.matchTypeHistory[levelVariables.matchTypeHistory.length - 1] = 'colors';
         } 
-        //console.log(`colorBase stuff: aavailableIconsInActiveTiles `, availableIconsInActiveTiles_arr.length, availableIconsInActiveTiles_set.size)
         
         animateMachTypeChange();
     }

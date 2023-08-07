@@ -5,18 +5,15 @@
 .wBox {
     font-size: 1rem;
     position: absolute; 
-    /* z-index: -50;  */
     text-align: center;
     align-items: center;
     justify-content: center;
-    width: 15%; /* height: 40%; */
+    width: 15%;
     min-height: 33%;
     margin: 0;
     padding: 2em 0;
     display: block;
     background-image: url('../resources/background.svg');
-/*     background-origin: border-box;
-    background-size: cover; */
     border-radius: 10%;
     border-image: url('../resources/background.svg');
     border: .2em solid #222;
@@ -45,8 +42,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-/*     background: hsla(0, 0%, 0%, .5);
-    background-image: url('../resources/background.svg'); */
 }
 
 .hText_letter {
@@ -66,7 +61,5 @@
     width: 6rem;
     height: 9rem;
     z-index: 10;
-    /* color: hsla(122, 35%, 30%, .95); */
-    /* color: #333; */
     font-size: 5rem;
 }
