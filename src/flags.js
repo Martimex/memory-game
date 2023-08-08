@@ -1,4 +1,5 @@
-import anime from 'animejs/lib/anime.es.js';
+//import anime from 'animejs/lib/anime.es.js';
+//import anime from "animejs"
 import levels from './levels.js';
 
 // #1 WINNING CONDITION :  if(foundTiles+2 === tiles) equals true
@@ -5450,4 +5451,4 @@ const flags = {
     }
 }
 
-export default flags;
+export default flags; // Bye bye 5453 lines of code  :(
